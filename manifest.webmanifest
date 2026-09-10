@@ -1,0 +1,10 @@
+{
+  "name": "Cidade Conecta",
+  "short_name": "Cidade Conecta",
+  "description": "Plataforma comunitária para registrar e acompanhar problemas urbanos.",
+  "start_url": "./#/",
+  "display": "standalone",
+  "background_color": "#f4f8fa",
+  "theme_color": "#0A5D75",
+  "lang": "pt-BR"
+}
