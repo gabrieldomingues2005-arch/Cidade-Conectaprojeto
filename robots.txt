@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Atualizar o endereço do sitemap quando o domínio definitivo for conectado.
