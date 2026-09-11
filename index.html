@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="Cidade Conecta — plataforma comunitária para registrar, acompanhar e visualizar problemas urbanos com protocolo, mapa e indicadores.">
-  <meta name="theme-color" content="#075f73">
+  <meta name="description" content="Cidade Conecta Piracicaba — plataforma comunitária para registrar, acompanhar e visualizar problemas urbanos em Piracicaba, São Paulo, com protocolo, mapa e indicadores.">
+  <meta name="theme-color" content="#2f3f88">
   <meta name="robots" content="index,follow">
-  <meta property="og:title" content="Cidade Conecta">
-  <meta property="og:description" content="Registre problemas urbanos, acompanhe protocolos e ajude a organizar informações da comunidade.">
+  <meta name="geo.region" content="BR-SP">
+  <meta name="geo.placename" content="Piracicaba">
+  <meta property="og:title" content="Cidade Conecta Piracicaba">
+  <meta property="og:description" content="Registre problemas urbanos de Piracicaba, acompanhe protocolos e ajude a organizar informações da comunidade.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:url" content="https://cidconecta-nztptuci.manus.space/">
@@ -19,15 +21,16 @@
   <link rel="preconnect" href="https://tile.openstreetmap.org">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yhcQyZ10wXgALDVK8O7n33R1F+9g=" crossorigin="">
   <link rel="stylesheet" href="assets/styles.css">
-  <title>Cidade Conecta — comunidade em ação</title>
+  <link rel="stylesheet" href="assets/piracicaba.css">
+  <title>Cidade Conecta Piracicaba — comunidade em ação</title>
 </head>
 <body>
   <a class="skip" href="#app">Pular para o conteúdo</a>
   <header class="top">
     <div class="wrap topin">
-      <a class="brand" href="#/" aria-label="Cidade Conecta - início">
+      <a class="brand" href="#/" aria-label="Cidade Conecta Piracicaba - início">
         <span class="logo" aria-hidden="true">CC</span>
-        <span>Cidade Conecta<small>Comunidade em ação</small></span>
+        <span>Cidade Conecta<small>Piracicaba · SP</small></span>
       </a>
       <nav class="nav" id="nav" aria-label="Navegação principal">
         <a href="#/" data-route="">Início</a>
@@ -46,8 +49,15 @@
     </div>
   </header>
 
+  <div class="cityBand">
+    <div class="wrap cityBandIn">
+      <span class="cityPlace">Cidade Conecta · Piracicaba, São Paulo</span>
+      <a class="cityOfficialShortcut" href="https://piracicaba.sp.gov.br/" target="_blank" rel="noopener noreferrer">Portal oficial de Piracicaba ↗</a>
+    </div>
+  </div>
+
   <div class="demo">
-    <div class="wrap">🧪 <span><strong>Protótipo acadêmico.</strong> Esta versão demonstra o funcionamento do Cidade Conecta e ainda não representa atendimento oficial de órgão público.</span></div>
+    <div class="wrap">🧪 <span><strong>Protótipo acadêmico independente.</strong> Esta versão demonstra o funcionamento do Cidade Conecta em Piracicaba e não representa atendimento oficial da Prefeitura.</span></div>
   </div>
 
   <main id="app" tabindex="-1"></main>
@@ -60,8 +70,8 @@
   <footer>
     <div class="wrap foot">
       <div>
-        <div class="footBrand">Cidade Conecta</div>
-        <p>Projeto acadêmico para participação cidadã e registro organizado de problemas urbanos.</p>
+        <div class="footBrand">Cidade Conecta · Piracicaba</div>
+        <p>Projeto acadêmico para participação cidadã e registro organizado de problemas urbanos em Piracicaba, São Paulo.</p>
         <div class="version">MVP v4 · 2026</div>
       </div>
       <div>
@@ -70,9 +80,13 @@
         <a href="#/privacidade">Princípios de privacidade</a>
       </div>
       <div>
-        <b>Importante</b>
-        <p>Não substitui canais oficiais de emergência, polícia, bombeiros, defesa civil ou atendimento público.</p>
-        <a href="#/sobre">Sobre o projeto</a>
+        <b>Serviços oficiais</b>
+        <p>O Cidade Conecta não substitui os canais da Prefeitura nem serviços de emergência.</p>
+        <div class="piraFooter">
+          <a href="https://piracicaba.sp.gov.br/" target="_blank" rel="noopener noreferrer">Prefeitura</a>
+          <a href="https://sistemas.pmp.sp.gov.br/semad/protocolo/atendimento156/" target="_blank" rel="noopener noreferrer">Atendimento 156</a>
+          <a href="https://geo.piracicaba.sp.gov.br/" target="_blank" rel="noopener noreferrer">Geoprocessamento</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -80,5 +94,6 @@
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="assets/app.js" defer></script>
+  <script src="assets/piracicaba.js" defer></script>
 </body>
 </html>
