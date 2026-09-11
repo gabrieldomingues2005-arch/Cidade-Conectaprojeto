@@ -26,6 +26,7 @@ jobs:
           node --check assets/app.js
           node --check assets/piracicaba.js
           node --check assets/piracicaba-mapas.js
+          node --check assets/privacy-geo.js
 
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs
