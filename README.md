@@ -2,6 +2,14 @@
 
 Projeto de extensão universitária voltado à participação cidadã e ao registro organizado de problemas urbanos.
 
+## Site publicado
+
+Versão pública atualmente publicada pelo Manus:
+
+https://cidconecta-nztptuci.manus.space
+
+> Observação: o GitHub continua sendo a fonte oficial do projeto. A publicação no Manus deve ser sincronizada/atualizada a partir desta base quando a integração for confirmada. Enquanto isso, alterações no `main` podem estar à frente da versão publicada.
+
 ## Objetivo
 
 Permitir que moradores registrem ocorrências como buracos, falhas de iluminação, descarte irregular de resíduos, vazamentos, alagamentos, sinalização, acessibilidade e problemas em áreas públicas. Cada registro recebe um protocolo para acompanhamento.
@@ -51,17 +59,15 @@ O foco é registrar problemas urbanos, não acusações contra pessoas. Nome, e-
 
 Este repositório é a fonte oficial do Cidade Conecta. Melhorias feitas no ChatGPT, Manus ou em outra ferramenta devem ser consolidadas aqui para evitar versões paralelas e divergentes.
 
-Existe uma publicação demonstrativa feita pelo Manus, porém a URL pública e a versão publicada devem ser registradas aqui quando forem confirmadas. Alterações neste repositório não devem ser consideradas automaticamente sincronizadas com a publicação do Manus sem uma integração verificada.
-
 ## Próximas etapas
 
-1. Registrar no repositório a URL pública atualmente publicada pelo Manus.
-2. Comparar visual e funcionalidades da publicação com o `main` atual.
+1. Comparar a versão pública do Manus com o `main` atual quando a publicação estiver acessível para inspeção automatizada.
+2. Confirmar um fluxo de sincronização entre GitHub e a publicação.
 3. Definir domínio próprio.
 4. Substituir armazenamento local por PostgreSQL/API.
 5. Implementar autenticação e autorização por perfil.
 6. Criar moderação de conteúdo e tratamento seguro de anexos.
-7. Configurar SEO, sitemap e Google Search Console após definição da URL/domínio.
+7. Configurar SEO, sitemap e Google Search Console após definição da URL/domínio definitivo.
 8. Realizar testes com usuários.
 9. Preparar demonstração e proposta para possível parceria institucional com a Prefeitura.
 
