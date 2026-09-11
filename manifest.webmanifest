@@ -1,16 +1,16 @@
 {
-  "id": "cidade-conecta",
-  "name": "Cidade Conecta",
+  "id": "cidade-conecta-piracicaba",
+  "name": "Cidade Conecta Piracicaba",
   "short_name": "Cidade Conecta",
-  "description": "Plataforma comunitária para registrar, acompanhar e visualizar problemas urbanos.",
+  "description": "Projeto comunitário para registrar, acompanhar e visualizar problemas urbanos em Piracicaba, São Paulo.",
   "start_url": "./#/",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#f3f7f8",
-  "theme_color": "#075f73",
+  "theme_color": "#2f3f88",
   "lang": "pt-BR",
-  "categories": ["government", "utilities", "productivity"],
+  "categories": ["utilities", "productivity"],
   "icons": [
     {
       "src": "favicon.svg",
