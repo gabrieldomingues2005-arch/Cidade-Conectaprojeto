@@ -1,4 +1,4 @@
-name: Publicar Cidade Conecta
+name: Sincronizar site para gh-pages
 
 on:
   push:
@@ -6,34 +6,23 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: "pages"
+  group: "gh-pages-sync"
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código
+      - name: Baixar branch main
         uses: actions/checkout@v4
-
-      - name: Configurar e habilitar Pages
-        uses: actions/configure-pages@v5
         with:
-          enablement: true
+          fetch-depth: 0
 
-      - name: Enviar site estático
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-
-      - name: Publicar
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Sincronizar gh-pages com main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git push origin HEAD:gh-pages --force
