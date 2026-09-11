@@ -35,7 +35,19 @@
       "administrativeRegions": {
         "status": "metadata-only",
         "source": "Mapa municipal de regiões administrativas de 12/12/2024",
-        "note": "Os polígonos das regiões não são aproximados pelo projeto. A aplicação aguarda fonte vetorial adequada e validada."
+        "sourceLayerName": "PMPM_REGIOES_ADMINISTRATIVAS_DPLAN_2021",
+        "sourceLayerMembers": [
+          "Regiao_Administrativa_I",
+          "Regiao_Administrativa_II",
+          "Regiao_Administrativa_III",
+          "Regiao_Administrativa_IV",
+          "Regiao_Administrativa_V",
+          "Regiao_Administrativa_VI",
+          "Regiao_Administrativa_VII",
+          "Regiao_Administrativa_VIII",
+          "Regiao_Administrativa_IX"
+        ],
+        "note": "Os nomes acima aparecem na legenda do mapa municipal de referência. O projeto ainda não possui endpoint vetorial oficial/validado para consumir os polígonos, portanto não os aproxima."
       }
     }
   },
