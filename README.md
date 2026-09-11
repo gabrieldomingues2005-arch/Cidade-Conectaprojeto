@@ -4,11 +4,17 @@ Projeto de extensão universitária voltado à participação cidadã e ao regis
 
 ## Site publicado
 
-Versão pública atualmente publicada pelo Manus:
+### Preview atualizado pelo GitHub
+
+https://gabrieldomingues2005-arch.github.io/Cidade-Conectaprojeto/
+
+A branch `main` é a fonte oficial do projeto. Um workflow sincroniza automaticamente o conteúdo da `main` com a branch `gh-pages`; o GitHub Pages publica essa branch. Assim, novas alterações feitas no GitHub podem chegar ao site sem depender do Manus.
+
+### Publicação anterior no Manus
 
 https://cidconecta-nztptuci.manus.space
 
-> Observação: o GitHub continua sendo a fonte oficial do projeto. A publicação no Manus deve ser sincronizada/atualizada a partir desta base quando a integração for confirmada. Enquanto isso, alterações no `main` podem estar à frente da versão publicada.
+A versão do Manus fica preservada como publicação anterior. Enquanto a situação da assinatura/reembolso estiver sendo regularizada, não é necessário usar créditos do Manus para manter a evolução do projeto.
 
 ## Objetivo
 
@@ -38,6 +44,7 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - Avisos claros de que o protótipo não substitui canais oficiais
 - PWA básica com `manifest.webmanifest`, favicon e service worker
 - Suporte offline básico para os arquivos principais
+- Publicação automática via GitHub Pages
 
 ## Estrutura do repositório
 
@@ -45,11 +52,13 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - `manifest.webmanifest` — manifesto da aplicação web
 - `sw.js` — cache/offline básico do protótipo
 - `favicon.svg` — ícone do projeto
-- `robots.txt` — preparação para indexação futura
+- `robots.txt` — regras de rastreamento
+- `sitemap.xml` — mapa do site para mecanismos de busca
 - `404.html` — página de erro
 - `ARQUITETURA.md` — fluxo funcional e perfis futuros
 - `PRIVACIDADE.md` — princípios de privacidade/LGPD para evolução do projeto
 - `schema.sql` — proposta inicial de banco PostgreSQL
+- `.github/workflows/pages.yml` — sincronização automática `main` → `gh-pages`
 
 ## Privacidade
 
@@ -61,14 +70,13 @@ Este repositório é a fonte oficial do Cidade Conecta. Melhorias feitas no Chat
 
 ## Próximas etapas
 
-1. Comparar a versão pública do Manus com o `main` atual quando a publicação estiver acessível para inspeção automatizada.
-2. Confirmar um fluxo de sincronização entre GitHub e a publicação.
-3. Definir domínio próprio.
-4. Substituir armazenamento local por PostgreSQL/API.
-5. Implementar autenticação e autorização por perfil.
-6. Criar moderação de conteúdo e tratamento seguro de anexos.
-7. Configurar SEO, sitemap e Google Search Console após definição da URL/domínio definitivo.
-8. Realizar testes com usuários.
-9. Preparar demonstração e proposta para possível parceria institucional com a Prefeitura.
+1. Validar o preview do GitHub Pages em celular e computador.
+2. Substituir armazenamento local por PostgreSQL/API.
+3. Implementar autenticação e autorização por perfil.
+4. Criar moderação de conteúdo e tratamento seguro de anexos.
+5. Definir domínio próprio e apontá-lo para a publicação oficial.
+6. Configurar Google Search Console após definição do domínio.
+7. Realizar testes com usuários.
+8. Preparar demonstração e proposta para possível parceria institucional com a Prefeitura.
 
 Projeto acadêmico — 2026.
