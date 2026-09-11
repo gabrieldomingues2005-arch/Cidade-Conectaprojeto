@@ -18,7 +18,7 @@ function normalize(v=''){
 
 const required=[
   'index.html','assets/styles.css','assets/app.js','assets/piracicaba.css',
-  'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css',
+  'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
   'data/piracicaba.json','manifest.webmanifest','sw.js','favicon.svg','README.md',
   'GEOGRAFIA.md','API.md','schema.sql','TESTES.md'
 ];
@@ -68,16 +68,29 @@ if(data){
 }
 
 const index=read('index.html');
-for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js']){
+for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js']){
   assert(index.includes(ref),`index.html referencia ${ref}`);
 }
 assert(index.includes('Protótipo acadêmico independente'),'Aviso de independência institucional está no HTML');
 assert(index.includes('Piracicaba · SP'),'Identidade local de Piracicaba está no HTML');
 
 const sw=read('sw.js');
-for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','data/piracicaba.json']){
+for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','data/piracicaba.json']){
   assert(sw.includes(ref),`Service worker referencia ${ref}`);
 }
+
+const privacyGeo=read('assets/privacy-geo.js');
+assert(privacyGeo.includes("PUBLIC_DECIMALS=3"),'Localização pública usa precisão reduzida no protótipo');
+assert(privacyGeo.includes('exactLocation'),'Localização exata é separada no bloco privado local');
+assert(privacyGeo.includes('territoryResolutionStatus'),'Registro guarda estado da resolução territorial');
+
+const schema=read('schema.sql');
+assert(schema.includes('occurrence_private_location'),'Schema separa localização exata da ocorrência pública');
+assert(schema.includes('neighborhood_regions'),'Schema suporta bairro associado a múltiplas regiões');
+
+const api=read('API.md');
+assert(api.includes('/api/territory/resolve'),'Contrato de API possui resolução territorial');
+assert(api.includes('public_latitude'),'Contrato diferencia coordenada pública');
 
 const geo=read('GEOGRAFIA.md');
 assert(geo.includes('não desenha polígonos aproximados'),'Documentação proíbe polígonos regionais aproximados');
