@@ -89,7 +89,7 @@ function enhanceOccurrence(d){
   const article=[...document.querySelectorAll('.detail .card')].find(x=>x.querySelector('.eyebrow'));
   const chips=article?.querySelector('.chips');
   if(chips&&!chips.querySelector('[data-pira-territory]')){
-    const holder=document.createElement('span');holder.dataset.piraTerritory='1';holder.innerHTML=`<span class="mini">📍 Piracicaba · SP</span>${regionSummary(regs)}`;while(holder.firstChild)chips.appendChild(holder.firstChild);
+    const holder=document.createElement('span');holder.dataset.piraTerritory='1';holder.className='piraTerritoryChips';holder.innerHTML=`<span class="mini">📍 Piracicaba · SP</span>${regionSummary(regs)}`;chips.appendChild(holder);
   }
   const aside=document.querySelector('.detail aside.card');
   if(aside&&!aside.querySelector('#piraRoutingHint')){
