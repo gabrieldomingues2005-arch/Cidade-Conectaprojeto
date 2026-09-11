@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="Cidade Conecta Piracicaba — plataforma comunitária para registrar, acompanhar e visualizar problemas urbanos em Piracicaba, São Paulo, com protocolo, mapa e indicadores.">
+  <meta name="description" content="Cidade Conecta Piracicaba — plataforma comunitária para registrar, acompanhar e visualizar problemas urbanos em Piracicaba, São Paulo, com protocolo, mapa, regiões administrativas e indicadores.">
   <meta name="theme-color" content="#2f3f88">
   <meta name="robots" content="index,follow">
   <meta name="geo.region" content="BR-SP">
   <meta name="geo.placename" content="Piracicaba">
+  <meta name="geo.position" content="-22.7253;-47.6492">
+  <meta name="ICBM" content="-22.7253, -47.6492">
   <meta property="og:title" content="Cidade Conecta Piracicaba">
-  <meta property="og:description" content="Registre problemas urbanos de Piracicaba, acompanhe protocolos e ajude a organizar informações da comunidade.">
+  <meta property="og:description" content="Registre problemas urbanos de Piracicaba, acompanhe protocolos e visualize informações por bairro e região administrativa.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:url" content="https://cidconecta-nztptuci.manus.space/">
@@ -22,6 +24,17 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yhcQyZ10wXgALDVK8O7n33R1F+9g=" crossorigin="">
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/piracicaba.css">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Cidade Conecta Piracicaba",
+    "url":"https://cidconecta-nztptuci.manus.space/",
+    "description":"Projeto acadêmico comunitário para registro e acompanhamento de problemas urbanos em Piracicaba, São Paulo.",
+    "inLanguage":"pt-BR",
+    "spatialCoverage":{"@type":"City","name":"Piracicaba","containedInPlace":{"@type":"State","name":"São Paulo"}}
+  }
+  </script>
   <title>Cidade Conecta Piracicaba — comunidade em ação</title>
 </head>
 <body>
@@ -39,6 +52,7 @@
         <a href="#/minhas" data-route="minhas">Meus registros</a>
         <a href="#/mapa" data-route="mapa">Mapa</a>
         <a href="#/dashboard" data-route="dashboard">Indicadores</a>
+        <a href="#/piracicaba" data-route="piracicaba">Piracicaba</a>
         <a href="#/sobre" data-route="sobre">Sobre</a>
         <a href="#/admin" data-route="admin">Admin</a>
       </nav>
@@ -75,8 +89,9 @@
         <div class="version">MVP v4 · 2026</div>
       </div>
       <div>
-        <b>Privacidade</b>
-        <p>Dados pessoais não são exibidos publicamente. Evite informações sensíveis durante os testes.</p>
+        <b>Território e privacidade</b>
+        <p>Consulte as regiões administrativas e os princípios de proteção de dados do protótipo.</p>
+        <a href="#/piracicaba">Geografia de Piracicaba</a><br>
         <a href="#/privacidade">Princípios de privacidade</a>
       </div>
       <div>
