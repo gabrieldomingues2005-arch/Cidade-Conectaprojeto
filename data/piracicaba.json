@@ -9,6 +9,10 @@
         "url": "https://www.ibge.gov.br/cidades-e-estados/sp/piracicaba.html"
       },
       {
+        "name": "IBGE — API de Malhas Geográficas",
+        "url": "https://servicodados.ibge.gov.br/api/v3/malhas/municipios/3538709?formato=application/vnd.geo%2Bjson&qualidade=minima"
+      },
+      {
         "name": "Prefeitura de Piracicaba — Mapas do Município",
         "url": "https://piracicaba.sp.gov.br/servicos/mapas-do-municipio/"
       },
@@ -17,10 +21,23 @@
         "url": "https://piracicaba.sp.gov.br/wp-content/uploads/2024/12/MAPA-DAS-REGIOES-ADMINISTRATIVAS-FINAL.pdf"
       },
       {
-        "name": "Geoprocessamento Corporativo de Piracicaba",
-        "url": "https://geo.piracicaba.sp.gov.br/"
+        "name": "Geoprocessamento de Piracicaba",
+        "url": "https://piracicaba.geopixel.com.br/geopixelcidades3/"
       }
-    ]
+    ],
+    "machineReadable": {
+      "municipalBoundary": {
+        "status": "integrated-runtime",
+        "format": "GeoJSON",
+        "source": "IBGE API de Malhas Geográficas",
+        "url": "https://servicodados.ibge.gov.br/api/v3/malhas/municipios/3538709?formato=application/vnd.geo%2Bjson&qualidade=minima"
+      },
+      "administrativeRegions": {
+        "status": "metadata-only",
+        "source": "Mapa municipal de regiões administrativas de 12/12/2024",
+        "note": "Os polígonos das regiões não são aproximados pelo projeto. A aplicação aguarda fonte vetorial adequada e validada."
+      }
+    }
   },
   "municipio": {
     "name": "Piracicaba",
