@@ -20,16 +20,27 @@ O GitHub Pages funciona como espelho técnico para validar rapidamente a versão
 
 O MVP foi contextualizado para Piracicaba/SP. O mapa utiliza Piracicaba como referência inicial, os registros demonstrativos usam bairros do município e a interface recebeu uma paleta inspirada na identidade visual municipal, com predominância de azul e verde e detalhes em amarelo. O Cidade Conecta continua sendo um projeto acadêmico independente e não utiliza a marca oficial da Prefeitura como se fosse um serviço municipal.
 
-A interface também oferece atalhos externos para o Portal da Prefeitura, Portal de Serviços 156 e Geoprocessamento, sempre identificados como canais oficiais externos.
+A camada territorial usa uma base própria em `data/piracicaba.json`, montada a partir de referências do IBGE e de mapas públicos municipais. Ela reúne dados gerais do município, as 9 regiões administrativas, bairros componentes, área, população, densidade, núcleos urbanos isolados, municípios vizinhos e sugestões demonstrativas de encaminhamento por categoria.
+
+A interface também oferece atalhos externos para o Portal da Prefeitura, Portal de Serviços 156, Geoprocessamento e Mapas do Município, sempre identificados como canais oficiais externos.
 
 ## Objetivo
 
 Permitir que moradores registrem ocorrências como buracos, falhas de iluminação, descarte irregular de resíduos, vazamentos, alagamentos, sinalização, acessibilidade e problemas em áreas públicas. Cada registro recebe um protocolo para acompanhamento.
 
-## MVP v4 atual
+## MVP v4.2 atual
 
 - Interface redesenhada e modular, separando HTML, CSS e JavaScript
 - Identidade visual contextualizada para Piracicaba/SP
+- Página específica `#/piracicaba` com geografia e leitura territorial
+- Dados municipais de referência: população, área, densidade e código IBGE
+- 9 regiões administrativas com população, área, densidade e bairros componentes
+- Núcleos urbanos isolados/áreas rurais de referência
+- Municípios vizinhos como contexto regional
+- Identificação automática da região administrativa a partir do bairro quando possível
+- Sugestão demonstrativa de área de encaminhamento conforme a categoria da ocorrência
+- Indicadores de ocorrências agrupados por região administrativa
+- Links para Geoprocessamento, Mapas do Município, IBGE e Atendimento 156
 - Página inicial responsiva para computador e celular
 - Busca rápida por protocolo já na página inicial
 - Registro de ocorrência com categoria, título, descrição, bairro e referência de localização
@@ -46,7 +57,7 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - Histórico de atualizações
 - Mapa interativo com OpenStreetMap/Leaflet
 - Filtros no mapa por categoria, status e busca textual
-- Dashboard com indicadores por categoria, bairro e status
+- Dashboard com indicadores por categoria, bairro, status e leitura territorial
 - Taxa demonstrativa de resolução
 - Painel administrativo de demonstração
 - Alteração de status, setor responsável e observações
@@ -55,11 +66,10 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - Separação entre dados públicos e privados
 - Página de princípios de privacidade
 - Avisos claros de que o protótipo não substitui canais oficiais
-- Atalhos para Portal da Prefeitura, Atendimento 156 e Geoprocessamento
 - PWA com manifesto, favicon e service worker
-- Cache offline dos arquivos principais
+- Cache offline dos arquivos principais e da base territorial
 - Atalhos mobile para registrar e acompanhar
-- SEO básico com canonical, Open Graph, robots e sitemap
+- SEO local com metadados de Piracicaba, canonical, Open Graph, dados estruturados, robots e sitemap
 - Publicação automática do preview via GitHub Pages
 
 ## Estrutura do repositório
@@ -68,7 +78,8 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - `assets/styles.css` — design system e responsividade
 - `assets/app.js` — funcionalidades, rotas, mapa, formulário, dashboard e administração demonstrativa
 - `assets/piracicaba.css` — paleta e componentes visuais contextualizados para Piracicaba
-- `assets/piracicaba.js` — conteúdo local e links oficiais externos de Piracicaba
+- `assets/piracicaba.js` — módulo de geografia, região administrativa, indicadores territoriais e links oficiais externos
+- `data/piracicaba.json` — base territorial estruturada do protótipo
 - `manifest.webmanifest` — manifesto PWA
 - `sw.js` — cache/offline básico
 - `favicon.svg` — ícone do projeto
@@ -82,9 +93,20 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - `TESTES.md` — roteiro de testes
 - `.github/workflows/pages.yml` — sincronização automática `main` → `gh-pages`
 
-## Privacidade
+## Privacidade e caráter independente
 
-O foco é registrar problemas urbanos, não acusações contra pessoas. Nome, e-mail e telefone não são mostrados publicamente. O MVP atual usa armazenamento local do navegador e dados demonstrativos; antes de uso real será necessário backend seguro, autenticação, moderação, armazenamento protegido de anexos, política de privacidade e validação jurídica/LGPD.
+O foco é registrar problemas urbanos, não acusações contra pessoas. Nome, e-mail e telefone não são mostrados publicamente. O uso de referências territoriais, cores inspiradas na identidade municipal e links oficiais não significa integração, endosso ou operação pela Prefeitura Municipal de Piracicaba.
+
+O MVP atual usa armazenamento local do navegador e dados demonstrativos; antes de uso real será necessário backend seguro, autenticação, moderação, armazenamento protegido de anexos, política de privacidade, validação jurídica/LGPD e validação institucional das regras de encaminhamento.
+
+## Fontes territoriais principais
+
+- IBGE Cidades — Piracicaba
+- Prefeitura de Piracicaba — Mapas do Município
+- Mapa das Regiões Administrativas, atualização de 12/12/2024
+- Geoprocessamento Corporativo de Piracicaba
+
+As referências são usadas para organizar o protótipo. Antes de uma implantação real, os arquivos e limites geográficos devem ser importados diretamente de fontes oficiais atualizadas e validados pela área técnica responsável.
 
 ## Fonte principal
 
@@ -92,14 +114,15 @@ A branch `main` deste repositório é a fonte oficial do Cidade Conecta. Melhori
 
 ## Próximas etapas
 
-1. Validar o MVP v4 contextualizado para Piracicaba em computador e celular.
+1. Validar o MVP v4.2 contextualizado para Piracicaba em computador e celular.
 2. Confirmar que a publicação principal está acompanhando a branch `main`.
-3. Substituir armazenamento local por PostgreSQL/API.
-4. Implementar autenticação e autorização por perfil.
-5. Criar moderação de conteúdo e tratamento seguro de anexos.
-6. Definir domínio próprio e apontá-lo para a publicação oficial.
-7. Configurar Google Search Console após definição do domínio.
-8. Realizar testes com usuários.
-9. Preparar demonstração e proposta para possível parceria institucional com a Prefeitura.
+3. Evoluir o mapa para consumir limites oficiais em GeoJSON/serviço geográfico quando houver endpoint adequado e autorização de uso.
+4. Substituir armazenamento local por PostgreSQL/API.
+5. Implementar autenticação e autorização por perfil.
+6. Criar moderação de conteúdo e tratamento seguro de anexos.
+7. Definir domínio próprio e apontá-lo para a publicação oficial.
+8. Configurar Google Search Console após definição do domínio.
+9. Realizar testes com usuários.
+10. Preparar demonstração e proposta para possível parceria institucional com a Prefeitura.
 
 Projeto acadêmico — 2026.
