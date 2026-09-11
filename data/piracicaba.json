@@ -134,6 +134,20 @@
     "Anhembi",
     "Santa Maria da Serra"
   ],
+  "officialMapLayers": [
+    {"name":"Bairros urbanos e rurais","group":"Território","icon":"🏘️"},
+    {"name":"Estradas na área rural","group":"Mobilidade","icon":"🛣️"},
+    {"name":"Zoneamento urbano: área urbana e NUIs","group":"Planejamento","icon":"🧭"},
+    {"name":"Zona Especial de Parques Lineares","group":"Meio ambiente","icon":"🌳"},
+    {"name":"Zona Especial de Risco: enchentes, deslizamento e solapamento","group":"Risco","icon":"⚠️"},
+    {"name":"Zona Especial de Interesse Social — ZEIS","group":"Habitação","icon":"🏠"},
+    {"name":"Divisão do município em distritos","group":"Território","icon":"📍"},
+    {"name":"Municípios vizinhos de Piracicaba","group":"Região","icon":"🗺️"},
+    {"name":"Evolução da mancha urbana por década","group":"Urbanização","icon":"📈"},
+    {"name":"Evolução do perímetro urbano","group":"Urbanização","icon":"📐"},
+    {"name":"Equipamentos de educação","group":"Serviços públicos","icon":"🏫"},
+    {"name":"Equipamentos de saúde","group":"Serviços públicos","icon":"🏥"}
+  ],
   "suggestedRouting": {
     "vias": "Obras e manutenção viária",
     "iluminacao": "Iluminação pública",
