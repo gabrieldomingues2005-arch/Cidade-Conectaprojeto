@@ -1,0 +1,148 @@
+{
+  "metadata": {
+    "title": "Base territorial de Piracicaba para o Cidade Conecta",
+    "lastReviewed": "2026-09-10",
+    "note": "Dados de referência para o protótipo acadêmico. As fontes oficiais devem ser conferidas antes de uso institucional ou operacional.",
+    "sources": [
+      {
+        "name": "IBGE Cidades — Piracicaba",
+        "url": "https://www.ibge.gov.br/cidades-e-estados/sp/piracicaba.html"
+      },
+      {
+        "name": "Prefeitura de Piracicaba — Mapas do Município",
+        "url": "https://piracicaba.sp.gov.br/servicos/mapas-do-municipio/"
+      },
+      {
+        "name": "Mapa das Regiões Administrativas — atualização 12/12/2024",
+        "url": "https://piracicaba.sp.gov.br/wp-content/uploads/2024/12/MAPA-DAS-REGIOES-ADMINISTRATIVAS-FINAL.pdf"
+      },
+      {
+        "name": "Geoprocessamento Corporativo de Piracicaba",
+        "url": "https://geo.piracicaba.sp.gov.br/"
+      }
+    ]
+  },
+  "municipio": {
+    "name": "Piracicaba",
+    "state": "São Paulo",
+    "uf": "SP",
+    "ibgeCode": "3538709",
+    "center": [-22.7253, -47.6492],
+    "areaKm2": 1377.173,
+    "areaReferenceYear": 2025,
+    "populationCensus": 423323,
+    "censusYear": 2022,
+    "populationEstimate": 440835,
+    "populationEstimateYear": 2025,
+    "densityHabKm2": 307.19,
+    "densityReferenceYear": 2022
+  },
+  "administrativeRegions": [
+    {
+      "id": 1,
+      "population": 61859,
+      "areaKm2": 10.68,
+      "densityHabKm2": 5792.04,
+      "neighborhoods": ["Centro", "Cidade Alta", "Cidade Jardim", "Clube de Campo", "Higienópolis", "Jardim Elite", "Nova América", "Parque da Rua do Porto", "São Dimas", "São Judas", "Vila Independência", "Vila Monteiro"]
+    },
+    {
+      "id": 2,
+      "population": 36982,
+      "areaKm2": 37.99,
+      "densityHabKm2": 973.47,
+      "neighborhoods": ["Água Santa", "Algodoal", "Areão", "Capim Fino", "Jardim Monumento", "Nhô Quim", "Nova Piracicaba", "Parte do Guamium", "Santa Rosa", "Vila Rezende"]
+    },
+    {
+      "id": 3,
+      "population": 28526,
+      "areaKm2": 16.38,
+      "densityHabKm2": 1741.51,
+      "neighborhoods": ["Corumbataí", "Jardim Primavera", "Mário Dedini", "Parte do Guamium", "Vila Fátima", "Vila Industrial"]
+    },
+    {
+      "id": 4,
+      "population": 60002,
+      "areaKm2": 27.94,
+      "densityHabKm2": 2147.53,
+      "neighborhoods": ["Itaperu", "Parque Residencial Piracicaba", "Santa Terezinha", "Vale do Sol", "Vila Sônia"]
+    },
+    {
+      "id": 5,
+      "population": 30290,
+      "areaKm2": 17.18,
+      "densityHabKm2": 1763.10,
+      "neighborhoods": ["Castelinho", "Glebas Califórnia", "Jupiá", "Morato", "Ondas", "Ondinhas", "Paulista"]
+    },
+    {
+      "id": 6,
+      "population": 46321,
+      "areaKm2": 5.83,
+      "densityHabKm2": 7945.28,
+      "neighborhoods": ["Bairro Verde", "Jaraguá", "Jardim Itapuã", "Monte Líbano", "Paulicéia", "Vila Cristina"]
+    },
+    {
+      "id": 7,
+      "population": 38043,
+      "areaKm2": 28.57,
+      "densityHabKm2": 1331.57,
+      "neighborhoods": ["Água das Pedras", "Campestre", "Dona Antonia", "Jardim Planalto", "Novo Horizonte", "Santa Helena", "São Jorge"]
+    },
+    {
+      "id": 8,
+      "population": 58099,
+      "areaKm2": 32.85,
+      "densityHabKm2": 1768.61,
+      "neighborhoods": ["Água Branca", "CECAP", "Chicó", "Jardim Califórnia", "Jardim Caxambu", "Pompéia", "Taquaral"]
+    },
+    {
+      "id": 9,
+      "population": 42210,
+      "areaKm2": 54.01,
+      "densityHabKm2": 781.52,
+      "neighborhoods": ["Agronomia", "Cidade Judiciária", "Conceição", "Dois Córregos", "Jardim Abaeté", "Jardim São Francisco", "Monte Alegre", "Morumbi", "Piracicamirim", "Santa Cecília", "Santa Rita", "Unileste"]
+    }
+  ],
+  "ruralAndIsolatedUrbanNuclei": [
+    "Anhumas",
+    "Ártemis",
+    "Ibitiruna",
+    "Tanquinho",
+    "Tupi",
+    "Santana / Santa Olímpia",
+    "Brisa da Serra",
+    "Canaã",
+    "Nova Suíça",
+    "Santa Ana",
+    "Terra Nova",
+    "Vila Belém",
+    "Uninorte",
+    "Santa Isabel"
+  ],
+  "neighborMunicipalities": [
+    "São Pedro",
+    "Charqueada",
+    "Rio Claro",
+    "Saltinho",
+    "Rio das Pedras",
+    "Tietê",
+    "Conchas",
+    "Laranjal Paulista",
+    "Santa Gertrudes",
+    "Iracemápolis",
+    "Limeira",
+    "Santa Bárbara d’Oeste",
+    "Anhembi",
+    "Santa Maria da Serra"
+  ],
+  "suggestedRouting": {
+    "vias": "Obras e manutenção viária",
+    "iluminacao": "Iluminação pública",
+    "residuos": "Limpeza urbana e resíduos",
+    "agua": "Saneamento / SEMAE",
+    "alagamentos": "Drenagem urbana / Defesa Civil conforme o risco",
+    "sinalizacao": "Mobilidade e trânsito",
+    "acessibilidade": "Acessibilidade / manutenção urbana",
+    "areas": "Áreas verdes, parques e serviços urbanos",
+    "outros": "Triagem de atendimento / 156"
+  }
+}
