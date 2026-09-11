@@ -24,8 +24,10 @@ jobs:
       - name: Baixar código
         uses: actions/checkout@v4
 
-      - name: Configurar Pages
+      - name: Configurar e habilitar Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Enviar site estático
         uses: actions/upload-pages-artifact@v3
