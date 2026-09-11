@@ -1,0 +1,58 @@
+:root{
+  /* Paleta inspirada na identidade visual atual do Município de Piracicaba:
+     azul, verde, azul-claro e amarelo. O projeto continua independente e não oficial. */
+  --pira-navy:#2f3f88;
+  --pira-blue:#4f74bd;
+  --pira-green:#3aa63f;
+  --pira-teal:#4da9ad;
+  --pira-yellow:#f2d20a;
+  --brand:#2f3f88;
+  --brand-2:#2f9742;
+  --brand-3:#3d8799;
+  --surface-2:#edf4f8;
+  --surface-3:#f7fafc;
+  --focus:0 0 0 4px rgba(79,116,189,.18)
+}
+
+body{background:linear-gradient(180deg,#f6f9fb 0,#f3f7f8 430px)}
+.top{border-top:4px solid transparent;border-image:linear-gradient(90deg,var(--pira-green) 0 34%,var(--pira-blue) 34% 73%,var(--pira-yellow) 73% 100%) 1}
+.logo{background:linear-gradient(135deg,var(--pira-green),var(--pira-teal) 48%,var(--pira-blue));position:relative;overflow:hidden}
+.logo:after{content:"";position:absolute;left:6px;right:6px;bottom:5px;height:2px;border-radius:20px;background:var(--pira-yellow)}
+.primary{background:var(--pira-navy)}
+.primary:hover{background:#243471}
+.soft{color:var(--pira-navy);background:#eef3fb;border-color:#dbe4f4}
+.hero{background:radial-gradient(circle at 86% 12%,rgba(58,166,63,.17),transparent 27%),radial-gradient(circle at 70% 46%,rgba(79,116,189,.12),transparent 30%),linear-gradient(#fff,var(--bg))}
+.hero h1 span,.eyebrow{color:var(--pira-green)}
+.heroMap{background:linear-gradient(140deg,#e7f3e6,#eaf3f7 52%,#e8edf8)}
+.bar{background:linear-gradient(90deg,var(--pira-navy),var(--pira-blue),var(--pira-green))}
+.stepNum{background:var(--pira-navy)}
+.category:hover{border-color:#aebfe2}
+.callout .icon{background:#eef3fb}
+footer{background:linear-gradient(115deg,#252f68,#233b73 55%,#245d68)}
+
+.cityBand{background:#fff;border-bottom:1px solid var(--line)}
+.cityBandIn{min-height:42px;display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.85rem}
+.cityPlace{display:flex;align-items:center;gap:8px;font-weight:850;color:var(--pira-navy)}
+.cityPlace:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--pira-green);box-shadow:14px 0 0 var(--pira-blue),28px 0 0 var(--pira-yellow);margin-right:29px}
+.cityBand a{color:var(--pira-navy);font-weight:800;text-decoration:none}
+.cityBand a:hover{text-decoration:underline}
+
+.cityContext{padding-top:26px}
+.cityIntro{position:relative;overflow:hidden;border-color:#d8e1ee;background:linear-gradient(135deg,#fff,#f5f8fc)}
+.cityIntro:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--pira-green) 0 33%,var(--pira-blue) 33% 74%,var(--pira-yellow) 74% 100%)}
+.cityIntro h2{margin:.25rem 0 .55rem;font-size:clamp(1.55rem,3vw,2.25rem);letter-spacing:-.035em}
+.cityLabel{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#edf6ef;color:#277c35;font-size:.79rem;font-weight:900}
+.cityGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:18px}
+.cityFeature{padding:16px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.cityFeature b{display:block;margin-bottom:4px}
+.cityFeature .cityIcon{font-size:1.25rem;display:block;margin-bottom:8px}
+.cityOfficial{margin-top:16px;padding:14px 16px;border:1px solid #d9e2ef;border-radius:14px;background:#f6f8fc}
+.cityOfficial strong{color:var(--pira-navy)}
+.cityLinks{display:flex;gap:9px;flex-wrap:wrap;margin-top:11px}
+.cityLink{display:inline-flex;align-items:center;gap:6px;padding:9px 11px;border-radius:10px;text-decoration:none;background:#fff;border:1px solid #d8e1ee;color:var(--pira-navy);font-size:.85rem;font-weight:850}
+.cityLink:hover{border-color:#aebfe2;transform:translateY(-1px)}
+.cityDisclaimer{font-size:.8rem;color:var(--muted);margin-top:10px}
+.piraFooter{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.16)}
+.piraFooter a{display:inline-block;margin-right:12px;margin-top:5px;font-size:.84rem}
+
+@media(max-width:780px){.cityGrid{grid-template-columns:1fr}.cityBandIn{align-items:flex-start;flex-direction:column;padding:8px 0;gap:4px}.cityBand .cityOfficialShortcut{margin-left:45px}.cityContext{padding-top:18px}}
