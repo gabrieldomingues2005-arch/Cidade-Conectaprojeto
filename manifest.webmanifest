@@ -3,8 +3,17 @@
   "short_name": "Cidade Conecta",
   "description": "Plataforma comunitária para registrar e acompanhar problemas urbanos.",
   "start_url": "./#/",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f4f8fa",
-  "theme_color": "#0A5D75",
-  "lang": "pt-BR"
+  "theme_color": "#075f73",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }
