@@ -1,5 +1,5 @@
-const CACHE='cidade-conecta-v4-3-geografia';
-const CORE=['./','./index.html','./assets/styles.css','./assets/app.js','./assets/piracicaba.css','./assets/piracicaba.js','./assets/piracicaba-mapas.js','./data/piracicaba.json','./manifest.webmanifest','./favicon.svg'];
+const CACHE='cidade-conecta-v4-3-geografia-avancada';
+const CORE=['./','./index.html','./assets/styles.css','./assets/app.js','./assets/piracicaba.css','./assets/piracicaba.js','./assets/piracicaba-mapas.js','./assets/piracicaba-mapas.css','./data/piracicaba.json','./manifest.webmanifest','./favicon.svg'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
 });
