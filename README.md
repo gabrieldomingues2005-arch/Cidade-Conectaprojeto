@@ -22,24 +22,34 @@ O MVP foi contextualizado para Piracicaba/SP. O mapa utiliza Piracicaba como ref
 
 A camada territorial usa uma base própria em `data/piracicaba.json`, montada a partir de referências do IBGE e de mapas públicos municipais. Ela reúne dados gerais do município, as 9 regiões administrativas, bairros componentes, área, população, densidade, núcleos urbanos isolados, municípios vizinhos e sugestões demonstrativas de encaminhamento por categoria.
 
+O limite municipal é carregado dinamicamente pela API de Malhas Geográficas do IBGE. Os limites internos das 9 regiões administrativas não são desenhados por aproximação: enquanto não houver uma camada vetorial adequada e validada, o sistema mantém apenas a classificação territorial baseada no mapa municipal e no nome do bairro.
+
 A interface também oferece atalhos externos para o Portal da Prefeitura, Portal de Serviços 156, Geoprocessamento e Mapas do Município, sempre identificados como canais oficiais externos.
 
 ## Objetivo
 
 Permitir que moradores registrem ocorrências como buracos, falhas de iluminação, descarte irregular de resíduos, vazamentos, alagamentos, sinalização, acessibilidade e problemas em áreas públicas. Cada registro recebe um protocolo para acompanhamento.
 
-## MVP v4.2 atual
+## MVP v4.3 atual
 
 - Interface redesenhada e modular, separando HTML, CSS e JavaScript
 - Identidade visual contextualizada para Piracicaba/SP
 - Página específica `#/piracicaba` com geografia e leitura territorial
 - Dados municipais de referência: população, área, densidade e código IBGE
+- Limite municipal vetorial carregado dinamicamente pela API de Malhas Geográficas do IBGE
 - 9 regiões administrativas com população, área, densidade e bairros componentes
+- Localizador de bairro e região administrativa
+- Autocomplete de bairros/núcleos no formulário de ocorrência
+- Tratamento de correspondências territoriais ambíguas sem inventar limites
 - Núcleos urbanos isolados/áreas rurais de referência
 - Municípios vizinhos como contexto regional
 - Identificação automática da região administrativa a partir do bairro quando possível
 - Sugestão demonstrativa de área de encaminhamento conforme a categoria da ocorrência
+- Contexto territorial exibido nas páginas de ocorrência e no painel administrativo
 - Indicadores de ocorrências agrupados por região administrativa
+- Taxa demonstrativa de ocorrências por 10 mil habitantes de cada região
+- Resumo territorial integrado ao mapa comunitário
+- Catálogo de camadas municipais: bairros, estradas rurais, zoneamento, áreas de risco, parques lineares, ZEIS, distritos, mancha urbana, educação e saúde
 - Links para Geoprocessamento, Mapas do Município, IBGE e Atendimento 156
 - Página inicial responsiva para computador e celular
 - Busca rápida por protocolo já na página inicial
@@ -67,7 +77,7 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - Página de princípios de privacidade
 - Avisos claros de que o protótipo não substitui canais oficiais
 - PWA com manifesto, favicon e service worker
-- Cache offline dos arquivos principais e da base territorial
+- Cache offline dos arquivos principais e da base territorial local
 - Atalhos mobile para registrar e acompanhar
 - SEO local com metadados de Piracicaba, canonical, Open Graph, dados estruturados, robots e sitemap
 - Publicação automática do preview via GitHub Pages
@@ -78,8 +88,11 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - `assets/styles.css` — design system e responsividade
 - `assets/app.js` — funcionalidades, rotas, mapa, formulário, dashboard e administração demonstrativa
 - `assets/piracicaba.css` — paleta e componentes visuais contextualizados para Piracicaba
-- `assets/piracicaba.js` — módulo de geografia, região administrativa, indicadores territoriais e links oficiais externos
+- `assets/piracicaba.js` — módulo base de geografia, regiões administrativas e indicadores territoriais
+- `assets/piracicaba-mapas.js` — limite municipal IBGE, localizador territorial, camadas de referência e inteligência regional
+- `assets/piracicaba-mapas.css` — estilos da geografia avançada
 - `data/piracicaba.json` — base territorial estruturada do protótipo
+- `GEOGRAFIA.md` — documentação das fontes, regras e limitações cartográficas
 - `manifest.webmanifest` — manifesto PWA
 - `sw.js` — cache/offline básico
 - `favicon.svg` — ícone do projeto
@@ -102,9 +115,10 @@ O MVP atual usa armazenamento local do navegador e dados demonstrativos; antes d
 ## Fontes territoriais principais
 
 - IBGE Cidades — Piracicaba
+- API de Malhas Geográficas do IBGE
 - Prefeitura de Piracicaba — Mapas do Município
 - Mapa das Regiões Administrativas, atualização de 12/12/2024
-- Geoprocessamento Corporativo de Piracicaba
+- Geoprocessamento de Piracicaba
 
 As referências são usadas para organizar o protótipo. Antes de uma implantação real, os arquivos e limites geográficos devem ser importados diretamente de fontes oficiais atualizadas e validados pela área técnica responsável.
 
@@ -114,15 +128,16 @@ A branch `main` deste repositório é a fonte oficial do Cidade Conecta. Melhori
 
 ## Próximas etapas
 
-1. Validar o MVP v4.2 contextualizado para Piracicaba em computador e celular.
+1. Validar o MVP v4.3 contextualizado para Piracicaba em computador e celular.
 2. Confirmar que a publicação principal está acompanhando a branch `main`.
-3. Evoluir o mapa para consumir limites oficiais em GeoJSON/serviço geográfico quando houver endpoint adequado e autorização de uso.
-4. Substituir armazenamento local por PostgreSQL/API.
-5. Implementar autenticação e autorização por perfil.
-6. Criar moderação de conteúdo e tratamento seguro de anexos.
-7. Definir domínio próprio e apontá-lo para a publicação oficial.
-8. Configurar Google Search Console após definição do domínio.
-9. Realizar testes com usuários.
-10. Preparar demonstração e proposta para possível parceria institucional com a Prefeitura.
+3. Obter/validar camada vetorial municipal das regiões administrativas e bairros para implementar ponto-em-polígono.
+4. Evoluir o mapa com camadas de risco, drenagem, zoneamento e equipamentos públicos quando houver fonte vetorial apropriada.
+5. Substituir armazenamento local por PostgreSQL/API.
+6. Implementar autenticação e autorização por perfil.
+7. Criar moderação de conteúdo e tratamento seguro de anexos.
+8. Definir domínio próprio e apontá-lo para a publicação oficial.
+9. Configurar Google Search Console após definição do domínio.
+10. Realizar testes com usuários.
+11. Preparar demonstração e proposta para possível parceria institucional com a Prefeitura.
 
 Projeto acadêmico — 2026.
