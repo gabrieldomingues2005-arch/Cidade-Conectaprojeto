@@ -6,29 +6,37 @@ Projeto de extensão universitária voltado à participação cidadã e ao regis
 
 Permitir que moradores registrem ocorrências como buracos, falhas de iluminação, descarte irregular de resíduos, vazamentos, alagamentos, sinalização, acessibilidade e problemas em áreas públicas. Cada registro recebe um protocolo para acompanhamento.
 
-## MVP atual
+## MVP v3 atual
 
 - Página inicial responsiva para computador e celular
-- Registro de ocorrência com categoria, título, descrição, bairro e localização
+- Registro de ocorrência com categoria, título, descrição, bairro e referência de localização
 - Seleção de ponto no mapa e geolocalização opcional
-- Foto opcional com compressão no navegador
+- Foto opcional com limite de tamanho no navegador
 - Protocolo automático no padrão `CC-2026-00001`
 - Consulta por protocolo
+- Página pública individual de cada ocorrência
+- Compartilhamento e cópia do protocolo
 - Status: Recebida, Em análise, Encaminhada, Em andamento e Resolvida
+- Histórico de atualizações
 - Mapa interativo com OpenStreetMap/Leaflet
-- Filtros no mapa por categoria, status e bairro
-- Dashboard com indicadores por categoria, bairro, status e órgão/setor
+- Filtros no mapa por categoria, status e busca textual
+- Dashboard com indicadores por categoria, bairro e status
+- Taxa demonstrativa de resolução
 - Painel administrativo de demonstração
-- Alteração de status, órgão responsável e observações
-- Exportação dos dados demonstrativos em JSON
+- Alteração de status, setor responsável e observações
+- Exportação dos dados demonstrativos em JSON e CSV
 - Separação entre dados públicos e privados
+- Página de princípios de privacidade
 - Avisos claros de que o protótipo não substitui canais oficiais
-- Manifesto web e página 404
+- PWA básica com `manifest.webmanifest`, favicon e service worker
+- Suporte offline básico para os arquivos principais
 
 ## Estrutura do repositório
 
 - `index.html` — aplicação demonstrativa completa
 - `manifest.webmanifest` — manifesto da aplicação web
+- `sw.js` — cache/offline básico do protótipo
+- `favicon.svg` — ícone do projeto
 - `robots.txt` — preparação para indexação futura
 - `404.html` — página de erro
 - `ARQUITETURA.md` — fluxo funcional e perfis futuros
@@ -41,17 +49,20 @@ O foco é registrar problemas urbanos, não acusações contra pessoas. Nome, e-
 
 ## Fonte principal
 
-Este repositório é a fonte oficial do Cidade Conecta. Qualquer melhoria futura deve partir daqui para evitar versões paralelas e divergentes.
+Este repositório é a fonte oficial do Cidade Conecta. Melhorias feitas no ChatGPT, Manus ou em outra ferramenta devem ser consolidadas aqui para evitar versões paralelas e divergentes.
+
+Existe uma publicação demonstrativa feita pelo Manus, porém a URL pública e a versão publicada devem ser registradas aqui quando forem confirmadas. Alterações neste repositório não devem ser consideradas automaticamente sincronizadas com a publicação do Manus sem uma integração verificada.
 
 ## Próximas etapas
 
-1. Publicar o protótipo em uma URL pública.
-2. Definir domínio próprio.
-3. Substituir armazenamento local por PostgreSQL/API.
-4. Implementar autenticação e autorização por perfil.
-5. Criar moderação de conteúdo e anexos.
-6. Configurar SEO, sitemap e Google Search Console após definição da URL.
-7. Realizar testes com usuários.
-8. Preparar demonstração e proposta para possível parceria com a Prefeitura.
+1. Registrar no repositório a URL pública atualmente publicada pelo Manus.
+2. Comparar visual e funcionalidades da publicação com o `main` atual.
+3. Definir domínio próprio.
+4. Substituir armazenamento local por PostgreSQL/API.
+5. Implementar autenticação e autorização por perfil.
+6. Criar moderação de conteúdo e tratamento seguro de anexos.
+7. Configurar SEO, sitemap e Google Search Console após definição da URL/domínio.
+8. Realizar testes com usuários.
+9. Preparar demonstração e proposta para possível parceria institucional com a Prefeitura.
 
 Projeto acadêmico — 2026.
