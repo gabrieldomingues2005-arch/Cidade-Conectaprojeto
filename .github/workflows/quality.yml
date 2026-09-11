@@ -23,10 +23,12 @@ jobs:
 
       - name: Validar JavaScript
         run: |
+          node --check assets/runtime-config.js
           node --check assets/app.js
           node --check assets/piracicaba.js
           node --check assets/piracicaba-mapas.js
           node --check assets/privacy-geo.js
+          node --check assets/site-enhancements.js
 
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs
