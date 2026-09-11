@@ -26,6 +26,7 @@ Este documento descreve como o protótipo usa informações territoriais de Pira
 4. **Mapa das Regiões Administrativas — atualização 12/12/2024**
    - referência para as 9 regiões administrativas, população, área, densidade e bairros componentes;
    - https://piracicaba.sp.gov.br/wp-content/uploads/2024/12/MAPA-DAS-REGIOES-ADMINISTRATIVAS-FINAL.pdf
+   - a legenda do próprio mapa identifica a camada como `PMPM_REGIOES_ADMINISTRATIVAS_DPLAN_2021` e lista `Regiao_Administrativa_I` até `Regiao_Administrativa_IX`.
 
 5. **Geoprocessamento de Piracicaba**
    - consulta cartográfica externa;
@@ -39,6 +40,7 @@ Este documento descreve como o protótipo usa informações territoriais de Pira
 - associação de bairro com região quando o nome permite correspondência segura;
 - tratamento de correspondências ambíguas, como áreas que aparecem em mais de uma região;
 - localizador de bairro/região;
+- autocomplete de bairros e núcleos no registro;
 - população, área e densidade por região;
 - núcleos urbanos isolados e áreas rurais de referência;
 - municípios vizinhos;
@@ -46,11 +48,15 @@ Este documento descreve como o protótipo usa informações territoriais de Pira
 - taxa demonstrativa de ocorrências por 10 mil habitantes;
 - sugestão de triagem por categoria;
 - catálogo de camadas geográficas publicadas pelo Município;
+- contexto territorial nas telas de ocorrência e administração;
+- separação, no protótipo local, entre coordenada pública aproximada e coordenada exata privada para novos registros;
 - atalhos para mapas e serviços oficiais externos.
 
 ## Limites internos das regiões
 
 O protótipo **não desenha polígonos aproximados das 9 regiões administrativas**. A divisão regional usada no sistema vem do mapa oficial municipal, mas os polígonos só devem ser incorporados quando houver uma camada vetorial adequada, identificada e validada para uso pela aplicação.
+
+O identificador cartográfico `PMPM_REGIOES_ADMINISTRATIVAS_DPLAN_2021` foi registrado no projeto para facilitar uma futura busca técnica pelo serviço vetorial correspondente. O nome da camada, por si só, não é tratado como um endpoint disponível.
 
 Essa decisão evita que um desenho aproximado seja confundido com limite oficial.
 
@@ -60,16 +66,26 @@ Para fins de demonstração, o nome do bairro informado pelo usuário é compara
 
 Em uma versão de produção, a região deverá ser determinada preferencialmente por **interseção espacial de coordenadas com polígonos oficiais**, e não somente pelo texto do bairro.
 
+## Privacidade geográfica
+
+Novas ocorrências do protótipo usam duas representações quando existe uma coordenada escolhida no mapa:
+
+- a coordenada pública é reduzida para três casas decimais antes de permanecer como posição exibida pelo mapa público;
+- a coordenada original é mantida no bloco privado local `privateData.exactLocation` apenas para demonstrar a separação de acesso.
+
+Essa implementação ainda usa `localStorage`, portanto não deve receber dados reais sensíveis. Em produção, localização exata precisa ficar no backend, em tabela/estrutura privada, com autorização por perfil e política de retenção.
+
 ## Evolução recomendada
 
-1. obter camada vetorial oficial dos bairros e das regiões administrativas;
-2. validar sistema de referência e atributos;
+1. localizar/obter camada vetorial oficial dos bairros e das regiões administrativas;
+2. validar sistema de referência, atributos, licença/condição de uso e data da fonte;
 3. converter para GeoJSON otimizado para web quando necessário;
 4. implementar busca espacial ponto-em-polígono;
 5. adicionar camadas de risco, drenagem, zoneamento e equipamentos públicos somente com fontes autorizadas/adequadas;
 6. registrar data da fonte e versão de cada camada;
 7. manter dados oficiais separados dos registros comunitários;
-8. submeter o fluxo territorial à validação da Prefeitura antes de qualquer uso institucional.
+8. manter coordenada exata separada da localização pública;
+9. submeter o fluxo territorial à validação da Prefeitura antes de qualquer uso institucional.
 
 ## Aviso
 
