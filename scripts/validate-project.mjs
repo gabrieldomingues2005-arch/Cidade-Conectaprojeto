@@ -19,8 +19,9 @@ function normalize(v=''){
 const required=[
   'index.html','assets/styles.css','assets/app.js','assets/piracicaba.css',
   'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
+  'assets/runtime-config.js','assets/site-enhancements.js','assets/site-enhancements.css',
   'data/piracicaba.json','manifest.webmanifest','sw.js','favicon.svg','README.md',
-  'GEOGRAFIA.md','API.md','schema.sql','TESTES.md'
+  'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md'
 ];
 for(const file of required)assert(fs.existsSync(path.join(root,file)),`Presente: ${file}`);
 
@@ -68,14 +69,14 @@ if(data){
 }
 
 const index=read('index.html');
-for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js']){
+for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/runtime-config.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
   assert(index.includes(ref),`index.html referencia ${ref}`);
 }
 assert(index.includes('Protótipo acadêmico independente'),'Aviso de independência institucional está no HTML');
 assert(index.includes('Piracicaba · SP'),'Identidade local de Piracicaba está no HTML');
 
 const sw=read('sw.js');
-for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','data/piracicaba.json']){
+for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/site-enhancements.js','assets/site-enhancements.css','data/piracicaba.json']){
   assert(sw.includes(ref),`Service worker referencia ${ref}`);
 }
 
@@ -83,6 +84,15 @@ const privacyGeo=read('assets/privacy-geo.js');
 assert(privacyGeo.includes("PUBLIC_DECIMALS=3"),'Localização pública usa precisão reduzida no protótipo');
 assert(privacyGeo.includes('exactLocation'),'Localização exata é separada no bloco privado local');
 assert(privacyGeo.includes('territoryResolutionStatus'),'Registro guarda estado da resolução territorial');
+
+const runtime=read('assets/runtime-config.js');
+assert(runtime.includes("dataMode: 'local'"),'Runtime inicia em modo local seguro');
+assert(runtime.includes('publishableKey'),'Runtime prevê somente chave pública do cliente');
+assert(!runtime.includes('service_role:'),'Runtime não contém campo service_role');
+
+const enhancements=read('assets/site-enhancements.js');
+assert(enhancements.includes('Modo local'),'Interface informa modo local');
+assert(enhancements.includes('Restaurar demo'),'Painel permite restaurar dados demonstrativos');
 
 const schema=read('schema.sql');
 assert(schema.includes('occurrence_private_location'),'Schema separa localização exata da ocorrência pública');
@@ -95,6 +105,10 @@ assert(api.includes('public_latitude'),'Contrato diferencia coordenada pública'
 const geo=read('GEOGRAFIA.md');
 assert(geo.includes('não desenha polígonos aproximados'),'Documentação proíbe polígonos regionais aproximados');
 assert(geo.includes('ponto-em-polígono'),'Documentação prevê ponto-em-polígono com vetor oficial');
+
+const supabase=read('SUPABASE.md');
+assert(supabase.includes('separado'),'Documentação exige projeto Supabase separado');
+assert(supabase.includes('service_role'),'Documentação alerta sobre chave administrativa');
 
 console.log(`\nCidade Conecta — validação estática`);
 console.log(`OK: ${ok.length}`);
