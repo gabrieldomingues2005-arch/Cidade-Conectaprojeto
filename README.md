@@ -1,6 +1,6 @@
 # Cidade Conecta
 
-Projeto de extensão universitária voltado à participação cidadã e ao registro organizado de problemas urbanos.
+Projeto de extensão universitária voltado à participação cidadã e ao registro organizado de problemas urbanos em Piracicaba, São Paulo.
 
 ## Site publicado
 
@@ -16,6 +16,12 @@ https://gabrieldomingues2005-arch.github.io/Cidade-Conectaprojeto/
 
 O GitHub Pages funciona como espelho técnico para validar rapidamente a versão mais recente do repositório. Um workflow sincroniza automaticamente `main` com `gh-pages`.
 
+## Contexto local — Piracicaba
+
+O MVP foi contextualizado para Piracicaba/SP. O mapa utiliza Piracicaba como referência inicial, os registros demonstrativos usam bairros do município e a interface recebeu uma paleta inspirada na identidade visual municipal, com predominância de azul e verde e detalhes em amarelo. O Cidade Conecta continua sendo um projeto acadêmico independente e não utiliza a marca oficial da Prefeitura como se fosse um serviço municipal.
+
+A interface também oferece atalhos externos para o Portal da Prefeitura, Portal de Serviços 156 e Geoprocessamento, sempre identificados como canais oficiais externos.
+
 ## Objetivo
 
 Permitir que moradores registrem ocorrências como buracos, falhas de iluminação, descarte irregular de resíduos, vazamentos, alagamentos, sinalização, acessibilidade e problemas em áreas públicas. Cada registro recebe um protocolo para acompanhamento.
@@ -23,6 +29,7 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 ## MVP v4 atual
 
 - Interface redesenhada e modular, separando HTML, CSS e JavaScript
+- Identidade visual contextualizada para Piracicaba/SP
 - Página inicial responsiva para computador e celular
 - Busca rápida por protocolo já na página inicial
 - Registro de ocorrência com categoria, título, descrição, bairro e referência de localização
@@ -48,6 +55,7 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - Separação entre dados públicos e privados
 - Página de princípios de privacidade
 - Avisos claros de que o protótipo não substitui canais oficiais
+- Atalhos para Portal da Prefeitura, Atendimento 156 e Geoprocessamento
 - PWA com manifesto, favicon e service worker
 - Cache offline dos arquivos principais
 - Atalhos mobile para registrar e acompanhar
@@ -59,6 +67,8 @@ Permitir que moradores registrem ocorrências como buracos, falhas de iluminaç�
 - `index.html` — estrutura principal da aplicação
 - `assets/styles.css` — design system e responsividade
 - `assets/app.js` — funcionalidades, rotas, mapa, formulário, dashboard e administração demonstrativa
+- `assets/piracicaba.css` — paleta e componentes visuais contextualizados para Piracicaba
+- `assets/piracicaba.js` — conteúdo local e links oficiais externos de Piracicaba
 - `manifest.webmanifest` — manifesto PWA
 - `sw.js` — cache/offline básico
 - `favicon.svg` — ícone do projeto
@@ -82,7 +92,7 @@ A branch `main` deste repositório é a fonte oficial do Cidade Conecta. Melhori
 
 ## Próximas etapas
 
-1. Validar o MVP v4 em computador e celular.
+1. Validar o MVP v4 contextualizado para Piracicaba em computador e celular.
 2. Confirmar que a publicação principal está acompanhando a branch `main`.
 3. Substituir armazenamento local por PostgreSQL/API.
 4. Implementar autenticação e autorização por perfil.
