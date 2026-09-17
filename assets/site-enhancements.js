@@ -3,15 +3,19 @@
 const STORAGE_KEY='cidadeConecta2026v3';
 const cfg=window.CIDADE_CONECTA_CONFIG||{};
 const $=s=>document.querySelector(s);
-const $$=s=>[...document.querySelectorAll(s)];
 
 function dataMode(){
   const sb=cfg.supabase||{};
-  return sb.enabled&&sb.url&&sb.publishableKey?'cloud':'local';
+  if(!(sb.enabled&&sb.url&&sb.publishableKey))return 'local';
+  if(cfg.dataMode==='hybrid-read')return window.CidadeConectaSupabase?.state?.connected?'hybrid-read':'configured';
+  return 'cloud';
 }
 function statusText(){
   if(!navigator.onLine)return {label:'Offline',detail:'Aplicação em modo offline/cache local',cls:'offline'};
-  if(dataMode()==='cloud')return {label:'Banco conectado',detail:'Backend do Cidade Conecta configurado',cls:'cloud'};
+  const mode=dataMode();
+  if(mode==='hybrid-read')return {label:'Supabase conectado',detail:'Território e estrutura de backend conectados; criação de ocorrências ainda permanece local nesta etapa',cls:'cloud'};
+  if(mode==='configured')return {label:'Supabase configurado',detail:'Backend configurado; aguardando confirmação da conexão',cls:'local'};
+  if(mode==='cloud')return {label:'Banco conectado',detail:'Backend do Cidade Conecta configurado',cls:'cloud'};
   return {label:'Modo local',detail:'Dados demonstrativos neste navegador',cls:'local'};
 }
 function ensureStatus(){
@@ -25,11 +29,8 @@ function ensureStatus(){
   header.insertBefore(el,header.firstChild);
   el.onclick=()=>{
     const s=statusText();
-    const msg=dataMode()==='cloud'
-      ?`${s.detail}. Nunca use chave service_role no navegador.`
-      :`${s.detail}. A integração com o projeto Supabase separado do Cidade Conecta será ativada somente quando estiver configurada.`;
     const toast=$('#toast');
-    if(toast){toast.textContent=msg;toast.classList.remove('hidden');setTimeout(()=>toast.classList.add('hidden'),4300)}
+    if(toast){toast.textContent=s.detail;toast.classList.remove('hidden');setTimeout(()=>toast.classList.add('hidden'),4300)}
   };
   paintStatus();
 }
@@ -55,7 +56,9 @@ function addTechnicalCard(){
   const card=document.createElement('section');
   card.id='techStatusCard';card.className='card techStatusCard';
   const s=statusText();
-  card.innerHTML=`<h2>Estado técnico do protótipo</h2><div class="techGrid"><div><span>Versão</span><b>${cfg.appVersion||'4.4.0'}</b></div><div><span>Território</span><b>Piracicaba/SP</b></div><div><span>Dados</span><b>${s.label}</b></div><div><span>Conectividade</span><b>${navigator.onLine?'Online':'Offline'}</b></div></div><p class="small muted">O banco definitivo do Cidade Conecta deve permanecer separado de qualquer outro projeto. Enquanto a integração não estiver configurada, os registros continuam locais neste navegador.</p>`;
+  const mode=dataMode();
+  const dataLabel=mode==='hybrid-read'?'Supabase + registros locais':s.label;
+  card.innerHTML=`<h2>Estado técnico do protótipo</h2><div class="techGrid"><div><span>Versão</span><b>${cfg.appVersion||'4.5.0'}</b></div><div><span>Território</span><b>Piracicaba/SP</b></div><div><span>Dados</span><b>${dataLabel}</b></div><div><span>Conectividade</span><b>${navigator.onLine?'Online':'Offline'}</b></div></div><p class="small muted">O Supabase do Cidade Conecta é independente do Raiz Carbon. Nesta etapa, a leitura técnica do backend está conectada, enquanto novos registros continuam locais até a migração segura do fluxo de escrita.</p>`;
   wrap.insertAdjacentElement('afterend',card);
 }
 function addAdminReset(){
@@ -101,6 +104,7 @@ function enhancePage(){
 }
 window.addEventListener('online',paintStatus);
 window.addEventListener('offline',paintStatus);
+window.addEventListener('cidadeconecta:supabase-status',()=>{paintStatus();document.querySelector('#techStatusCard')?.remove();setTimeout(addTechnicalCard,0)});
 window.addEventListener('keydown',keyboardShortcuts);
 window.addEventListener('hashchange',()=>setTimeout(enhancePage,30));
 window.addEventListener('DOMContentLoaded',()=>{
