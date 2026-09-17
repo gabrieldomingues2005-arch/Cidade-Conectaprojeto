@@ -14,7 +14,7 @@
 
 **NUNCA use ou altere Supabase do Raiz Carbon, especialmente `htzigdvatjpvvkwswjof`.**
 
-## Estado entregue — MVP v4.7
+## Estado entregue — MVP v4.8
 O trabalho pesado de backend já foi implementado. Não recrie schema, frontend ou banco do zero.
 
 - PostgreSQL + PostGIS no Supabase exclusivo.
@@ -28,10 +28,10 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 - Storage privado de anexos.
 - Edge Functions `submit-occurrence` e `track-occurrence`.
 - RPC de rastreamento SECURITY DEFINER restrita a `service_role`.
-- Frontend v4.7 envia para Supabase e lê publicamente somente ocorrências aprovadas.
+- Frontend v4.8 envia para Supabase e lê publicamente somente ocorrências aprovadas.
 - Admin visual permanece demonstrativo até autenticação/fluxo institucional real.
 - Integração Prefeitura/156 continua futura; não fingir parceria oficial.
-- Design v4.7 aplica, de forma incremental, a melhor direção dos protótipos Manus: hero verde-escuro, acento lima, cards mais claros, navegação e mobile refinados. Arquivo: `assets/design-v47.css`.
+- Design v4.8 consolida a direção Manus com polimento de produto: hero mais forte, navegação mais limpa, formulários e filtros refinados, tabelas e mapas mais legíveis, safe-area mobile, melhor contraste e microinterações moderadas. Arquivo: `assets/design-v48.css`.
 
 ## Segurança/testes já feitos
 - Sem `service_role`, senha ou segredo administrativo no frontend.
@@ -53,6 +53,6 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 8. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
-**Inspecione a `main` atual → consulte CI → faça QA do preview v4.7 → corrija somente falhas comprovadas → teste de novo.**
+**Inspecione a `main` atual → consulte CI → faça QA do preview v4.8 → corrija somente falhas comprovadas → teste de novo.**
 
 Não refaça análises já consolidadas e responda curto.

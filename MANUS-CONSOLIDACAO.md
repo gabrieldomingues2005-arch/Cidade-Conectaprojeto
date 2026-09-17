@@ -84,3 +84,8 @@ A tarefa que for proprietária do site principal `https://cidconecta-nztptuci.ma
 ## Aplicação visual v4.7
 
 A direção visual dos protótipos Manus foi incorporada de forma incremental em `assets/design-v47.css`, preservando o código, o Supabase e os fluxos atuais da `main`. Foram aproveitados o contraste verde-escuro + verde-lima, hero mais expressivo, cards elevados, navegação arredondada, hierarquia mobile e sinais de confiança/privacidade. Nenhum snapshot React do Manus foi importado em bloco.
+
+
+## Polimento visual v4.8
+
+A v4.8 aprofundou a direção visual já consolidada sem consumir uma nova tarefa Manus. Foram refinados hero, navegação, formulários, tabelas, mapas, filtros, mobile/safe-area, contraste e microinterações. O objetivo foi reduzir a aparência de “template” nas telas internas e aproximar o produto de uma interface cívica madura, sem alterar a arquitetura nem criar uma versão paralela.
