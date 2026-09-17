@@ -1,10 +1,9 @@
 name: Validar Cidade Conecta
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+  workflow_call:
 
 permissions:
   contents: read
@@ -12,9 +11,12 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -26,9 +28,12 @@ jobs:
           node --check assets/runtime-config.js
           node --check assets/app.js
           node --check assets/piracicaba.js
+          node --check assets/piracicaba-data.js
           node --check assets/piracicaba-mapas.js
           node --check assets/privacy-geo.js
           node --check assets/site-enhancements.js
+          node --check sw.js
+          node --check scripts/validate-project.mjs
 
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs

@@ -6,15 +6,24 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: "gh-pages-sync"
+  group: "gh-pages-sync-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
+  validate:
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/quality.yml
+
   sync:
+    needs: validate
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
     steps:
       - name: Baixar branch main
         uses: actions/checkout@v4
@@ -23,6 +32,9 @@ jobs:
 
       - name: Sincronizar gh-pages com main
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git push origin HEAD:gh-pages --force
+          git fetch origin main
+          if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
+            echo "A main avançou; esta execução não substituirá o preview."
+            exit 0
+          fi
+          git push origin HEAD:refs/heads/gh-pages

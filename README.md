@@ -12,6 +12,8 @@ https://gabrieldomingues2005-arch.github.io/Cidade-Conectaprojeto/
 
 A branch `main` é a fonte oficial do código. O preview do GitHub Pages é atualizado automaticamente para permitir testar as mudanças sem depender do Manus.
 
+A sincronização com `gh-pages` só ocorre após a validação do mesmo commit. Se algum teste falhar, a versão anterior do preview é preservada. Execuções antigas são ignoradas quando a `main` já avançou, e o envio para `gh-pages` não usa força. Pull requests executam a mesma validação, sem publicar.
+
 ## Situação atual — MVP v4.4
 
 O protótipo já possui:

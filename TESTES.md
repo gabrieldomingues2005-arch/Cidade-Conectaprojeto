@@ -2,6 +2,15 @@
 
 Use este roteiro antes de qualquer apresentação ou publicação.
 
+## 0. Validação automática e publicação do preview
+- Em cada push para `main`, o workflow `Sincronizar site para gh-pages` chama `Validar Cidade Conecta` antes de sincronizar.
+- A validação verifica a sintaxe dos módulos JavaScript, do service worker e do próprio validador; depois verifica a base territorial, referências e manifesto.
+- O job `sync` só executa após `validate` concluir com sucesso. Uma falha mantém a versão anterior em `gh-pages`.
+- A execução manual também passa pela validação e só publica a partir da `main`.
+- Se a `main` avançou durante a execução, a sincronização antiga é ignorada. Atualizações divergentes de `gh-pages` são rejeitadas pelo Git, sem sobrescrita forçada.
+- Pull requests para `main` usam a mesma validação, sem permissão de publicação.
+- As checagens automáticas são estáticas; os testes de interação abaixo continuam necessários para alterações na aplicação.
+
 ## 1. Página inicial
 - Abrir no celular e no computador.
 - Conferir menu, botões, textos e indicadores.
