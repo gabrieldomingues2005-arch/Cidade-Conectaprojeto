@@ -19,7 +19,7 @@ function normalize(v=''){
 const required=[
   'index.html','assets/styles.css','assets/app.js','assets/piracicaba.css',
   'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
-  'assets/runtime-config.js','assets/site-enhancements.js','assets/site-enhancements.css',
+  'assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css',
   'data/piracicaba.json','manifest.webmanifest','sw.js','favicon.svg','README.md',
   'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md'
 ];
@@ -69,14 +69,14 @@ if(data){
 }
 
 const index=read('index.html');
-for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/runtime-config.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
+for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/runtime-config.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
   assert(index.includes(ref),`index.html referencia ${ref}`);
 }
 assert(index.includes('Protótipo acadêmico independente'),'Aviso de independência institucional está no HTML');
 assert(index.includes('Piracicaba · SP'),'Identidade local de Piracicaba está no HTML');
 
 const sw=read('sw.js');
-for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/site-enhancements.js','assets/site-enhancements.css','data/piracicaba.json']){
+for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','data/piracicaba.json']){
   assert(sw.includes(ref),`Service worker referencia ${ref}`);
 }
 
@@ -86,12 +86,18 @@ assert(privacyGeo.includes('exactLocation'),'Localização exata é separada no 
 assert(privacyGeo.includes('territoryResolutionStatus'),'Registro guarda estado da resolução territorial');
 
 const runtime=read('assets/runtime-config.js');
-assert(runtime.includes("dataMode: 'local'"),'Runtime inicia em modo local seguro');
+assert(runtime.includes("dataMode: 'hybrid-read'"),'Runtime usa modo híbrido de leitura durante a migração');
+assert(runtime.includes("projectRef: 'yvmkgpijzewssdxgimit'"),'Runtime aponta para o Supabase exclusivo do Cidade Conecta');
 assert(runtime.includes('publishableKey'),'Runtime prevê somente chave pública do cliente');
 assert(!runtime.includes('service_role:'),'Runtime não contém campo service_role');
 
+const bridge=read('assets/supabase-bridge.js');
+assert(bridge.includes('/rest/v1/'),'Ponte usa Data API do Supabase');
+assert(bridge.includes("select('municipalities'"),'Ponte valida conexão pelo município do projeto');
+assert(!bridge.includes('service_role'),'Ponte pública não usa service_role');
+
 const enhancements=read('assets/site-enhancements.js');
-assert(enhancements.includes('Modo local'),'Interface informa modo local');
+assert(enhancements.includes('Supabase conectado'),'Interface informa conexão de leitura com Supabase');
 assert(enhancements.includes('Restaurar demo'),'Painel permite restaurar dados demonstrativos');
 
 const schema=read('schema.sql');
