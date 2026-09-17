@@ -26,6 +26,7 @@ jobs:
       - name: Validar JavaScript
         run: |
           node --check assets/runtime-config.js
+          node --check assets/supabase-bridge.js
           node --check assets/app.js
           node --check assets/piracicaba.js
           node --check assets/piracicaba-data.js
