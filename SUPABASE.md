@@ -1,4 +1,4 @@
-# Supabase — Cidade Conecta
+# Cidade Conecta — Supabase v4.6
 
 O Cidade Conecta usa projeto Supabase próprio, separado de Raiz Carbon / Carbon Track.
 
@@ -76,3 +76,17 @@ O bucket de anexos é privado e permite upload/leitura do próprio usuário aute
 ## Princípio
 
 Se houver dúvida sobre qual projeto Supabase está selecionado, nenhuma alteração deve ser executada. Cidade Conecta e Raiz Carbon permanecem totalmente separados.
+
+
+## Atualização v4.6 — escrita segura
+
+Projeto oficial: `yvmkgpijzewssdxgimit` (`sa-east-1`).
+
+- `submit-occurrence`: valida entrada, aplica rate limiting, cria protocolo/token, salva contato/localização privada e opcionalmente anexo privado.
+- `track-occurrence`: aplica rate limiting e chama internamente `track_occurrence`; a RPC é restrita a `service_role`.
+- `occurrence_contacts`: dados de contato privados.
+- `private.occurrence_tracking_tokens`: somente hash do token.
+- `private.submission_rate_limits` e `private.tracking_rate_limits`: controles de abuso.
+- `profile_self_update` impede autopromoção de papel por cidadão.
+
+As migrations aplicadas estão em `supabase/migrations/`; as Edge Functions estão em `supabase/functions/`.

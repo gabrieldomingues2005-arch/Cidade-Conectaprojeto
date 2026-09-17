@@ -33,7 +33,7 @@ function protectLatestOccurrence(){
   const candidates=db.occurrences
     .filter(o=>o?.localOwner&&o?.created&&Math.abs(now-new Date(o.created).getTime())<15000)
     .sort((a,b)=>new Date(b.created)-new Date(a.created));
-  const o=candidates[0];if(!o||o.geoPrivacyVersion)return;
+  const o=candidates[0];if(!o||o.geoPrivacyVersion||o.cloudOrigin)return;
 
   const exactLat=Number(o.lat),exactLng=Number(o.lng);
   o.privateData=o.privateData&&typeof o.privateData==='object'?o.privateData:{};
@@ -41,7 +41,7 @@ function protectLatestOccurrence(){
     o.privateData.exactLocation={
       latitude:exactLat,
       longitude:exactLng,
-      visibility:'private-local-prototype'
+      visibility:'private-local-legacy'
     };
     o.lat=roundPublic(exactLat);
     o.lng=roundPublic(exactLng);

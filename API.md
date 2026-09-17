@@ -1,6 +1,12 @@
-# Cidade Conecta — Contrato de API proposto v4.3
+# Cidade Conecta — API e backend v4.6
 
-Este documento define a arquitetura inicial da API para substituir o armazenamento local do protótipo por um backend real. **Ainda não é uma API em produção.**
+O backend Supabase do MVP já está ativo no projeto exclusivo `yvmkgpijzewssdxgimit`. Contratos implementados hoje:
+
+- `POST /functions/v1/submit-occurrence` — cria ocorrência pendente e retorna `protocol` + `trackingKey`.
+- `POST /functions/v1/track-occurrence` — acompanha ocorrência; registros pendentes exigem token privado.
+- `GET /rest/v1/occurrences` — leitura pública via RLS somente para `public_visible=true` e `moderation_status=approved`.
+
+A Edge Function de acompanhamento chama internamente a RPC `track_occurrence` com `service_role`; a RPC não possui EXECUTE para `anon`/`authenticated`. As rotas `/api/...` descritas abaixo permanecem como contrato futuro para uma camada dedicada.
 
 O primeiro município do projeto é **Piracicaba/SP**, código IBGE `3538709`, mas a modelagem evita deixar o backend preso a um único município.
 
@@ -307,3 +313,15 @@ Antes de produção:
 8. Importar polígonos oficiais de regiões/bairros somente quando houver fonte vetorial validada.
 9. Implementar busca ponto-em-polígono no backend quando a geometria estiver disponível.
 10. Adicionar logs de auditoria, rate limit, testes e monitoramento.
+
+
+## Segurança implementada no MVP v4.6
+
+- contato em `occurrence_contacts`;
+- localização exata em `occurrence_private_location`;
+- coordenadas públicas arredondadas para 3 casas;
+- token de acompanhamento armazenado somente como hash;
+- rate limiting de submissão e acompanhamento;
+- validação de JPG/PNG/WebP por MIME, tamanho e assinatura binária;
+- bloqueio de e-mail, telefone e CPF no título/descrição pública;
+- RLS e moderação pendente antes da exposição pública.

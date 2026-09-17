@@ -20,3 +20,8 @@ Os dados são armazenados localmente no navegador e servem apenas para demonstra
 ## Antes de um piloto comunitário
 
 Será necessário implementar autenticação, autorização por perfis, banco seguro, armazenamento protegido de imagens, política de privacidade completa, termos de uso, moderação, registro de consentimento e canal para exercício dos direitos do titular.
+
+
+## Implementação v4.6
+
+O MVP usa backend Supabase separado. Nome/e-mail/telefone ficam em `occurrence_contacts`; endereço e coordenadas exatas ficam em `occurrence_private_location`. A ocorrência pública usa coordenadas reduzidas para 3 casas decimais e só é exposta depois da moderação. O token privado de acompanhamento não é armazenado em texto puro no banco.

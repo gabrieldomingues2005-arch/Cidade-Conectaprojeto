@@ -1,4 +1,4 @@
-# Cidade Conecta — Roteiro de testes do MVP
+# Cidade Conecta — Roteiro de testes do MVP v4.6
 
 Use este roteiro antes de qualquer apresentação ou publicação.
 
@@ -135,3 +135,17 @@ A versão atual ainda é um protótipo. Antes de uso real, validar:
 
 ## Critério mínimo para demonstração acadêmica
 O projeto está pronto para demonstração quando registro, protocolo, acompanhamento, mapa, geografia de Piracicaba, limite municipal IBGE, localizador de bairros, indicadores territoriais e painel administrativo funcionarem sem erros evidentes em celular e computador.
+
+
+## 11. Backend v4.6
+
+- Enviar ocorrência válida e confirmar protocolo real do backend.
+- Confirmar que pendente não aparece na leitura pública.
+- Confirmar que o próprio navegador acompanha pendente com o `trackingKey` salvo localmente.
+- Confirmar que token ausente/incorreto não retorna ocorrência pendente.
+- Validar rate limiting de submissão e acompanhamento.
+- Validar rejeição de e-mail/telefone/CPF no título ou descrição pública.
+- Validar JPG/PNG/WebP e rejeição de assinatura binária incompatível.
+- Confirmar que contato/localização exata não aparecem em consultas públicas.
+- Confirmar que `anon`/`authenticated` não executam diretamente `track_occurrence`.
+- Confirmar mitigação de CSV Formula Injection.

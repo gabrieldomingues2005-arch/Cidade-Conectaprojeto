@@ -2,29 +2,19 @@
 'use strict';
 const cfg=window.CIDADE_CONECTA_CONFIG||{};
 const sb=cfg.supabase||{};
-const state={configured:false,connected:false,lastError:null,lastCheckedAt:null};
-
+const state={configured:false,connected:false,writeReady:false,lastError:null,lastCheckedAt:null,details:{municipality:null,categoriesCount:0,regionsCount:0,neighborhoodsCount:0,activeOccurrencesCount:0,readLatencyMs:null}};
 function configured(){return Boolean(sb.enabled&&sb.url&&sb.publishableKey)}
-function headers(){return {'apikey':sb.publishableKey,'Authorization':`Bearer ${sb.publishableKey}`,'Accept':'application/json'}}
-async function select(table,query='select=*'){
-  if(!configured())throw new Error('Supabase não configurado');
-  const response=await fetch(`${sb.url}/rest/v1/${encodeURIComponent(table)}?${query}`,{headers:headers()});
-  if(!response.ok)throw new Error(`Supabase HTTP ${response.status}`);
-  return response.json();
-}
-async function health(){
-  state.configured=configured();
-  state.lastCheckedAt=new Date().toISOString();
-  if(!state.configured){state.connected=false;state.lastError='not-configured';emit();return false}
-  try{
-    const rows=await select('municipalities','select=ibge_code,name&ibge_code=eq.3538709&limit=1');
-    state.connected=Array.isArray(rows)&&rows.length===1;
-    state.lastError=state.connected?null:'municipality-not-found';
-  }catch(error){state.connected=false;state.lastError=String(error?.message||error)}
-  emit();
-  return state.connected;
-}
+function bearer(){return sb.legacyAnonJwt||sb.publishableKey||''}
+function headers(extra={}){const out={'apikey':sb.publishableKey,'Accept':'application/json',...extra};if(bearer())out.Authorization=`Bearer ${bearer()}`;return out}
+async function parseResponse(response){let payload=null;try{payload=await response.json()}catch{}if(response.ok)return payload;const message=payload?.message||payload?.error||payload?.hint||`Supabase HTTP ${response.status}`;const error=new Error(String(message));error.status=response.status;error.payload=payload;throw error}
+async function select(table,query='select=*',extraHeaders={}){if(!configured())throw new Error('Supabase não configurado');const response=await fetch(`${sb.url}/rest/v1/${encodeURIComponent(table)}?${query}`,{headers:headers(extraHeaders)});return parseResponse(response)}
+async function invokeFunction(name,payload={}){if(!configured())throw new Error('Supabase não configurado');if(!name)throw new Error('Edge Function não configurada');const response=await fetch(`${sb.url}/functions/v1/${encodeURIComponent(name)}`,{method:'POST',headers:headers({'Content-Type':'application/json'}),body:JSON.stringify(payload)});return parseResponse(response)}
+async function countTable(table,query='select=id'){if(!configured())return 0;try{const response=await fetch(`${sb.url}/rest/v1/${encodeURIComponent(table)}?${query}`,{headers:headers({'Range-Unit':'items','Range':'0-0','Prefer':'count=exact'})});if(!response.ok)return 0;const total=(response.headers.get('content-range')||'').split('/')[1];return Number.isFinite(Number(total))?Number(total):0}catch{return 0}}
+async function submitOccurrence(payload){if(!sb.submitFunction)throw new Error('Endpoint de envio não configurado');return invokeFunction(sb.submitFunction,payload)}
+async function trackOccurrence(protocol,trackingKey=null){if(!sb.trackFunction)throw new Error('Endpoint de acompanhamento não configurado');const payload=await invokeFunction(sb.trackFunction,{protocol:String(protocol||'').trim().toUpperCase(),trackingKey:trackingKey||null});return payload?.occurrence||null}
+async function listPublicOccurrences(limit=200){const safeLimit=Math.min(500,Math.max(1,Number(limit)||200));return select('occurrences',['select=protocol,title,description,neighborhood_label,public_location,public_latitude,public_longitude,status,responsible_agency,moderation_status,territory_resolution_status,created_at,updated_at,resolved_at,categories(slug,name)','public_visible=eq.true','moderation_status=eq.approved','order=created_at.desc',`limit=${safeLimit}`].join('&'))}
+async function health(){state.configured=configured();state.lastCheckedAt=new Date().toISOString();state.writeReady=false;if(!state.configured){state.connected=false;state.lastError='not-configured';emit();return false}const t0=performance.now();try{const rows=await select('municipalities','select=ibge_code,name&ibge_code=eq.3538709&limit=1');const ok=Array.isArray(rows)&&rows.length===1;state.connected=ok;state.writeReady=ok&&Boolean(sb.submitFunction&&sb.trackFunction&&bearer());state.lastError=ok?null:'municipality-not-found';if(ok){state.details.municipality=rows[0]?.name||'Piracicaba';state.details.readLatencyMs=Math.round(performance.now()-t0);Promise.allSettled([countTable('categories','select=id&active=eq.true'),countTable('administrative_regions','select=id'),countTable('neighborhoods','select=id'),countTable('occurrences','select=id&public_visible=eq.true&moderation_status=eq.approved')]).then(results=>{state.details.categoriesCount=results[0].status==='fulfilled'?results[0].value:0;state.details.regionsCount=results[1].status==='fulfilled'?results[1].value:0;state.details.neighborhoodsCount=results[2].status==='fulfilled'?results[2].value:0;state.details.activeOccurrencesCount=results[3].status==='fulfilled'?results[3].value:0;emit()})}}catch(error){state.connected=false;state.writeReady=false;state.lastError=String(error?.message||error)}emit();return state.connected}
 function emit(){window.dispatchEvent(new CustomEvent('cidadeconecta:supabase-status',{detail:{...state}}))}
-window.CidadeConectaSupabase=Object.freeze({state,health,select});
+window.CidadeConectaSupabase=Object.freeze({state,health,select,invokeFunction,countTable,submitOccurrence,trackOccurrence,listPublicOccurrences});
 window.addEventListener('DOMContentLoaded',()=>health());
 })();

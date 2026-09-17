@@ -7,13 +7,15 @@ const $=s=>document.querySelector(s);
 function dataMode(){
   const sb=cfg.supabase||{};
   if(!(sb.enabled&&sb.url&&sb.publishableKey))return 'local';
+  if(cfg.dataMode==='hybrid-write'){const st=window.CidadeConectaSupabase?.state||{};if(!st.connected)return 'configured';return st.writeReady?'hybrid-write':'hybrid-read'}
   if(cfg.dataMode==='hybrid-read')return window.CidadeConectaSupabase?.state?.connected?'hybrid-read':'configured';
   return 'cloud';
 }
 function statusText(){
   if(!navigator.onLine)return {label:'Offline',detail:'Aplicação em modo offline/cache local',cls:'offline'};
   const mode=dataMode();
-  if(mode==='hybrid-read')return {label:'Supabase conectado',detail:'Território e estrutura de backend conectados; criação de ocorrências ainda permanece local nesta etapa',cls:'cloud'};
+  if(mode==='hybrid-write'){const latency=window.CidadeConectaSupabase?.state?.details?.readLatencyMs;return {label:'Supabase ativo'+(latency?' · '+latency+'ms':''),detail:'Leitura pública e envio seguro de ocorrências conectados ao backend do Cidade Conecta.',cls:'cloud'}};
+  if(mode==='hybrid-read')return {label:'Supabase leitura',detail:'Backend conectado para leitura; escrita segura indisponível no momento.',cls:'cloud'};
   if(mode==='configured')return {label:'Supabase configurado',detail:'Backend configurado; aguardando confirmação da conexão',cls:'local'};
   if(mode==='cloud')return {label:'Banco conectado',detail:'Backend do Cidade Conecta configurado',cls:'cloud'};
   return {label:'Modo local',detail:'Dados demonstrativos neste navegador',cls:'local'};
@@ -57,8 +59,8 @@ function addTechnicalCard(){
   card.id='techStatusCard';card.className='card techStatusCard';
   const s=statusText();
   const mode=dataMode();
-  const dataLabel=mode==='hybrid-read'?'Supabase + registros locais':s.label;
-  card.innerHTML=`<h2>Estado técnico do protótipo</h2><div class="techGrid"><div><span>Versão</span><b>${cfg.appVersion||'4.5.0'}</b></div><div><span>Território</span><b>Piracicaba/SP</b></div><div><span>Dados</span><b>${dataLabel}</b></div><div><span>Conectividade</span><b>${navigator.onLine?'Online':'Offline'}</b></div></div><p class="small muted">O Supabase do Cidade Conecta é independente do Raiz Carbon. Nesta etapa, a leitura técnica do backend está conectada, enquanto novos registros continuam locais até a migração segura do fluxo de escrita.</p>`;
+  const dataLabel=mode==='hybrid-write'?'Supabase (leitura + envio)':mode==='hybrid-read'?'Supabase (leitura)':s.label;
+  card.innerHTML=`<h2>Estado técnico do protótipo</h2><div class="techGrid"><div><span>Versão</span><b>${cfg.appVersion||'4.6.0'}</b></div><div><span>Território</span><b>Piracicaba/SP</b></div><div><span>Dados</span><b>${dataLabel}</b></div><div><span>Conectividade</span><b>${navigator.onLine?'Online':'Offline'}</b></div></div><p class="small muted">O Supabase do Cidade Conecta é independente do Raiz Carbon. Novas ocorrências são enviadas por Edge Function segura, recebem token privado de acompanhamento e entram como pendentes de moderação.</p>`;
   wrap.insertAdjacentElement('afterend',card);
 }
 function addAdminReset(){

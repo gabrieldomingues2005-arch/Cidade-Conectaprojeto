@@ -1,5 +1,7 @@
 # Cidade Conecta — contexto oficial
 
+> Para continuar no ChatGPT Work sem reprocessar o histórico, leia primeiro **`WORK-CONTINUAR.md`** na raiz da `main`.
+
 Este arquivo consolida as referências principais do projeto para reduzir dependência de chats antigos.
 
 ## Fonte de verdade

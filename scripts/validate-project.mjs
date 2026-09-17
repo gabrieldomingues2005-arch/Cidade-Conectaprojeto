@@ -21,7 +21,13 @@ const required=[
   'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
   'assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css',
   'data/piracicaba.json','manifest.webmanifest','sw.js','favicon.svg','README.md',
-  'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md'
+  'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md','WORK-CONTINUAR.md',
+  'supabase/migrations/20260917_secure_occurrence_submission_v1.sql',
+  'supabase/migrations/20260917_reserve_demo_protocol_range.sql',
+  'supabase/migrations/20260917_restrict_profile_self_role.sql',
+  'supabase/migrations/20260917_secure_occurrence_tracking_edge.sql',
+  'supabase/functions/submit-occurrence/index.ts','supabase/functions/submit-occurrence/deno.json',
+  'supabase/functions/track-occurrence/index.ts','supabase/functions/track-occurrence/deno.json'
 ];
 for(const file of required)assert(fs.existsSync(path.join(root,file)),`Presente: ${file}`);
 
@@ -86,19 +92,45 @@ assert(privacyGeo.includes('exactLocation'),'Localização exata é separada no 
 assert(privacyGeo.includes('territoryResolutionStatus'),'Registro guarda estado da resolução territorial');
 
 const runtime=read('assets/runtime-config.js');
-assert(runtime.includes("dataMode: 'hybrid-read'"),'Runtime usa modo híbrido de leitura durante a migração');
+assert(runtime.includes("dataMode: 'hybrid-write'"),'Runtime usa modo híbrido com escrita segura');
 assert(runtime.includes("projectRef: 'yvmkgpijzewssdxgimit'"),'Runtime aponta para o Supabase exclusivo do Cidade Conecta');
 assert(runtime.includes('publishableKey'),'Runtime prevê somente chave pública do cliente');
 assert(!runtime.includes('service_role:'),'Runtime não contém campo service_role');
+assert(!runtime.includes('sb_secret_'),'Runtime não contém chave secreta Supabase');
+assert(runtime.includes('submitFunction'),'Runtime referencia Edge Function de submissão');
+assert(runtime.includes('trackFunction'),'Runtime referencia Edge Function de acompanhamento');
 
 const bridge=read('assets/supabase-bridge.js');
 assert(bridge.includes('/rest/v1/'),'Ponte usa Data API do Supabase');
 assert(bridge.includes("select('municipalities'"),'Ponte valida conexão pelo município do projeto');
+assert(bridge.includes('/functions/v1/'),'Ponte usa Edge Functions para escrita/acompanhamento');
+assert(bridge.includes('sb.trackFunction'),'Ponte acompanha ocorrência pela Edge Function dedicada');
+assert(!bridge.includes("rpc('track_occurrence'"),'Ponte pública não chama diretamente RPC privilegiada de rastreamento');
+assert(bridge.includes('moderation_status=eq.approved'),'Lista pública filtra somente ocorrências aprovadas');
 assert(!bridge.includes('service_role'),'Ponte pública não usa service_role');
 
 const enhancements=read('assets/site-enhancements.js');
-assert(enhancements.includes('Supabase conectado'),'Interface informa conexão de leitura com Supabase');
+assert(enhancements.includes('Supabase ativo'),'Interface informa leitura e escrita conectadas ao Supabase');
 assert(enhancements.includes('Restaurar demo'),'Painel permite restaurar dados demonstrativos');
+
+const app=read('assets/app.js');
+assert(app.includes('submitOccurrence'),'Aplicação usa submissão segura do backend');
+assert(app.includes('trackingKey'),'Aplicação preserva token privado do próprio protocolo');
+assert(app.includes('moderationStatus'),'Aplicação trata moderação antes da exposição pública');
+assert(app.includes('/^[=+\\-@]/'),'Exportação CSV protege contra fórmula injetada');
+
+const edge=read('supabase/functions/submit-occurrence/index.ts');
+assert(edge.includes('SUPABASE_SERVICE_ROLE_KEY'),'Edge de submissão usa service role apenas no backend');
+assert(edge.includes('consume_submission_quota'),'Edge de submissão aplica rate limiting');
+assert(edge.includes('personal_data_in_public_text'),'Edge bloqueia identificadores pessoais no texto público');
+assert(edge.includes('invalid_image_signature'),'Edge valida assinatura binária da imagem');
+
+const trackingEdge=read('supabase/functions/track-occurrence/index.ts');
+assert(trackingEdge.includes('consume_tracking_quota'),'Edge de acompanhamento aplica rate limiting');
+assert(trackingEdge.includes('track_occurrence'),'Edge de acompanhamento chama RPC interna');
+
+const trackingMigration=read('supabase/migrations/20260917_secure_occurrence_tracking_edge.sql');
+assert(trackingMigration.includes('grant execute on function public.track_occurrence(text,text) to service_role'),'RPC de acompanhamento fica restrita ao backend');
 
 const schema=read('schema.sql');
 assert(schema.includes('occurrence_private_location'),'Schema separa localização exata da ocorrência pública');
