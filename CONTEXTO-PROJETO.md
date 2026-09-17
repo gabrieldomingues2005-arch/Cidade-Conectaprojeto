@@ -49,11 +49,11 @@ Uma tarefa antiga contém arquivos que devem ser comparados com a `main` antes d
 
 Os materiais antigos também registram requisitos já incorporados ou ainda úteis: fluxo de ocorrências, protocolos, mapa, painel pessoal, privacidade/LGPD por design, filtro contra registros voltados a acusações de pessoas/estabelecimentos privados e preparação de SEO/publicação.
 
-### IDs de trabalhos anteriores conhecidos
+### IDs e links compartilhados de trabalhos anteriores
 
-- `JGfgTKqwF2sTJeYD4rHbeq` — evolução da base principal ligada ao GitHub.
-- `gRCXmqyiZBT5Y7JGY6zpQ6` — visual, mobile, formulário, protocolos, painel, indicadores, privacidade/LGPD e SEO.
-- `QP6gFQQX6TvdngAaaLuEpb` — tarefa inicial, não tratada como base principal.
+- `gRCXmqyiZBT5Y7JGY6zpQ6` — visual, mobile, formulário, protocolos, painel, indicadores, privacidade/LGPD e SEO. Share: `https://manus.im/share/gRCXmqyiZBT5Y7JGY6zpQ6`
+- `JGfgTKqwF2sTJeYD4rHbeq` — evolução da base principal ligada ao GitHub. Share: `https://manus.im/share/JGfgTKqwF2sTJeYD4rHbeq`
+- `QP6gFQQX6TvdngAaaLuEpb` — tarefa inicial, não tratada como base principal. Share: `https://manus.im/share/QP6gFQQX6TvdngAaaLuEpb`
 
 A tarefa `P76YZUrwuxpTJcJz2WeGRp`, criada posteriormente, não deve virar uma base paralela. O projeto existente e o GitHub continuam sendo a referência.
 
