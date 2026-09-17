@@ -79,3 +79,8 @@ A tarefa que for proprietária do site principal `https://cidconecta-nztptuci.ma
 2. Implementar validação de escopo contra acusações/conflitos privados de maneira contextual, sem bloquear relatos urbanos legítimos.
 3. Aproveitar apenas elementos visuais/UX dos protótipos Manus que melhorem o projeto atual sem criar outra aplicação paralela.
 4. Continuar validando cada alteração pela CI antes do preview do GitHub Pages.
+
+
+## Aplicação visual v4.7
+
+A direção visual dos protótipos Manus foi incorporada de forma incremental em `assets/design-v47.css`, preservando o código, o Supabase e os fluxos atuais da `main`. Foram aproveitados o contraste verde-escuro + verde-lima, hero mais expressivo, cards elevados, navegação arredondada, hierarquia mobile e sinais de confiança/privacidade. Nenhum snapshot React do Manus foi importado em bloco.
