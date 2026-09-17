@@ -7,7 +7,7 @@ Este arquivo consolida as referências principais do projeto para reduzir depend
 - Repositório: `gabrieldomingues2005-arch/Cidade-Conectaprojeto`
 - Branch oficial: `main`
 - Preview técnico: `https://gabrieldomingues2005-arch.github.io/Cidade-Conectaprojeto/`
-- Site Manus existente: `https://cidconecta-nztptuci.manus.space`
+- Site Manus principal existente: `https://cidconecta-nztptuci.manus.space`
 
 ## Supabase oficial do Cidade Conecta
 
@@ -18,9 +18,38 @@ Este arquivo consolida as referências principais do projeto para reduzir depend
 
 Regra crítica: nunca usar os projetos Supabase do Raiz Carbon no Cidade Conecta.
 
-## Manus
+## Manus — histórico consolidado
 
-Trabalhos anteriores relevantes do Cidade Conecta:
+### Site principal a preservar
+
+O protótipo identificado no Manus como **“Cidade Conecta — protótipo final”** publicou o site:
+
+- `https://cidconecta-nztptuci.manus.space`
+
+Características visuais registradas: identidade verde-escuro + verde-lima, navegação com mapa da cidade, acompanhamento de ocorrência, como funciona, meu painel e registro de ocorrência. Esse é o site Manus tratado como principal/referência visual histórica.
+
+### Site alternativo/legado
+
+Há também um protótipo Manus identificado como **“Cidade Conecta — Ocorrências urbanas”**, publicado em:
+
+- `https://cidadedata-gyfpfhhu.manus.space`
+
+Ele possui identidade visual clara em verde/azul, rotas como Início, Registrar ocorrência, Acompanhar, Mapa, Indicadores e Painel demonstrativo. Esse endereço é tratado como versão antiga/alternativa, não como nova fonte de verdade.
+
+### Entregáveis antigos do Manus ainda relevantes
+
+Uma tarefa antiga contém arquivos que devem ser comparados com a `main` antes de a tarefa ser excluída:
+
+- `README_CONSOLIDACAO.md`
+- `mockData.ts`
+- `useOccurrenceStore.ts`
+- `robots.txt`
+- `sitemap.xml`
+- relatório/guia de consolidação do Cidade Conecta
+
+Os materiais antigos também registram requisitos já incorporados ou ainda úteis: fluxo de ocorrências, protocolos, mapa, painel pessoal, privacidade/LGPD por design, filtro contra registros voltados a acusações de pessoas/estabelecimentos privados e preparação de SEO/publicação.
+
+### IDs de trabalhos anteriores conhecidos
 
 - `JGfgTKqwF2sTJeYD4rHbeq` — evolução da base principal ligada ao GitHub.
 - `gRCXmqyiZBT5Y7JGY6zpQ6` — visual, mobile, formulário, protocolos, painel, indicadores, privacidade/LGPD e SEO.
@@ -33,7 +62,9 @@ A tarefa `P76YZUrwuxpTJcJz2WeGRp`, criada posteriormente, não deve virar uma ba
 - Não recriar o projeto do zero.
 - Não criar versões paralelas.
 - `main` é a fonte oficial do código.
-- O site Manus existente deve ser preservado.
+- O site Manus principal existente deve ser preservado enquanto estiver publicado e útil como referência.
+- Sites Manus antigos/alternativos são apenas referência histórica; mudanças novas devem convergir para GitHub + Supabase oficial.
+- Antes de apagar uma tarefa Manus com arquivos, conferir se os entregáveis únicos já estão incorporados ao GitHub.
 - Supabase, GitHub e Manus devem permanecer separados do Raiz Carbon.
 - Integração com Prefeitura/156 só deve ser tratada como oficial após autorização/integração real.
 - O Cidade Conecta continua identificado como projeto acadêmico independente enquanto não houver parceria formal.
