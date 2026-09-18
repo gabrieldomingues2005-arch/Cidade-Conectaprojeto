@@ -48,9 +48,10 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 3. `SUPABASE.md`
 4. `API.md`
 5. `TESTES.md`
-6. `supabase/migrations/`
-7. `supabase/functions/`
-8. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
+6. `DESIGN-SYSTEM.md`
+7. `supabase/migrations/`
+8. `supabase/functions/`
+9. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
 **Inspecione a `main` atual → consulte CI → faça QA do preview v4.9 → corrija somente falhas comprovadas → teste de novo.**
