@@ -89,9 +89,6 @@ for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapa
 
 const design=read('assets/design-v49.css');
 assert(index.includes('brandMark'),'Shell usa símbolo próprio do Cidade Conecta');
-assert(app.includes('statusStepper'),'Detalhe da ocorrência usa progressão de status além de cor');
-assert(app.includes('mapMarkerIcon'),'Mapas usam marcador visual próprio');
-assert(app.includes('formStage'),'Formulário possui agrupamento visual por etapas sem wizard obrigatório');
 assert(design.includes('--civic-950'),'Tema v4.9 possui tokens visuais próprios');
 assert(design.includes('--lime'),'Tema v4.9 incorpora acento visual dos protótipos Manus');
 assert(design.includes('@media(max-width:650px)'),'Tema v4.9 inclui ajustes mobile');
@@ -126,6 +123,9 @@ assert(enhancements.includes('Supabase ativo'),'Interface informa leitura e escr
 assert(enhancements.includes('Restaurar demo'),'Painel permite restaurar dados demonstrativos');
 
 const app=read('assets/app.js');
+assert(app.includes('statusStepper'),'Detalhe da ocorrência usa progressão de status além de cor');
+assert(app.includes('mapMarkerIcon'),'Mapas usam marcador visual próprio');
+assert(app.includes('formStage'),'Formulário possui agrupamento visual por etapas sem wizard obrigatório');
 assert(app.includes('submitOccurrence'),'Aplicação usa submissão segura do backend');
 assert(app.includes('trackingKey'),'Aplicação preserva token privado do próprio protocolo');
 assert(app.includes('moderationStatus'),'Aplicação trata moderação antes da exposição pública');
