@@ -149,3 +149,20 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - Confirmar que contato/localização exata não aparecem em consultas públicas.
 - Confirmar que `anon`/`authenticated` não executam diretamente `track_occurrence`.
 - Confirmar mitigação de CSV Formula Injection.
+
+
+## 12. QA de produto v5.0
+
+- Confirmar que o seletor visual de categorias seleciona uma única categoria e restaura corretamente o rascunho.
+- Confirmar que o formulário impede envio sem categoria.
+- Confirmar que os ícones lineares não quebram labels nem leitura por teclado.
+- No mapa, validar busca por título, bairro e protocolo.
+- Validar filtros de categoria/status e filtros rápidos.
+- Validar troca entre mapa padrão e mapa humanitário.
+- Confirmar carregamento do limite municipal do IBGE quando a API estiver disponível e fallback silencioso quando não estiver.
+- Validar “Perto de mim”: pedir permissão apenas após ação do usuário; ordenar resultados por distância; não persistir localização.
+- Validar “Ver todos” e limpeza dos filtros.
+- Confirmar que clicar em um item lateral centraliza e abre o marcador correspondente.
+- Salvar/remover um protocolo e confirmar que ele aparece/desaparece de “Meus registros”.
+- Conferir layout do mapa em 360 px, 390 px, tablet e desktop.
+- Confirmar reduced-motion, foco por teclado e contraste dos novos componentes.

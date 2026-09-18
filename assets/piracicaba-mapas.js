@@ -118,7 +118,7 @@ async function initBoundaryMap(d){
   try{
     const r=await fetch(IBGE_BOUNDARY,{headers:{Accept:'application/vnd.geo+json'}});if(!r.ok)throw new Error('HTTP '+r.status);
     const geo=await r.json();
-    const layer=L.geoJSON(geo,{style:{color:'#2f3f88',weight:3,opacity:.9,fillColor:'#4f74bd',fillOpacity:.08}}).addTo(boundaryMap);
+    const layer=L.geoJSON(geo,{style:{color:'#13706e',weight:3,opacity:.9,fillColor:'#bff054',fillOpacity:.06}}).addTo(boundaryMap);
     const b=layer.getBounds();if(b.isValid())boundaryMap.fitBounds(b.pad(.04));
     if(status)status.innerHTML='✅ Limite municipal carregado pela API de Malhas Geográficas do IBGE.';
   }catch(err){

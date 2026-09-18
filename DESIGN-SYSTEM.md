@@ -1,16 +1,16 @@
-# Cidade Conecta — Design System v4.9
+# Cidade Conecta — Design System v5.0
 
 Este documento consolida a direção visual do Cidade Conecta depois da interrupção da tarefa Manus por limite de créditos. Ele descreve o que está realmente aplicado na `main` e serve como handoff para o Work.
 
 ## Princípio visual
 
-A interface combina clareza de Swiss/International Typographic Style com Civic Tech editorial e referências de sinalização urbana. O resultado deve parecer cívico, acessível e confiável sem imitar identidade governamental oficial.
+A interface v5.0 combina clareza de Swiss/International Typographic Style com Civic Tech editorial, cartografia e sinalização urbana, reduzindo de propósito efeitos decorativos e aparência de template. O resultado deve parecer cívico, acessível e confiável sem imitar identidade governamental oficial.
 
 Evitar: excesso de glassmorphism, gradientes decorativos, aparência de fintech/SaaS genérico, ícones multicoloridos em excesso e linguagem visual burocrática.
 
 ## Marca
 
-O símbolo v4.9 substitui o bloco textual “CC” por uma marca abstrata construída em CSS e refletida no `favicon.svg`.
+O símbolo v5.0 substitui o bloco textual “CC” por uma marca abstrata construída em CSS e refletida no `favicon.svg`.
 
 Conceito:
 - arco aberto = cidade em movimento / conexão em construção;
@@ -132,7 +132,7 @@ O centro interno usa o acento lima, mantendo ligação com a identidade.
 
 ## Arquivos de referência
 
-- `assets/design-v49.css` — camada visual principal;
+- `assets/design-v50.css` — camada visual principal;
 - `assets/app.js` — componentes de interface e fluxo;
 - `favicon.svg` — símbolo compacto;
 - `manifest.webmanifest` — cores PWA;
@@ -147,3 +147,34 @@ O centro interno usa o acento lima, mantendo ligação com a identidade.
 5. consolidar componentes repetidos antes de qualquer reescrita maior.
 
 Não recriar o projeto para implementar esses refinamentos.
+
+
+## Revisão rígida v5.0
+
+A v5.0 aumenta o padrão visual e funcional sem reescrever a arquitetura.
+
+### Mudanças de design
+- hero claro/editorial com mapa como elemento focal;
+- sombras mais contidas e bordas mais consistentes;
+- botões menos arredondados e com aparência mais institucional;
+- navegação pública simplificada; Sobre/Admin ficam acessíveis pelo rodapé;
+- conjunto de ícones lineares substitui emojis nas áreas principais;
+- seletor de categoria em cards de escolha;
+- melhor leitura de tabelas, ocorrências, métricas e formulários.
+
+### Mapa avançado
+- painel lateral de ocorrências;
+- filtros rápidos por status;
+- busca também por protocolo;
+- duas camadas-base do OpenStreetMap;
+- limite municipal carregado pela API do IBGE;
+- ação "Perto de mim" com permissão explícita de geolocalização;
+- distância aproximada ordenada no navegador;
+- marcadores próprios por estado;
+- lista e mapa sincronizados.
+
+### Acompanhamento
+O usuário pode salvar protocolos públicos no navegador. Isso não cria conta, não envia preferência ao servidor e não altera a ocorrência.
+
+### Regra de qualidade
+Não adicionar função apenas por efeito visual. Novas funções devem melhorar localização, compreensão, acompanhamento ou segurança.

@@ -94,3 +94,8 @@ A v4.8 aprofundou a direção visual já consolidada sem consumir uma nova taref
 ## Continuidade após limite de créditos — v4.9
 
 A tarefa Manus de evolução visual foi iniciada com briefing completo, mas o limite de créditos interrompeu a execução. A continuidade foi feita diretamente sobre a `main`, preservando o mesmo briefing: símbolo próprio, hierarquia do formulário sem wizard obrigatório, progressão de status que não depende só de cor e marcadores de mapa da marca. Nenhuma base paralela foi criada.
+
+
+## Revisão de qualidade v5.0
+
+Após a interrupção do Manus por limite de créditos, a direção de Product Design foi aprofundada diretamente na `main`: interface cívica mais editorial, redução de efeitos de template, ícones lineares, seletor visual de categorias, protocolos salvos e mapa avançado com painel de resultados, filtros rápidos, geolocalização opcional, camadas de mapa e limite municipal do IBGE. A arquitetura e o Supabase existentes foram preservados.
