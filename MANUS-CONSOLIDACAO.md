@@ -89,3 +89,8 @@ A direção visual dos protótipos Manus foi incorporada de forma incremental em
 ## Polimento visual v4.8
 
 A v4.8 aprofundou a direção visual já consolidada sem consumir uma nova tarefa Manus. Foram refinados hero, navegação, formulários, tabelas, mapas, filtros, mobile/safe-area, contraste e microinterações. O objetivo foi reduzir a aparência de “template” nas telas internas e aproximar o produto de uma interface cívica madura, sem alterar a arquitetura nem criar uma versão paralela.
+
+
+## Continuidade após limite de créditos — v4.9
+
+A tarefa Manus de evolução visual foi iniciada com briefing completo, mas o limite de créditos interrompeu a execução. A continuidade foi feita diretamente sobre a `main`, preservando o mesmo briefing: símbolo próprio, hierarquia do formulário sem wizard obrigatório, progressão de status que não depende só de cor e marcadores de mapa da marca. Nenhuma base paralela foi criada.

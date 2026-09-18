@@ -329,3 +329,51 @@ footer{background:linear-gradient(120deg,#042d30,#073d3f 55%,#0a504c);padding:48
   .card,.field input,.field select,.field textarea,.row,.filters{border-width:2px}
   .muted,.help,.metricLabel{color:#435b60}
 }
+
+
+/* v4.9 — identidade própria, fluxo e mapas */
+.brandMark{position:relative;display:inline-block;overflow:hidden;color:transparent;text-indent:-999px}
+.brandMark .brandArc{position:absolute;inset:9px 8px 9px 9px;border:3px solid var(--lime);border-right-color:transparent;border-radius:50%;transform:rotate(-10deg)}
+.brandMark .brandArc:after{content:"";position:absolute;width:11px;height:3px;border-radius:999px;right:-5px;top:4px;background:#fff;transform:rotate(10deg);box-shadow:0 16px 0 #4da9ad}
+.brandMark .brandNode{position:absolute;width:7px;height:7px;border-radius:50%;right:8px;top:8px;background:#fff;box-shadow:-5px 25px 0 #4da9ad,-27px 11px 0 rgba(255,255,255,.9)}
+.brandMark:after{display:none}
+.brandWord{display:flex;flex-direction:column}
+
+.formStage{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:center;padding:14px 16px;margin:4px 0 2px;border-radius:16px;background:linear-gradient(135deg,#f2f8f5,#fbfdfc);border:1px solid #dbe9e3}
+.formStage .stageIndex{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:var(--civic-950);color:var(--lime);font-size:.78rem;font-weight:950;letter-spacing:.06em}
+.formStage b{display:block;color:var(--civic-950);font-size:1rem}
+.formStage small{display:block;margin-top:2px;color:#667b7f;line-height:1.4}
+.formStage.privateStage{background:linear-gradient(135deg,#f7f6ff,#fbfaff);border-color:#e2dff0}
+.formStage.privateStage .stageIndex{background:#453c66;color:#f5efff}
+
+.statusFlowBlock{margin:18px 0 6px;padding:16px;border-radius:17px;background:#f7faf8;border:1px solid #dce8e3}
+.statusFlowLabel{display:block;margin-bottom:11px;color:#65797d;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.statusStepper{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:0;padding:0}
+.statusStepper li{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;min-width:0;color:#7a8b8e}
+.statusStepper li:not(:last-child):before{content:"";position:absolute;top:13px;left:50%;right:-50%;height:2px;background:#d8e4df;z-index:0}
+.statusStepper .statusDot{position:relative;z-index:1;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#fff;border:2px solid #c9d8d2;color:#718287;font-size:.72rem;font-weight:950}
+.statusStepper li.done:not(:last-child):before{background:#79a997}
+.statusStepper li.done .statusDot{background:#dff1e9;border-color:#79a997;color:#245f43}
+.statusStepper li.current .statusDot{background:var(--lime);border-color:#8dbb35;color:#173914;box-shadow:0 0 0 5px rgba(191,240,84,.18)}
+.statusStepper li.current{color:var(--civic-950)}
+.statusStepper li b{font-size:.69rem;line-height:1.2;font-weight:820}
+
+.ccMarkerWrap{background:transparent!important;border:0!important}
+.ccMarker{display:block;position:relative;width:28px;height:28px;border-radius:50% 50% 50% 12px;transform:rotate(-45deg);background:var(--civic-900);border:3px solid #fff;box-shadow:0 7px 18px rgba(7,56,58,.28)}
+.ccMarker:after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--lime);left:7px;top:7px}
+.ccMarker.markerResolved{background:#3f7952}
+.ccMarker.markerProgress{background:#0b716b}
+.ccMarker.markerAnalysis{background:#9a681f}
+.ccMarker.markerDraft{background:#4f74bd}
+.ccMarker.markerDraft:after{background:#fff}
+.leaflet-marker-icon.ccMarkerWrap{filter:none}
+
+@media(max-width:760px){
+  .statusStepper{grid-template-columns:1fr;gap:8px}
+  .statusStepper li{display:grid;grid-template-columns:30px 1fr;align-items:center;text-align:left;justify-items:start}
+  .statusStepper li:not(:last-child):before{top:28px;left:14px;right:auto;width:2px;height:calc(100% + 8px)}
+  .statusStepper .statusDot{grid-column:1}
+  .statusStepper li b{grid-column:2;font-size:.78rem}
+  .formStage{grid-template-columns:36px 1fr;padding:12px}
+  .formStage .stageIndex{width:36px;height:36px;border-radius:11px}
+}
