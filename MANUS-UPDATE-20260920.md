@@ -54,3 +54,8 @@ Motivo: o Cidade Conecta continua sendo **protótipo acadêmico independente** e
 ## Regra para próximas alterações
 
 Continuar incrementalmente na `main`. Não reintroduzir linguagem ou funcionalidades que façam o protótipo parecer um sistema oficial da Prefeitura sem parceria formal.
+
+
+## Refinamento posterior — v5.2
+
+Depois da integração inicial do pacote Manus, a experiência foi aprofundada diretamente na arquitetura oficial: prevenção de registros duplicados, lista assistida de bairros, acompanhamento rápido, detalhe de status mais explicativo, filtro de ocorrências abertas e refinamento de acessibilidade/navegação. Essas melhorias não dependem de créditos adicionais do Manus.

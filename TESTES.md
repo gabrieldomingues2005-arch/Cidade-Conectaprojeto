@@ -209,3 +209,17 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - testar barra inferior com 4 atalhos;
 - formulário, mapa, dashboard e teclado virtual;
 - confirmar ausência de overflow horizontal.
+
+
+## 14. QA v5.2
+
+- preencher bairro e confirmar sugestões oriundas da base territorial;
+- selecionar categoria + ponto próximo a ocorrência aberta da mesma categoria e verificar aviso de possível duplicidade;
+- confirmar que o aviso de semelhante não bloqueia o envio;
+- limpar/remover ponto e confirmar atualização do aviso;
+- abrir detalhe de protocolo e validar explicação do status, recência e registros semelhantes;
+- validar acessos rápidos na tela de acompanhamento;
+- filtrar mapa por “Somente abertas” e combinar com categoria/status/região;
+- confirmar atualização de `document.title` e `aria-current` em cada rota;
+- validar teclado, foco, mobile e ausência de overflow;
+- quando o Supabase for reativado, redeploy de `submit-occurrence` e teste de coordenadas inválidas/limítrofes.

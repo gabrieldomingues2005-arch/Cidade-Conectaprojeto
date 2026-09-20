@@ -1375,3 +1375,211 @@ footer{background:#052f31}
   .statsV51{grid-template-columns:1fr!important}
   .dashboardKpisV51{grid-template-columns:1fr}
 }
+
+
+/* =========================================================
+   Cidade Conecta v5.2 — acabamento de produto
+   ========================================================= */
+
+:root{
+  --cc-focus:0 0 0 3px rgba(191,240,84,.36),0 0 0 5px rgba(7,56,58,.14);
+}
+::selection{background:#dff2a9;color:#173914}
+a,button,input,select,textarea{accent-color:var(--cc-green-2)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:none!important;
+  box-shadow:var(--cc-focus)!important
+}
+.top{box-shadow:0 1px 0 rgba(3,47,49,.05)}
+.nav a{position:relative}
+.nav a.active:after{
+  content:"";position:absolute;left:11px;right:11px;bottom:3px;height:2px;
+  border-radius:999px;background:var(--cc-lime)
+}
+.nav a[data-route="registrar"].active:after{background:#fff}
+.demoMark{color:#9a681f;font-size:.66rem;margin-top:.32rem;flex:none}
+.pageHead{
+  position:relative;overflow:hidden;
+  background:
+    linear-gradient(90deg,rgba(7,56,58,.035) 1px,transparent 1px),
+    linear-gradient(rgba(7,56,58,.035) 1px,transparent 1px),
+    #eef3ef;
+  background-size:36px 36px
+}
+.pageHead:after{
+  content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;
+  border:1px solid rgba(19,112,110,.09);box-shadow:0 0 0 36px rgba(191,240,84,.035)
+}
+.pageHead .wrap{position:relative;z-index:1}
+
+/* Acompanhamento */
+.followLayoutV52{
+  display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start
+}
+.followSearchV52{padding:25px;box-shadow:none}
+.followSearchV52 h2{margin:.3rem 0 15px;color:var(--cc-green);font-size:1.35rem}
+.followSearchV52 .quickSearch{margin:0}
+.followRecentV52{padding:18px;box-shadow:none}
+.followRecentV52 h3{margin:.25rem 0 12px;color:var(--cc-green)}
+.followRecentV52>a{
+  display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:9px;align-items:center;
+  padding:10px 0;text-decoration:none;border-top:1px solid #e6ece8
+}
+.followRecentV52>a>span{
+  width:32px;height:32px;display:grid;place-items:center;border-radius:9px;
+  background:#eef4ef;color:var(--cc-green-2)
+}
+.followRecentV52>a>span .uiIcon{width:17px;height:17px}
+.followRecentV52>a b{display:block;font-size:.73rem;color:var(--cc-green)}
+.followRecentV52>a small{
+  display:block;max-width:175px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:#748689;font-size:.66rem;margin-top:2px
+}
+.followRecentV52>a em{
+  font-style:normal;color:#6c7d80;font-size:.64rem;font-weight:800;text-align:right
+}
+.followResultV52{margin-top:18px}
+
+/* Detalhe da ocorrência */
+.detailV52{
+  grid-template-columns:minmax(0,1.22fr) minmax(290px,.78fr);
+  gap:14px;align-items:start
+}
+.occurrenceDetailV52{padding:25px;box-shadow:none}
+.detailHeaderV52{
+  display:flex;justify-content:space-between;gap:20px;align-items:flex-start
+}
+.detailHeaderV52 h2{
+  margin:.28rem 0 .55rem;color:var(--cc-ink);font-size:clamp(1.45rem,3vw,2.2rem);
+  letter-spacing:-.035em;line-height:1.08
+}
+.detailMetaV52{display:flex;flex-wrap:wrap;gap:7px}
+.detailMetaV52 span{
+  display:inline-flex;align-items:center;gap:5px;padding:5px 8px;
+  background:#f1f5f2;border-radius:999px;color:#647a7e;font-size:.7rem;font-weight:740
+}
+.detailMetaV52 .uiIcon{width:14px;height:14px}
+.currentStatusV52{
+  display:grid;grid-template-columns:auto 1fr;gap:13px;
+  margin:20px 0 14px;padding:17px;
+  border:1px solid #d7e4dc;border-radius:15px;
+  background:linear-gradient(135deg,#f2f7f3,#fbfcfa)
+}
+.statusPulseV52{
+  width:13px;height:13px;margin-top:4px;border-radius:50%;
+  background:var(--cc-lime);box-shadow:0 0 0 5px rgba(191,240,84,.22)
+}
+.currentStatusV52 h3{margin:.15rem 0 .25rem;color:var(--cc-green);font-size:1.08rem}
+.currentStatusV52 p{margin:0;color:#596f73;font-size:.82rem}
+.currentStatusV52 small{display:block;margin-top:6px;color:#7c8d8f;font-size:.69rem}
+.occurrenceBodyV52{padding:5px 1px 2px}
+.occurrenceBodyV52 h3{margin:.3rem 0 .55rem;color:var(--cc-green);font-size:.82rem;text-transform:uppercase;letter-spacing:.08em}
+.occurrenceBodyV52 p{color:#405b60;line-height:1.72}
+.mapFrameV52{
+  margin-top:18px;border:1px solid #dbe5df;border-radius:16px;overflow:hidden;background:#fff
+}
+.mapFrameHeadV52{
+  min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 13px;background:#f7f9f7;color:#52696d;font-size:.73rem;font-weight:800
+}
+.mapFrameHeadV52 span{display:inline-flex;align-items:center;gap:6px}
+.mapFrameHeadV52 small{font-weight:650;color:#7b8a8d}
+.detailMapV52{height:310px!important;border:0!important;border-radius:0!important}
+.detailActionsV52{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:17px;padding-top:16px;border-top:1px solid #e5ebe7
+}
+.similarSectionV52{
+  margin-top:19px;padding-top:17px;border-top:1px solid #e5ebe7
+}
+.similarSectionV52>div>h3{margin:.2rem 0 10px;color:var(--cc-green);font-size:1rem}
+.similarSectionV52>a{
+  display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;
+  padding:10px 0;text-decoration:none;border-top:1px solid #edf1ee
+}
+.similarSectionV52>a>span:first-child{
+  width:32px;height:32px;display:grid;place-items:center;border-radius:9px;
+  background:#eef4ef;color:var(--cc-green-2)
+}
+.similarSectionV52>a b{display:block;color:#38575b;font-size:.78rem}
+.similarSectionV52>a small{display:block;color:#7a898c;font-size:.66rem;margin-top:2px}
+.historyCardV52{padding:21px;box-shadow:none;position:sticky;top:95px}
+.historyHeadV52{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.historyHeadV52 h2{margin:.12rem 0;color:var(--cc-green);font-size:1.16rem}
+.historyIconV52{
+  width:38px;height:38px;display:grid;place-items:center;border-radius:11px;
+  background:var(--cc-green);color:var(--cc-lime)
+}
+.responsibleBoxV52{
+  display:grid;gap:3px;margin-top:16px;padding:14px;border-radius:13px;background:#f1f5f2
+}
+.responsibleBoxV52 span{color:#76878a;font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;font-weight:850}
+.responsibleBoxV52 b{color:var(--cc-green);font-size:.86rem}
+.responsibleBoxV52 small{color:#7a898c;font-size:.65rem}
+
+/* Prevenção de registros duplicados */
+.similarNoticeV52{
+  margin-top:11px;padding:13px;border:1px solid #d9dfb6;border-radius:13px;
+  background:#fbfce9
+}
+.similarNoticeHeadV52{display:flex;gap:9px;align-items:flex-start}
+.similarNoticeHeadV52>span{
+  width:30px;height:30px;display:grid;place-items:center;border-radius:9px;
+  background:#eff3c8;color:#576b22;flex:none
+}
+.similarNoticeHeadV52 b{display:block;color:#4a5923;font-size:.8rem}
+.similarNoticeHeadV52 small{display:block;color:#78814e;font-size:.67rem;margin-top:2px}
+.similarNoticeListV52{display:grid;margin-top:9px}
+.similarNoticeListV52>a{
+  display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:8px;align-items:center;
+  padding:8px 0;border-top:1px solid #e8ebca;text-decoration:none
+}
+.similarNoticeListV52>a>span{
+  width:29px;height:29px;display:grid;place-items:center;color:#617131
+}
+.similarNoticeListV52>a b{display:block;color:#4e5c29;font-size:.73rem}
+.similarNoticeListV52>a small{display:block;color:#81895a;font-size:.64rem}
+.similarNoticeListV52>a em{font-style:normal;color:#78814e;font-size:.62rem;font-weight:800}
+
+/* Mapa */
+.openOnlyV52{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 10px;
+  border:1px solid #d8e2dd;border-radius:999px;background:#f5f8f6;
+  color:#607579;font-size:.72rem;font-weight:760;cursor:pointer
+}
+.openOnlyV52 input{margin:0;width:14px;height:14px}
+.mapResultItem{transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.mapResultItem:hover{transform:translateX(2px)}
+.mapCanvasV50:after{
+  content:"Piracicaba · mapa comunitário";
+  position:absolute;right:14px;bottom:52px;z-index:450;
+  padding:6px 8px;border-radius:8px;background:rgba(3,47,49,.88);color:#fff;
+  font-size:.62rem;font-weight:800;letter-spacing:.02em;pointer-events:none
+}
+
+/* Micro-polimento */
+.card h2,.card h3{text-wrap:balance}
+.btn{letter-spacing:-.01em}
+.code{font-variant-numeric:tabular-nums}
+.statusStepper li.current b{font-weight:900}
+.toast{border:1px solid rgba(255,255,255,.1)}
+.footerLinkButton:hover{background:rgba(255,255,255,.08)}
+.systemStatus{border-radius:999px!important}
+
+@media(max-width:1020px){
+  .followLayoutV52{grid-template-columns:1fr}
+  .followRecentV52{display:none}
+  .detailV52{grid-template-columns:1fr}
+  .historyCardV52{position:static}
+}
+@media(max-width:760px){
+  .detailHeaderV52{flex-direction:column;gap:10px}
+  .detailHeaderV52>.badge{align-self:flex-start}
+  .detailActionsV52{display:grid;grid-template-columns:1fr}
+  .detailActionsV52 .btn{width:100%}
+  .mapFrameHeadV52{align-items:flex-start;flex-direction:column}
+  .detailMapV52{height:280px!important}
+  .similarSectionV52>a{grid-template-columns:32px minmax(0,1fr)}
+  .similarSectionV52>a>.badge{grid-column:2;justify-self:start}
+  .openOnlyV52{width:max-content}
+  .mapCanvasV50:after{display:none}
+}

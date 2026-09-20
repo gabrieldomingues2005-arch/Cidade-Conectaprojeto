@@ -80,6 +80,10 @@ A tarefa `P76YZUrwuxpTJcJz2WeGRp`, criada posteriormente, não deve virar uma ba
 - O frontend deve migrar do modo local para o Supabase de forma incremental e testada.
 
 
-## Estado visual atual — v5.1 (20/09/2026)
+## Estado visual atual — v5.2 (20/09/2026)
 
 O update React/Vite recebido do Manus foi auditado e incorporado seletivamente na `main`, sem substituir a arquitetura segura existente. A versão atual mantém Supabase/RLS/Edge Functions e adiciona identidade própria, mapa real na Home, formulário guiado com prévia pública, otimização de imagens, filtro regional no mapa e dashboard reestruturado. Ver `MANUS-UPDATE-20260920.md` e `DESIGN-SYSTEM.md`.
+
+
+### Refinamento v5.2
+A versão v5.2 adiciona prevenção assistiva de duplicidades, sugestão de bairros, explicação contextual do status, acompanhamento rápido e filtro de ocorrências abertas. O Supabase correto foi confirmado, mas está `INACTIVE` por limite de projetos gratuitos; nenhum outro projeto deve ser pausado/apagado automaticamente para liberar vaga.

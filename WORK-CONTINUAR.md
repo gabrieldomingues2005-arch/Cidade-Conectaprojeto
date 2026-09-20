@@ -14,7 +14,7 @@
 
 **NUNCA use ou altere Supabase do Raiz Carbon, especialmente `htzigdvatjpvvkwswjof`.**
 
-## Estado entregue — MVP v5.1
+## Estado entregue — MVP v5.2
 O trabalho pesado de backend já foi implementado. Não recrie schema, frontend ou banco do zero.
 
 - PostgreSQL + PostGIS no Supabase exclusivo.
@@ -28,10 +28,10 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 - Storage privado de anexos.
 - Edge Functions `submit-occurrence` e `track-occurrence`.
 - RPC de rastreamento SECURITY DEFINER restrita a `service_role`.
-- Frontend v5.1 envia para Supabase e lê publicamente somente ocorrências aprovadas.
+- Frontend v5.2 envia para Supabase e lê publicamente somente ocorrências aprovadas.
 - Admin visual permanece demonstrativo até autenticação/fluxo institucional real.
 - Integração Prefeitura/156 continua futura; não fingir parceria oficial.
-- Design v5.1 incorpora seletivamente o update do Manus sem trocar a arquitetura segura atual: marca gráfica própria, hero com mapa real, categorias com entrada direta no formulário, progresso/previsão pública no registro, otimização de foto, dashboard reestruturado e mapa com filtro por região. Arquivo: `assets/design-v51.css`.
+- Design v5.2 aprofunda a integração do Manus sem trocar a arquitetura segura: marca própria, mapa real, registro guiado com prévia pública e detecção de duplicidade, bairro assistido, foto otimizada, protocolo com status explicado, dashboard reestruturado e mapa com região/status/somente abertas. Arquivo: `assets/design-v52.css`.
 
 ## Segurança/testes já feitos
 - Sem `service_role`, senha ou segredo administrativo no frontend.
@@ -55,6 +55,10 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 10. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
-**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.1 em desktop e mobile → valide Home/mapa real, registro guiado, foto otimizada, protocolos salvos, filtro regional, dashboard e Supabase → corrija somente falhas comprovadas → teste de novo.**
+**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.2 em desktop e mobile → valide Home, registro, detecção de semelhantes, protocolo, mapa, dashboard e integração Supabase → corrija somente falhas comprovadas → teste de novo.**
 
 Não refaça análises já consolidadas e responda curto.
+
+
+## Atenção — backend Supabase em 20/09/2026
+O projeto correto `yvmkgpijzewssdxgimit` foi confirmado, porém o Supabase está com status `INACTIVE`. A tentativa de restauração foi bloqueada pelo limite de 2 projetos gratuitos ativos da organização. **Não pause nem apague outro projeto automaticamente.** A correção da validação de longitude foi aplicada no código da `main`, mas o redeploy da Edge Function `submit-occurrence` deve ser feito quando o projeto Cidade Conecta puder ser reativado.

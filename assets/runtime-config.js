@@ -2,7 +2,7 @@
 // IMPORTANTE: este arquivo NÃO deve receber service_role, senha de banco ou qualquer segredo.
 // As chaves abaixo são públicas para navegador e dependem de RLS/Edge Functions no backend.
 window.CIDADE_CONECTA_CONFIG = Object.freeze({
-  appVersion: '5.1.0',
+  appVersion: '5.2.0',
   city: 'Piracicaba',
   state: 'SP',
   municipalityIbgeCode: '3538709',
