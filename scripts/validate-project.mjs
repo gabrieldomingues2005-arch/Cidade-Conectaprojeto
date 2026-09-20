@@ -88,7 +88,7 @@ for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapa
 }
 
 const design=read('assets/design-v51.css');
-assert(index.includes('brandMark'),'Shell usa símbolo próprio do Cidade Conecta');
+assert(index.includes('brandAsset')&&index.includes('assets/brand-mark-v51.svg'),'Shell usa símbolo próprio do Cidade Conecta');
 assert(design.includes('--civic-950'),'Tema v5.1 possui tokens visuais próprios');
 assert(design.includes('--lime'),'Tema v5.1 incorpora acento visual dos protótipos Manus');
 assert(design.includes('@media(max-width:650px)'),'Tema v5.1 inclui ajustes mobile');
