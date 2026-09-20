@@ -1,16 +1,16 @@
-# Cidade Conecta — Design System v5.0
+# Cidade Conecta — Design System v5.1
 
 Este documento consolida a direção visual do Cidade Conecta depois da interrupção da tarefa Manus por limite de créditos. Ele descreve o que está realmente aplicado na `main` e serve como handoff para o Work.
 
 ## Princípio visual
 
-A interface v5.0 combina clareza de Swiss/International Typographic Style com Civic Tech editorial, cartografia e sinalização urbana, reduzindo de propósito efeitos decorativos e aparência de template. O resultado deve parecer cívico, acessível e confiável sem imitar identidade governamental oficial.
+A interface v5.1 combina clareza de Swiss/International Typographic Style com Civic Tech editorial, cartografia e sinalização urbana, reduzindo de propósito efeitos decorativos e aparência de template. O resultado deve parecer cívico, acessível e confiável sem imitar identidade governamental oficial.
 
 Evitar: excesso de glassmorphism, gradientes decorativos, aparência de fintech/SaaS genérico, ícones multicoloridos em excesso e linguagem visual burocrática.
 
 ## Marca
 
-O símbolo v5.0 substitui o bloco textual “CC” por uma marca abstrata construída em CSS e refletida no `favicon.svg`.
+O símbolo v5.1 substitui o bloco textual “CC” por uma marca abstrata construída em CSS e refletida no `favicon.svg`.
 
 Conceito:
 - arco aberto = cidade em movimento / conexão em construção;
@@ -132,7 +132,7 @@ O centro interno usa o acento lima, mantendo ligação com a identidade.
 
 ## Arquivos de referência
 
-- `assets/design-v50.css` — camada visual principal;
+- `assets/design-v51.css` — camada visual principal;
 - `assets/app.js` — componentes de interface e fluxo;
 - `favicon.svg` — símbolo compacto;
 - `manifest.webmanifest` — cores PWA;
@@ -149,9 +149,9 @@ O centro interno usa o acento lima, mantendo ligação com a identidade.
 Não recriar o projeto para implementar esses refinamentos.
 
 
-## Revisão rígida v5.0
+## Revisão rígida v5.1
 
-A v5.0 aumenta o padrão visual e funcional sem reescrever a arquitetura.
+A v5.1 aumenta o padrão visual e funcional sem reescrever a arquitetura.
 
 ### Mudanças de design
 - hero claro/editorial com mapa como elemento focal;
@@ -178,3 +178,29 @@ O usuário pode salvar protocolos públicos no navegador. Isso não cria conta, 
 
 ### Regra de qualidade
 Não adicionar função apenas por efeito visual. Novas funções devem melhorar localização, compreensão, acompanhamento ou segurança.
+
+
+## Integração visual Manus — v5.1
+
+O pacote React produzido pelo Manus foi tratado como referência de Product Design, não como substituição automática da arquitetura existente.
+
+Foram incorporados e aprofundados:
+- mapa como elemento central da identidade;
+- leitura territorial mais visível;
+- fluxo de registro guiado visualmente;
+- categorias tratadas como escolhas visuais;
+- dashboard com melhor hierarquia;
+- navegação mobile mais próxima de produto;
+- marca gráfica consistente.
+
+A v5.1 também adiciona:
+- mapa Leaflet real na Home;
+- filtro por região administrativa no mapa público, derivado da base territorial local;
+- prévia pública durante o preenchimento;
+- medidor de completude do formulário;
+- círculo visual de privacidade ao marcar localização;
+- compressão de imagem client-side;
+- filtro regional sem inventar polígonos internos;
+- layout próprio de indicadores de completude do conjunto.
+
+Não foi adotada a migração completa para React porque o pacote Manus estava orientado a estado local/demonstração e não preservava por si só o fluxo seguro já existente com Supabase, Edge Functions, RLS, tokens e moderação.

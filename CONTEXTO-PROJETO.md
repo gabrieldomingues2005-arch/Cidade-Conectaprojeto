@@ -78,3 +78,8 @@ A tarefa `P76YZUrwuxpTJcJz2WeGRp`, criada posteriormente, não deve virar uma ba
 - RLS e segurança devem permanecer obrigatórias para dados expostos.
 - GitHub Pages é o preview técnico automático.
 - O frontend deve migrar do modo local para o Supabase de forma incremental e testada.
+
+
+## Estado visual atual — v5.1 (20/09/2026)
+
+O update React/Vite recebido do Manus foi auditado e incorporado seletivamente na `main`, sem substituir a arquitetura segura existente. A versão atual mantém Supabase/RLS/Edge Functions e adiciona identidade própria, mapa real na Home, formulário guiado com prévia pública, otimização de imagens, filtro regional no mapa e dashboard reestruturado. Ver `MANUS-UPDATE-20260920.md` e `DESIGN-SYSTEM.md`.

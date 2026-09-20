@@ -99,3 +99,12 @@ A tarefa Manus de evolução visual foi iniciada com briefing completo, mas o li
 ## Revisão de qualidade v5.0
 
 Após a interrupção do Manus por limite de créditos, a direção de Product Design foi aprofundada diretamente na `main`: interface cívica mais editorial, redução de efeitos de template, ícones lineares, seletor visual de categorias, protocolos salvos e mapa avançado com painel de resultados, filtros rápidos, geolocalização opcional, camadas de mapa e limite municipal do IBGE. A arquitetura e o Supabase existentes foram preservados.
+
+
+## Pacote Manus recebido em 20/09/2026
+
+Foi recebido um ZIP do Manus baseado em React/Vite com componentes de Home, registro em etapas, mapa territorial, dashboard, painel demonstrativo e design system.
+
+A integração foi feita por seleção, não por substituição total. O pacote continha bons padrões de UI/UX, porém também usava estado local para criação/atualização de ocorrências e textos que poderiam sugerir operação municipal real, como despacho/triagem municipal e SLAs. Esses trechos não foram adotados.
+
+A v5.1 preserva a `main` e o backend seguro atual e incorpora os elementos úteis de design e interação do pacote.

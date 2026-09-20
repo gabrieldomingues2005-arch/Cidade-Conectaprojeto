@@ -14,20 +14,20 @@ A branch `main` é a fonte oficial do código. O preview do GitHub Pages é atua
 
 A sincronização com `gh-pages` só ocorre após a validação do mesmo commit. Se algum teste falhar, a versão anterior do preview é preservada. Execuções antigas são ignoradas quando a `main` já avançou, e o envio para `gh-pages` não usa força. Pull requests executam a mesma validação, sem publicar.
 
-## Situação atual — MVP v5.0
+## Situação atual — MVP v5.1
 
 O protótipo já possui:
 
 - interface responsiva para computador e celular;
-- redesign v5.0 com linguagem cívica editorial, hierarquia mais limpa, ícones lineares consistentes, seletor visual de categorias e experiência cartográfica avançada;
+- redesign v5.1 com identidade mais própria, hero com mapa real, navegação móvel em quatro atalhos, formulário guiado com prévia pública, compressão de imagem no navegador, dashboard refinado e mapa territorial com filtro por região;
 - identidade visual inspirada nas cores utilizadas pela cidade de Piracicaba, mantendo caráter independente;
 - registro de ocorrências com protocolo;
 - acompanhamento por protocolo e histórico;
 - área “Meus registros” no navegador atual, incluindo protocolos públicos salvos para acompanhamento;
-- mapa OpenStreetMap/Leaflet com painel de resultados, filtros rápidos, duas camadas-base, limite municipal do IBGE e ordenação por distância quando o usuário autoriza geolocalização;
+- mapa OpenStreetMap/Leaflet com painel de resultados, filtros rápidos, filtro por região administrativa, duas camadas-base, limite municipal do IBGE e ordenação por distância quando o usuário autoriza geolocalização;
 - geolocalização opcional;
 - localização pública aproximada e separação conceitual da localização exata privada;
-- foto opcional;
+- foto opcional com otimização/compressão client-side para imagens grandes;
 - rascunho local;
 - painel administrativo demonstrativo;
 - atualização de status, setor e observações;
@@ -46,7 +46,9 @@ O protótipo já possui:
 - status visual de conectividade e origem dos dados;
 - atalho `Ctrl/Cmd + K` para consulta de protocolo;
 - opção de restaurar dados demonstrativos no painel Admin;
-- botão para copiar o link do site.
+- botão para copiar o link do site;
+- mapa real também na Home;
+- prévia do que ficará público antes do envio da ocorrência.
 
 ## Piracicaba e geografia
 
@@ -76,7 +78,7 @@ Nunca devem ser colocadas no front-end público chaves `service_role`, senha do 
 - `index.html` — shell principal;
 - `assets/app.js` — aplicação e fluxo de ocorrências;
 - `assets/styles.css` — estilos gerais;
-- `assets/design-v50.css` — camada visual incremental inspirada nos protótipos Manus;
+- `assets/design-v51.css` — camada visual incremental inspirada nos protótipos Manus;
 - `assets/piracicaba.js` — contexto territorial;
 - `assets/piracicaba-mapas.js` — geografia avançada e limite municipal;
 - `assets/privacy-geo.js` — proteção de localização;
@@ -101,7 +103,7 @@ Cidade Conecta é um **projeto acadêmico independente**. Referências territori
 
 ## Próximas etapas
 
-1. Fazer QA visual/funcional da v5.0 em desktop e celulares reais.
+1. Fazer QA visual/funcional da v5.1 em desktop e celulares reais.
 2. Validar usabilidade do novo seletor de categorias e do mapa avançado.
 3. Implementar autenticação/roles reais para substituir o Admin demonstrativo.
 4. Evoluir moderação e notificações.

@@ -24,11 +24,11 @@
   <link rel="preconnect" href="https://servicodados.ibge.gov.br">
   <link rel="preconnect" href="https://yvmkgpijzewssdxgimit.supabase.co">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yhcQyZ10wXgALDVK8O7n33R1F+9g=" crossorigin="">
-  <link rel="stylesheet" href="assets/styles.css?v=5.0.0">
-  <link rel="stylesheet" href="assets/piracicaba.css?v=5.0.0">
-  <link rel="stylesheet" href="assets/piracicaba-mapas.css?v=5.0.0">
-  <link rel="stylesheet" href="assets/site-enhancements.css?v=5.0.0">
-  <link rel="stylesheet" href="assets/design-v50.css?v=5.0.0">
+  <link rel="stylesheet" href="assets/styles.css?v=5.1.0">
+  <link rel="stylesheet" href="assets/piracicaba.css?v=5.1.0">
+  <link rel="stylesheet" href="assets/piracicaba-mapas.css?v=5.1.0">
+  <link rel="stylesheet" href="assets/site-enhancements.css?v=5.1.0">
+  <link rel="stylesheet" href="assets/design-v51.css?v=5.1.0">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -47,7 +47,7 @@
   <header class="top">
     <div class="wrap topin">
       <a class="brand" href="#/" aria-label="Cidade Conecta Piracicaba - início">
-        <span class="logo brandMark" aria-hidden="true"><span class="brandArc"></span><span class="brandNode"></span></span>
+        <img class="brandAsset" src="assets/brand-mark-v51.svg?v=5.1.0" alt="" aria-hidden="true">
         <span class="brandWord">Cidade Conecta<small>Piracicaba · SP</small></span>
       </a>
       <nav class="nav" id="nav" aria-label="Navegação principal">
@@ -74,14 +74,16 @@
   </div>
 
   <div class="demo">
-    <div class="wrap">🧪 <span><strong>Protótipo acadêmico independente.</strong> Esta versão demonstra o funcionamento do Cidade Conecta em Piracicaba e não representa atendimento oficial da Prefeitura.</span></div>
+    <div class="wrap"><span class="demoMark" aria-hidden="true">●</span><span><strong>Protótipo acadêmico independente.</strong> Demonstra registro e acompanhamento urbano em Piracicaba; não é canal oficial da Prefeitura.</span></div>
   </div>
 
   <main id="app" tabindex="-1"></main>
 
-  <div class="mobileActions" aria-label="Atalhos">
-    <a class="btn primary" href="#/registrar">＋ Registrar</a>
-    <a class="btn secondary" href="#/acompanhar">🔎 Acompanhar</a>
+  <div class="mobileActions mobileActionsV51" aria-label="Atalhos principais">
+    <a href="#/"><span aria-hidden="true">⌂</span>Início</a>
+    <a href="#/registrar" data-primary="1"><span aria-hidden="true">＋</span>Registrar</a>
+    <a href="#/mapa"><span aria-hidden="true">⌖</span>Mapa</a>
+    <a href="#/acompanhar"><span aria-hidden="true">#</span>Protocolo</a>
   </div>
 
   <footer>
@@ -89,7 +91,7 @@
       <div>
         <div class="footBrand">Cidade Conecta · Piracicaba</div>
         <p>Projeto acadêmico para participação cidadã e registro organizado de problemas urbanos em Piracicaba, São Paulo.</p>
-        <div class="version">MVP v5.0 · 2026</div>
+        <div class="version">MVP v5.1 · 2026</div>
       </div>
       <div>
         <b>Território e privacidade</b>
@@ -113,12 +115,12 @@
 
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="assets/runtime-config.js?v=5.0.0" defer></script>
-  <script src="assets/supabase-bridge.js?v=5.0.0" defer></script>
-  <script src="assets/app.js?v=5.0.0" defer></script>
-  <script src="assets/piracicaba.js?v=5.0.0" defer></script>
-  <script src="assets/piracicaba-mapas.js?v=5.0.0" defer></script>
-  <script src="assets/privacy-geo.js?v=5.0.0" defer></script>
-  <script src="assets/site-enhancements.js?v=5.0.0" defer></script>
+  <script src="assets/runtime-config.js?v=5.1.0" defer></script>
+  <script src="assets/supabase-bridge.js?v=5.1.0" defer></script>
+  <script src="assets/app.js?v=5.1.0" defer></script>
+  <script src="assets/piracicaba.js?v=5.1.0" defer></script>
+  <script src="assets/piracicaba-mapas.js?v=5.1.0" defer></script>
+  <script src="assets/privacy-geo.js?v=5.1.0" defer></script>
+  <script src="assets/site-enhancements.js?v=5.1.0" defer></script>
 </body>
 </html>

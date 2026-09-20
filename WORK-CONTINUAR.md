@@ -14,7 +14,7 @@
 
 **NUNCA use ou altere Supabase do Raiz Carbon, especialmente `htzigdvatjpvvkwswjof`.**
 
-## Estado entregue — MVP v5.0
+## Estado entregue — MVP v5.1
 O trabalho pesado de backend já foi implementado. Não recrie schema, frontend ou banco do zero.
 
 - PostgreSQL + PostGIS no Supabase exclusivo.
@@ -28,10 +28,10 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 - Storage privado de anexos.
 - Edge Functions `submit-occurrence` e `track-occurrence`.
 - RPC de rastreamento SECURITY DEFINER restrita a `service_role`.
-- Frontend v5.0 envia para Supabase e lê publicamente somente ocorrências aprovadas.
+- Frontend v5.1 envia para Supabase e lê publicamente somente ocorrências aprovadas.
 - Admin visual permanece demonstrativo até autenticação/fluxo institucional real.
 - Integração Prefeitura/156 continua futura; não fingir parceria oficial.
-- Design v5.0 é uma revisão rígida de qualidade: visual cívico editorial, menos aparência de template, ícones lineares, navegação pública mais limpa, seletor visual de categorias, protocolos salvos e mapa avançado com resultados laterais, geolocalização opcional, camadas de mapa e limite municipal IBGE. Arquivo: `assets/design-v50.css`.
+- Design v5.1 incorpora seletivamente o update do Manus sem trocar a arquitetura segura atual: marca gráfica própria, hero com mapa real, categorias com entrada direta no formulário, progresso/previsão pública no registro, otimização de foto, dashboard reestruturado e mapa com filtro por região. Arquivo: `assets/design-v51.css`.
 
 ## Segurança/testes já feitos
 - Sem `service_role`, senha ou segredo administrativo no frontend.
@@ -49,11 +49,12 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 4. `API.md`
 5. `TESTES.md`
 6. `DESIGN-SYSTEM.md`
-7. `supabase/migrations/`
-8. `supabase/functions/`
-9. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
+7. `MANUS-UPDATE-20260920.md`
+8. `supabase/migrations/`
+9. `supabase/functions/`
+10. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
-**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.0 em desktop e mobile → valide formulário, protocolos salvos, mapa avançado e Supabase → corrija somente falhas comprovadas → teste de novo.**
+**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.1 em desktop e mobile → valide Home/mapa real, registro guiado, foto otimizada, protocolos salvos, filtro regional, dashboard e Supabase → corrija somente falhas comprovadas → teste de novo.**
 
 Não refaça análises já consolidadas e responda curto.

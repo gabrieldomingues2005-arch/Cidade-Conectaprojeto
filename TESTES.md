@@ -166,3 +166,46 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - Salvar/remover um protocolo e confirmar que ele aparece/desaparece de “Meus registros”.
 - Conferir layout do mapa em 360 px, 390 px, tablet e desktop.
 - Confirmar reduced-motion, foco por teclado e contraste dos novos componentes.
+
+
+## 13. QA da integração Manus — v5.1
+
+### Home
+- confirmar renderização do mapa real sem scroll-wheel involuntário;
+- clicar em marcador e abrir a ocorrência;
+- confirmar que falha da API do IBGE não bloqueia a Home;
+- validar busca de protocolo e CTAs;
+- validar entrada direta por categoria em `#/registrar/<slug>`.
+
+### Registro
+- validar seleção inicial de categoria por URL;
+- validar medidor de completude;
+- validar prévia pública sem exibir contato privado;
+- marcar ponto e confirmar círculo visual de proteção;
+- remover ponto e centralizar Piracicaba;
+- carregar JPG/PNG/WebP pequeno;
+- carregar imagem grande e confirmar otimização no navegador;
+- confirmar rejeição de arquivo não-imagem ou muito grande;
+- salvar/restaurar rascunho sem perder categoria;
+- enviar ao backend e confirmar protocolo/tracking key.
+
+### Mapa
+- validar busca, categoria, status e região;
+- confirmar que Guamium pode continuar correspondendo a mais de uma região;
+- validar botões R1–R9 sem desenhar polígonos inventados;
+- validar “Perto de mim” apenas após ação explícita;
+- validar camadas-base e limite municipal IBGE;
+- validar clique lista ↔ marcador.
+
+### Dashboard
+- validar KPIs;
+- validar pipeline de status;
+- validar ranking de categorias e bairros;
+- validar indicadores de completude;
+- confirmar linguagem explícita de que os números não são estatística oficial.
+
+### Mobile
+- 360 px, 390 px, 430 px e tablet;
+- testar barra inferior com 4 atalhos;
+- formulário, mapa, dashboard e teclado virtual;
+- confirmar ausência de overflow horizontal.
