@@ -1,4 +1,4 @@
-# Cidade Conecta — Supabase v4.6
+# Cidade Conecta — Supabase v5.2
 
 O Cidade Conecta usa projeto Supabase próprio, separado de Raiz Carbon / Carbon Track.
 
@@ -13,7 +13,7 @@ O Cidade Conecta usa projeto Supabase próprio, separado de Raiz Carbon / Carbon
 
 ## Estado atual
 
-O backend foi provisionado em 17/09/2026 e está saudável.
+O backend foi provisionado em 17/09/2026, foi restaurado em 24/09/2026 e está saudável (`ACTIVE_HEALTHY`).
 
 Já foram aplicadas migrations para:
 
@@ -33,13 +33,13 @@ Já foram aplicadas migrations para:
 - índices geográficos e relacionais;
 - bucket privado `occurrence-attachments`.
 
-O Security Advisor não apresentou alertas após a configuração. O Performance Advisor só aponta índices ainda não utilizados, esperado enquanto o banco está praticamente vazio.
+O Security Advisor não apresenta lints ativos. O Performance Advisor aponta apenas índices ainda não utilizados, esperado enquanto o banco está praticamente vazio. Uma auditoria adicional identificou que as tabelas do schema `private` não têm grants diretos para `anon`/`authenticated`, porém continuam com RLS desabilitado; isso deve ser tratado como hardening pendente.
 
 ## Integração do frontend
 
 A configuração pública fica em `assets/runtime-config.js` e a leitura técnica em `assets/supabase-bridge.js`.
 
-O site está em `dataMode: hybrid-read`: o navegador confirma leitura do Supabase, mas a criação/edição de ocorrências continua local até a próxima etapa de migração segura.
+O site está em `dataMode: hybrid-write`: leitura pública aprovada vem do Supabase e a criação de ocorrências passa pela Edge Function segura `submit-occurrence`. O Admin visual continua demonstrativo.
 
 No navegador podem existir somente:
 
@@ -90,3 +90,17 @@ Projeto oficial: `yvmkgpijzewssdxgimit` (`sa-east-1`).
 - `profile_self_update` impede autopromoção de papel por cidadão.
 
 As migrations aplicadas estão em `supabase/migrations/`; as Edge Functions estão em `supabase/functions/`.
+
+
+## Atualização 24/09/2026
+
+- Projeto restaurado com sucesso: `ACTIVE_HEALTHY`.
+- `submit-occurrence` redeployada como versão 3.
+- Corrigida a validação de longitude para rejeitar corretamente valores fora de `-180..180`.
+- `track-occurrence` segue ativa com `verify_jwt: true`.
+- Migrations preservadas: core, índices, submissão segura, reserva de protocolos demo, restrição de papel e tracking seguro.
+- Base territorial preservada: 1 município, 5 fontes, 9 regiões, 71 bairros, 72 vínculos e 9 categorias.
+- Nenhuma ocorrência, contato, anexo ou token residual ficou gravado após os testes.
+- Bucket `occurrence-attachments` permanece privado e aceita apenas JPEG/PNG/WebP.
+- Foi endurecido o ACL de `occurrence_contacts`: `authenticated` agora mantém somente `SELECT`, ainda limitado por RLS.
+- Hardening pendente: avaliar habilitação de RLS nas tabelas `private.occurrence_tracking_tokens`, `private.submission_rate_limits` e `private.tracking_rate_limits`. Hoje elas não têm grants diretos para `anon` ou `authenticated`, mas a recomendação é não depender apenas de grants.

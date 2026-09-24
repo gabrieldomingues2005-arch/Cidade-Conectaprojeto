@@ -60,5 +60,12 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 Não refaça análises já consolidadas e responda curto.
 
 
-## Atenção — backend Supabase em 20/09/2026
-O projeto correto `yvmkgpijzewssdxgimit` foi confirmado, porém o Supabase está com status `INACTIVE`. A tentativa de restauração foi bloqueada pelo limite de 2 projetos gratuitos ativos da organização. **Não pause nem apague outro projeto automaticamente.** A correção da validação de longitude foi aplicada no código da `main`, mas o redeploy da Edge Function `submit-occurrence` deve ser feito quando o projeto Cidade Conecta puder ser reativado.
+## Backend Supabase — estado atualizado em 24/09/2026
+O projeto correto `yvmkgpijzewssdxgimit` foi restaurado e está `ACTIVE_HEALTHY`.
+
+- `submit-occurrence` está em **v3**, com a validação de longitude corrigida e redeploy concluído.
+- `track-occurrence` permanece ativa em v1.
+- Migrations e dados territoriais foram preservados após a restauração.
+- Foi aplicada a migration `harden_occurrence_contacts_privileges`, removendo de `authenticated` privilégios desnecessários como `TRUNCATE`, `TRIGGER` e `REFERENCES`; permaneceu apenas `SELECT` controlado por RLS.
+- O Supabase de homologação da Raiz Carbon `kkzdtiqpabkyzyotalvo` permanece pausado para liberar a vaga gratuita. Não reativá-lo automaticamente enquanto o Cidade Conecta precisar permanecer ativo.
+- As tabelas privadas de tracking/rate-limit seguem sem grants diretos para `anon` ou `authenticated`, porém estão com RLS desabilitado. Isso é um hardening pendente que deve ser decidido explicitamente antes de habilitar RLS.
