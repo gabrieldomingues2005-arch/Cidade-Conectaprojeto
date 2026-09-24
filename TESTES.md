@@ -254,3 +254,31 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - integração Supabase e Edge Functions;
 - service worker e cache v5.3;
 - foco, contraste, reduced-motion e overflow horizontal.
+
+
+## 16. QA v5.4 — Rede municipal e competências
+
+### Rede Municipal
+- abrir `#/rede-municipal` e validar carregamento de `data/municipal-network.json`;
+- testar as 9 categorias e conferir troca da escala visual;
+- buscar por secretaria, setor e serviço;
+- abrir links oficiais em nova aba;
+- confirmar presença do aviso de que não há integração/despacho oficial;
+- validar cards de Obras, Agricultura/Meio Ambiente, Segurança/Trânsito, SEMAE, Cidadania e Administração/Governo.
+
+### Registro e detalhe
+- escolher cada categoria e conferir a área pública de referência no assessor territorial;
+- abrir `Ver secretaria, setores e fontes`;
+- conferir cartão de área pública no detalhe do protocolo;
+- garantir que a referência não altere status nem envie dados para órgão municipal.
+
+### Mapa
+- filtrar por área pública de referência;
+- combinar órgão + região + categoria + status + somente abertas;
+- compartilhar a URL e confirmar restauração do filtro `agency`;
+- validar nome da área de referência na lista e no popup.
+
+### Dashboard/Admin demo
+- conferir distribuição por área de referência e aviso de que não representa carga real das secretarias;
+- no painel demonstrativo, conferir sugestão de área/setor por categoria;
+- confirmar que o painel continua explicitamente demonstrativo.

@@ -2,6 +2,7 @@
 'use strict';
 const APP='#app';
 const DATA_URL='data/piracicaba.json';
+const NETWORK_URL='data/municipal-network.json';
 const STORAGE_KEY='cidadeConecta2026v3';
 const official={
   prefeitura:'https://piracicaba.sp.gov.br/',
@@ -10,7 +11,7 @@ const official={
   mapas:'https://piracicaba.sp.gov.br/servicos/mapas-do-municipio/',
   ibge:'https://www.ibge.gov.br/cidades-e-estados/sp/piracicaba.html'
 };
-let cityData=null;
+let cityData=null,networkData=null;
 
 const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=(v='')=>String(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
@@ -31,6 +32,20 @@ async function loadData(){
   }
 }
 
+async function loadNetwork(){
+  if(networkData)return networkData;
+  try{
+    const r=await fetch(NETWORK_URL,{cache:'no-cache'});
+    if(!r.ok)throw new Error('Falha ao carregar rede municipal');
+    networkData=await r.json();
+    window.CidadeConectaRedeMunicipal=networkData;
+    return networkData;
+  }catch(err){
+    console.warn('[Cidade Conecta] Rede municipal indisponível:',err);
+    return null;
+  }
+}
+
 function route(){return location.hash.replace(/^#\/?/,'').split('/')[0]}
 function readOccurrences(){
   try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}
@@ -46,7 +61,14 @@ function findRegion(bairro,data=cityData){
   }
   return null;
 }
-function routingFor(category,data=cityData){return data?.suggestedRouting?.[category]||'Triagem de atendimento / 156'}
+function routingFor(category,network=networkData){
+  const route=network?.routing?.[category]||network?.routing?.outros;
+  if(!route)return null;
+  const agencies=new Map((network?.agencies||[]).map(a=>[a.id,a]));
+  const primary=(route.primaryAgencyIds||[]).map(id=>agencies.get(id)).filter(Boolean);
+  const related=(route.relatedAgencyIds||[]).map(id=>agencies.get(id)).filter(Boolean);
+  return {route,primary,related,label:primary.map(a=>a.shortName).join(' + ')||'Triagem / 156'};
+}
 
 function sourcesNote(data){
   const sources=(data?.metadata?.sources||[]).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)}</a>`).join(' · ');
@@ -61,7 +83,7 @@ function homeSection(data){
   const el=document.createElement('section');
   el.className='section cityContext';
   el.id='piraContext';
-  el.innerHTML=`<div class="wrap"><div class="card cityIntro"><span class="cityLabel">📍 Piracicaba · São Paulo</span><h2>O Cidade Conecta agora entende o território de Piracicaba</h2><p class="muted">Além do registro por bairro e mapa, o protótipo passa a usar a divisão municipal em <b>9 regiões administrativas</b>, dados demográficos de referência e roteamento sugerido por tipo de ocorrência.</p><div class="geoQuickStats"><div><b>${n(m.populationEstimate)}</b><span>população estimada · ${m.populationEstimateYear}</span></div><div><b>${nf(m.areaKm2,3)} km²</b><span>área territorial · ${m.areaReferenceYear}</span></div><div><b>${nf(m.densityHabKm2)} hab/km²</b><span>densidade · ${m.densityReferenceYear}</span></div><div><b>${n(urbanPop)}</b><span>habitantes nas 9 regiões do mapa administrativo</span></div></div><div class="cityGrid"><div class="cityFeature"><span class="cityIcon">🏘️</span><b>Regiões administrativas</b><span class="small muted">O bairro informado pode ser relacionado automaticamente a uma das nove regiões usadas pela Prefeitura no mapa territorial.</span></div><div class="cityFeature"><span class="cityIcon">🧭</span><b>Leitura geográfica</b><span class="small muted">Área, população, densidade, bairros, núcleos isolados e municípios vizinhos ficam disponíveis em uma página territorial.</span></div><div class="cityFeature"><span class="cityIcon">📊</span><b>Indicadores territoriais</b><span class="small muted">Os registros do navegador podem ser agrupados por região para mostrar onde há maior concentração de ocorrências.</span></div></div><div class="geoHighlight"><span>Região administrativa mais densa no mapa de referência</span><b>Região ${densest.id} · ${nf(densest.densityHabKm2)} hab/km²</b></div><div class="cityOfficial"><strong>Canais e bases oficiais de Piracicaba</strong><div class="small muted">O Cidade Conecta é um projeto acadêmico independente. Os links abaixo levam a serviços externos oficiais.</div><div class="cityLinks"><a class="cityLink" href="${official.prefeitura}" target="_blank" rel="noopener noreferrer">🏛️ Prefeitura</a><a class="cityLink" href="${official.atendimento}" target="_blank" rel="noopener noreferrer">☎️ Atendimento 156</a><a class="cityLink" href="${official.geo}" target="_blank" rel="noopener noreferrer">🗺️ Geoprocessamento</a><a class="cityLink" href="#/piracicaba">📍 Ver geografia completa</a></div><div class="cityDisclaimer">O projeto não representa nem substitui a Prefeitura Municipal de Piracicaba.</div></div></div></div>`;
+  el.innerHTML=`<div class="wrap"><div class="card cityIntro"><span class="cityLabel">📍 Piracicaba · São Paulo</span><h2>O Cidade Conecta agora entende o território de Piracicaba</h2><p class="muted">Além do registro por bairro e mapa, o protótipo passa a usar a divisão municipal em <b>9 regiões administrativas</b>, dados demográficos de referência e roteamento sugerido por tipo de ocorrência.</p><div class="geoQuickStats"><div><b>${n(m.populationEstimate)}</b><span>população estimada · ${m.populationEstimateYear}</span></div><div><b>${nf(m.areaKm2,3)} km²</b><span>área territorial · ${m.areaReferenceYear}</span></div><div><b>${nf(m.densityHabKm2)} hab/km²</b><span>densidade · ${m.densityReferenceYear}</span></div><div><b>${n(urbanPop)}</b><span>habitantes nas 9 regiões do mapa administrativo</span></div></div><div class="cityGrid"><div class="cityFeature"><span class="cityIcon">🏘️</span><b>Regiões administrativas</b><span class="small muted">O bairro informado pode ser relacionado automaticamente a uma das nove regiões usadas pela Prefeitura no mapa territorial.</span></div><div class="cityFeature"><span class="cityIcon">🧭</span><b>Leitura geográfica</b><span class="small muted">Área, população, densidade, bairros, núcleos isolados e municípios vizinhos ficam disponíveis em uma página territorial.</span></div><div class="cityFeature"><span class="cityIcon">📊</span><b>Indicadores territoriais</b><span class="small muted">Os registros do navegador podem ser agrupados por região para mostrar onde há maior concentração de ocorrências.</span></div></div><div class="geoHighlight"><span>Região administrativa mais densa no mapa de referência</span><b>Região ${densest.id} · ${nf(densest.densityHabKm2)} hab/km²</b></div><div class="cityOfficial"><strong>Canais e bases oficiais de Piracicaba</strong><div class="small muted">O Cidade Conecta é um projeto acadêmico independente. Os links abaixo levam a serviços externos oficiais.</div><div class="cityLinks"><a class="cityLink" href="${official.prefeitura}" target="_blank" rel="noopener noreferrer">🏛️ Prefeitura</a><a class="cityLink" href="${official.atendimento}" target="_blank" rel="noopener noreferrer">☎️ Atendimento 156</a><a class="cityLink" href="${official.geo}" target="_blank" rel="noopener noreferrer">🗺️ Geoprocessamento</a><a class="cityLink" href="#/piracicaba">📍 Ver geografia completa</a><a class="cityLink" href="#/rede-municipal">🏛️ Secretarias e setores</a></div><div class="cityDisclaimer">O projeto não representa nem substitui a Prefeitura Municipal de Piracicaba.</div></div></div></div>`;
   return el;
 }
 
@@ -81,7 +103,7 @@ function geographyPage(data){
   window.scrollTo(0,0);
 }
 
-function addRegisterAdvisor(data){
+function addRegisterAdvisor(data,network){
   const form=document.querySelector('#occForm');if(!form||document.querySelector('#piraAdvisor'))return;
   const category=document.querySelector('#category');
   const bairro=document.querySelector('#bairro');
@@ -93,8 +115,10 @@ function addRegisterAdvisor(data){
   const update=()=>{
     const r=findRegion(bairro.value,data);
     const routeTxt=r?`Região ${r.id} · ${n(r.population)} hab. · ${nf(r.densityHabKm2)} hab/km²`:'Região ainda não identificada';
-    const sector=category.value?routingFor(category.value,data):'Escolha uma categoria para ver a área sugerida';
-    box.innerHTML=`<div><span class="geoAdvisorLabel">📍 Leitura territorial automática</span><b>${esc(routeTxt)}</b><small>Bairro informado: ${esc(bairro.value||'—')}</small></div><div><span class="geoAdvisorLabel">↗ Encaminhamento sugerido</span><b>${esc(sector)}</b><small>Sugestão do protótipo; não é roteamento oficial da Prefeitura.</small></div>`;
+    const ref=category.value?routingFor(category.value,network):null;
+    const sector=ref?.route?.sectors?.[0]||'Escolha uma categoria para ver a área sugerida';
+    const related=ref?.related?.length?' · Relacionada: '+ref.related.map(a=>a.shortName).join(', '):'';
+    box.innerHTML=`<div><span class="geoAdvisorLabel">📍 Leitura territorial automática</span><b>${esc(routeTxt)}</b><small>Bairro informado: ${esc(bairro.value||'—')}</small></div><div><span class="geoAdvisorLabel">🏛️ Área pública de referência</span><b>${esc(ref?.label||'Escolha uma categoria')}</b><small>${esc(sector+related)}</small><a class="geoAdvisorLinkV54" href="#/rede-municipal?cat=${encodeURIComponent(category.value||'outros')}">Ver secretaria, setores e fontes →</a></div>`;
   };
   category.addEventListener('change',update);bairro.addEventListener('input',update);update();
 }
@@ -111,7 +135,7 @@ function addDashboardTerritory(data){
   app.appendChild(sec);
 }
 
-function enhance(data){
+function enhance(data,network){
   const app=document.querySelector(APP);if(!app||!data)return;
   const r=route();
   if(r==='piracicaba'){geographyPage(data);return}
@@ -119,11 +143,11 @@ function enhance(data){
     const hero=app.querySelector('.hero');
     if(hero&&!document.querySelector('#piraContext'))hero.insertAdjacentElement('afterend',homeSection(data));
   }
-  if(r==='registrar')addRegisterAdvisor(data);
+  if(r==='registrar')addRegisterAdvisor(data,network);
   if(r==='dashboard')addDashboardTerritory(data);
 }
 
-function scheduleEnhance(){loadData().then(data=>setTimeout(()=>enhance(data),0))}
+function scheduleEnhance(){Promise.all([loadData(),loadNetwork()]).then(([data,network])=>setTimeout(()=>enhance(data,network),0))}
 const observer=new MutationObserver(()=>{if(route()!=='piracicaba')scheduleEnhance()});
 window.addEventListener('DOMContentLoaded',()=>{const app=document.querySelector(APP);if(app)observer.observe(app,{childList:true});scheduleEnhance()});
 window.addEventListener('hashchange',scheduleEnhance);

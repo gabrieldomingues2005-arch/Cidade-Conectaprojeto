@@ -14,7 +14,7 @@
 
 **NUNCA use ou altere Supabase do Raiz Carbon, especialmente `htzigdvatjpvvkwswjof`.**
 
-## Estado entregue — MVP v5.3
+## Estado entregue — MVP v5.4
 O trabalho pesado de backend já foi implementado. Não recrie schema, frontend ou banco do zero.
 
 - PostgreSQL + PostGIS no Supabase exclusivo.
@@ -28,10 +28,10 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 - Storage privado de anexos.
 - Edge Functions `submit-occurrence` e `track-occurrence`.
 - RPC de rastreamento SECURITY DEFINER restrita a `service_role`.
-- Frontend v5.3 envia para Supabase e lê publicamente somente ocorrências aprovadas.
+- Frontend v5.4 envia para Supabase e lê publicamente somente ocorrências aprovadas.
 - Admin visual permanece demonstrativo até autenticação/fluxo institucional real.
 - Integração Prefeitura/156 continua futura; não fingir parceria oficial.
-- Design v5.3 mantém a arquitetura segura e adiciona padrões selecionados do 21st.dev sem copiar templates inteiros: bento com hierarquia, spotlight CSS leve, busca global estilo command palette e mapa tratado como workspace com modo foco, URL de filtros e alternância Mapa/Lista no mobile. Arquivo: `assets/design-v53.css`.
+- Design v5.4 mantém a arquitetura segura e amplia a experiência cívica: bento/spotlight/command palette continuam, e agora existe uma Rede Municipal de referência com secretarias, órgãos, setores, canais oficiais, escala de competência, integração informativa no formulário, filtro por área pública no mapa e distribuição por competência no dashboard. Arquivo: `assets/design-v54.css`.
 
 ## Segurança/testes já feitos
 - Sem `service_role`, senha ou segredo administrativo no frontend.
@@ -50,12 +50,13 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 5. `TESTES.md`
 6. `DESIGN-SYSTEM.md`
 7. `MANUS-UPDATE-20260920.md`
+8. `REDE-MUNICIPAL.md`
 8. `supabase/migrations/`
 9. `supabase/functions/`
 10. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
-**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.3 em desktop e mobile → valide busca global, bento da Home, mapa (filtros/URL/modo foco/mobile), registro, protocolo, dashboard e Supabase → corrija somente falhas comprovadas → teste de novo.**
+**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.4 em desktop e mobile → valide Rede Municipal, formulário com área de referência, mapa (incluindo filtro de órgão), busca global, protocolo, dashboard e Supabase → corrija somente falhas comprovadas → teste de novo.**
 
 Não refaça análises já consolidadas e responda curto.
 

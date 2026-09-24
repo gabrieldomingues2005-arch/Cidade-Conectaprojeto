@@ -60,7 +60,7 @@ function addTechnicalCard(){
   const s=statusText();
   const mode=dataMode();
   const dataLabel=mode==='hybrid-write'?'Supabase (leitura + envio)':mode==='hybrid-read'?'Supabase (leitura)':s.label;
-  card.innerHTML=`<h2>Estado técnico do protótipo</h2><div class="techGrid"><div><span>Versão</span><b>${cfg.appVersion||'5.3.0'}</b></div><div><span>Território</span><b>Piracicaba/SP</b></div><div><span>Dados</span><b>${dataLabel}</b></div><div><span>Conectividade</span><b>${navigator.onLine?'Online':'Offline'}</b></div></div><p class="small muted">O Supabase do Cidade Conecta é independente do Raiz Carbon. Novas ocorrências são enviadas por Edge Function segura, recebem token privado de acompanhamento e entram como pendentes de moderação.</p>`;
+  card.innerHTML=`<h2>Estado técnico do protótipo</h2><div class="techGrid"><div><span>Versão</span><b>${cfg.appVersion||'5.4.0'}</b></div><div><span>Território</span><b>Piracicaba/SP</b></div><div><span>Dados</span><b>${dataLabel}</b></div><div><span>Conectividade</span><b>${navigator.onLine?'Online':'Offline'}</b></div></div><p class="small muted">O Supabase do Cidade Conecta é independente do Raiz Carbon. Novas ocorrências são enviadas por Edge Function segura, recebem token privado de acompanhamento e entram como pendentes de moderação.</p>`;
   wrap.insertAdjacentElement('afterend',card);
 }
 function addAdminReset(){

@@ -1,0 +1,316 @@
+{
+  "metadata": {
+    "title": "Rede municipal de referência — Cidade Conecta Piracicaba",
+    "lastVerified": "2026-09-24",
+    "status": "informational-reference",
+    "disclaimer": "Mapeamento informativo do protótipo acadêmico. Não representa integração, despacho, protocolo ou roteamento oficial da Prefeitura de Piracicaba.",
+    "officialDirectoryUrl": "https://transparencia.piracicaba.sp.gov.br/secretarias/",
+    "officialServicesUrl": "https://piracicaba.sp.gov.br/carta-de-servicos/",
+    "official156Url": "https://sempapel.pmp.sp.gov.br/156/"
+  },
+  "flow": [
+    {
+      "level": 1,
+      "label": "Entrada comunitária",
+      "description": "Registro no Cidade Conecta, com protocolo do próprio projeto."
+    },
+    {
+      "level": 2,
+      "label": "Classificação",
+      "description": "Categoria, bairro, localização aproximada e contexto do problema."
+    },
+    {
+      "level": 3,
+      "label": "Área pública de referência",
+      "description": "Secretaria ou órgão relacionado por competência pública consultada."
+    },
+    {
+      "level": 4,
+      "label": "Setor ou serviço relacionado",
+      "description": "Exemplos de áreas técnicas e serviços publicados nos canais municipais."
+    },
+    {
+      "level": 5,
+      "label": "Canal oficial",
+      "description": "Quando necessário, o cidadão é orientado ao 156, Sem Papel ou portal oficial."
+    }
+  ],
+  "agencies": [
+    {
+      "id": "administracao-governo",
+      "name": "Secretaria Municipal de Administração e Governo",
+      "shortName": "Administração e Governo",
+      "type": "secretaria",
+      "phone": "(19) 3403-1033",
+      "email": "smg@piracicaba.sp.gov.br",
+      "address": "Rua Antônio Corrêa Barbosa, 2233 – 9º andar",
+      "officialUrl": "https://piracicaba.sp.gov.br/sobre-secretaria-municipal-de-administracao-e-governo/",
+      "servicesUrl": "https://piracicaba.sp.gov.br/carta-de-servicos/",
+      "sectors": [
+        "Atendimento e informações à população",
+        "Serviço de Informações à População – 156",
+        "Encaminhamento de solicitações aos órgãos competentes"
+      ],
+      "evidence": "A Lei Complementar 462/2025 atribui à pasta atendimento e informações à população; a Carta de Serviços descreve o 156 como canal de recebimento e encaminhamento."
+    },
+    {
+      "id": "obras",
+      "name": "Secretaria Municipal de Obras, Infraestrutura e Serviços Públicos",
+      "shortName": "Obras e Serviços Públicos",
+      "type": "secretaria",
+      "phone": "(19) 3124-2450",
+      "email": "obras@piracicaba.sp.gov.br",
+      "address": "Avenida Cristóvão Colombo, 1900",
+      "officialUrl": "https://piracicaba.sp.gov.br/sobre-secretaria-municipal-de-obras-infraestrutura-e-servicos-publicos/",
+      "servicesUrl": "https://piracicaba.sp.gov.br/entidade/secretaria-municipal-de-obras-infraestrutura-e-servicos-publicos/?assunto=rua-e-bairro&eixo=cidadao",
+      "sectors": [
+        "Manutenção viária, pavimentação e tapa-buracos",
+        "Iluminação pública",
+        "Drenagem urbana, galerias e bocas de lobo",
+        "Obras civis, calçadas públicas e rampas de acesso",
+        "Praças, centros de lazer e equipamentos públicos",
+        "Limpeza e conservação de vias públicas"
+      ],
+      "evidence": "As competências e a Carta de Serviços incluem conservação de vias, canais e galerias pluviais, iluminação, rampas, áreas públicas, resíduos e limpeza pública."
+    },
+    {
+      "id": "agricultura-meio-ambiente",
+      "name": "Secretaria Municipal de Agricultura, Abastecimento e Meio Ambiente",
+      "shortName": "Agricultura e Meio Ambiente",
+      "type": "secretaria",
+      "phone": "(19) 3437-4000 / (19) 3403-1249",
+      "email": "agricultura@piracicaba.sp.gov.br / meioambiente@piracicaba.sp.gov.br",
+      "address": "Av. Dr. Paulo de Moraes, 2113 / Rua Antônio Corrêa Barbosa, 2233",
+      "officialUrl": "https://piracicaba.sp.gov.br/sobre-secretaria-municipal-de-agricultura-abastecimento-e-meio-ambiente/",
+      "servicesUrl": "https://piracicaba.sp.gov.br/entidade/secretaria-municipal-de-agricultura-abastecimento-e-meio-ambiente/?assunto=rua-e-bairro&eixo=cidadao",
+      "sectors": [
+        "Meio ambiente",
+        "Arborização, poda e supressão de árvores",
+        "Resíduos sólidos, coleta seletiva e serviços correlatos publicados no portal",
+        "Estradas e infraestrutura da área rural",
+        "Educação e políticas ambientais"
+      ],
+      "evidence": "A pasta tem competências ambientais e rurais; o portal de serviços também cataloga serviços de resíduos sólidos, coleta, varrição e arborização."
+    },
+    {
+      "id": "seguranca-transito",
+      "name": "Secretaria Municipal de Segurança Pública, Trânsito e Transportes",
+      "shortName": "Segurança, Trânsito e Transportes",
+      "type": "secretaria",
+      "phone": "(19) 3403-1376",
+      "email": "semuttran@piracicaba.sp.gov.br",
+      "address": "Rua Antônio Corrêa Barbosa, 2233 – 6º andar",
+      "officialUrl": "https://piracicaba.sp.gov.br/sobre-secretaria-municipal-de-seguranca-publica-transito-e-transportes/",
+      "servicesUrl": "https://piracicaba.sp.gov.br/entidade/secretaria-municipal-de-seguranca-publica-transito-e-transportes/",
+      "sectors": [
+        "Secretaria Executiva de Trânsito e Transportes",
+        "Engenharia de tráfego",
+        "Sinalização e trânsito",
+        "Transporte público",
+        "Defesa Civil",
+        "Segurança pública"
+      ],
+      "evidence": "A LC 462/2025 atribui estudos de trânsito, projetos de sinalização, serviços de sinalização e trânsito, sistema viário e coordenação da Defesa Civil."
+    },
+    {
+      "id": "semae",
+      "name": "Serviço Municipal de Água e Esgoto – SEMAE",
+      "shortName": "SEMAE",
+      "type": "autarquia",
+      "phone": "(19) 3403-9611",
+      "email": "presidencia@semaepiracicaba.sp.gov.br",
+      "address": "Rua XV de Novembro, 2200",
+      "officialUrl": "https://piracicaba.sp.gov.br/sobre-servico-municipal-de-agua-e-esgoto-semae/",
+      "servicesUrl": "https://piracicaba.sp.gov.br/sobre-servico-municipal-de-agua-e-esgoto-semae/",
+      "sectors": [
+        "Abastecimento público de água",
+        "Esgotamento sanitário",
+        "Operação, manutenção e conservação dos sistemas de água e esgoto"
+      ],
+      "evidence": "O SEMAE exerce as atividades municipais ligadas aos sistemas públicos de água potável e esgoto sanitário."
+    },
+    {
+      "id": "cidadania",
+      "name": "Secretaria Municipal de Cidadania e Parcerias",
+      "shortName": "Cidadania e Parcerias",
+      "type": "secretaria",
+      "phone": "(19) 3431-8602",
+      "email": "cidadania@piracicaba.sp.gov.br",
+      "address": "Rua do Rosário, 1314 – Centro",
+      "officialUrl": "https://piracicaba.sp.gov.br/sobre-secretaria-municipal-de-cidadania-e-parcerias/",
+      "servicesUrl": "https://piracicaba.sp.gov.br/entidade/secretaria-municipal-de-cidadania-e-parcerias/",
+      "sectors": [
+        "Direitos humanos e cidadania",
+        "Participação social",
+        "Articulação intersetorial",
+        "Governo aberto e plataformas de participação"
+      ],
+      "evidence": "A LC 462/2025 atribui à pasta políticas de direitos humanos, participação social e articulação com outras unidades municipais."
+    }
+  ],
+  "routing": {
+    "vias": {
+      "label": "Vias públicas",
+      "primaryAgencyIds": [
+        "obras"
+      ],
+      "relatedAgencyIds": [
+        "seguranca-transito"
+      ],
+      "sectors": [
+        "Manutenção viária e pavimentação",
+        "Tapa-buracos",
+        "Vias não pavimentadas"
+      ],
+      "officialChannel": "156 / Sem Papel",
+      "note": "Projetos de sistema viário podem envolver também a área de trânsito."
+    },
+    "iluminacao": {
+      "label": "Iluminação",
+      "primaryAgencyIds": [
+        "obras"
+      ],
+      "relatedAgencyIds": [],
+      "sectors": [
+        "Manutenção de iluminação pública",
+        "Instalação, substituição e remoção de unidades"
+      ],
+      "officialChannel": "156 / serviços municipais",
+      "note": "Referência baseada nos serviços de manutenção urbana publicados pela Prefeitura."
+    },
+    "residuos": {
+      "label": "Resíduos",
+      "primaryAgencyIds": [
+        "obras",
+        "agricultura-meio-ambiente"
+      ],
+      "relatedAgencyIds": [],
+      "sectors": [
+        "Limpeza e conservação de vias",
+        "Resíduos sólidos",
+        "Coleta domiciliar e seletiva",
+        "Varrição e volumosos"
+      ],
+      "officialChannel": "156 / serviços municipais",
+      "note": "As fontes oficiais consultadas distribuem competências e serviços de resíduos entre Obras/Serviços Públicos e Agricultura/Meio Ambiente."
+    },
+    "agua": {
+      "label": "Água e saneamento",
+      "primaryAgencyIds": [
+        "semae"
+      ],
+      "relatedAgencyIds": [],
+      "sectors": [
+        "Abastecimento de água",
+        "Esgoto sanitário",
+        "Operação e manutenção dos sistemas"
+      ],
+      "officialChannel": "SEMAE / canais oficiais",
+      "note": "Não confundir drenagem de chuva com rede de água e esgoto."
+    },
+    "alagamentos": {
+      "label": "Alagamentos e drenagem",
+      "primaryAgencyIds": [
+        "obras"
+      ],
+      "relatedAgencyIds": [
+        "seguranca-transito"
+      ],
+      "sectors": [
+        "Galerias pluviais",
+        "Bocas de lobo e bueiros",
+        "Guias e sarjetas",
+        "Defesa Civil em situações de risco"
+      ],
+      "officialChannel": "156; em risco, canais oficiais de emergência/Defesa Civil",
+      "note": "A drenagem urbana está relacionada a Obras; Defesa Civil integra a pasta de Segurança, Trânsito e Transportes."
+    },
+    "sinalizacao": {
+      "label": "Sinalização e trânsito",
+      "primaryAgencyIds": [
+        "seguranca-transito"
+      ],
+      "relatedAgencyIds": [
+        "obras"
+      ],
+      "sectors": [
+        "Engenharia de tráfego",
+        "Sinalização horizontal e vertical",
+        "Serviços de trânsito",
+        "Projetos de sistema viário"
+      ],
+      "officialChannel": "serviços de Trânsito / 156",
+      "note": "Projetos viários são tratados de forma articulada com Obras."
+    },
+    "acessibilidade": {
+      "label": "Acessibilidade",
+      "primaryAgencyIds": [
+        "obras"
+      ],
+      "relatedAgencyIds": [
+        "cidadania"
+      ],
+      "sectors": [
+        "Reparo de calçadas públicas",
+        "Rampas de acesso",
+        "Articulação de direitos e participação"
+      ],
+      "officialChannel": "156 / serviços municipais",
+      "note": "Obras aparece como referência para intervenções físicas; Cidadania é uma referência de articulação de direitos, não de execução de obras."
+    },
+    "areas": {
+      "label": "Áreas públicas",
+      "primaryAgencyIds": [
+        "obras"
+      ],
+      "relatedAgencyIds": [
+        "agricultura-meio-ambiente"
+      ],
+      "sectors": [
+        "Praças e centros de lazer",
+        "Manutenção de áreas verdes",
+        "Arborização e poda",
+        "Equipamentos públicos"
+      ],
+      "officialChannel": "156 / serviços municipais",
+      "note": "A referência pode variar conforme o problema seja infraestrutura, vegetação ou meio ambiente."
+    },
+    "outros": {
+      "label": "Outros",
+      "primaryAgencyIds": [
+        "administracao-governo"
+      ],
+      "relatedAgencyIds": [],
+      "sectors": [
+        "Atendimento e triagem",
+        "Informações ao cidadão",
+        "Encaminhamento via 156"
+      ],
+      "officialChannel": "156 / Sem Papel",
+      "note": "Quando a categoria não identifica claramente a competência, o 156 é a referência geral de atendimento municipal."
+    }
+  },
+  "officialStructure": [
+    "Corregedoria Geral do Município",
+    "Guarda Civil Municipal",
+    "Procuradoria Geral do Município",
+    "Secretaria Municipal de Administração e Governo",
+    "Secretaria Municipal de Agricultura, Abastecimento e Meio Ambiente",
+    "Secretaria Municipal de Assistência, Desenvolvimento Social e Família",
+    "Secretaria Municipal de Cidadania e Parcerias",
+    "Secretaria Municipal de Cultura",
+    "Secretaria Municipal de Desenvolvimento Econômico, Indústria e Comércio",
+    "Secretaria Municipal de Educação",
+    "Secretaria Municipal de Esportes, Lazer e Atividades Motoras",
+    "Secretaria Municipal de Finanças",
+    "Secretaria Municipal de Habitação e Regularização Fundiária",
+    "Secretaria Municipal de Obras, Infraestrutura e Serviços Públicos",
+    "Secretaria Municipal de Saúde",
+    "Secretaria Municipal de Segurança Pública, Trânsito e Transportes",
+    "Secretaria Municipal de Trabalho, Emprego e Renda",
+    "Secretaria Municipal de Turismo",
+    "Fundação Municipal de Ensino – FUMEP",
+    "Instituto de Previdência e Assistência Social dos Funcionários Municipais de Piracicaba – IPASP",
+    "Serviço Municipal de Água e Esgoto – SEMAE"
+  ]
+}
