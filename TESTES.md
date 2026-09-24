@@ -223,3 +223,34 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - confirmar atualização de `document.title` e `aria-current` em cada rota;
 - validar teclado, foco, mobile e ausência de overflow;
 - quando o Supabase for reativado, redeploy de `submit-occurrence` e teste de coordenadas inválidas/limítrofes.
+
+
+## 15. QA v5.3 — padrões 21st e mapa completo
+
+### Busca rápida
+- abrir pelo botão do header e por Ctrl/Cmd + K;
+- buscar ação, página, protocolo, título e bairro;
+- navegar resultados com ↑/↓ e Enter;
+- fechar com Escape e clique fora;
+- verificar foco e ausência de scroll do body enquanto aberta.
+
+### Home
+- validar bento em desktop, tablet e mobile;
+- validar spotlight somente com ponteiro fino e desligado em reduced-motion;
+- confirmar que bento não repete informação de forma confusa.
+
+### Mapa
+- abrir link com filtros em #/mapa?cat=...&status=...&region=...&open=1&q=...;
+- mudar filtros e confirmar atualização da URL sem recarregar;
+- copiar a visão e abrir em outra aba;
+- validar modo foco e saída por botão/Escape;
+- validar alternância Mapa/Lista em 360/390/430 px;
+- combinar busca, região, status e Somente abertas;
+- validar resumo de visíveis/abertas/resolvidas;
+- confirmar que IBGE/território continuam com fallback seguro.
+
+### Regressão
+- Home, registrar, acompanhar, minhas, mapa, dashboard, Piracicaba e detalhe de ocorrência;
+- integração Supabase e Edge Functions;
+- service worker e cache v5.3;
+- foco, contraste, reduced-motion e overflow horizontal.

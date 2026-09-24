@@ -1583,3 +1583,296 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .openOnlyV52{width:max-content}
   .mapCanvasV50:after{display:none}
 }
+
+
+/* =========================================================
+   Cidade Conecta v5.3 — 21st-inspired product polish
+   Adapted patterns: bento hierarchy, spotlight surfaces,
+   command search and composable map workspace.
+   ========================================================= */
+
+:root{
+  --cc-surface-elevated:#ffffff;
+  --cc-line-strong:#cddbd4;
+  --cc-shadow-soft:0 1px 2px rgba(3,47,49,.03),0 12px 32px rgba(3,47,49,.06);
+  --cc-shadow-pop:0 28px 80px rgba(3,34,36,.22);
+}
+
+/* Header command trigger */
+.commandTriggerV53{
+  display:inline-flex;align-items:center;gap:7px;
+  min-height:38px;padding:6px 8px 6px 10px;
+  color:#586f73;background:#f2f6f3;
+  border:1px solid #d9e3dd;border-radius:10px;
+  font:inherit;font-size:.76rem;font-weight:760;cursor:pointer;
+}
+.commandTriggerV53:hover{background:#ebf2ed;color:var(--cc-green)}
+.commandTriggerIconV53{font-size:1rem;line-height:1;color:#7d8e91}
+.commandTriggerV53 kbd,.commandInlineV53 kbd{
+  padding:3px 6px;border-radius:6px;
+  background:#fff;border:1px solid #d8e1dc;
+  color:#7c8b8e;font:700 .62rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  box-shadow:inset 0 -1px rgba(3,47,49,.07)
+}
+
+/* Command palette — compact, search-first, no decorative overkill */
+.commandOverlayV53{
+  position:fixed;inset:0;z-index:1800;
+  display:grid;place-items:start center;
+  padding:10vh 18px 18px;
+  background:rgba(2,23,25,.56);
+  backdrop-filter:blur(10px);
+}
+.commandOverlayV53.hidden{display:none}
+.commandOpenV53{overflow:hidden}
+.commandPanelV53{
+  width:min(680px,100%);
+  max-height:min(76vh,720px);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.46);
+  border-radius:20px;
+  background:rgba(250,252,249,.98);
+  box-shadow:var(--cc-shadow-pop);
+}
+.commandSearchV53{
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;gap:10px;padding:12px 13px;
+  border-bottom:1px solid #e0e7e2;
+  background:#fff
+}
+.commandSearchV53>span{width:32px;height:32px;display:grid;place-items:center;color:#7b8b8e;font-size:1.15rem}
+.commandSearchV53 input{
+  width:100%;min-height:42px;border:0;background:transparent;color:var(--cc-ink);
+  font:750 .96rem/1.3 inherit;outline:none
+}
+.commandSearchV53 input::placeholder{color:#9aa5a7}
+.commandSearchV53 button{
+  padding:6px 8px;border:1px solid #d9e2dd;border-radius:8px;background:#f5f7f5;
+  color:#718286;font:800 .64rem/1 inherit;cursor:pointer
+}
+.commandMetaV53{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:10px 14px 7px;color:#839194;font-size:.67rem
+}
+.commandMetaV53 strong{color:#52686d;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
+.commandResultsV53{max-height:52vh;overflow:auto;padding:5px 8px 10px}
+.commandGroupV53{
+  padding:10px 8px 5px;color:#8a989a;font-size:.62rem;
+  font-weight:900;text-transform:uppercase;letter-spacing:.09em
+}
+.commandItemV53{
+  width:100%;display:grid;grid-template-columns:38px minmax(0,1fr) auto;
+  gap:10px;align-items:center;padding:9px 10px;
+  border:1px solid transparent;border-radius:12px;background:transparent;
+  color:var(--cc-ink);font:inherit;text-align:left;cursor:pointer
+}
+.commandItemV53:hover,.commandItemV53.active{
+  background:#eef5f0;border-color:#dbe8e0
+}
+.commandItemIconV53{
+  width:36px;height:36px;display:grid;place-items:center;border-radius:10px;
+  background:#fff;border:1px solid #dde6e1;color:var(--cc-green-2)
+}
+.commandItemIconV53 .uiIcon{width:18px;height:18px}
+.commandItemV53 b{display:block;font-size:.8rem;color:#314f54}
+.commandItemV53 small{display:block;margin-top:2px;color:#7b8c8f;font-size:.66rem}
+.commandItemV53>.badge{font-size:.59rem}
+.commandArrowV53{color:#9aa6a8;font-size:.72rem}
+.commandEmptyV53{padding:32px 18px;text-align:center;color:#7a8a8d;font-size:.8rem}
+.commandFooterV53{
+  display:flex;gap:14px;padding:9px 13px;border-top:1px solid #e1e7e3;
+  color:#879497;background:#f7f9f7;font-size:.62rem
+}
+
+/* 21st-style spotlight surface kept deliberately subtle */
+.spotlightV53{
+  --mx:50%;--my:50%;
+  position:relative;isolation:isolate;overflow:hidden
+}
+.spotlightV53:before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(260px circle at var(--mx) var(--my),rgba(191,240,84,.12),transparent 62%);
+  opacity:.72
+}
+.heroPanelLive.spotlightV53:before{
+  z-index:0;opacity:.28;
+  background:radial-gradient(340px circle at var(--mx) var(--my),rgba(191,240,84,.28),transparent 63%)
+}
+.heroPanelLive.spotlightV53>*{position:relative;z-index:1}
+
+/* Home bento: unequal hierarchy instead of uniform feature cards */
+.civicBentoSectionV53{background:#f7f9f6}
+.titleRowCompactV53{align-items:end}
+.commandInlineV53{
+  display:inline-flex;align-items:center;gap:8px;
+  min-height:40px;padding:7px 9px 7px 12px;
+  border:1px solid #d6e1db;border-radius:11px;background:#fff;
+  color:#4f686d;font:800 .74rem/1 inherit;cursor:pointer
+}
+.commandInlineV53 .uiIcon{width:15px;height:15px;color:var(--cc-green-2)}
+.civicBentoV53{
+  display:grid;
+  grid-template-columns:1.35fr .85fr 1fr;
+  grid-template-areas:
+    "open category trust"
+    "open hood trust";
+  gap:12px
+}
+.bentoCellV53{
+  min-height:168px;padding:19px;
+  display:flex;flex-direction:column;
+  border:1px solid #dce5df;border-radius:18px;
+  background:#fff;box-shadow:var(--cc-shadow-soft)
+}
+.bentoOpenV53{grid-area:open;min-height:348px;background:linear-gradient(155deg,#07383a,#0b5554);color:#fff;border-color:#0b5554}
+.civicBentoV53>article:nth-child(2){grid-area:category}
+.civicBentoV53>article:nth-child(3){grid-area:hood}
+.bentoTrustV53{grid-area:trust;background:linear-gradient(180deg,#f2f9df,#eef5e3)}
+.bentoTopV53{display:flex;align-items:center;gap:9px}
+.bentoIconV53{
+  width:36px;height:36px;display:grid;place-items:center;flex:none;
+  border-radius:10px;background:#edf4ef;color:var(--cc-green-2)
+}
+.bentoIconV53 .uiIcon{width:18px;height:18px}
+.bentoOpenV53 .bentoIconV53{background:rgba(255,255,255,.09);color:var(--cc-lime)}
+.bentoOpenV53 .miniLabel{color:#bad0cb}
+.bentoCellV53>strong{display:block;margin-top:auto;color:var(--cc-green);font-size:2.2rem;letter-spacing:-.055em}
+.bentoOpenV53>strong{color:#fff;font-size:4.6rem}
+.bentoLabelV53{font-size:1.25rem!important;line-height:1.08;letter-spacing:-.03em!important}
+.bentoCellV53 p{margin:.45rem 0 0;color:#718387;font-size:.76rem;line-height:1.55}
+.bentoOpenV53 p{color:#c7dad6;max-width:310px}
+.bentoCellV53>a{
+  display:inline-flex;align-items:center;gap:6px;width:max-content;margin-top:13px;
+  color:var(--cc-green-2);font-size:.7rem;font-weight:850;text-decoration:none
+}
+.bentoCellV53>a .uiIcon{width:13px;height:13px}
+.bentoOpenV53>a{color:var(--cc-lime)}
+.bentoProgressV53{height:6px;margin-top:17px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.12)}
+.bentoProgressV53 i{display:block;height:100%;background:var(--cc-lime);border-radius:inherit}
+
+/* Map workspace v5.3 */
+.mapSectionV53{padding-top:38px}
+.mapCardV53{box-shadow:0 20px 54px rgba(3,47,49,.08)}
+.mapMobileTabsV53{display:none}
+.mapExperienceV53{grid-template-columns:minmax(310px,350px) 1fr;min-height:720px}
+.mapSideV53{
+  padding:18px;background:
+    linear-gradient(180deg,rgba(248,250,248,.98),rgba(244,248,245,.98))
+}
+.mapSideHead small{display:block;margin-top:3px;color:#899699;font-size:.64rem}
+.mapSideActionsV53{grid-template-columns:1fr 1fr}
+.mapSideActionsV53 #mapShare{grid-column:1/-1}
+.mapCanvasHeadV53{min-height:72px;height:auto;padding:10px 14px 10px 16px}
+.mapCanvasHeadV53>div:first-child>b{display:block;margin-top:2px}
+.mapMiniStatsV53{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px}
+.mapMiniStatsV53 span{color:#76878a;font-size:.62rem}
+.mapMiniStatsV53 b{color:var(--cc-green);font-size:.67rem}
+.mapHeadActionsV53{display:flex;align-items:center;gap:10px}
+.mapIconBtnV53{
+  width:38px;height:38px;display:grid;place-items:center;
+  border:1px solid #d8e2dc;border-radius:10px;background:#f7f9f7;
+  color:var(--cc-green-2);cursor:pointer
+}
+.mapIconBtnV53:hover{background:#eef4ef}
+.mapIconBtnV53 .uiIcon{width:17px;height:17px}
+.mapContextV53 span{display:inline-flex;align-items:center;gap:6px}
+.mapContextV53 .uiIcon{width:14px;height:14px}
+.mapResultItem{min-height:58px}
+.mapResultItem.active{box-shadow:0 0 0 2px rgba(19,112,110,.08)}
+.leaflet-popup-content-wrapper{
+  border-radius:14px!important;
+  box-shadow:0 18px 42px rgba(3,47,49,.18)!important
+}
+.leaflet-popup-content{margin:13px 14px!important}
+
+/* Full focus mode: keeps the same map/list composition, only removes page chrome */
+body.mapFocusOpenV53{overflow:hidden}
+.mapFocusModeV53{
+  position:fixed!important;inset:12px!important;z-index:1600!important;
+  width:auto!important;height:auto!important;margin:0!important;
+  border-radius:22px!important;background:#fff!important;
+  box-shadow:0 0 0 100vmax rgba(2,23,25,.72),0 28px 80px rgba(0,0,0,.28)!important
+}
+.mapFocusModeV53 .mapExperienceV53{height:calc(100vh - 24px);min-height:0}
+.mapFocusModeV53 .mapCanvasV50 #publicMap{min-height:0}
+.mapFocusModeV53 #mapFocus{
+  background:var(--cc-green);color:#fff;border-color:var(--cc-green)
+}
+
+/* Tiny visual refinements */
+.heroV53 .heroPanelLive{border-radius:24px}
+.heroV53 .heroLiveMap{filter:saturate(.92) contrast(.98)}
+.categoryTileV51{box-shadow:0 1px 0 rgba(3,47,49,.02)}
+.categoryTileV51:hover{box-shadow:0 14px 34px rgba(3,47,49,.08)}
+.dashboardPanelV51{box-shadow:0 1px 0 rgba(3,47,49,.025)}
+.pageHead h1{max-width:920px}
+.row,.card{backface-visibility:hidden}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  .mapResultItem,.categoryTileV51,.bentoCellV53{transition:none!important}
+  .spotlightV53:before{display:none}
+}
+
+/* Tablet */
+@media(max-width:1120px){
+  .commandTriggerV53 kbd{display:none}
+  .civicBentoV53{
+    grid-template-columns:1fr 1fr;
+    grid-template-areas:"open trust" "category hood"
+  }
+  .bentoOpenV53{min-height:260px}
+}
+
+/* Mobile map behaves like a real task switcher */
+@media(max-width:760px){
+  .commandTriggerV53 span:not(.commandTriggerIconV53),.commandTriggerV53 kbd{display:none}
+  .commandTriggerV53{width:40px;height:40px;padding:0;justify-content:center}
+  .commandOverlayV53{padding:7vh 10px 10px}
+  .commandPanelV53{border-radius:16px}
+  .commandMetaV53{align-items:flex-start;flex-direction:column;gap:2px}
+  .commandFooterV53{display:none}
+  .commandItemV53{grid-template-columns:36px minmax(0,1fr)}
+  .commandItemV53>.badge,.commandArrowV53{grid-column:2;justify-self:start}
+  .titleRowCompactV53{align-items:flex-start}
+  .commandInlineV53{width:100%;justify-content:space-between}
+  .civicBentoV53{
+    grid-template-columns:1fr;
+    grid-template-areas:"open" "category" "hood" "trust"
+  }
+  .bentoOpenV53{min-height:240px}
+  .bentoOpenV53>strong{font-size:3.7rem}
+
+  .mapMobileTabsV53{
+    display:grid;grid-template-columns:1fr 1fr;gap:3px;
+    margin-bottom:10px;padding:4px;border:1px solid #dae4de;border-radius:12px;background:#eef3ef
+  }
+  .mapMobileTabsV53 button{
+    min-height:36px;border:0;border-radius:9px;background:transparent;
+    color:#667b7f;font:800 .75rem/1 inherit;cursor:pointer
+  }
+  .mapMobileTabsV53 button.active{background:#fff;color:var(--cc-green);box-shadow:0 2px 8px rgba(3,47,49,.07)}
+  .mapExperienceV53{display:block!important}
+  .mapExperienceV53 .mapSideV53{display:none}
+  .mapExperienceV53.showListV53 .mapSideV53{display:flex}
+  .mapExperienceV53.showListV53 .mapCanvasV53{display:none}
+  .mapExperienceV53.showMapV53 .mapSideV53{display:none}
+  .mapExperienceV53.showMapV53 .mapCanvasV53{display:flex}
+  .mapSideV53{max-height:none}
+  .mapResultsV50{max-height:54vh}
+  .mapCanvasV53 #publicMap{min-height:58vh}
+  .mapCanvasHeadV53{align-items:center}
+  .mapHeadActionsV53 .mapLegendInline{display:none}
+  .mapSideActionsV53{grid-template-columns:1fr 1fr}
+  .mapSideActionsV53 #mapShare{grid-column:1/-1}
+  .mapFocusModeV53{inset:6px!important;border-radius:16px!important}
+  .mapFocusModeV53 .mapExperienceV53{height:calc(100vh - 12px)}
+  .mapFocusModeV53 .mapCanvasV53 #publicMap{min-height:calc(100vh - 135px)}
+}
+
+@media(max-width:440px){
+  .commandSearchV53{grid-template-columns:minmax(0,1fr) auto}
+  .commandSearchV53>span{display:none}
+  .mapSideActionsV53{grid-template-columns:1fr}
+  .mapSideActionsV53 #mapShare{grid-column:auto}
+}

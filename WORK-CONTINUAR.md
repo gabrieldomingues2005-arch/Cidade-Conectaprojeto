@@ -14,7 +14,7 @@
 
 **NUNCA use ou altere Supabase do Raiz Carbon, especialmente `htzigdvatjpvvkwswjof`.**
 
-## Estado entregue — MVP v5.2
+## Estado entregue — MVP v5.3
 O trabalho pesado de backend já foi implementado. Não recrie schema, frontend ou banco do zero.
 
 - PostgreSQL + PostGIS no Supabase exclusivo.
@@ -28,10 +28,10 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 - Storage privado de anexos.
 - Edge Functions `submit-occurrence` e `track-occurrence`.
 - RPC de rastreamento SECURITY DEFINER restrita a `service_role`.
-- Frontend v5.2 envia para Supabase e lê publicamente somente ocorrências aprovadas.
+- Frontend v5.3 envia para Supabase e lê publicamente somente ocorrências aprovadas.
 - Admin visual permanece demonstrativo até autenticação/fluxo institucional real.
 - Integração Prefeitura/156 continua futura; não fingir parceria oficial.
-- Design v5.2 aprofunda a integração do Manus sem trocar a arquitetura segura: marca própria, mapa real, registro guiado com prévia pública e detecção de duplicidade, bairro assistido, foto otimizada, protocolo com status explicado, dashboard reestruturado e mapa com região/status/somente abertas. Arquivo: `assets/design-v52.css`.
+- Design v5.3 mantém a arquitetura segura e adiciona padrões selecionados do 21st.dev sem copiar templates inteiros: bento com hierarquia, spotlight CSS leve, busca global estilo command palette e mapa tratado como workspace com modo foco, URL de filtros e alternância Mapa/Lista no mobile. Arquivo: `assets/design-v53.css`.
 
 ## Segurança/testes já feitos
 - Sem `service_role`, senha ou segredo administrativo no frontend.
@@ -55,7 +55,7 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 10. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
-**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.2 em desktop e mobile → valide Home, registro, detecção de semelhantes, protocolo, mapa, dashboard e integração Supabase → corrija somente falhas comprovadas → teste de novo.**
+**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.3 em desktop e mobile → valide busca global, bento da Home, mapa (filtros/URL/modo foco/mobile), registro, protocolo, dashboard e Supabase → corrija somente falhas comprovadas → teste de novo.**
 
 Não refaça análises já consolidadas e responda curto.
 

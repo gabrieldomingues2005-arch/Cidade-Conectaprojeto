@@ -24,11 +24,11 @@
   <link rel="preconnect" href="https://servicodados.ibge.gov.br">
   <link rel="preconnect" href="https://yvmkgpijzewssdxgimit.supabase.co">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yhcQyZ10wXgALDVK8O7n33R1F+9g=" crossorigin="">
-  <link rel="stylesheet" href="assets/styles.css?v=5.2.0">
-  <link rel="stylesheet" href="assets/piracicaba.css?v=5.2.0">
-  <link rel="stylesheet" href="assets/piracicaba-mapas.css?v=5.2.0">
-  <link rel="stylesheet" href="assets/site-enhancements.css?v=5.2.0">
-  <link rel="stylesheet" href="assets/design-v52.css?v=5.2.0">
+  <link rel="stylesheet" href="assets/styles.css?v=5.3.0">
+  <link rel="stylesheet" href="assets/piracicaba.css?v=5.3.0">
+  <link rel="stylesheet" href="assets/piracicaba-mapas.css?v=5.3.0">
+  <link rel="stylesheet" href="assets/site-enhancements.css?v=5.3.0">
+  <link rel="stylesheet" href="assets/design-v53.css?v=5.3.0">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -47,7 +47,7 @@
   <header class="top">
     <div class="wrap topin">
       <a class="brand" href="#/" aria-label="Cidade Conecta Piracicaba - início">
-        <img class="brandAsset" src="assets/brand-mark-v51.svg?v=5.2.0" alt="" aria-hidden="true">
+        <img class="brandAsset" src="assets/brand-mark-v51.svg?v=5.3.0" alt="" aria-hidden="true">
         <span class="brandWord">Cidade Conecta<small>Piracicaba · SP</small></span>
       </a>
       <nav class="nav" id="nav" aria-label="Navegação principal">
@@ -60,6 +60,9 @@
         <a href="#/piracicaba" data-route="piracicaba">Piracicaba</a>
       </nav>
       <div class="headerActions">
+        <button class="commandTriggerV53" id="globalSearchBtn" type="button" aria-label="Buscar no Cidade Conecta">
+          <span class="commandTriggerIconV53" aria-hidden="true">⌕</span><span>Buscar</span><kbd>Ctrl K</kbd>
+        </button>
         <button class="btn soft smallBtn installBtn hidden" type="button">Instalar app</button>
         <button class="btn secondary menu" id="menu" type="button" aria-label="Abrir menu" aria-controls="nav">☰</button>
       </div>
@@ -91,7 +94,7 @@
       <div>
         <div class="footBrand">Cidade Conecta · Piracicaba</div>
         <p>Projeto acadêmico para participação cidadã e registro organizado de problemas urbanos em Piracicaba, São Paulo.</p>
-        <div class="version">MVP v5.2 · 2026</div>
+        <div class="version">MVP v5.3 · 2026</div>
       </div>
       <div>
         <b>Território e privacidade</b>
@@ -113,14 +116,27 @@
     </div>
   </footer>
 
+  <div id="commandPalette" class="commandOverlayV53 hidden" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+    <div class="commandPanelV53">
+      <div class="commandSearchV53">
+        <span aria-hidden="true">⌕</span>
+        <input id="commandInput" type="search" autocomplete="off" placeholder="Buscar ação, protocolo, bairro..." aria-label="Buscar no Cidade Conecta">
+        <button id="commandClose" type="button" aria-label="Fechar busca">Esc</button>
+      </div>
+      <div class="commandMetaV53"><strong id="commandTitle">Busca rápida</strong><span>Ações, páginas e ocorrências públicas</span></div>
+      <div id="commandResults" class="commandResultsV53" role="listbox"></div>
+      <div class="commandFooterV53"><span>↑↓ navegar</span><span>↵ abrir</span><span>Esc fechar</span></div>
+    </div>
+  </div>
+
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="assets/runtime-config.js?v=5.2.0" defer></script>
-  <script src="assets/supabase-bridge.js?v=5.2.0" defer></script>
-  <script src="assets/app.js?v=5.2.0" defer></script>
-  <script src="assets/piracicaba.js?v=5.2.0" defer></script>
-  <script src="assets/piracicaba-mapas.js?v=5.2.0" defer></script>
-  <script src="assets/privacy-geo.js?v=5.2.0" defer></script>
-  <script src="assets/site-enhancements.js?v=5.2.0" defer></script>
+  <script src="assets/runtime-config.js?v=5.3.0" defer></script>
+  <script src="assets/supabase-bridge.js?v=5.3.0" defer></script>
+  <script src="assets/app.js?v=5.3.0" defer></script>
+  <script src="assets/piracicaba.js?v=5.3.0" defer></script>
+  <script src="assets/piracicaba-mapas.js?v=5.3.0" defer></script>
+  <script src="assets/privacy-geo.js?v=5.3.0" defer></script>
+  <script src="assets/site-enhancements.js?v=5.3.0" defer></script>
 </body>
 </html>

@@ -19,7 +19,7 @@ function normalize(v=''){
 const required=[
   'index.html','assets/styles.css','assets/app.js','assets/piracicaba.css',
   'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
-  'assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v52.css',
+  'assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v53.css',
   'data/piracicaba.json','manifest.webmanifest','sw.js','favicon.svg','assets/brand-mark-v51.svg','README.md',
   'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md','WORK-CONTINUAR.md',
   'supabase/migrations/20260917_secure_occurrence_submission_v1.sql',
@@ -75,25 +75,25 @@ if(data){
 }
 
 const index=read('index.html');
-for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/design-v52.css','assets/runtime-config.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
+for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/design-v53.css','assets/runtime-config.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
   assert(index.includes(ref),`index.html referencia ${ref}`);
 }
 assert(index.includes('Protótipo acadêmico independente'),'Aviso de independência institucional está no HTML');
 assert(index.includes('Piracicaba · SP'),'Identidade local de Piracicaba está no HTML');
-assert(read('manifest.webmanifest').includes('\"theme_color\": \"#07383a\"'),'PWA usa cor principal da identidade v5.2');
+assert(read('manifest.webmanifest').includes('\"theme_color\": \"#07383a\"'),'PWA usa cor principal da identidade v5.3');
 
 const sw=read('sw.js');
-for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v52.css','data/piracicaba.json']){
+for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v53.css','data/piracicaba.json']){
   assert(sw.includes(ref),`Service worker referencia ${ref}`);
 }
 
-const design=read('assets/design-v52.css');
+const design=read('assets/design-v53.css');
 assert(index.includes('brandAsset')&&index.includes('assets/brand-mark-v51.svg'),'Shell usa símbolo próprio do Cidade Conecta');
-assert(design.includes('--civic-950'),'Tema v5.2 possui tokens visuais próprios');
-assert(design.includes('--lime'),'Tema v5.2 incorpora acento visual dos protótipos Manus');
-assert(design.includes('@media(max-width:650px)'),'Tema v5.2 inclui ajustes mobile');
-assert(design.includes('prefers-contrast:more'),'Tema v5.2 inclui reforço de contraste');
-assert(design.includes('safe-area-inset-bottom'),'Tema v5.2 trata safe area mobile');
+assert(design.includes('--civic-950'),'Tema v5.3 possui tokens visuais próprios');
+assert(design.includes('--lime'),'Tema v5.3 incorpora acento visual dos protótipos Manus');
+assert(design.includes('@media(max-width:650px)'),'Tema v5.3 inclui ajustes mobile');
+assert(design.includes('prefers-contrast:more'),'Tema v5.3 inclui reforço de contraste');
+assert(design.includes('safe-area-inset-bottom'),'Tema v5.3 trata safe area mobile');
 
 const privacyGeo=read('assets/privacy-geo.js');
 assert(privacyGeo.includes("PUBLIC_DECIMALS=3"),'Localização pública usa precisão reduzida no protótipo');
@@ -142,6 +142,13 @@ assert(app.includes('bairroOptions'),'Registro oferece bairros conhecidos como s
 assert(app.includes('mapOpenOnly'),'Mapa permite filtrar somente ocorrências abertas');
 assert(app.includes('currentStatusV52'),'Detalhe explica o status atual em linguagem clara');
 assert(app.includes('document.title'),'Rotas atualizam o título da página');
+assert(index.includes('commandPalette')&&index.includes('globalSearchBtn'),'Shell possui busca rápida global');
+assert(app.includes('setupCommandPalette'),'Busca rápida global está ligada ao app');
+assert(app.includes('civicBentoV53'),'Home usa hierarquia bento v5.3');
+assert(app.includes('mapFocusModeV53'),'Mapa possui modo foco');
+assert(app.includes('mapMobileTabsV53'),'Mapa possui alternância mapa/lista no mobile');
+assert(app.includes('mapShare'),'Mapa permite compartilhar visão com filtros');
+assert(app.includes('syncUrl'),'Filtros do mapa são persistidos no hash');
 assert(app.includes('submitOccurrence'),'Aplicação usa submissão segura do backend');
 assert(app.includes('trackingKey'),'Aplicação preserva token privado do próprio protocolo');
 assert(app.includes('moderationStatus'),'Aplicação trata moderação antes da exposição pública');
