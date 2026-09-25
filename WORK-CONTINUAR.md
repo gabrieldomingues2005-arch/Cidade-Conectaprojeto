@@ -14,7 +14,7 @@
 
 **NUNCA use ou altere Supabase do Raiz Carbon, especialmente `htzigdvatjpvvkwswjof`.**
 
-## Estado entregue — MVP v5.4
+## Estado entregue — MVP v5.5
 O trabalho pesado de backend já foi implementado. Não recrie schema, frontend ou banco do zero.
 
 - PostgreSQL + PostGIS no Supabase exclusivo.
@@ -28,10 +28,10 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 - Storage privado de anexos.
 - Edge Functions `submit-occurrence` e `track-occurrence`.
 - RPC de rastreamento SECURITY DEFINER restrita a `service_role`.
-- Frontend v5.4 envia para Supabase e lê publicamente somente ocorrências aprovadas.
+- Frontend v5.5 envia para Supabase e lê publicamente somente ocorrências aprovadas.
 - Admin visual permanece demonstrativo até autenticação/fluxo institucional real.
 - Integração Prefeitura/156 continua futura; não fingir parceria oficial.
-- Design v5.4 mantém a arquitetura segura e amplia a experiência cívica: bento/spotlight/command palette continuam, e agora existe uma Rede Municipal de referência com secretarias, órgãos, setores, canais oficiais, escala de competência, integração informativa no formulário, filtro por área pública no mapa e distribuição por competência no dashboard. Arquivo: `assets/design-v54.css`.
+- Design v5.5 mantém a arquitetura segura e amplia o produto territorial: Rede Municipal continua, o mapa agora possui clustering próprio e controlável, há Radar de bairros com acompanhamento local e o fluxo mapa → bairro → ocorrência ficou navegável em ambos os sentidos. Arquivo: `assets/design-v55.css`.
 
 ## Segurança/testes já feitos
 - Sem `service_role`, senha ou segredo administrativo no frontend.
@@ -51,12 +51,13 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 6. `DESIGN-SYSTEM.md`
 7. `MANUS-UPDATE-20260920.md`
 8. `REDE-MUNICIPAL.md`
+9. `ATLAS-BAIRROS.md`
 8. `supabase/migrations/`
 9. `supabase/functions/`
 10. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
-**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.4 em desktop e mobile → valide Rede Municipal, formulário com área de referência, mapa (incluindo filtro de órgão), busca global, protocolo, dashboard e Supabase → corrija somente falhas comprovadas → teste de novo.**
+**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.5 em desktop e mobile → valide clustering do mapa, Radar dos bairros, bairros salvos, Rede Municipal, formulário, protocolo, dashboard e Supabase → corrija somente falhas comprovadas → teste de novo.**
 
 Não refaça análises já consolidadas e responda curto.
 

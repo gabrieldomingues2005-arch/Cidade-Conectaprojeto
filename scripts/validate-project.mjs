@@ -19,7 +19,7 @@ function normalize(v=''){
 const required=[
   'index.html','assets/styles.css','assets/app.js','assets/piracicaba.css',
   'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
-  'assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v54.css',
+  'assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css',
   'data/piracicaba.json','data/municipal-network.json','manifest.webmanifest','sw.js','favicon.svg','assets/brand-mark-v51.svg','README.md',
   'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md','WORK-CONTINUAR.md','REDE-MUNICIPAL.md',
   'supabase/migrations/20260917_secure_occurrence_submission_v1.sql',
@@ -94,27 +94,30 @@ if(data){
 }
 
 const index=read('index.html');
-for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/design-v54.css','assets/runtime-config.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
+for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/design-v55.css','assets/runtime-config.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
   assert(index.includes(ref),`index.html referencia ${ref}`);
 }
 assert(index.includes('Protótipo acadêmico independente'),'Aviso de independência institucional está no HTML');
 assert(index.includes('Piracicaba · SP'),'Identidade local de Piracicaba está no HTML');
-assert(read('manifest.webmanifest').includes('\"theme_color\": \"#07383a\"'),'PWA usa cor principal da identidade v5.4');
+assert(read('manifest.webmanifest').includes('\"theme_color\": \"#07383a\"'),'PWA usa cor principal da identidade v5.5');
 
 const sw=read('sw.js');
-for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v54.css','data/piracicaba.json','data/municipal-network.json']){
+for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css','data/piracicaba.json','data/municipal-network.json']){
   assert(sw.includes(ref),`Service worker referencia ${ref}`);
 }
 
-const design=read('assets/design-v54.css');
+const design=read('assets/design-v55.css');
 assert(index.includes('brandAsset')&&index.includes('assets/brand-mark-v51.svg'),'Shell usa símbolo próprio do Cidade Conecta');
-assert(design.includes('--civic-950'),'Tema v5.4 possui tokens visuais próprios');
-assert(design.includes('--lime'),'Tema v5.4 incorpora acento visual dos protótipos Manus');
-assert(design.includes('@media(max-width:650px)'),'Tema v5.4 inclui ajustes mobile');
-assert(design.includes('prefers-contrast:more'),'Tema v5.4 inclui reforço de contraste');
-assert(design.includes('safe-area-inset-bottom'),'Tema v5.4 trata safe area mobile');
-assert(design.includes('networkFlowRailV54'),'Tema v5.4 estiliza escala de encaminhamento');
-assert(design.includes('networkAgencyGridV54'),'Tema v5.4 estiliza diretório de secretarias/setores');
+assert(design.includes('--civic-950'),'Tema v5.5 possui tokens visuais próprios');
+assert(design.includes('--lime'),'Tema v5.5 incorpora acento visual dos protótipos Manus');
+assert(design.includes('@media(max-width:650px)'),'Tema v5.5 inclui ajustes mobile');
+assert(design.includes('prefers-contrast:more'),'Tema v5.5 inclui reforço de contraste');
+assert(design.includes('safe-area-inset-bottom'),'Tema v5.5 trata safe area mobile');
+assert(design.includes('networkFlowRailV54'),'Tema v5.5 estiliza escala de encaminhamento');
+assert(design.includes('networkAgencyGridV54'),'Tema v5.5 mantém diretório de secretarias/setores');
+assert(design.includes('neighborhoodAtlasV55'),'Tema v5.5 estiliza o Atlas cívico de bairros');
+assert(design.includes('ccClusterV55'),'Tema v5.5 estiliza clusters cartográficos');
+assert(design.includes('mapBehaviorV55'),'Tema v5.5 estiliza controles de visualização do mapa');
 
 const privacyGeo=read('assets/privacy-geo.js');
 assert(privacyGeo.includes("PUBLIC_DECIMALS=3"),'Localização pública usa precisão reduzida no protótipo');
@@ -176,6 +179,13 @@ assert(app.includes('mapAgency'),'Mapa permite filtrar por área pública de ref
 assert(app.includes('agencyReferenceV54'),'Detalhe da ocorrência mostra área pública de referência');
 assert(app.includes('agencyLoadV54'),'Dashboard mostra distribuição por área de referência');
 assert(app.includes('municipalPulseV54'),'Home apresenta atalhos para a rede municipal');
+assert(app.includes('neighborhoodPage'),'Aplicação possui Radar dos bairros');
+assert(app.includes('NEIGHBORHOOD_KEY'),'Bairros podem ser acompanhados localmente');
+assert(app.includes('clusterGroups'),'Mapa agrupa pontos em escalas amplas');
+assert(app.includes('mapCluster'),'Usuário pode controlar o agrupamento do mapa');
+assert(app.includes('ccClusterV55'),'Mapa usa marcador de cluster próprio');
+assert(app.includes('bindNeighborhood'),'Radar do bairro possui mapa e ações próprias');
+assert(app.includes('savedNeighborhoodsV55'),'Meus registros inclui bairros acompanhados');
 assert(app.includes('submitOccurrence'),'Aplicação usa submissão segura do backend');
 assert(app.includes('trackingKey'),'Aplicação preserva token privado do próprio protocolo');
 assert(app.includes('moderationStatus'),'Aplicação trata moderação antes da exposição pública');

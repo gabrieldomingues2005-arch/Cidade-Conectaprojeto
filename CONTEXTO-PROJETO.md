@@ -80,18 +80,22 @@ A tarefa `P76YZUrwuxpTJcJz2WeGRp`, criada posteriormente, não deve virar uma ba
 - O frontend deve migrar do modo local para o Supabase de forma incremental e testada.
 
 
-## Estado visual atual — v5.4 (20/09/2026)
+## Estado visual atual — v5.5 (20/09/2026)
 
 O update React/Vite recebido do Manus foi auditado e incorporado seletivamente na `main`, sem substituir a arquitetura segura existente. A versão atual mantém Supabase/RLS/Edge Functions e adiciona identidade própria, mapa real na Home, formulário guiado com prévia pública, otimização de imagens, filtro regional no mapa e dashboard reestruturado. Ver `MANUS-UPDATE-20260920.md` e `DESIGN-SYSTEM.md`.
 
 
-### Refinamento v5.4
-A versão v5.4 adiciona prevenção assistiva de duplicidades, sugestão de bairros, explicação contextual do status, acompanhamento rápido e filtro de ocorrências abertas. O Supabase correto foi confirmado, mas está `INACTIVE` por limite de projetos gratuitos; nenhum outro projeto deve ser pausado/apagado automaticamente para liberar vaga.
+### Refinamento v5.5
+A versão v5.5 adiciona prevenção assistiva de duplicidades, sugestão de bairros, explicação contextual do status, acompanhamento rápido e filtro de ocorrências abertas. O Supabase correto foi confirmado, mas está `INACTIVE` por limite de projetos gratuitos; nenhum outro projeto deve ser pausado/apagado automaticamente para liberar vaga.
 
 
-### Design e mapa v5.4
-A v5.4 incorpora padrões adaptados do 21st.dev sem trocar a arquitetura: bento hierárquico, spotlight CSS leve, busca global por Ctrl/Cmd+K e mapa tratado como workspace com URL de filtros, modo foco e alternância Mapa/Lista no mobile. O objetivo é qualidade de produto e navegação, não copiar templates externos.
+### Design e mapa v5.5
+A v5.5 incorpora padrões adaptados do 21st.dev sem trocar a arquitetura: bento hierárquico, spotlight CSS leve, busca global por Ctrl/Cmd+K e mapa tratado como workspace com URL de filtros, modo foco e alternância Mapa/Lista no mobile. O objetivo é qualidade de produto e navegação, não copiar templates externos.
 
 
-### Rede municipal v5.4
-A v5.4 adiciona uma base versionada `data/municipal-network.json` com referências oficiais verificadas em 24/09/2026. O projeto mostra secretarias/órgãos e setores relacionados às categorias do MVP, mas mantém a regra institucional: nenhuma associação exibida significa despacho, integração ou parceria oficial. O mapa e o dashboard usam essas associações apenas como classificação informativa.
+### Rede municipal v5.5
+A v5.5 adiciona uma base versionada `data/municipal-network.json` com referências oficiais verificadas em 24/09/2026. O projeto mostra secretarias/órgãos e setores relacionados às categorias do MVP, mas mantém a regra institucional: nenhuma associação exibida significa despacho, integração ou parceria oficial. O mapa e o dashboard usam essas associações apenas como classificação informativa.
+
+
+### Atlas cívico v5.5
+A v5.5 cria `#/bairro` e `#/bairro?nome=<bairro>` para leitura comunitária por bairro, com acompanhamento local, indicadores, áreas públicas de referência e mapa de pontos. O mapa principal passa a agrupar ocorrências próximas em zoom amplo sem biblioteca externa, preservando lista textual e opção de desativar clustering. Nenhum limite de bairro é inferido ou desenhado sem dado vetorial oficial.

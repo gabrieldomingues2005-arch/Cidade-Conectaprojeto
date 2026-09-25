@@ -1,16 +1,16 @@
-# Cidade Conecta — Design System v5.4
+# Cidade Conecta — Design System v5.5
 
 Este documento consolida a direção visual do Cidade Conecta depois da interrupção da tarefa Manus por limite de créditos. Ele descreve o que está realmente aplicado na `main` e serve como handoff para o Work.
 
 ## Princípio visual
 
-A interface v5.4 combina clareza de Swiss/International Typographic Style com Civic Tech editorial, cartografia e sinalização urbana, reduzindo de propósito efeitos decorativos e aparência de template. O resultado deve parecer cívico, acessível e confiável sem imitar identidade governamental oficial.
+A interface v5.5 combina clareza de Swiss/International Typographic Style com Civic Tech editorial, cartografia e sinalização urbana, reduzindo de propósito efeitos decorativos e aparência de template. O resultado deve parecer cívico, acessível e confiável sem imitar identidade governamental oficial.
 
 Evitar: excesso de glassmorphism, gradientes decorativos, aparência de fintech/SaaS genérico, ícones multicoloridos em excesso e linguagem visual burocrática.
 
 ## Marca
 
-O símbolo v5.4 substitui o bloco textual “CC” por uma marca abstrata construída em CSS e refletida no `favicon.svg`.
+O símbolo v5.5 substitui o bloco textual “CC” por uma marca abstrata construída em CSS e refletida no `favicon.svg`.
 
 Conceito:
 - arco aberto = cidade em movimento / conexão em construção;
@@ -132,7 +132,7 @@ O centro interno usa o acento lima, mantendo ligação com a identidade.
 
 ## Arquivos de referência
 
-- `assets/design-v54.css` — camada visual principal;
+- `assets/design-v55.css` — camada visual principal;
 - `assets/app.js` — componentes de interface e fluxo;
 - `favicon.svg` — símbolo compacto;
 - `manifest.webmanifest` — cores PWA;
@@ -149,9 +149,9 @@ O centro interno usa o acento lima, mantendo ligação com a identidade.
 Não recriar o projeto para implementar esses refinamentos.
 
 
-## Revisão rígida v5.4
+## Revisão rígida v5.5
 
-A v5.4 aumenta o padrão visual e funcional sem reescrever a arquitetura.
+A v5.5 aumenta o padrão visual e funcional sem reescrever a arquitetura.
 
 ### Mudanças de design
 - hero claro/editorial com mapa como elemento focal;
@@ -180,7 +180,7 @@ O usuário pode salvar protocolos públicos no navegador. Isso não cria conta, 
 Não adicionar função apenas por efeito visual. Novas funções devem melhorar localização, compreensão, acompanhamento ou segurança.
 
 
-## Integração visual Manus — v5.4
+## Integração visual Manus — v5.5
 
 O pacote React produzido pelo Manus foi tratado como referência de Product Design, não como substituição automática da arquitetura existente.
 
@@ -193,7 +193,7 @@ Foram incorporados e aprofundados:
 - navegação mobile mais próxima de produto;
 - marca gráfica consistente.
 
-A v5.4 também adiciona:
+A v5.5 também adiciona:
 - mapa Leaflet real na Home;
 - filtro por região administrativa no mapa público, derivado da base territorial local;
 - prévia pública durante o preenchimento;
@@ -206,9 +206,9 @@ A v5.4 também adiciona:
 Não foi adotada a migração completa para React porque o pacote Manus estava orientado a estado local/demonstração e não preservava por si só o fluxo seguro já existente com Supabase, Edge Functions, RLS, tokens e moderação.
 
 
-## Refinamento v5.4
+## Refinamento v5.5
 
-A v5.4 concentra qualidade percebida e prevenção de erro, não apenas decoração.
+A v5.5 concentra qualidade percebida e prevenção de erro, não apenas decoração.
 
 - página de acompanhamento com acessos rápidos do navegador;
 - detalhe do protocolo com explicação do status atual, próximo passo e recência da atualização;
@@ -221,9 +221,9 @@ A v5.4 concentra qualidade percebida e prevenção de erro, não apenas decoraç
 Regra: sugestões de duplicidade são apenas assistivas; nunca bloqueiam o envio.
 
 
-## Referências 21st.dev — v5.4
+## Referências 21st.dev — v5.5
 
-A v5.4 usa o 21st.dev como referência de padrões, não como origem para copiar uma aplicação pronta.
+A v5.5 usa o 21st.dev como referência de padrões, não como origem para copiar uma aplicação pronta.
 
 Padrões adaptados:
 - **Bento hierarchy**: cards de tamanhos diferentes para indicar prioridade, em vez de tratar toda métrica como equivalente.
@@ -238,7 +238,7 @@ Decisões:
 - efeitos que não melhoram navegação, hierarquia ou leitura foram evitados.
 
 
-## Rede Municipal — v5.4
+## Rede Municipal — v5.5
 
 A nova página de competências usa uma hierarquia visual em cinco níveis: Entrada comunitária → Classificação → Área pública de referência → Setor/serviço → Canal oficial.
 
@@ -249,3 +249,19 @@ Princípios:
 - contatos e links externos ficam claramente separados das ações internas do Cidade Conecta;
 - o mapa pode filtrar ocorrências pela área de referência da categoria, mas isso não equivale a fila de trabalho real da Prefeitura;
 - a identidade continua verde cívico + lima, com cartões de rede mais técnicos e compactos para diferenciar informação institucional de conteúdo comunitário.
+
+
+## Atlas cívico — v5.5
+
+A v5.5 adiciona uma camada territorial centrada no bairro e melhora a escala do mapa.
+
+Padrões visuais e de UX:
+- **cluster cartográfico próprio** em zoom amplo, reduzindo excesso de marcadores DOM;
+- o agrupamento pode ser desligado pelo usuário;
+- a informação do mapa continua duplicada em lista textual acessível;
+- cada bairro tem uma página própria com KPIs, categorias, áreas públicas de referência, mapa e registros recentes;
+- bairros podem ser salvos no navegador e reaparecem em `Meus registros` e na busca global;
+- nenhum polígono de bairro é inventado: o Radar usa somente o nome do bairro e os pontos existentes;
+- a estética do Radar usa grade cartográfica sutil, hero cívico escuro, números tabulares e painéis compactos.
+
+O padrão segue a orientação de produto já adotada do 21st: mapa interativo somente quando pan/zoom/agrupamento realmente fazem parte do produto; em paralelo, manter lista textual para acessibilidade e fallback.

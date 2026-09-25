@@ -282,3 +282,30 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - conferir distribuição por área de referência e aviso de que não representa carga real das secretarias;
 - no painel demonstrativo, conferir sugestão de área/setor por categoria;
 - confirmar que o painel continua explicitamente demonstrativo.
+
+
+## 17. QA v5.5 — Atlas cívico e clustering
+
+### Radar dos bairros
+- abrir `#/bairro` e validar diretório dos bairros presentes no conjunto;
+- abrir `#/bairro?nome=Centro` e bairros sem registros;
+- conferir total, abertas, resolvidas, categoria predominante e áreas de referência;
+- validar mapa do bairro sem criação de polígonos fictícios;
+- salvar/remover bairro acompanhado;
+- confirmar bairro salvo em `Meus registros` e na busca Ctrl/Cmd + K;
+- compartilhar Radar e abrir o link em nova aba.
+
+### Mapa
+- em zoom amplo, confirmar agrupamento de pontos próximos;
+- clicar em cluster e confirmar aproximação do grupo;
+- aproximar para zoom >= 14 e confirmar marcadores individuais;
+- desligar `Agrupar pontos` e confirmar exibição individual;
+- copiar URL com `cluster=0` e confirmar restauração;
+- selecionar uma ocorrência na lista quando ela estiver dentro de cluster e confirmar zoom/abertura do popup;
+- abrir `Radar do bairro` pelo popup e pela lista textual;
+- validar filtros anteriores: região, área pública, categoria, status, somente abertas e perto de mim.
+
+### Regressão visual
+- validar Radar em 360/390/430 px, tablet e desktop;
+- testar foco de teclado em clusters, botões e links;
+- confirmar ausência de overflow horizontal e respeito a reduced-motion.

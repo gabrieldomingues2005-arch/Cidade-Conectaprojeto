@@ -14,12 +14,12 @@ A branch `main` é a fonte oficial do código. O preview do GitHub Pages é atua
 
 A sincronização com `gh-pages` só ocorre após a validação do mesmo commit. Se algum teste falhar, a versão anterior do preview é preservada. Execuções antigas são ignoradas quando a `main` já avançou, e o envio para `gh-pages` não usa força. Pull requests executam a mesma validação, sem publicar.
 
-## Situação atual — MVP v5.4
+## Situação atual — MVP v5.5
 
 O protótipo já possui:
 
 - interface responsiva para computador e celular;
-- redesign v5.4 com identidade cívica própria, padrões adaptados do 21st e uma nova camada de competências municipais: secretarias/órgãos relacionados, setores, canais oficiais e filtro por área de referência no mapa;
+- redesign v5.5 com identidade cívica própria, Atlas de bairros, mapa com clustering sem dependência externa, bairros acompanhados e continuidade dos padrões 21st adaptados ao produto;
 - identidade visual inspirada nas cores utilizadas pela cidade de Piracicaba, mantendo caráter independente;
 - registro de ocorrências com protocolo;
 - acompanhamento por protocolo e histórico;
@@ -58,7 +58,11 @@ O protótipo já possui:
 - **Rede municipal de referência** com escala Entrada → Classificação → Área pública → Setor/serviço → Canal oficial;
 - diretório detalhado das áreas municipais diretamente ligadas às 9 categorias do MVP;
 - mapa filtrável também por área pública de referência;
-- ocorrência e dashboard mostram a competência de referência sem simular despacho oficial.
+- ocorrência e dashboard mostram a competência de referência sem simular despacho oficial;
+- **Radar dos bairros** com página própria por bairro, indicadores, categorias, áreas de referência e mapa textual/cartográfico;
+- bairros podem ser acompanhados localmente e reaparecem em `Meus registros` e na busca global;
+- mapa agrupa pontos automaticamente em escalas amplas e permite desligar o agrupamento;
+- popups/listas do mapa levam diretamente ao Radar do bairro.
 
 ## Piracicaba e geografia
 
@@ -88,7 +92,7 @@ Nunca devem ser colocadas no front-end público chaves `service_role`, senha do 
 - `index.html` — shell principal;
 - `assets/app.js` — aplicação e fluxo de ocorrências;
 - `assets/styles.css` — estilos gerais;
-- `assets/design-v54.css` — camada visual incremental inspirada nos protótipos Manus;
+- `assets/design-v55.css` — camada visual incremental inspirada nos protótipos Manus;
 - `assets/piracicaba.js` — contexto territorial;
 - `assets/piracicaba-mapas.js` — geografia avançada e limite municipal;
 - `assets/privacy-geo.js` — proteção de localização;
@@ -113,7 +117,7 @@ Cidade Conecta é um **projeto acadêmico independente**. Referências territori
 
 ## Próximas etapas
 
-1. Fazer QA visual/funcional da v5.4 em desktop e celulares reais.
+1. Fazer QA visual/funcional da v5.5 em desktop e celulares reais.
 2. Validar usabilidade do novo seletor de categorias e do mapa avançado.
 3. Implementar autenticação/roles reais para substituir o Admin demonstrativo.
 4. Evoluir moderação e notificações.
