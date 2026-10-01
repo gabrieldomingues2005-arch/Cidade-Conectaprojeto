@@ -32,6 +32,7 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 - Admin visual permanece demonstrativo até autenticação/fluxo institucional real.
 - Integração Prefeitura/156 continua futura; não fingir parceria oficial.
 - Design v5.5 mantém a arquitetura segura e amplia o produto territorial: Rede Municipal continua, o mapa agora possui clustering próprio e controlável, há Radar de bairros com acompanhamento local e o fluxo mapa → bairro → ocorrência ficou navegável em ambos os sentidos. Arquivo: `assets/design-v55.css`.
+- Rodada Product Design v5.6 criada na branch `feature/cidade-conecta-product-design-20261001`: `assets/design-v56.css` refina hierarquia, foco, estados, mapa, Rede Municipal, formulário e mobile; não altera banco, Supabase, RLS, Edge Functions ou contratos de dados.
 
 ## Segurança/testes já feitos
 - Sem `service_role`, senha ou segredo administrativo no frontend.
@@ -57,7 +58,7 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 10. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
-**Inspecione a `main` atual → consulte CI → faça QA rigoroso da v5.5 em desktop e mobile → valide clustering do mapa, Radar dos bairros, bairros salvos, Rede Municipal, formulário, protocolo, dashboard e Supabase → corrija somente falhas comprovadas → teste de novo.**
+**Integre a Product Design v5.6 somente após QA final da branch `feature/cidade-conecta-product-design-20261001`: valide desktop/mobile em 320/390/768/1366 px, foco de teclado, aviso offline, primeiro carregamento offline/PWA, skeleton da Rede Municipal, clustering do mapa, Radar dos bairros, formulário, protocolo e dashboard. Se tudo passar, integre a branch na `main` sem alterar Supabase, banco, RLS, Edge Functions ou contratos de dados.**
 
 Não refaça análises já consolidadas e responda curto.
 
