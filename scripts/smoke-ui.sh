@@ -5,12 +5,14 @@ PORT="${PORT:-4173}"
 BASE="http://127.0.0.1:${PORT}"
 TMP_DIR="$(mktemp -d)"
 SERVER_PID=""
+SMOKE_HTML=".smoke-index.html"
 
 cleanup() {
   if [[ -n "${SERVER_PID}" ]]; then
     kill "${SERVER_PID}" >/dev/null 2>&1 || true
   fi
   rm -rf "${TMP_DIR}"
+  rm -f "${SMOKE_HTML}"
 }
 trap cleanup EXIT
 
@@ -29,6 +31,11 @@ fi
 
 echo "Cidade Conecta — smoke UI"
 echo "Browser: $("${CHROME}" --version)"
+
+# O Leaflet remoto é bloqueante no HTML real. Para o smoke de rotas,
+# removemos somente as tags do CDN em uma cópia temporária do shell.
+# Todos os scripts e estilos do Cidade Conecta continuam sendo os reais.
+grep -v 'unpkg.com' index.html > "${SMOKE_HTML}"
 
 python3 -m http.server "${PORT}" --bind 127.0.0.1 >"${TMP_DIR}/server.log" 2>&1 &
 SERVER_PID=$!
@@ -51,7 +58,15 @@ run_route() {
   local height="${5:-900}"
   local out="${TMP_DIR}/${name}.html"
 
-  "${CHROME}"     --headless=new     --no-sandbox     --disable-gpu     --disable-dev-shm-usage     --hide-scrollbars     --window-size="${width},${height}"     --virtual-time-budget=3500     --dump-dom "${BASE}/${hash}" >"${out}" 2>"${TMP_DIR}/${name}.stderr"
+  "${CHROME}" \
+    --headless=new \
+    --no-sandbox \
+    --disable-gpu \
+    --disable-dev-shm-usage \
+    --hide-scrollbars \
+    --window-size="${width},${height}" \
+    --virtual-time-budget=1800 \
+    --dump-dom "${BASE}/${SMOKE_HTML}${hash}" >"${out}" 2>"${TMP_DIR}/${name}.stderr"
 
   if ! grep -Fq "${marker}" "${out}"; then
     echo "✖ ${name}: marcador esperado não encontrado: ${marker}"
