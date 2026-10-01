@@ -157,7 +157,7 @@ assert(enhancements.includes('Restaurar demo'),'Painel permite restaurar dados d
 const app=read('assets/app.js');
 assert(app.includes('setupConnectivity()'),'App conecta estado online/offline ao aviso v5.6');
 assert(app.includes("$('.installBtn').forEach"),'Botões de instalação usam seletor múltiplo seguro');
-assert(!app.includes("$('.installBtn').forEach"),'App não usa seletor unitário como coleção nos botões de instalação');
+assert(!/(?<!\\$)\\$\\('\\.installBtn'\\)\\.forEach/.test(app),'App não usa seletor unitário como coleção nos botões de instalação');
 assert(app.includes('skeletonStackV56'),'Rede municipal exibe skeleton durante carregamento');
 assert(app.includes('statusStepper'),'Detalhe da ocorrência usa progressão de status além de cor');
 assert(app.includes('mapMarkerIcon'),'Mapas usam marcador visual próprio');
