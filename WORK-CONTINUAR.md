@@ -14,7 +14,7 @@
 
 **NUNCA use ou altere Supabase do Raiz Carbon, especialmente `htzigdvatjpvvkwswjof`.**
 
-## Estado entregue — MVP v5.5
+## Estado entregue — MVP v5.5 + UI v5.6
 O trabalho pesado de backend já foi implementado. Não recrie schema, frontend ou banco do zero.
 
 - PostgreSQL + PostGIS no Supabase exclusivo.
@@ -32,7 +32,8 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 - Admin visual permanece demonstrativo até autenticação/fluxo institucional real.
 - Integração Prefeitura/156 continua futura; não fingir parceria oficial.
 - Design v5.5 mantém a arquitetura segura e amplia o produto territorial: Rede Municipal continua, o mapa agora possui clustering próprio e controlável, há Radar de bairros com acompanhamento local e o fluxo mapa → bairro → ocorrência ficou navegável em ambos os sentidos. Arquivo: `assets/design-v55.css`.
-- Rodada Product Design v5.6 criada na branch `feature/cidade-conecta-product-design-20261001`: `assets/design-v56.css` refina hierarquia, foco, estados, mapa, Rede Municipal, formulário e mobile; não altera banco, Supabase, RLS, Edge Functions ou contratos de dados.
+- Product Design v5.6 integrada à `main` em `5daf87a99bee73adf0b2a293aea856f7aaea67dd` via PR #1. `assets/design-v56.css` refina hierarquia, foco, estados, mapa, Rede Municipal, formulário e mobile; não altera banco, Supabase, RLS, Edge Functions ou contratos de dados.
+- CI da v5.6: **245 verificações aprovadas, 0 falhas**, com apenas o aviso conhecido de Guamium. A sincronização para `gh-pages` também concluiu com sucesso.
 
 ## Segurança/testes já feitos
 - Sem `service_role`, senha ou segredo administrativo no frontend.
@@ -53,12 +54,12 @@ O trabalho pesado de backend já foi implementado. Não recrie schema, frontend 
 7. `MANUS-UPDATE-20260920.md`
 8. `REDE-MUNICIPAL.md`
 9. `ATLAS-BAIRROS.md`
-8. `supabase/migrations/`
-9. `supabase/functions/`
-10. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
+10. `supabase/migrations/`
+11. `supabase/functions/`
+12. `CONTEXTO-PROJETO.md` e `MANUS-CONSOLIDACAO.md`
 
 ## Próxima ação no Work
-**Integre a Product Design v5.6 somente após QA final da branch `feature/cidade-conecta-product-design-20261001`: valide desktop/mobile em 320/390/768/1366 px, foco de teclado, aviso offline, primeiro carregamento offline/PWA, skeleton da Rede Municipal, clustering do mapa, Radar dos bairros, formulário, protocolo e dashboard. Se tudo passar, integre a branch na `main` sem alterar Supabase, banco, RLS, Edge Functions ou contratos de dados.**
+**A Product Design v5.6 já está integrada e publicada no preview técnico. Continue da `main` atual; preserve `assets/design-v56.css`, o hardening do Service Worker e os estados offline/loading. Antes de novas evoluções, faça somente smoke tests no preview público e em aparelho físico quando disponível. Não altere Supabase, banco, RLS, Edge Functions ou contratos de dados sem uma tarefa explícita.**
 
 Não refaça análises já consolidadas e responda curto.
 
