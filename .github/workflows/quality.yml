@@ -36,8 +36,14 @@ jobs:
           node --check sw.js
           node --check scripts/validate-project.mjs
 
+      - name: Validar smoke test de UI
+        run: bash -n scripts/smoke-ui.sh
+
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs
 
       - name: Validar JSON do manifesto
         run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8')); console.log('manifest.webmanifest válido')"
+
+      - name: Smoke test UI em Chrome headless
+        run: bash scripts/smoke-ui.sh
