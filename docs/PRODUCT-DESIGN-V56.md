@@ -1,7 +1,8 @@
 # Cidade Conecta — Product Design v5.6
 
 **Branch:** `feature/cidade-conecta-product-design-20261001`  
-**Base:** `main` em `41b118fae0fce61e18c368dfffc33583ebd8f6de`  
+**Base original:** `main` em `41b118fae0fce61e18c368dfffc33583ebd8f6de`  
+**Integração:** PR #1 → `main` em `5daf87a99bee73adf0b2a293aea856f7aaea67dd`  
 **Escopo:** evolução incremental de UI/UX e front-end estático, sem alteração de banco, Supabase, RLS, Edge Functions ou contratos de dados.
 
 ## 1. Diagnóstico atual
@@ -80,8 +81,9 @@ Nenhuma tabela, migration, Edge Function, RLS, credencial ou integração foi al
 - [x] A v5.6 não altera Supabase, banco, migrations, RLS ou Edge Functions.
 - [x] Cache v5.6 inclui `assets/design-v56.css`.
 - [x] Limpeza de cache fica limitada aos caches do Cidade Conecta.
-- [ ] CI completo da branch no GitHub.
-- [ ] Preview publicado pela pipeline após integração na `main`.
+- [x] CI completo da branch no GitHub: **245 verificações aprovadas, 0 falhas** e 1 aviso conhecido de Guamium.
+- [x] PR #1 integrado por squash na `main`.
+- [x] Pipeline `Sincronizar site para gh-pages` concluída com sucesso; `gh-pages` sincronizada ao commit da integração.
 
 ## 7. Riscos restantes
 
@@ -90,6 +92,6 @@ Nenhuma tabela, migration, Edge Function, RLS, credencial ou integração foi al
 - Estados reais de backend devem ser validados em ambiente integrado; a v5.6 não altera esses contratos.
 - Teste em aparelhos físicos continua recomendado mesmo após o QA automatizado.
 
-## 8. Próxima etapa
+## 8. Estado final e próxima etapa
 
-Abrir PR da branch v5.6 contra a `main`, aguardar o CI e integrar somente com os checks aprovados. A publicação em GitHub Pages deve continuar sendo feita pela pipeline existente, sem deploy manual.
+A v5.6 está integrada à `main` e sincronizada no preview técnico do GitHub Pages. O próximo trabalho deve partir da `main` atual, preservando a camada v5.6. Restam apenas smoke tests em navegador/aparelho físico e as evoluções funcionais futuras já registradas no roadmap; nenhuma mudança adicional de banco ou Supabase foi necessária para esta entrega.
