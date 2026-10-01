@@ -14,12 +14,13 @@ A branch `main` é a fonte oficial do código. O preview do GitHub Pages é atua
 
 A sincronização com `gh-pages` só ocorre após a validação do mesmo commit. Se algum teste falhar, a versão anterior do preview é preservada. Execuções antigas são ignoradas quando a `main` já avançou, e o envio para `gh-pages` não usa força. Pull requests executam a mesma validação, sem publicar.
 
-## Situação atual — MVP v5.5
+## Situação atual — MVP v5.5 + UI v5.6
 
 O protótipo já possui:
 
 - interface responsiva para computador e celular;
 - redesign v5.5 com identidade cívica própria, Atlas de bairros, mapa com clustering sem dependência externa, bairros acompanhados e continuidade dos padrões 21st adaptados ao produto;
+- camada Product Design v5.6 para hierarquia visual, foco de teclado, estados loading/vazio/erro/offline, responsividade, contraste e reduced motion;
 - identidade visual inspirada nas cores utilizadas pela cidade de Piracicaba, mantendo caráter independente;
 - registro de ocorrências com protocolo;
 - acompanhamento por protocolo e histórico;
@@ -42,7 +43,7 @@ O protótipo já possui:
 - sugestão demonstrativa de encaminhamento por categoria;
 - PWA e cache offline dos arquivos principais;
 - SEO local;
-- validação automática de qualidade no GitHub Actions;
+- validação automática de qualidade no GitHub Actions, incluindo 247 verificações estáticas e smoke das rotas principais em Chrome headless;
 - status visual de conectividade e origem dos dados;
 - atalho `Ctrl/Cmd + K` para consulta de protocolo;
 - opção de restaurar dados demonstrativos no painel Admin;
@@ -92,7 +93,8 @@ Nunca devem ser colocadas no front-end público chaves `service_role`, senha do 
 - `index.html` — shell principal;
 - `assets/app.js` — aplicação e fluxo de ocorrências;
 - `assets/styles.css` — estilos gerais;
-- `assets/design-v55.css` — camada visual incremental inspirada nos protótipos Manus;
+- `assets/design-v55.css` — base visual incremental do MVP v5.5;
+- `assets/design-v56.css` — camada Product Design v5.6 de hierarquia, acessibilidade, estados e responsividade;
 - `assets/piracicaba.js` — contexto territorial;
 - `assets/piracicaba-mapas.js` — geografia avançada e limite municipal;
 - `assets/privacy-geo.js` — proteção de localização;
@@ -102,8 +104,9 @@ Nunca devem ser colocadas no front-end público chaves `service_role`, senha do 
 - `schema.sql` — modelo PostgreSQL futuro;
 - `SUPABASE.md` — plano de integração Supabase;
 - `TESTES.md` — roteiro de validação;
-- `.github/workflows/quality.yml` — checagem automática;
-- `.github/workflows/pages.yml` — sincronização do preview.
+- `.github/workflows/quality.yml` — checagem automática estática + smoke de UI;
+- `scripts/smoke-ui.sh` — smoke das rotas principais em Chrome headless;
+- `.github/workflows/pages.yml` — sincronização do preview somente após o quality gate.
 
 ## Privacidade
 
@@ -117,9 +120,9 @@ Cidade Conecta é um **projeto acadêmico independente**. Referências territori
 
 ## Próximas etapas
 
-1. Fazer QA visual/funcional da v5.5 em desktop e celulares reais.
-2. Validar usabilidade do novo seletor de categorias e do mapa avançado.
-3. Implementar autenticação/roles reais para substituir o Admin demonstrativo.
+1. Fazer smoke/QA complementar em celulares e navegadores físicos, já que o CI cobre automaticamente desktop e mobile headless.
+2. Validar usabilidade do seletor de categorias, mapa avançado, Rede Municipal e UI v5.6 com usuários reais.
+3. Planejar e implementar autenticação/roles reais para substituir o Admin demonstrativo somente com escopo explícito de segurança.
 4. Evoluir moderação e notificações.
 5. Incorporar novas camadas geográficas somente quando houver fonte vetorial validada.
 6. Preparar demonstração acadêmica e eventual apresentação institucional futura.
