@@ -17,7 +17,7 @@ function normalize(v=''){
 }
 
 const required=[
-  'index.html','assets/styles.css','assets/app.js','assets/piracicaba.css',
+  'index.html','assets/styles.css','assets/app.js','assets/piracicaba.css','assets/design-v56.css',
   'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
   'assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css',
   'data/piracicaba.json','data/municipal-network.json','manifest.webmanifest','sw.js','favicon.svg','assets/brand-mark-v51.svg','README.md',
@@ -94,7 +94,7 @@ if(data){
 }
 
 const index=read('index.html');
-for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/design-v55.css','assets/runtime-config.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
+for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/design-v55.css','assets/design-v56.css','assets/runtime-config.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
   assert(index.includes(ref),`index.html referencia ${ref}`);
 }
 assert(index.includes('Protótipo acadêmico independente'),'Aviso de independência institucional está no HTML');
@@ -102,9 +102,17 @@ assert(index.includes('Piracicaba · SP'),'Identidade local de Piracicaba está 
 assert(read('manifest.webmanifest').includes('\"theme_color\": \"#07383a\"'),'PWA usa cor principal da identidade v5.5');
 
 const sw=read('sw.js');
-for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css','data/piracicaba.json','data/municipal-network.json']){
+for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css','assets/design-v56.css','data/piracicaba.json','data/municipal-network.json']){
   assert(sw.includes(ref),`Service worker referencia ${ref}`);
 }
+assert(sw.includes("ignoreSearch:true"),'Service worker resolve assets versionados mesmo com query string');
+assert(sw.includes('startsWith(CACHE_PREFIX)'),'Service worker remove somente caches do Cidade Conecta');
+assert(index.includes('id="offlineNoticeV56"'),'Shell inclui aviso global de estado offline');
+
+const design56=read('assets/design-v56.css');
+assert(design56.includes('button:focus-visible')&&design56.includes('!important'),'v5.6 prevalece sobre foco legado v5.5');
+assert(design56.includes('offlineNoticeV56[hidden]'),'v5.6 respeita estado hidden do aviso offline');
+assert(design56.includes('skeletonStackV56'),'v5.6 estiliza skeleton de carregamento');
 
 const design=read('assets/design-v55.css');
 assert(index.includes('brandAsset')&&index.includes('assets/brand-mark-v51.svg'),'Shell usa símbolo próprio do Cidade Conecta');
@@ -147,6 +155,8 @@ assert(enhancements.includes('Supabase ativo'),'Interface informa leitura e escr
 assert(enhancements.includes('Restaurar demo'),'Painel permite restaurar dados demonstrativos');
 
 const app=read('assets/app.js');
+assert(app.includes('setupConnectivity()'),'App conecta estado online/offline ao aviso v5.6');
+assert(app.includes('skeletonStackV56'),'Rede municipal exibe skeleton durante carregamento');
 assert(app.includes('statusStepper'),'Detalhe da ocorrência usa progressão de status além de cor');
 assert(app.includes('mapMarkerIcon'),'Mapas usam marcador visual próprio');
 assert(app.includes('formStage'),'Formulário possui agrupamento visual por etapas sem wizard obrigatório');
