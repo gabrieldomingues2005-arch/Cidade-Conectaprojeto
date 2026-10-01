@@ -1,0 +1,129 @@
+/* Cidade Conecta v5.6 — Product Design polish
+   Camada incremental sobre v5.5: hierarquia, leitura, estados e mobile. */
+:root{
+  --cc56-surface:#ffffff;
+  --cc56-surface-soft:#f4f8f6;
+  --cc56-border:rgba(7,56,58,.13);
+  --cc56-ink:#0b3e42;
+  --cc56-muted:#5f7478;
+  --cc56-focus:#0a5f61;
+}
+
+/* Base de produto: menos ruído, mais leitura e foco visível. */
+body{font-feature-settings:"ss01" 1,"cv11" 1;overflow-x:hidden}
+*:focus-visible{outline:3px solid var(--cc56-focus);outline-offset:3px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--cc56-focus)!important;outline-offset:3px!important;box-shadow:0 0 0 6px rgba(169,233,61,.42)!important}
+button,a,input,select,textarea{touch-action:manipulation}
+.btn{font-weight:820;min-height:46px}
+.card{background:var(--cc56-surface);border:1px solid var(--cc56-border)}
+.muted,.help{color:var(--cc56-muted)}
+
+/* Header e navegação: marca clara, CTA primário e menu mais previsível. */
+.top{z-index:100}
+.topin{gap:18px}
+.brand{min-width:max-content}
+.nav{min-width:0;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{white-space:nowrap}
+.headerActions{flex:0 0 auto}
+.cityBandLinksV54{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.cityBandLinksV54 a{text-underline-offset:3px}
+
+/* Page head com contexto e ação visual consistente. */
+.pageHead{position:relative;isolation:isolate}
+.pageHead:after{content:"";position:absolute;right:6%;top:18px;width:190px;height:190px;border:1px solid rgba(19,112,110,.10);border-radius:50%;box-shadow:0 0 0 28px rgba(19,112,110,.025),0 0 0 58px rgba(19,112,110,.018);pointer-events:none;z-index:-1}
+.pageHead h1{max-width:900px}
+.pageHead p{max-width:720px}
+
+/* Estados de carregamento, erro, vazio e offline reutilizáveis nas telas. */
+.empty{border:1px dashed #c9dad3;background:linear-gradient(180deg,#fff,#f8fbf9);border-radius:18px}
+.empty h2{color:var(--cc56-ink)}
+.notice{line-height:1.55}
+[data-loading="true"],.networkLoadingV54{position:relative}
+.skeletonV56{display:block;background:linear-gradient(90deg,#edf3ef 25%,#f8fbf9 45%,#edf3ef 65%);background-size:300% 100%;animation:cc56Shimmer 1.25s ease-in-out infinite;border-radius:10px;min-height:18px}
+.skeletonStackV56{display:grid;gap:9px;margin:16px 0}
+.skeletonStackV56 .skeletonV56:nth-child(1){width:78%}
+.skeletonStackV56 .skeletonV56:nth-child(2){width:92%}
+.skeletonStackV56 .skeletonV56:nth-child(3){width:64%}
+.offlineNoticeV56{display:flex;align-items:flex-start;gap:10px;margin:10px auto 0;padding:12px 14px;border:1px solid #ecd8a8;background:#fff8e8;color:#6f541e;border-radius:14px}
+.offlineNoticeV56[hidden]{display:none}
+@keyframes cc56Shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+
+/* Cartões e dados: uma superfície principal e uma hierarquia de leitura. */
+.dashboardPanelV51,.networkAgencyCardV54,.networkStructureV54,.geoLookupCard{box-shadow:0 8px 24px rgba(8,55,58,.055)}
+.dashboardPanelV51:hover,.networkAgencyCardV54:hover,.geoLookupCard:hover{box-shadow:0 16px 38px rgba(8,55,58,.09);transform:translateY(-2px)}
+.dashboardPanelV51,.networkAgencyCardV54,.geoLookupCard{transition:transform .2s ease,box-shadow .2s ease}
+.panelHeadV51 h2{letter-spacing:-.035em}
+.dashboardKpisV51 article{min-height:112px}
+.dashboardKpisV51 article small,.qualityGridV51 span{line-height:1.35}
+.pipelineStageV51 strong,.rankBarV51 b,.agencyLoadBarsV54 b{font-variant-numeric:tabular-nums}
+
+/* Mapa: contraste de controles, contexto persistente e melhor leitura da lista. */
+.mapCardV53 .filters{background:#f1f7f4;border-color:#d5e4dc}
+.mapSideV53{background:linear-gradient(180deg,#fbfdfb,#f4f8f6)}
+.mapSideHead{padding-bottom:12px;border-bottom:1px solid #dce8e2}
+.resultCount{min-width:38px;min-height:38px;display:grid;place-items:center;border-radius:12px;background:var(--civic-950);color:#fff;font-weight:900}
+.mapResultItem{border-bottom:1px solid rgba(8,55,58,.08)}
+.mapResultItem button{min-height:58px}
+.mapResultItem small{line-height:1.35}
+.mapEmpty{padding:28px 16px;text-align:center;color:var(--cc56-muted);background:#fff;border:1px dashed #cbdcd5;border-radius:14px}
+.mapCanvasV53 #publicMap{background:#e8f0eb}
+.mapContextV53{font-size:.72rem;line-height:1.4}
+.mapLegendInline{font-weight:760}
+
+/* Rede municipal: reforça a escala problema → referência → serviço → canal. */
+.networkFlowRailV54 article{background:linear-gradient(180deg,#fff,#f4f8f6);border:1px solid #d8e6df;box-shadow:0 6px 18px rgba(8,55,58,.045)}
+.networkFlowRailV54 article span{background:var(--civic-950);color:var(--lime)}
+.networkFlowRailV54 article b{color:var(--cc56-ink)}
+.networkFlowRailV54 i{color:#7aa79a;font-weight:900}
+.networkAgencyCardV54{background:linear-gradient(180deg,#fff,#fbfdfb)}
+.networkAgencyCardV54 p{line-height:1.45}
+.networkSectorListV54 span{background:#edf5f1;border-color:#d8e8df;color:#315d5b}
+.networkContactV54{border-top:1px solid #e3ece7;padding-top:10px}
+
+/* Formulário: reforça a progressão sem transformar em wizard. */
+.formJourneyV51{position:sticky;top:86px;z-index:4;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);padding:8px;border:1px solid #dce9e3;border-radius:16px;box-shadow:0 8px 18px rgba(8,55,58,.05)}
+.formJourneyV51 button{min-height:42px}
+.formProgressV51{margin:12px 0 18px}
+.registerSubmitV51{position:sticky;bottom:12px;z-index:3;padding:10px;border:1px solid #dce9e3;border-radius:16px;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);box-shadow:0 10px 28px rgba(8,55,58,.10)}
+
+/* Mobile como aplicativo: áreas de toque, telas sem corte e filtros em fluxo. */
+@media(max-width:760px){
+  .topin{gap:8px}
+  .brand small{font-size:.66rem}
+  .nav.open{top:68px}
+  .pageHead:after{right:-90px;top:12px;width:170px;height:170px}
+  .pageHead p{font-size:.96rem}
+  .dashboardKpisV51 article{min-height:96px}
+  .dashboardPanelV51:hover,.networkAgencyCardV54:hover,.geoLookupCard:hover{transform:none}
+  .formJourneyV51{top:68px;overflow:auto}
+  .formJourneyV51 button b{font-size:.68rem}
+  .registerSubmitV51{position:static;margin-top:10px;box-shadow:none}
+  .networkFlowRailV54{grid-template-columns:1fr!important;gap:8px!important}
+  .networkFlowRailV54>i{transform:rotate(90deg);justify-self:center}
+  .networkAgencyGridV54{grid-template-columns:1fr!important}
+  .networkContactV54{display:grid;gap:4px}
+  .mapSideV53{border-radius:16px}
+  .mapCanvasV53 #publicMap{min-height:52vh}
+  .mapContextV53 span{max-width:100%}
+  .tableWrap{max-width:100%;overflow-x:auto}
+  table{min-width:620px}
+}
+@media(max-width:440px){
+  .brand{gap:7px}
+  .brandAsset{width:34px}
+  .brandWord{font-size:.88rem}
+  .brandWord small{font-size:.6rem}
+  .headerActions{gap:5px}
+  .mobileActions a{min-height:44px}
+  .categoryChooser{gap:7px}
+  .categoryChoice{min-height:66px}
+}
+@media(prefers-reduced-motion:reduce){
+  .skeletonV56{animation:none}
+  .dashboardPanelV51,.networkAgencyCardV54,.geoLookupCard{transition:none}
+}
+@media(prefers-contrast:more){
+  .mapResultItem,.networkFlowRailV54 article,.networkSectorListV54 span{border-width:2px}
+  .resultCount{border:2px solid #fff}
+}
