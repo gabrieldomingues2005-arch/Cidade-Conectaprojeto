@@ -1,15 +1,16 @@
-# Cidade Conecta — Roteiro de testes do MVP v4.6
+# Cidade Conecta — Roteiro de testes do MVP v5.5 + UI v5.6
 
 Use este roteiro antes de qualquer apresentação ou publicação.
 
 ## 0. Validação automática e publicação do preview
 - Em cada push para `main`, o workflow `Sincronizar site para gh-pages` chama `Validar Cidade Conecta` antes de sincronizar.
-- A validação verifica a sintaxe dos módulos JavaScript, do service worker e do próprio validador; depois verifica a base territorial, referências e manifesto.
+- A validação verifica a sintaxe dos módulos JavaScript, do service worker, do validador e do próprio script de smoke; depois verifica base territorial, referências, manifesto e invariantes de segurança/UX.
+- O quality gate executa também `scripts/smoke-ui.sh` em Chrome headless, servindo o projeto localmente e validando rotas reais em desktop e mobile sem adicionar Playwright/Puppeteer ao projeto.
 - O job `sync` só executa após `validate` concluir com sucesso. Uma falha mantém a versão anterior em `gh-pages`.
 - A execução manual também passa pela validação e só publica a partir da `main`.
 - Se a `main` avançou durante a execução, a sincronização antiga é ignorada. Atualizações divergentes de `gh-pages` são rejeitadas pelo Git, sem sobrescrita forçada.
 - Pull requests para `main` usam a mesma validação, sem permissão de publicação.
-- As checagens automáticas são estáticas; os testes de interação abaixo continuam necessários para alterações na aplicação.
+- As checagens automáticas combinam validação estática e smoke de renderização. Interações profundas, mapas externos, permissões do navegador e testes em aparelhos físicos continuam necessários para alterações relevantes.
 
 ## 1. Página inicial
 - Abrir no celular e no computador.
@@ -309,3 +310,34 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - validar Radar em 360/390/430 px, tablet e desktop;
 - testar foco de teclado em clusters, botões e links;
 - confirmar ausência de overflow horizontal e respeito a reduced-motion.
+
+
+## 18. QA v5.6 — Product Design e smoke automatizado
+
+### Camada visual e PWA
+- confirmar carregamento de `assets/design-v56.css` depois da v5.5;
+- confirmar foco visível de teclado nos controles principais;
+- validar aviso offline e retorno ao estado online;
+- confirmar skeleton/`aria-busy` da Rede Municipal;
+- validar `prefers-reduced-motion`;
+- confirmar cache offline com assets versionados por query string;
+- confirmar que a limpeza do Service Worker remove apenas caches com prefixo `cidade-conecta-`.
+
+### Smoke automático no CI
+- executar `bash scripts/smoke-ui.sh`;
+- desktop: Home, Registrar, Acompanhar, Mapa, Indicadores e Rede Municipal;
+- mobile 390 px: Home, Registrar, Mapa e Rede Municipal;
+- confirmar presença do shell v5.6 e ausência de queda para a rota 404;
+- manter o smoke sem dependência de CDN externo para que o resultado seja determinístico no runner;
+- qualquer erro JavaScript que impeça o preenchimento de `#app` deve bloquear o CI.
+
+### Regressão conhecida corrigida
+- `setupInstall` deve usar `$$('.installBtn').forEach(...)`;
+- nunca usar `$('.installBtn').forEach(...)`, pois `$` retorna um único elemento;
+- o validador automático mantém uma checagem específica para impedir o retorno dessa regressão.
+
+### Estado validado em 01/10/2026
+- **247 verificações automáticas aprovadas**;
+- smoke em Chrome headless: PASS nas rotas cobertas;
+- 1 aviso territorial conhecido: Guamium referenciado em R2 e R3;
+- `main` e `gh-pages` sincronizadas no commit `a6bdb22c4b5c1cdfdb483a412c678c416414d83d`.
