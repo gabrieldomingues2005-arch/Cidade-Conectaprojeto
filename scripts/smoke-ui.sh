@@ -35,7 +35,25 @@ echo "Browser: $("${CHROME}" --version)"
 # O Leaflet remoto é bloqueante no HTML real. Para o smoke de rotas,
 # removemos somente as tags do CDN em uma cópia temporária do shell.
 # Todos os scripts e estilos do Cidade Conecta continuam sendo os reais.
-grep -v 'unpkg.com' index.html > "${SMOKE_HTML}"
+python3 - <<'PY'
+from pathlib import Path
+source=Path('index.html').read_text(encoding='utf-8')
+source='\n'.join(line for line in source.splitlines() if 'unpkg.com' not in line)
+probe="""<script>
+window.addEventListener('error',function(e){
+  document.documentElement.setAttribute('data-smoke-error',(e.message||'error')+' @ '+(e.filename||'')+':'+(e.lineno||0));
+});
+window.addEventListener('unhandledrejection',function(e){
+  document.documentElement.setAttribute('data-smoke-rejection',String(e.reason||'unhandled rejection'));
+});
+setTimeout(function(){
+  var app=document.getElementById('app');
+  document.documentElement.setAttribute('data-smoke-app-size',String(app?app.innerHTML.length:-1));
+},900);
+</script>"""
+source=source.replace('</head>',probe+'\n</head>')
+Path('.smoke-index.html').write_text(source,encoding='utf-8')
+PY
 
 python3 -m http.server "${PORT}" --bind 127.0.0.1 >"${TMP_DIR}/server.log" 2>&1 &
 SERVER_PID=$!
@@ -72,6 +90,10 @@ run_route() {
     echo "✖ ${name}: marcador esperado não encontrado: ${marker}"
     echo "--- stderr ---"
     tail -80 "${TMP_DIR}/${name}.stderr" || true
+    echo "--- diagnóstico runtime ---"
+    grep -o 'data-smoke-error="[^"]*"' "${out}" || true
+    grep -o 'data-smoke-rejection="[^"]*"' "${out}" || true
+    grep -o 'data-smoke-app-size="[^"]*"' "${out}" || true
     echo "--- DOM (fim) ---"
     tail -80 "${out}" || true
     exit 1
