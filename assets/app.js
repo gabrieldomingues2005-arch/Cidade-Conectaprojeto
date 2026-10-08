@@ -486,7 +486,7 @@ async function bindAdmin(){
   login.onsubmit=async e=>{
    e.preventDefault();const btn=$('#adminLoginBtn'),errorBox=$('#adminLoginError');btn.disabled=true;btn.textContent='Validando…';errorBox.classList.add('hidden');errorBox.textContent='';
    try{await auth.signIn($('#adminEmail').value,$('#adminPassword').value);toast('Acesso interno confirmado.');route()}
-   catch(error){errorBox.textContent=String(error?.message||'Não foi possível entrar.');errorBox.classList.remove('hidden');btn.disabled=false;btn.textContent='Entrar com segurança'}
+   catch(error){if(auth.state.status==='denied'){route();return}errorBox.textContent=String(error?.message||'Não foi possível entrar.');errorBox.classList.remove('hidden');btn.disabled=false;btn.textContent='Entrar com segurança'}
   };
   return
  }
