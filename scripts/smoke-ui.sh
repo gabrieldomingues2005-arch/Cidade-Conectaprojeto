@@ -6,6 +6,7 @@ BASE="http://127.0.0.1:${PORT}"
 TMP_DIR="$(mktemp -d)"
 SERVER_PID=""
 SMOKE_HTML=".smoke-index.html"
+SCREENSHOT_DIR="${SMOKE_SCREENSHOT_DIR:-}"
 
 cleanup() {
   if [[ -n "${SERVER_PID}" ]]; then
@@ -31,6 +32,7 @@ fi
 
 echo "Cidade Conecta — smoke UI"
 echo "Browser: $("${CHROME}" --version)"
+if [[ -n "${SCREENSHOT_DIR}" ]]; then mkdir -p "${SCREENSHOT_DIR}"; fi
 
 # O Leaflet remoto é bloqueante no HTML real. Para o smoke de rotas,
 # removemos somente as tags do CDN em uma cópia temporária do shell.
@@ -102,6 +104,20 @@ run_route() {
   if grep -Fq "Página não encontrada" "${out}"; then
     echo "✖ ${name}: caiu na rota 404."
     exit 1
+  fi
+
+  if [[ -n "${SCREENSHOT_DIR}" && ( "${name}" == "home-desktop" || "${name}" == "admin-login-desktop" || "${name}" == "home-mobile" ) ]]; then
+    "${CHROME}" \
+      --headless=new \
+      --no-sandbox \
+      --disable-gpu \
+      --disable-dev-shm-usage \
+      --hide-scrollbars \
+      --window-size="${width},${height}" \
+      --virtual-time-budget=1200 \
+      --screenshot="${SCREENSHOT_DIR}/${name}.png" \
+      "${BASE}/${SMOKE_HTML}${hash}" >/dev/null 2>"${TMP_DIR}/${name}-screenshot.stderr"
+    [[ -s "${SCREENSHOT_DIR}/${name}.png" ]] || { echo "✖ ${name}: screenshot não gerado"; exit 1; }
   fi
 
   echo "✓ ${name}"
