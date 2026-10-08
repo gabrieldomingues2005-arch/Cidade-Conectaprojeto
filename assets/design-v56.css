@@ -151,3 +151,12 @@ button,a,input,select,textarea{touch-action:manipulation}
   .adminMetaGridV57{grid-template-columns:1fr}
   .adminAuthCardV57 .btn{width:100%}
 }
+
+body.adminRouteV57 .pageHead{padding-top:34px;padding-bottom:34px}
+body.adminRouteV57 .pageHead h1{font-size:clamp(2.7rem,5vw,4rem)}
+body.adminRouteV57 .section{padding-top:28px}
+@media(max-width:760px){
+  body.adminRouteV57 .pageHead{padding-top:26px;padding-bottom:26px}
+  body.adminRouteV57 .pageHead h1{font-size:clamp(2.35rem,11vw,3.2rem)}
+  body.adminRouteV57 .section{padding-top:20px}
+}
