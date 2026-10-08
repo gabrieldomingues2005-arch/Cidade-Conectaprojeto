@@ -22,7 +22,7 @@ button,a,input,select,textarea{touch-action:manipulation}
 .top{z-index:100}
 .topin{gap:18px}
 .brand{min-width:max-content}
-.nav{min-width:0;overflow-x:auto;scrollbar-width:none}
+.nav{min-width:0;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
 .nav::-webkit-scrollbar{display:none}
 .nav a{white-space:nowrap}
 .headerActions{flex:0 0 auto}
@@ -159,4 +159,14 @@ body.adminRouteV57 .section{padding-top:28px}
   body.adminRouteV57 .pageHead{padding-top:26px;padding-bottom:26px}
   body.adminRouteV57 .pageHead h1{font-size:clamp(2.35rem,11vw,3.2rem)}
   body.adminRouteV57 .section{padding-top:20px}
+}
+
+@media(min-width:900px) and (max-width:1450px){
+  .topin{gap:10px}
+  .nav{gap:2px}
+  .nav a{padding:9px 8px;font-size:.84rem}
+  .brand{gap:8px}
+  .brandWord{font-size:.94rem}
+  .commandTriggerV53 kbd{display:none}
+  .headerActions{gap:6px}
 }
