@@ -78,8 +78,12 @@ run_route() {
   local height="${5:-900}"
   local out="${TMP_DIR}/${name}.html"
 
-  "${CHROME}" \
+  timeout 15s "${CHROME}" \
     --headless=new \
+    --no-first-run \
+    --disable-background-networking \
+    --disable-component-update \
+    --disable-sync \
     --no-sandbox \
     --disable-gpu \
     --disable-dev-shm-usage \
@@ -107,8 +111,12 @@ run_route() {
   fi
 
   if [[ -n "${SCREENSHOT_DIR}" && ( "${name}" == "home-desktop" || "${name}" == "admin-login-desktop" || "${name}" == "home-mobile" || "${name}" == "admin-login-mobile" ) ]]; then
-    "${CHROME}" \
+    timeout 15s "${CHROME}" \
       --headless=new \
+      --no-first-run \
+      --disable-background-networking \
+      --disable-component-update \
+      --disable-sync \
       --no-sandbox \
       --disable-gpu \
       --disable-dev-shm-usage \
