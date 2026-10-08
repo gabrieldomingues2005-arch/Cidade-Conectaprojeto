@@ -166,6 +166,8 @@ assert(adminEdge.includes('admin.auth.getUser(token)'),'Edge administrativa vali
 assert(adminEdge.includes('new Set(["triage", "admin"])'),'Edge administrativa limita acesso a triage/admin');
 assert(adminEdge.includes('internal_access_denied'),'Edge administrativa nega papel não autorizado');
 assert(adminEdge.includes('readOnly: true'),'Fase inicial do Admin real é somente leitura');
+assert(adminEdge.includes('.eq("ibge_code", "3538709")'),'Edge administrativa limita dados a Piracicaba');
+
 assert(!adminEdge.includes('"agency"')&&!adminEdge.includes("'agency'"),'Papel agency ainda não recebe acesso amplo sem vínculo de setor');
 
 
