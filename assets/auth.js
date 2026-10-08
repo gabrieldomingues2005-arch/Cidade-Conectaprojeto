@@ -112,20 +112,27 @@ async function ensureToken(){
   return session.access_token;
 }
 
-async function fetchProfile(userId,token){
-  const query=new URLSearchParams({
-    select:'id,name,email,role,auth_user_id',
-    auth_user_id:`eq.${userId}`,
-    limit:'1'
-  });
-  const response=await fetch(`${sb.url}/rest/v1/users_profile?${query.toString()}`,{
-    headers:baseHeaders(token),
+async function verifyInternalAccess(token){
+  const response=await fetch(`${sb.url}/functions/v1/admin-occurrences`,{
+    method:'POST',
+    headers:baseHeaders(token,{'Content-Type':'application/json'}),
+    body:JSON.stringify({action:'session'}),
     cache:'no-store'
   });
-  const rows=await parseResponse(response);
-  return Array.isArray(rows)&&rows.length?rows[0]:null;
+  let payload=null;
+  try{payload=await response.json()}catch{}
+  if(response.status===403){
+    return {authorized:false,profile:payload?.profile||null,role:payload?.role||payload?.profile?.role||null};
+  }
+  if(!response.ok){
+    const message=payload?.message||payload?.error||`Supabase HTTP ${response.status}`;
+    const error=new Error(String(message));
+    error.status=response.status;
+    error.payload=payload;
+    throw error;
+  }
+  return {authorized:payload?.authenticated===true,profile:payload?.profile||null,role:payload?.profile?.role||null};
 }
-
 async function init(){
   state.lastCheckedAt=new Date().toISOString();
   state.lastError=null;
@@ -151,10 +158,10 @@ async function init(){
     const userPayload=await authRequest('user',{token});
     const user=userPayload?.user||userPayload;
     if(!user?.id)throw new Error('Usuário inválido');
-    const profile=await fetchProfile(user.id,token);
+    const access=await verifyInternalAccess(token);
     state.user=user;
-    state.profile=profile;
-    state.status=profile&&ALLOWED_INTERNAL_ROLES.has(profile.role)?'authorized':'denied';
+    state.profile=access.profile;
+    state.status=access.authorized&&access.profile&&ALLOWED_INTERNAL_ROLES.has(access.profile.role)?'authorized':'denied';
   }catch(error){
     saveSession(null);
     state.user=null;
