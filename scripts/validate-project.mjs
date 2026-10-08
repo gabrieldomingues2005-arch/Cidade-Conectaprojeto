@@ -157,6 +157,9 @@ assert(authClient.includes("new Set(['triage','admin'])"),'Frontend limita paine
 assert(authClient.includes("action:'session'"),'Frontend delega autorização de papel à Edge Function');
 assert(!authClient.includes('service_role'),'Frontend de autenticação não contém service_role');
 assert(!authClient.includes('sb_secret_'),'Frontend de autenticação não contém chave secreta');
+assert(authClient.includes('sessionStorage.setItem(STORAGE_KEY'),'Sessão interna fica limitada à aba atual');
+assert(!authClient.includes('localStorage.setItem(STORAGE_KEY'),'Sessão interna não persiste token entre fechamentos do navegador');
+
 
 const adminEdge=read('supabase/functions/admin-occurrences/index.ts');
 assert(adminEdge.includes('admin.auth.getUser(token)'),'Edge administrativa valida sessão com Auth');
