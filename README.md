@@ -30,7 +30,7 @@ O protótipo já possui:
 - localização pública aproximada e separação conceitual da localização exata privada;
 - foto opcional com otimização/compressão client-side para imagens grandes;
 - rascunho local;
-- painel administrativo demonstrativo;
+- acesso interno autenticado por Supabase Auth, com fila real somente leitura para papéis `triage` e `admin`;
 - atualização de status, setor e observações;
 - exportação/importação de backup;
 - indicadores por categoria, bairro, status e região;
@@ -46,7 +46,7 @@ O protótipo já possui:
 - validação automática de qualidade no GitHub Actions, incluindo 247 verificações estáticas e smoke das rotas principais em Chrome headless;
 - status visual de conectividade e origem dos dados;
 - atalho `Ctrl/Cmd + K` para consulta de protocolo;
-- opção de restaurar dados demonstrativos no painel Admin;
+- proteção do painel interno por sessão real e papel validado no backend;
 - botão para copiar o link do site;
 - mapa real também na Home;
 - prévia do que ficará público antes do envio da ocorrência;
@@ -99,6 +99,7 @@ Nunca devem ser colocadas no front-end público chaves `service_role`, senha do 
 - `assets/piracicaba-mapas.js` — geografia avançada e limite municipal;
 - `assets/privacy-geo.js` — proteção de localização;
 - `assets/runtime-config.js` — modo e configuração do backend;
+- `assets/auth.js` — sessão do acesso interno com Supabase Auth;
 - `assets/site-enhancements.js` — melhorias de UX e estado do sistema;
 - `data/piracicaba.json` — base territorial;
 - `schema.sql` — modelo PostgreSQL futuro;
@@ -122,9 +123,14 @@ Cidade Conecta é um **projeto acadêmico independente**. Referências territori
 
 1. Fazer smoke/QA complementar em celulares e navegadores físicos, já que o CI cobre automaticamente desktop e mobile headless.
 2. Validar usabilidade do seletor de categorias, mapa avançado, Rede Municipal e UI v5.6 com usuários reais.
-3. Planejar e implementar autenticação/roles reais para substituir o Admin demonstrativo somente com escopo explícito de segurança.
+3. Validar a fase 1 do painel autenticado e, depois, implementar escrita administrativa transacional + auditoria antes de liberar edição.
 4. Evoluir moderação e notificações.
 5. Incorporar novas camadas geográficas somente quando houver fonte vetorial validada.
 6. Preparar demonstração acadêmica e eventual apresentação institucional futura.
 
 Projeto acadêmico — 2026.
+
+
+### Acesso interno
+
+A rota `#/admin` usa autenticação real do Supabase. Nesta primeira fase, somente `triage` e `admin` podem acessar a fila real, em modo somente leitura. O papel `agency` permanece bloqueado até existir escopo por órgão/setor. Detalhes: `AUTH-ADMIN.md`.
