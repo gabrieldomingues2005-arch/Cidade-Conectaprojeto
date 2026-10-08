@@ -151,8 +151,8 @@ assert(!bridge.includes("rpc('track_occurrence'"),'Ponte pública não chama dir
 assert(bridge.includes('moderation_status=eq.approved'),'Lista pública filtra somente ocorrências aprovadas');
 assert(!bridge.includes('service_role'),'Ponte pública não usa service_role');
 const authClient=read('assets/auth.js');
-assert(authClient.includes('/auth/v1/token?grant_type=password'),'Auth usa login oficial por senha do Supabase');
-assert(authClient.includes('/auth/v1/user'),'Auth valida o usuário no servidor do Supabase');
+assert(authClient.includes("authRequest('token?grant_type=password'"),'Auth usa login oficial por senha do Supabase');
+assert(authClient.includes("authRequest('user'"),'Auth valida o usuário no servidor do Supabase');
 assert(authClient.includes("new Set(['triage','admin'])"),'Frontend limita painel interno a triage/admin');
 assert(authClient.includes("action:'session'"),'Frontend delega autorização de papel à Edge Function');
 assert(!authClient.includes('service_role'),'Frontend de autenticação não contém service_role');
