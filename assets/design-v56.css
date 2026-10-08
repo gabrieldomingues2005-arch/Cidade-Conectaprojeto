@@ -22,7 +22,7 @@ button,a,input,select,textarea{touch-action:manipulation}
 .top{z-index:100}
 .topin{gap:18px}
 .brand{min-width:max-content}
-.nav{min-width:0;overflow-x:auto;scrollbar-width:none}
+.nav{min-width:0;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
 .nav::-webkit-scrollbar{display:none}
 .nav a{white-space:nowrap}
 .headerActions{flex:0 0 auto}
@@ -126,4 +126,78 @@ button,a,input,select,textarea{touch-action:manipulation}
 @media(prefers-contrast:more){
   .mapResultItem,.networkFlowRailV54 article,.networkSectorListV54 span{border-width:2px}
   .resultCount{border:2px solid #fff}
+}
+
+
+/* Acesso interno autenticado — fase 1 somente leitura. */
+.adminAuthCardV57{max-width:680px;margin-inline:auto;display:grid;gap:16px}
+.adminAuthCardV57 .field{display:grid;gap:7px}
+.adminAuthCardV57 input{min-height:48px}
+.adminAuthCardV57 .btn{justify-self:start}
+.adminSessionBarV57{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px;background:linear-gradient(135deg,#f7fbf9,#eef7f2)}
+.adminSessionBarV57 h2{margin:.2rem 0}
+.adminDetailV57{margin-top:16px;scroll-margin-top:96px}
+.adminReadOnlyV57{display:grid;gap:14px}
+.adminReadOnlyV57 h3{margin:0}
+.adminMetaGridV57{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.adminMetaGridV57>div{display:grid;gap:4px;padding:12px;border:1px solid #dce9e3;border-radius:13px;background:#f8fbf9}
+.adminMetaGridV57 small{color:#56736f}
+.adminMetaGridV57 b{overflow-wrap:anywhere}
+@media(max-width:760px){
+  .adminSessionBarV57{align-items:flex-start;flex-direction:column}
+  .adminMetaGridV57{grid-template-columns:1fr 1fr}
+}
+@media(max-width:440px){
+  .adminMetaGridV57{grid-template-columns:1fr}
+  .adminAuthCardV57 .btn{width:100%}
+}
+
+body.adminRouteV57 .pageHead{padding-top:34px;padding-bottom:34px}
+body.adminRouteV57 .pageHead h1{font-size:clamp(2.7rem,5vw,4rem)}
+body.adminRouteV57 .section{padding-top:28px}
+@media(max-width:760px){
+  body.adminRouteV57 .pageHead{padding-top:26px;padding-bottom:26px}
+  body.adminRouteV57 .pageHead h1{font-size:clamp(2.35rem,11vw,3.2rem)}
+  body.adminRouteV57 .section{padding-top:20px}
+}
+
+@media(min-width:900px) and (max-width:1450px){
+  .topin{gap:10px}
+  .nav{gap:2px}
+  .nav a{padding:9px 8px;font-size:.84rem}
+  .brand{gap:8px}
+  .brandWord{font-size:.94rem}
+  .commandTriggerV53 kbd{display:none}
+  .headerActions{gap:6px}
+}
+
+/* Header desktop compacto: evita cortar navegação em larguras intermediárias. */
+@media(min-width:1021px) and (max-width:1450px){
+  .nav{display:none}
+  .nav.open{
+    display:flex;
+    position:absolute;
+    top:78px;
+    left:16px;
+    right:16px;
+    padding:10px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    flex-direction:column;
+    align-items:stretch;
+    overflow:visible
+  }
+  .nav.open a{padding:11px 12px;font-size:.91rem}
+  .menu{display:inline-flex}
+}
+/* A área interna não compete com os atalhos públicos do app. */
+body.adminRouteV57 .mobileActions{display:none!important}
+@media(max-width:760px){
+  body.adminRouteV57 .pageHead{padding-top:18px;padding-bottom:18px}
+  body.adminRouteV57 .pageHead h1{font-size:clamp(2rem,10vw,2.65rem);margin-top:6px;margin-bottom:8px}
+  body.adminRouteV57 .pageHead p{font-size:.92rem;line-height:1.45}
+  body.adminRouteV57 .section{padding-top:14px}
+  body.adminRouteV57 .adminAuthCardV57{padding:16px}
 }

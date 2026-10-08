@@ -19,16 +19,17 @@ function normalize(v=''){
 const required=[
   'index.html','assets/styles.css','assets/app.js','assets/piracicaba.css','assets/design-v56.css',
   'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
-  'assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css',
+  'assets/runtime-config.js','assets/auth.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css',
   'data/piracicaba.json','data/municipal-network.json','manifest.webmanifest','sw.js','favicon.svg','assets/brand-mark-v51.svg','README.md',
-  'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md','WORK-CONTINUAR.md','REDE-MUNICIPAL.md',
+  'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md','WORK-CONTINUAR.md','REDE-MUNICIPAL.md','AUTH-ADMIN.md',
   'supabase/migrations/20260917_secure_occurrence_submission_v1.sql',
   'supabase/migrations/20260917_reserve_demo_protocol_range.sql',
   'supabase/migrations/20260917_restrict_profile_self_role.sql',
   'supabase/migrations/20260917_secure_occurrence_tracking_edge.sql',
   'supabase/migrations/20260924_harden_occurrence_contacts_privileges.sql',
   'supabase/functions/submit-occurrence/index.ts','supabase/functions/submit-occurrence/deno.json',
-  'supabase/functions/track-occurrence/index.ts','supabase/functions/track-occurrence/deno.json'
+  'supabase/functions/track-occurrence/index.ts','supabase/functions/track-occurrence/deno.json',
+  'supabase/functions/admin-occurrences/index.ts','supabase/functions/admin-occurrences/deno.json'
 ];
 for(const file of required)assert(fs.existsSync(path.join(root,file)),`Presente: ${file}`);
 
@@ -94,7 +95,7 @@ if(data){
 }
 
 const index=read('index.html');
-for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/design-v55.css','assets/design-v56.css','assets/runtime-config.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
+for(const ref of ['assets/styles.css','assets/piracicaba.css','assets/piracicaba-mapas.css','assets/site-enhancements.css','assets/design-v55.css','assets/design-v56.css','assets/runtime-config.js','assets/auth.js','assets/supabase-bridge.js','assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/privacy-geo.js','assets/site-enhancements.js']){
   assert(index.includes(ref),`index.html referencia ${ref}`);
 }
 assert(index.includes('Protótipo acadêmico independente'),'Aviso de independência institucional está no HTML');
@@ -102,7 +103,7 @@ assert(index.includes('Piracicaba · SP'),'Identidade local de Piracicaba está 
 assert(read('manifest.webmanifest').includes('\"theme_color\": \"#07383a\"'),'PWA usa cor principal da identidade v5.5');
 
 const sw=read('sw.js');
-for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css','assets/design-v56.css','data/piracicaba.json','data/municipal-network.json']){
+for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/auth.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css','assets/design-v56.css','data/piracicaba.json','data/municipal-network.json']){
   assert(sw.includes(ref),`Service worker referencia ${ref}`);
 }
 assert(sw.includes("ignoreSearch:true"),'Service worker resolve assets versionados mesmo com query string');
@@ -149,6 +150,26 @@ assert(bridge.includes('sb.trackFunction'),'Ponte acompanha ocorrência pela Edg
 assert(!bridge.includes("rpc('track_occurrence'"),'Ponte pública não chama diretamente RPC privilegiada de rastreamento');
 assert(bridge.includes('moderation_status=eq.approved'),'Lista pública filtra somente ocorrências aprovadas');
 assert(!bridge.includes('service_role'),'Ponte pública não usa service_role');
+const authClient=read('assets/auth.js');
+assert(authClient.includes("authRequest('token?grant_type=password'"),'Auth usa login oficial por senha do Supabase');
+assert(authClient.includes("authRequest('user'"),'Auth valida o usuário no servidor do Supabase');
+assert(authClient.includes("new Set(['triage','admin'])"),'Frontend limita painel interno a triage/admin');
+assert(authClient.includes("action:'session'"),'Frontend delega autorização de papel à Edge Function');
+assert(!authClient.includes('service_role'),'Frontend de autenticação não contém service_role');
+assert(!authClient.includes('sb_secret_'),'Frontend de autenticação não contém chave secreta');
+assert(authClient.includes('sessionStorage.setItem(STORAGE_KEY'),'Sessão interna fica limitada à aba atual');
+assert(!authClient.includes('localStorage.setItem(STORAGE_KEY'),'Sessão interna não persiste token entre fechamentos do navegador');
+
+
+const adminEdge=read('supabase/functions/admin-occurrences/index.ts');
+assert(adminEdge.includes('admin.auth.getUser(token)'),'Edge administrativa valida sessão com Auth');
+assert(adminEdge.includes('new Set(["triage", "admin"])'),'Edge administrativa limita acesso a triage/admin');
+assert(adminEdge.includes('internal_access_denied'),'Edge administrativa nega papel não autorizado');
+assert(adminEdge.includes('readOnly: true'),'Fase inicial do Admin real é somente leitura');
+assert(adminEdge.includes('.eq("ibge_code", "3538709")'),'Edge administrativa limita dados a Piracicaba');
+
+assert(!adminEdge.includes('"agency"')&&!adminEdge.includes("'agency'"),'Papel agency ainda não recebe acesso amplo sem vínculo de setor');
+
 
 const enhancements=read('assets/site-enhancements.js');
 assert(enhancements.includes('Supabase ativo'),'Interface informa leitura e escrita conectadas ao Supabase');
@@ -156,6 +177,11 @@ assert(enhancements.includes('Restaurar demo'),'Painel permite restaurar dados d
 
 const app=read('assets/app.js');
 assert(app.includes('setupConnectivity()'),'App conecta estado online/offline ao aviso v5.6');
+assert(!app.includes("const ADMIN_KEY='ccAdminDemo'"),'Admin não usa mais chave local de demonstração');
+assert(!app.includes("sessionStorage.setItem(ADMIN_KEY"),'Admin não usa sessionStorage como autenticação');
+assert(app.includes('adminLoginForm'),'Admin possui formulário de login real');
+assert(app.includes('CidadeConectaAuth'),'Admin integra sessão real do Supabase');
+
 assert(/\$\$\('\.installBtn'\)\.forEach/.test(app),'Botões de instalação usam seletor múltiplo seguro');
 assert(!/(?<!\$)\$\('\.installBtn'\)\.forEach/.test(app),'App não usa seletor unitário como coleção nos botões de instalação');
 assert(app.includes('skeletonStackV56'),'Rede municipal exibe skeleton durante carregamento');
@@ -232,6 +258,10 @@ assert(geo.includes('ponto-em-polígono'),'Documentação prevê ponto-em-políg
 const supabase=read('SUPABASE.md');
 assert(supabase.includes('separado'),'Documentação exige projeto Supabase separado');
 assert(supabase.includes('service_role'),'Documentação alerta sobre chave administrativa');
+const authAdminDoc=read('AUTH-ADMIN.md');
+assert(authAdminDoc.includes('Somente `triage` e `admin`'),'Documentação restringe a fase 1 a triage/admin');
+assert(authAdminDoc.includes('transacional'),'Documentação exige escrita administrativa transacional');
+
 
 console.log(`\nCidade Conecta — validação estática`);
 console.log(`OK: ${ok.length}`);

@@ -6,6 +6,7 @@ BASE="http://127.0.0.1:${PORT}"
 TMP_DIR="$(mktemp -d)"
 SERVER_PID=""
 SMOKE_HTML=".smoke-index.html"
+SCREENSHOT_DIR="${SMOKE_SCREENSHOT_DIR:-}"
 
 cleanup() {
   if [[ -n "${SERVER_PID}" ]]; then
@@ -31,6 +32,7 @@ fi
 
 echo "Cidade Conecta — smoke UI"
 echo "Browser: $("${CHROME}" --version)"
+if [[ -n "${SCREENSHOT_DIR}" ]]; then mkdir -p "${SCREENSHOT_DIR}"; fi
 
 # O Leaflet remoto é bloqueante no HTML real. Para o smoke de rotas,
 # removemos somente as tags do CDN em uma cópia temporária do shell.
@@ -40,6 +42,19 @@ from pathlib import Path
 source=Path('index.html').read_text(encoding='utf-8')
 source='\n'.join(line for line in source.splitlines() if 'unpkg.com' not in line)
 probe="""<script>
+(function(){
+  var nativeFetch=window.fetch.bind(window);
+  window.fetch=function(input,init){
+    try{
+      var raw=typeof input==='string'?input:(input&&input.url)||'';
+      var url=new URL(raw,location.href);
+      if(url.origin!==location.origin){
+        return Promise.resolve(new Response('{}',{status:503,headers:{'Content-Type':'application/json'}}));
+      }
+    }catch(e){}
+    return nativeFetch(input,init);
+  };
+})();
 window.addEventListener('error',function(e){
   document.documentElement.setAttribute('data-smoke-error',(e.message||'error')+' @ '+(e.filename||'')+':'+(e.lineno||0));
 });
@@ -76,8 +91,12 @@ run_route() {
   local height="${5:-900}"
   local out="${TMP_DIR}/${name}.html"
 
-  "${CHROME}" \
+  timeout 15s "${CHROME}" \
     --headless=new \
+    --no-first-run \
+    --disable-background-networking \
+    --disable-component-update \
+    --disable-sync \
     --no-sandbox \
     --disable-gpu \
     --disable-dev-shm-usage \
@@ -104,6 +123,24 @@ run_route() {
     exit 1
   fi
 
+  if [[ -n "${SCREENSHOT_DIR}" && ( "${name}" == "home-desktop" || "${name}" == "admin-login-desktop" || "${name}" == "home-mobile" || "${name}" == "admin-login-mobile" ) ]]; then
+    timeout 15s "${CHROME}" \
+      --headless=new \
+      --no-first-run \
+      --disable-background-networking \
+      --disable-component-update \
+      --disable-sync \
+      --no-sandbox \
+      --disable-gpu \
+      --disable-dev-shm-usage \
+      --hide-scrollbars \
+      --window-size="${width},${height}" \
+      --virtual-time-budget=1200 \
+      --screenshot="${SCREENSHOT_DIR}/${name}.png" \
+      "${BASE}/${SMOKE_HTML}${hash}" >/dev/null 2>"${TMP_DIR}/${name}-screenshot.stderr"
+    [[ -s "${SCREENSHOT_DIR}/${name}.png" ]] || { echo "✖ ${name}: screenshot não gerado"; exit 1; }
+  fi
+
   echo "✓ ${name}"
 }
 
@@ -113,11 +150,13 @@ run_route "acompanhar-desktop" "#/acompanhar" 'id="followForm"' 1366 900
 run_route "mapa-desktop" "#/mapa" 'id="publicMap"' 1366 900
 run_route "dashboard-desktop" "#/dashboard" 'class="dashboardKpisV51"' 1366 900
 run_route "rede-desktop" "#/rede-municipal" 'id="municipalNetworkRoot"' 1366 900
+run_route "admin-login-desktop" "#/admin" 'id="adminLoginForm"' 1366 900
 
 run_route "home-mobile" "#/" 'id="homeSearch"' 390 844
 run_route "registrar-mobile" "#/registrar" 'id="occForm"' 390 844
 run_route "mapa-mobile" "#/mapa" 'id="publicMap"' 390 844
 run_route "rede-mobile" "#/rede-municipal" 'id="municipalNetworkRoot"' 390 844
+run_route "admin-login-mobile" "#/admin" 'id="adminLoginForm"' 390 844
 
 HOME_DOM="${TMP_DIR}/home-desktop.html"
 if ! grep -Fq 'id="offlineNoticeV56"' "${HOME_DOM}"; then

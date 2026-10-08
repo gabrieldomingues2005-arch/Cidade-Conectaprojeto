@@ -341,3 +341,47 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - smoke em Chrome headless: PASS nas rotas cobertas;
 - 1 aviso territorial conhecido: Guamium referenciado em R2 e R3;
 - `main` e `gh-pages` sincronizadas no commit `a6bdb22c4b5c1cdfdb483a412c678c416414d83d`.
+
+
+## 19. QA — autenticação e painel interno
+
+### Estado anônimo
+- abrir `#/admin` sem sessão e confirmar o formulário `adminLoginForm`;
+- confirmar que não existe botão para ativar modo administrativo local;
+- confirmar que as rotas públicas continuam funcionando sem login;
+- confirmar que o Service Worker carrega `assets/auth.js`.
+
+### Login e autorização
+- senha/e-mail inválidos devem falhar sem abrir a fila;
+- JWT deve ser validado pelo Supabase Auth;
+- usuário sem perfil deve receber acesso negado;
+- `citizen` deve receber acesso negado;
+- `agency` deve receber acesso negado nesta fase;
+- `triage` deve receber acesso;
+- `admin` deve receber acesso;
+- fechar a aba deve remover a persistência local da sessão interna;
+- logout deve limpar a sessão e voltar ao formulário.
+
+### Fila real
+- a lista deve vir da Edge Function `admin-occurrences`;
+- filtros de busca/categoria/status não devem expor dados privados;
+- detalhe deve exibir apenas campos operacionais seguros e histórico;
+- nome/e-mail/telefone de contato não podem aparecer;
+- endereço e coordenadas exatas privadas não podem aparecer;
+- não deve existir controle para salvar status/moderação nesta fase;
+- exportações CSV/JSON devem conter apenas a visão segura da fila.
+
+### Backend
+- request sem bearer token → 401;
+- token inválido → 401;
+- papel não autorizado → 403;
+- `triage/admin` → 200;
+- `action=session` retorna somente perfil seguro;
+- `action=list` e `action=detail` retornam `readOnly=true`;
+- executar Security Advisor após o deploy.
+
+### Regressão
+- executar `node --check assets/auth.js`;
+- executar `node scripts/validate-project.mjs`;
+- executar `bash scripts/smoke-ui.sh`;
+- confirmar smoke de `#/admin` no estado anônimo em desktop.
