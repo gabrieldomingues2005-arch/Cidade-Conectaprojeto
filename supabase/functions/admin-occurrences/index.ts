@@ -77,6 +77,7 @@ Deno.serve(async (req: Request) => {
     return json(origin, 403, {
       error: "internal_access_denied",
       role: profile?.role ?? null,
+      profile: profile ? { id: profile.id, name: profile.name, role: profile.role } : null,
     });
   }
 
