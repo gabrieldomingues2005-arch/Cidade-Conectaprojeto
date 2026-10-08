@@ -42,6 +42,19 @@ from pathlib import Path
 source=Path('index.html').read_text(encoding='utf-8')
 source='\n'.join(line for line in source.splitlines() if 'unpkg.com' not in line)
 probe="""<script>
+(function(){
+  var nativeFetch=window.fetch.bind(window);
+  window.fetch=function(input,init){
+    try{
+      var raw=typeof input==='string'?input:(input&&input.url)||'';
+      var url=new URL(raw,location.href);
+      if(url.origin!==location.origin){
+        return Promise.resolve(new Response('{}',{status:503,headers:{'Content-Type':'application/json'}}));
+      }
+    }catch(e){}
+    return nativeFetch(input,init);
+  };
+})();
 window.addEventListener('error',function(e){
   document.documentElement.setAttribute('data-smoke-error',(e.message||'error')+' @ '+(e.filename||'')+':'+(e.lineno||0));
 });
