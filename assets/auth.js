@@ -31,14 +31,14 @@ function emit(){
 function saveSession(session){
   state.session=session||null;
   try{
-    if(session)localStorage.setItem(STORAGE_KEY,JSON.stringify(session));
-    else localStorage.removeItem(STORAGE_KEY);
+    if(session)sessionStorage.setItem(STORAGE_KEY,JSON.stringify(session));
+    else sessionStorage.removeItem(STORAGE_KEY);
   }catch{}
 }
 
 function readSession(){
   try{
-    const raw=localStorage.getItem(STORAGE_KEY);
+    const raw=sessionStorage.getItem(STORAGE_KEY);
     if(!raw)return null;
     const parsed=JSON.parse(raw);
     return parsed&&parsed.access_token&&parsed.refresh_token?parsed:null;
