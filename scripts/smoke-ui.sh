@@ -106,7 +106,7 @@ run_route() {
     exit 1
   fi
 
-  if [[ -n "${SCREENSHOT_DIR}" && ( "${name}" == "home-desktop" || "${name}" == "admin-login-desktop" || "${name}" == "home-mobile" ) ]]; then
+  if [[ -n "${SCREENSHOT_DIR}" && ( "${name}" == "home-desktop" || "${name}" == "admin-login-desktop" || "${name}" == "home-mobile" || "${name}" == "admin-login-mobile" ) ]]; then
     "${CHROME}" \
       --headless=new \
       --no-sandbox \
@@ -135,6 +135,7 @@ run_route "home-mobile" "#/" 'id="homeSearch"' 390 844
 run_route "registrar-mobile" "#/registrar" 'id="occForm"' 390 844
 run_route "mapa-mobile" "#/mapa" 'id="publicMap"' 390 844
 run_route "rede-mobile" "#/rede-municipal" 'id="municipalNetworkRoot"' 390 844
+run_route "admin-login-mobile" "#/admin" 'id="adminLoginForm"' 390 844
 
 HOME_DOM="${TMP_DIR}/home-desktop.html"
 if ! grep -Fq 'id="offlineNoticeV56"' "${HOME_DOM}"; then
