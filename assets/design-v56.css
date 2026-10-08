@@ -170,3 +170,34 @@ body.adminRouteV57 .section{padding-top:28px}
   .commandTriggerV53 kbd{display:none}
   .headerActions{gap:6px}
 }
+
+/* Header desktop compacto: evita cortar navegação em larguras intermediárias. */
+@media(min-width:1021px) and (max-width:1450px){
+  .nav{display:none}
+  .nav.open{
+    display:flex;
+    position:absolute;
+    top:78px;
+    left:16px;
+    right:16px;
+    padding:10px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    flex-direction:column;
+    align-items:stretch;
+    overflow:visible
+  }
+  .nav.open a{padding:11px 12px;font-size:.91rem}
+  .menu{display:inline-flex}
+}
+/* A área interna não compete com os atalhos públicos do app. */
+body.adminRouteV57 .mobileActions{display:none!important}
+@media(max-width:760px){
+  body.adminRouteV57 .pageHead{padding-top:18px;padding-bottom:18px}
+  body.adminRouteV57 .pageHead h1{font-size:clamp(2rem,10vw,2.65rem);margin-top:6px;margin-bottom:8px}
+  body.adminRouteV57 .pageHead p{font-size:.92rem;line-height:1.45}
+  body.adminRouteV57 .section{padding-top:14px}
+  body.adminRouteV57 .adminAuthCardV57{padding:16px}
+}
