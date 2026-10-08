@@ -127,3 +127,27 @@ button,a,input,select,textarea{touch-action:manipulation}
   .mapResultItem,.networkFlowRailV54 article,.networkSectorListV54 span{border-width:2px}
   .resultCount{border:2px solid #fff}
 }
+
+
+/* Acesso interno autenticado — fase 1 somente leitura. */
+.adminAuthCardV57{max-width:680px;margin-inline:auto;display:grid;gap:16px}
+.adminAuthCardV57 .field{display:grid;gap:7px}
+.adminAuthCardV57 input{min-height:48px}
+.adminAuthCardV57 .btn{justify-self:start}
+.adminSessionBarV57{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px;background:linear-gradient(135deg,#f7fbf9,#eef7f2)}
+.adminSessionBarV57 h2{margin:.2rem 0}
+.adminDetailV57{margin-top:16px;scroll-margin-top:96px}
+.adminReadOnlyV57{display:grid;gap:14px}
+.adminReadOnlyV57 h3{margin:0}
+.adminMetaGridV57{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.adminMetaGridV57>div{display:grid;gap:4px;padding:12px;border:1px solid #dce9e3;border-radius:13px;background:#f8fbf9}
+.adminMetaGridV57 small{color:#56736f}
+.adminMetaGridV57 b{overflow-wrap:anywhere}
+@media(max-width:760px){
+  .adminSessionBarV57{align-items:flex-start;flex-direction:column}
+  .adminMetaGridV57{grid-template-columns:1fr 1fr}
+}
+@media(max-width:440px){
+  .adminMetaGridV57{grid-template-columns:1fr}
+  .adminAuthCardV57 .btn{width:100%}
+}
