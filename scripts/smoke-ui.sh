@@ -113,6 +113,7 @@ run_route "acompanhar-desktop" "#/acompanhar" 'id="followForm"' 1366 900
 run_route "mapa-desktop" "#/mapa" 'id="publicMap"' 1366 900
 run_route "dashboard-desktop" "#/dashboard" 'class="dashboardKpisV51"' 1366 900
 run_route "rede-desktop" "#/rede-municipal" 'id="municipalNetworkRoot"' 1366 900
+run_route "admin-login-desktop" "#/admin" 'id="adminLoginForm"' 1366 900
 
 run_route "home-mobile" "#/" 'id="homeSearch"' 390 844
 run_route "registrar-mobile" "#/registrar" 'id="occForm"' 390 844
