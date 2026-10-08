@@ -81,6 +81,16 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  const { data: municipality, error: municipalityError } = await admin
+    .from("municipalities")
+    .select("id")
+    .eq("ibge_code", "3538709")
+    .maybeSingle();
+
+  if (municipalityError || !municipality?.id) {
+    return json(origin, 503, { error: "municipality_not_configured" });
+  }
+
   let body: Record<string, unknown> = {};
   try {
     body = await req.json();
@@ -109,6 +119,7 @@ Deno.serve(async (req: Request) => {
     const { data, error } = await admin
       .from("occurrences")
       .select("id,protocol,title,description,neighborhood_label,status,responsible_agency,moderation_status,territory_resolution_status,created_at,updated_at,categories(slug,name)")
+      .eq("municipality_id", municipality.id)
       .order("created_at", { ascending: false })
       .limit(400);
 
@@ -148,6 +159,7 @@ Deno.serve(async (req: Request) => {
       .from("occurrences")
       .select("id,protocol,title,description,neighborhood_label,public_location,public_latitude,public_longitude,status,responsible_agency,moderation_status,territory_resolution_status,created_at,updated_at,resolved_at,categories(slug,name)")
       .eq("protocol", protocol)
+      .eq("municipality_id", municipality.id)
       .maybeSingle();
 
     if (occurrenceError) return json(origin, 500, { error: "occurrence_detail_failed" });
