@@ -21,7 +21,7 @@ const required=[
   'assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js',
   'assets/runtime-config.js','assets/auth.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css',
   'data/piracicaba.json','data/municipal-network.json','manifest.webmanifest','sw.js','favicon.svg','assets/brand-mark-v51.svg','README.md',
-  'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md','WORK-CONTINUAR.md','REDE-MUNICIPAL.md',
+  'GEOGRAFIA.md','API.md','schema.sql','TESTES.md','SUPABASE.md','WORK-CONTINUAR.md','REDE-MUNICIPAL.md','AUTH-ADMIN.md',
   'supabase/migrations/20260917_secure_occurrence_submission_v1.sql',
   'supabase/migrations/20260917_reserve_demo_protocol_range.sql',
   'supabase/migrations/20260917_restrict_profile_self_role.sql',
@@ -256,6 +256,10 @@ assert(geo.includes('ponto-em-polígono'),'Documentação prevê ponto-em-políg
 const supabase=read('SUPABASE.md');
 assert(supabase.includes('separado'),'Documentação exige projeto Supabase separado');
 assert(supabase.includes('service_role'),'Documentação alerta sobre chave administrativa');
+const authAdminDoc=read('AUTH-ADMIN.md');
+assert(authAdminDoc.includes('Somente `triage` e `admin`'),'Documentação restringe a fase 1 a triage/admin');
+assert(authAdminDoc.includes('transacional'),'Documentação exige escrita administrativa transacional');
+
 
 console.log(`\nCidade Conecta — validação estática`);
 console.log(`OK: ${ok.length}`);
