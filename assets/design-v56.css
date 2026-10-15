@@ -385,6 +385,7 @@ body.adminRouteV57 .pageHead h1{font-size:clamp(2.05rem,4vw,3rem)!important}
   .mapRegionGridV58{grid-template-columns:repeat(3,minmax(0,1fr))!important}
   .mapRegionGridV58 button{min-height:54px!important;flex-direction:column;gap:1px}
   .mapCanvasV58 #publicMap,.mapFallbackV58{min-height:56vh!important}
+  .mapFallbackV58{place-items:start center;padding:28px 14px 96px}
   .mapCanvasHeadV53{min-height:62px!important}
   .mapContextV53{font-size:.68rem}
   .mapStaticResultV58{grid-template-columns:34px minmax(0,1fr)}
