@@ -5,6 +5,7 @@ const cfg=window.CIDADE_CONECTA_CONFIG||{};
 const sb=cfg.supabase||{};
 const STORAGE_KEY='cidadeConectaAuthSessionV1';
 const ALLOWED_INTERNAL_ROLES=new Set(['triage','admin']);
+const REQUEST_TIMEOUT_MS=12000;
 
 const state={
   status:'checking',
@@ -17,6 +18,30 @@ const state={
 
 function configured(){
   return Boolean(sb.enabled&&sb.url&&sb.publishableKey);
+}
+
+function isTransientError(error){
+  const status=Number(error?.status||0);
+  return status===0||status>=500||error?.code==='request_timeout'||error?.name==='AbortError';
+}
+
+async function fetchWithTimeout(url,options={}){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
+  try{
+    return await fetch(url,{...options,signal:controller.signal});
+  }catch(error){
+    if(error?.name==='AbortError'){
+      const timeout=new Error('Tempo limite de comunicação excedido.');
+      timeout.code='request_timeout';
+      timeout.status=0;
+      throw timeout;
+    }
+    if(typeof error==='object'&&error&&!('status' in error))error.status=0;
+    throw error;
+  }finally{
+    clearTimeout(timer);
+  }
 }
 
 function emit(){
@@ -54,6 +79,7 @@ async function parseResponse(response){
   const message=payload?.msg||payload?.message||payload?.error_description||payload?.error||`Supabase HTTP ${response.status}`;
   const error=new Error(String(message));
   error.status=response.status;
+  error.code=response.headers.get('sb-error-code')||payload?.code||payload?.error_code||null;
   error.payload=payload;
   throw error;
 }
@@ -66,7 +92,7 @@ function baseHeaders(token=null,extra={}){
 
 async function authRequest(path,{method='GET',token=null,body=null}={}){
   if(!configured())throw new Error('Supabase não configurado');
-  const response=await fetch(`${sb.url}/auth/v1/${path}`,{
+  const response=await fetchWithTimeout(`${sb.url}/auth/v1/${path}`,{
     method,
     headers:baseHeaders(token,body?{'Content-Type':'application/json'}:{}),
     body:body?JSON.stringify(body):undefined,
@@ -113,7 +139,7 @@ async function ensureToken(){
 }
 
 async function verifyInternalAccess(token){
-  const response=await fetch(`${sb.url}/functions/v1/admin-occurrences`,{
+  const response=await fetchWithTimeout(`${sb.url}/functions/v1/admin-occurrences`,{
     method:'POST',
     headers:baseHeaders(token,{'Content-Type':'application/json'}),
     body:JSON.stringify({action:'session'}),
@@ -158,16 +184,21 @@ async function init(){
     const userPayload=await authRequest('user',{token});
     const user=userPayload?.user||userPayload;
     if(!user?.id)throw new Error('Usuário inválido');
-    const access=await verifyInternalAccess(token);
     state.user=user;
+    const access=await verifyInternalAccess(token);
     state.profile=access.profile;
     state.status=access.authorized&&access.profile&&ALLOWED_INTERNAL_ROLES.has(access.profile.role)?'authorized':'denied';
   }catch(error){
+    state.lastError=String(error?.message||error);
+    if(isTransientError(error)){
+      state.status='error';
+      emit();
+      return state;
+    }
     saveSession(null);
     state.user=null;
     state.profile=null;
     state.status='anonymous';
-    state.lastError=String(error?.message||error);
   }
   emit();
   return state;
@@ -206,7 +237,7 @@ async function signOut(){
 async function invokeInternal(payload){
   const token=await ensureToken();
   if(!token)throw new Error('Sessão expirada. Entre novamente.');
-  const response=await fetch(`${sb.url}/functions/v1/admin-occurrences`,{
+  const response=await fetchWithTimeout(`${sb.url}/functions/v1/admin-occurrences`,{
     method:'POST',
     headers:baseHeaders(token,{'Content-Type':'application/json'}),
     body:JSON.stringify(payload||{}),
