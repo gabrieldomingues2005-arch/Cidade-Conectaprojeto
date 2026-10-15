@@ -112,3 +112,15 @@ Não implementar atualização administrativa como duas chamadas independentes (
 ## Próximo estágio
 
 Depois da validação desta fase, implementar escrita administrativa transacional e auditada. Somente depois avaliar o papel `agency` com escopo por órgão/setor.
+
+
+## Melhorias de robustez — fase 1.1
+
+- requisições de autenticação e painel têm timeout de 12 segundos;
+- falhas temporárias 5xx/rede não apagam uma sessão válida automaticamente;
+- sessão inválida continua sendo descartada em modo fail-closed;
+- a listagem administrativa retorna somente os campos necessários para a tabela;
+- e-mail do perfil interno não é lido pela Edge Function sem necessidade;
+- payloads acima de 16 KiB são rejeitados e o endpoint exige `application/json`;
+- `@supabase/supabase-js` da Edge Function fica fixado em `2.117.3`;
+- CI usa Node.js 22.
