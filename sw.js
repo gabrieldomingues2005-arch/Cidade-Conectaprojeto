@@ -35,12 +35,17 @@ self.addEventListener('fetch',event=>{
   event.respondWith(
     caches.open(CACHE).then(async cache=>{
       const cached=await cache.match(event.request);
-      const network=fetch(event.request,{cache:freshAsset?'no-store':'default'}).then(response=>{
+      if(freshAsset){
+        return fetch(event.request,{cache:'no-store'}).then(response=>{
+          if(response.ok)cache.put(event.request,response.clone());
+          return response;
+        }).catch(()=>cached);
+      }
+      if(cached)return cached;
+      return fetch(event.request).then(response=>{
         if(response.ok)cache.put(event.request,response.clone());
         return response;
       });
-      if(freshAsset)return network.catch(()=>cached);
-      return cached||network;
     })
   );
 });
