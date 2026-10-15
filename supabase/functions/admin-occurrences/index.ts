@@ -8,6 +8,7 @@ const FIXED_ORIGINS = new Set([
   "https://cidconecta-nztptuci.manus.space",
 ]);
 const ALLOWED_ROLES = new Set(["triage", "admin"]);
+const MAX_BODY_BYTES = 16_384;
 
 function isAllowedOrigin(origin: string): boolean {
   if (FIXED_ORIGINS.has(origin)) return true;
@@ -58,13 +59,30 @@ Deno.serve(async (req: Request) => {
   const token = authHeader.match(/^Bearer\s+(.+)$/i)?.[1] ?? "";
   if (!token) return json(origin, 401, { error: "authentication_required" });
 
+  const contentType = (req.headers.get("content-type") ?? "").toLowerCase();
+  if (!contentType.includes("application/json")) {
+    return json(origin, 415, { error: "unsupported_media_type" });
+  }
+
+  const contentLength = Number(req.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return json(origin, 413, { error: "request_too_large" });
+  }
+
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
   const { data: userData, error: userError } = await admin.auth.getUser(token);
   const user = userData.user;
-  if (userError || !user?.id) return json(origin, 401, { error: "invalid_session" });
+  if (userError) {
+    const status = Number((userError as { status?: number }).status ?? 0);
+    if (status === 0 || status === 408 || status === 425 || status === 429 || status >= 500) {
+      return json(origin, 503, { error: "auth_temporarily_unavailable" });
+    }
+    return json(origin, 401, { error: "invalid_session" });
+  }
+  if (!user?.id) return json(origin, 401, { error: "invalid_session" });
 
   const { data: profile, error: profileError } = await admin
     .from("users_profile")
@@ -81,22 +99,26 @@ Deno.serve(async (req: Request) => {
     });
   }
 
-  const contentType = (req.headers.get("content-type") ?? "").toLowerCase();
-  if (!contentType.includes("application/json")) {
-    return json(origin, 415, { error: "unsupported_media_type" });
+  let rawBody = "";
+  try {
+    rawBody = await req.text();
+  } catch {
+    return json(origin, 400, { error: "invalid_body" });
   }
-
-  const contentLength = Number(req.headers.get("content-length") ?? "0");
-  if (Number.isFinite(contentLength) && contentLength > 16_384) {
+  if (new TextEncoder().encode(rawBody).byteLength > MAX_BODY_BYTES) {
     return json(origin, 413, { error: "request_too_large" });
   }
 
-  let body: Record<string, unknown> = {};
+  let parsedBody: unknown;
   try {
-    body = await req.json();
+    parsedBody = JSON.parse(rawBody);
   } catch {
     return json(origin, 400, { error: "invalid_json" });
   }
+  if (!parsedBody || typeof parsedBody !== "object" || Array.isArray(parsedBody)) {
+    return json(origin, 400, { error: "invalid_json_object" });
+  }
+  const body = parsedBody as Record<string, unknown>;
 
   const action = clean(body.action, 30) || "session";
 
