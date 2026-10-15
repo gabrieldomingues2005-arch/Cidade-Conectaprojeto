@@ -41,7 +41,7 @@ try{
   }
   if(url.pathname.includes('/functions/v1/admin-occurrences')){
    const body=JSON.parse(options.body||'{}');
-   if(mode==='403')return json(403,{message:'Permissão insuficiente'});
+   if(mode==='403')return json(403,{error:'internal_access_denied',message:'Permissão insuficiente',role:'citizen'});
    if(mode==='empty')return json(200,body.action==='session'?{authenticated:true,profile:{id:'qa-profile',role:'triage'}}:{occurrences:[]});
   }
   return json(503,{message:'Serviço temporariamente indisponível'});
