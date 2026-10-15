@@ -1,5 +1,5 @@
 const CACHE_PREFIX='cidade-conecta-';
-const CACHE='cidade-conecta-v5-6-auth-qa-20261015';
+const CACHE='cidade-conecta-v5-6-auth-qa-20261015b';
 const CORE=['./','./index.html','./assets/styles.css','./assets/app.js','./assets/piracicaba.css','./assets/piracicaba.js','./assets/piracicaba-mapas.js','./assets/piracicaba-mapas.css','./assets/privacy-geo.js','./assets/runtime-config.js','./assets/auth.js','./assets/supabase-bridge.js','./assets/site-enhancements.js','./assets/site-enhancements.css','./assets/design-v55.css','./assets/design-v56.css','./assets/brand-mark-v51.svg','./data/piracicaba.json','./data/municipal-network.json','./manifest.webmanifest','./favicon.svg'];
 
 self.addEventListener('install',event=>{
@@ -31,13 +31,16 @@ self.addEventListener('fetch',event=>{
     return;
   }
 
+  const freshAsset=/\.(?:js|css|json|webmanifest)$/i.test(url.pathname);
   event.respondWith(
-    caches.open(CACHE).then(cache=>cache.match(event.request,{ignoreSearch:true})).then(cached=>{
-      if(cached)return cached;
-      return fetch(event.request).then(response=>{
-        if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}
+    caches.open(CACHE).then(async cache=>{
+      const cached=await cache.match(event.request);
+      const network=fetch(event.request,{cache:freshAsset?'no-store':'default'}).then(response=>{
+        if(response.ok)cache.put(event.request,response.clone());
         return response;
       });
+      if(freshAsset)return network.catch(()=>cached);
+      return cached||network;
     })
   );
 });
