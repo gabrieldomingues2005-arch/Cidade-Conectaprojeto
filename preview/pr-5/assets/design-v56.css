@@ -201,3 +201,96 @@ body.adminRouteV57 .mobileActions{display:none!important}
   body.adminRouteV57 .section{padding-top:14px}
   body.adminRouteV57 .adminAuthCardV57{padding:16px}
 }
+
+
+/* Cidade Conecta UI/UX v5.7 — quick wins da auditoria visual */
+.pageHead{padding:28px 0 18px!important}
+.pageHead:after{display:none}
+.pageHead h1{font-size:clamp(2.15rem,4vw,3.35rem)!important;line-height:1.08!important;margin:.28rem 0 .5rem!important;max-width:900px}
+.pageHead p{font-size:1rem!important;line-height:1.5!important;margin:0;max-width:760px}
+
+.heroV53 .heroGrid{grid-template-columns:minmax(0,1.14fr) minmax(360px,.86fr);gap:40px}
+.heroV53 .heroCopy{max-width:760px}
+.heroV53 h1{font-size:clamp(2.7rem,4.7vw,4.5rem)!important;line-height:1.02!important;letter-spacing:-.055em}
+.heroV53 .actions{margin-top:22px}
+
+.stateCardV57{display:flex;align-items:flex-start;gap:14px;padding:18px;border:1px solid #d6e4dd;border-radius:16px;background:linear-gradient(180deg,#fff,#f7faf8)}
+.stateCardV57>span{width:42px;height:42px;display:grid;place-items:center;flex:0 0 auto;border-radius:12px;background:#eaf3ee;color:var(--cc56-ink)}
+.stateCardV57>span .uiIcon{width:21px;height:21px}
+.stateCardV57 h2,.stateCardV57 b{color:var(--cc56-ink)}
+.stateCardV57 p{margin:.3rem 0 0;color:var(--cc56-muted);line-height:1.45}
+.stateErrorV57{border-color:#ead6ad;background:#fffaf0}
+.homeMapFallbackV57{height:100%;min-height:220px;align-items:center;justify-content:center;text-align:left;border:0;border-radius:0;background:linear-gradient(145deg,#edf5f1,#f9fbf9)}
+
+.registerSubmitV51{position:static!important;bottom:auto!important;box-shadow:none!important;background:transparent!important;border:0!important;padding:12px 0 0!important}
+.registerSubmitV51 .btn[disabled]{opacity:.58;cursor:not-allowed}
+.clearActionV57{border-color:transparent!important;background:transparent!important;color:#657779!important}
+.formProgressV51{margin-top:10px}
+.formJourneyV51{position:relative!important;top:auto!important}
+
+.datasetChipV57{display:inline-flex;align-items:center;margin:0 0 12px;padding:7px 10px;border:1px solid #d9e5df;border-radius:999px;background:#f4f8f6;color:#496a67;font-size:.78rem;font-weight:820}
+.dashboardKpisV51 article small{font-size:.76rem!important}
+.pipelineStageV51>i{height:8px!important;border-radius:999px;overflow:hidden}
+
+.networkChooserFirstV57{margin-top:0!important;margin-bottom:14px}
+.networkHowV57{margin:0 0 22px;border:1px solid #dce7e1;border-radius:15px;background:#f8fbf9;overflow:hidden}
+.networkHowV57>summary{cursor:pointer;padding:13px 15px;color:var(--cc56-ink);font-weight:850;list-style:none}
+.networkHowV57>summary::-webkit-details-marker{display:none}
+.networkHowV57>summary:after{content:"+";float:right;font-size:1.15rem}
+.networkHowV57[open]>summary:after{content:"−"}
+.networkHowV57 .networkScaleV54,.networkHowV57 .networkDisclaimerV54{margin:0 14px 14px}
+
+.passwordFieldV57{position:relative}
+.passwordFieldV57 input{width:100%;padding-right:86px}
+.passwordToggleV57{position:absolute;right:7px;top:50%;transform:translateY(-50%);min-height:34px;border:0;background:transparent;color:var(--cc56-ink);font:inherit;font-size:.78rem;font-weight:850;cursor:pointer}
+.adminLoginCompactV57{max-width:560px}
+.adminLoginCompactV57 h2{margin:.1rem 0}
+body.adminRouteV57 .pageHead{padding:24px 0 16px!important}
+body.adminRouteV57 .pageHead h1{font-size:clamp(2.05rem,4vw,3rem)!important}
+
+.mobileActionsV51{grid-template-columns:repeat(5,1fr)!important}
+.mobileActionsV51 a,.mobileActionsV51 button{
+  min-width:0;min-height:48px;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px!important;
+  border:0!important;background:transparent!important;color:#587075!important;box-shadow:none!important;
+  padding:6px 2px!important;border-radius:10px!important;font:inherit;font-size:.72rem!important;font-weight:760;text-decoration:none!important;cursor:pointer
+}
+.mobileActionsV51 a.active,.mobileActionsV51 button.active{color:var(--cc-green)!important;background:#edf5f1!important;font-weight:900}
+.mobileActionsV51 .mobileNavIcon{width:21px;height:21px;display:grid;place-items:center}
+.mobileActionsV51 .mobileNavIcon svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mobileActionsV51 a[aria-current="page"],.mobileActionsV51 button[aria-current="page"]{text-decoration:none!important}
+
+#mapClear,#adminClear{background:transparent!important}
+.mapCardV50 .filters select{min-width:170px}
+
+@media(max-width:1020px){
+  .heroV53 .heroGrid{grid-template-columns:1fr}
+  .heroV53 .heroCopy{max-width:none}
+  .heroV53 .heroPanelLive{max-width:none}
+}
+@media(max-width:760px){
+  .cityBand{display:none}
+  .pageHead{padding:22px 0 15px!important}
+  .pageHead h1{font-size:clamp(2rem,9vw,2.75rem)!important}
+  .pageHead p{font-size:.94rem!important}
+  .heroV53{padding-top:34px!important}
+  .heroV53 h1{font-size:clamp(2.55rem,12vw,3.7rem)!important;line-height:1.03!important}
+  .heroV53 .actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .heroV53 .actions .btn{width:100%}
+  .formJourneyV51{display:grid;grid-template-columns:repeat(3,1fr)!important}
+  .formJourneyV51 button{min-width:0;display:flex;gap:4px!important;flex-direction:column}
+  .formJourneyV51 button b{display:block!important;font-size:.66rem!important}
+  .formJourneyV51 button span{font-size:.68rem}
+  .dashboardKpisV51{grid-template-columns:1fr 1fr!important}
+  .networkCategoryTabsV54{overflow-x:auto;flex-wrap:nowrap!important;scrollbar-width:none;padding-bottom:4px}
+  .networkCategoryTabsV54::-webkit-scrollbar{display:none}
+  .networkCategoryTabsV54 button{flex:0 0 auto;min-height:44px}
+  .networkHowV57 .networkScaleV54{display:grid!important;grid-template-columns:1fr!important}
+  .networkHowV57 .networkScaleV54>i{transform:rotate(90deg);justify-self:center}
+  body.adminRouteV57 .pageHead{padding:18px 0 13px!important}
+  body.adminRouteV57 .pageHead h1{font-size:clamp(2rem,9vw,2.55rem)!important}
+  .stateCardV57{flex-wrap:wrap}
+}
+@media(max-width:440px){
+  .mobileActionsV51 a,.mobileActionsV51 button{font-size:.66rem!important}
+  .mobileActionsV51 .mobileNavIcon,.mobileActionsV51 .mobileNavIcon svg{width:20px;height:20px}
+}

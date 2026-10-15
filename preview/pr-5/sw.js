@@ -1,5 +1,5 @@
 const CACHE_PREFIX='cidade-conecta-';
-const CACHE='cidade-conecta-v5-6-auth-qa-20261015b';
+const CACHE='cidade-conecta-v5-7-ui-20261015';
 const CORE=['./','./index.html','./assets/styles.css','./assets/app.js','./assets/piracicaba.css','./assets/piracicaba.js','./assets/piracicaba-mapas.js','./assets/piracicaba-mapas.css','./assets/privacy-geo.js','./assets/runtime-config.js','./assets/auth.js','./assets/supabase-bridge.js','./assets/site-enhancements.js','./assets/site-enhancements.css','./assets/design-v55.css','./assets/design-v56.css','./assets/brand-mark-v51.svg','./data/piracicaba.json','./data/municipal-network.json','./manifest.webmanifest','./favicon.svg'];
 
 self.addEventListener('install',event=>{

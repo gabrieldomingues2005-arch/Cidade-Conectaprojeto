@@ -20,7 +20,7 @@ try{
  let id=0;const pending=new Map(),errors=[];
  const send=(method,params={})=>new Promise((resolve,reject)=>{const n=++id,timer=setTimeout(()=>{pending.delete(n);reject(new Error(`CDP timeout: ${method}`))},20000);pending.set(n,{resolve,reject,timer});socket.send(JSON.stringify({id:n,method,params}))});
  socket.addEventListener('message',async event=>{const m=JSON.parse(event.data);if(m.id){const p=pending.get(m.id);if(p){clearTimeout(p.timer);pending.delete(m.id);m.error?p.reject(new Error(m.error.message)):p.resolve(m.result)}return}if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text+' '+(m.params.exceptionDetails.exception?.description||''));if(m.method==='Fetch.requestPaused'){const {requestId,request}=m.params;try{const u=new URL(request.url);if(u.origin!==new URL(base).origin){await send('Fetch.fulfillRequest',{requestId,responseCode:503,body:Buffer.from('{}').toString('base64'),responseHeaders:[{name:'Content-Type',value:'application/json'}]})}else await send('Fetch.continueRequest',{requestId})}catch(error){errors.push(String(error))}}});
- await send('Page.enable');await send('Runtime.enable');await send('Network.enable');await send('Network.setBypassServiceWorker',{bypass:true});await send('Fetch.enable',{patterns:[{urlPattern:'*'}]});
+ await send('Page.enable');await send('Runtime.enable');await send('Network.enable');await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});await send('Network.setBypassServiceWorker',{bypass:true});await send('Fetch.enable',{patterns:[{urlPattern:'*'}]});
  const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.exception?.description||'Falha de avaliação');return r.result.value};
  // Fixtures existem apenas no browser de QA: nenhuma chamada externa sai do teste.
  await send('Page.addScriptToEvaluateOnNewDocument',{source:`
@@ -47,7 +47,7 @@ try{
   return json(503,{message:'Serviço temporariamente indisponível'});
  };
  `});
- const capture=async name=>{const image=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});await writeFile(path.join(output,name+'.png'),Buffer.from(image.data,'base64'))};
+ const capture=async name=>{const metrics=await send('Page.getLayoutMetrics');const size=metrics.cssContentSize||metrics.contentSize||{width:1366,height:900};const image=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:true,clip:{x:0,y:0,width:Math.ceil(size.width),height:Math.min(Math.ceil(size.height),5000),scale:1}});await writeFile(path.join(output,name+'.png'),Buffer.from(image.data,'base64'))};
  const waitFor=async expression=>{for(let n=0;n<150;n++){if(await evaluate(expression))return;await pause(100)}throw new Error(`Condição não atendida: ${expression}`)};
  const routes=[['home','#/','#homeSearch'],['registrar','#/registrar','#occForm'],['acompanhar','#/acompanhar','#followForm'],['mapa','#/mapa','#publicMap'],['dashboard','#/dashboard','.dashboardKpisV51'],['rede','#/rede-municipal','#municipalNetworkRoot'],['admin','#/admin','#adminLoginForm']];
  for(const width of [390,768,1366]){
@@ -65,7 +65,7 @@ try{
   }
  }
  for(scenario of ['unavailable','network','timeout','offline','401','403','empty']){
-  await evaluate(`window.__qaScenario=${JSON.stringify(scenario)};sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));location.hash='#/admin';`);
+  await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:true});window.dispatchEvent(new Event('online'));window.__qaScenario=${JSON.stringify(scenario)};sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));location.hash='#/admin';`);
   if(scenario==='offline')await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:false});window.dispatchEvent(new Event('offline'))`);
   await evaluate('window.CidadeConectaAuth.init()');await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);await pause(150);
   const state=await evaluate(`({status:CidadeConectaAuth.state.status,saved:!!sessionStorage.getItem('cidadeConectaAuthSessionV1'),login:!!document.querySelector('#adminLoginForm'),text:document.querySelector('#app').textContent})`);
