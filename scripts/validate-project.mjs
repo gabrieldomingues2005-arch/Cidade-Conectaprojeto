@@ -177,7 +177,7 @@ assert(adminEdge.includes('npm:@supabase/supabase-js@2.117.3'),'Edge administrat
 assert(adminEdge.includes('request_too_large'),'Edge administrativa limita payload de entrada');
 assert(adminEdge.includes('unsupported_media_type'),'Edge administrativa exige JSON');
 assert(!adminEdge.includes('select("id,name,email,role,auth_user_id")'),'Edge não lê e-mail do perfil sem necessidade');
-assert(!adminEdge.includes('protocol,title,description,neighborhood_label'),'Listagem não retorna descrição completa sem necessidade');
+assert(adminEdge.includes('.select("protocol,title,neighborhood_label,status,responsible_agency,moderation_status,territory_resolution_status,created_at,updated_at,categories(slug,name)")'),'Listagem usa projeção mínima sem descrição completa');
 
 assert(adminEdge.includes('.eq("ibge_code", "3538709")'),'Edge administrativa limita dados a Piracicaba');
 
