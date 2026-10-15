@@ -199,7 +199,7 @@ async function init(){
     state.status=access.authorized&&access.profile&&ALLOWED_INTERNAL_ROLES.has(access.profile.role)?'authorized':'denied';
   }catch(error){
     state.lastError=String(error?.message||error);
-    if(isTransientError(error)){
+    if(isTransientError(error)||Number(error?.status)===403&&error?.payload?.error!=='internal_access_denied'){
       state.status='error';
       emit();
       return state;
