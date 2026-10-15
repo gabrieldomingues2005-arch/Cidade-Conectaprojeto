@@ -40,12 +40,13 @@ jobs:
           node --check scripts/smoke-browser.mjs
           node --check scripts/test-auth.mjs
           node --check scripts/test-sw.mjs
+          node --check scripts/test-edge.mjs
 
       - name: Validar smoke test de UI
         run: bash -n scripts/smoke-ui.sh
 
-      - name: Testar autenticação com backend simulado
-        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs
+      - name: Testar autenticação, Edge e Service Worker
+        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs
 
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs
