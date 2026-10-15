@@ -36,7 +36,33 @@ Chrome indisponível no ambiente local; download bloqueado. Resultado do navegad
 
 ## Pendências antes de merge
 
-- Obter PASS do novo smoke e inspecionar as capturas.
+- Novo smoke PASS no workflow 52; capturas das 21 combinações inspecionadas em pranchas por largura.
 - Quando o serviço recuperar, validar autenticação/autorização reais para citizen/agency/triage/admin com escopo autorizado.
 - QA em aparelhos físicos e leitor de tela.
 - PR #5 permanece sem merge.
+
+
+## Evidência de navegador
+
+Workflow 52: https://github.com/gabrieldomingues2005-arch/Cidade-Conectaprojeto/actions/runs/38816266389
+Commit testado: `a45576b5ba84e662aff48c99d94e6719aba7940b`.
+
+- 21/21 combinações rota/largura PASS.
+- 7/7 cenários Admin PASS.
+- Nenhum warning no log desse job.
+- 28 PNGs + results.json no artefato; screenshots são de viewport, não de página inteira.
+- Inspeção visual das 21 capturas: cabeçalho, títulos e conteúdo inicial se adaptam às três larguras; sem corte horizontal observado. Formulários longos exigem scroll normal.
+- Fallback do mapa aparece quando o Leaflet externo é bloqueado. Tiles, marcadores, zoom e contraste sobre mapas reais não foram validados.
+- Sem certificação de contraste ou leitor de tela real; as checagens automatizadas cobrem nomes de campos, aria-expanded, Tab do login e exceções JS, não toda a árvore acessível.
+
+| Etapa | Rota | Saúde no cenário isolado |
+|---|---|---|
+| 1 | `#/` | PASS nas 3 larguras |
+| 2 | `#/registrar` | PASS nas 3 larguras; envio real fora do escopo |
+| 3 | `#/acompanhar` | PASS nas 3 larguras; consulta real fora do escopo |
+| 4 | `#/mapa` | PASS do shell/fallback nas 3 larguras; mapas externos pendentes |
+| 5 | `#/dashboard` | PASS nas 3 larguras com conjunto demonstrativo |
+| 6 | `#/rede-municipal` | PASS nas 3 larguras com fonte local |
+| 7 | `#/admin` | PASS anônimo e estados simulados; autenticação real pendente |
+
+As mensagens de serviço indisponível e a opção de sair da conta no estado de erro foram refinadas após esta evidência e precisam permanecer cobertas pelo workflow subsequente.

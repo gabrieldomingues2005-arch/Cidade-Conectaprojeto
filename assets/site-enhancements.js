@@ -16,7 +16,7 @@ function statusText(){
   const mode=dataMode();
   if(mode==='hybrid-write'){const latency=window.CidadeConectaSupabase?.state?.details?.readLatencyMs;return {label:'Supabase ativo'+(latency?' · '+latency+'ms':''),detail:'Leitura pública e envio seguro de ocorrências conectados ao backend do Cidade Conecta.',cls:'cloud'}};
   if(mode==='hybrid-read')return {label:'Supabase leitura',detail:'Backend conectado para leitura; escrita segura indisponível no momento.',cls:'cloud'};
-  if(mode==='configured')return {label:'Supabase configurado',detail:'Backend configurado; aguardando confirmação da conexão',cls:'local'};
+  if(mode==='configured'){const failed=Boolean(window.CidadeConectaSupabase?.state?.lastError);return {label:failed?'Serviço indisponível':'Conectando…',detail:failed?'Não foi possível conectar ao serviço. O envio de ocorrências e o acesso interno podem estar indisponíveis. Tente novamente mais tarde.':'Aguardando confirmação da conexão com o serviço.',cls:failed?'offline':'local'}};
   if(mode==='cloud')return {label:'Banco conectado',detail:'Backend do Cidade Conecta configurado',cls:'cloud'};
   return {label:'Modo local',detail:'Dados demonstrativos neste navegador',cls:'local'};
 }
