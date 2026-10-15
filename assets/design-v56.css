@@ -294,3 +294,106 @@ body.adminRouteV57 .pageHead h1{font-size:clamp(2.05rem,4vw,3rem)!important}
   .mobileActionsV51 a,.mobileActionsV51 button{font-size:.66rem!important}
   .mobileActionsV51 .mobileNavIcon,.mobileActionsV51 .mobileNavIcon svg{width:20px;height:20px}
 }
+
+
+/* Mapa v5.7.1 — mapa primeiro, lista resiliente e regiões legíveis */
+.mapSectionV53{padding-top:20px!important}
+.mapCardV58{overflow:hidden!important;border-radius:22px!important}
+.mapExperienceV58{grid-template-columns:minmax(300px,330px) minmax(0,1fr)!important;min-height:650px!important}
+.mapSideV58{padding:15px!important}
+.mapSideV58 .mapSideHead{margin-bottom:11px}
+.mapSideV58 .mapSideHead h2{margin:.18rem 0;font-size:1.1rem;color:var(--cc56-ink)}
+.mapPrimaryFiltersV58{gap:7px!important}
+.mapSideV58 .filters input,.mapSideV58 .filters select,.mapSideV58 .filters .btn{min-height:42px!important}
+.mapSideV58 .statusQuick{margin:10px 0}
+.mapSideV58 .statusQuick button,.mapSideV58 .openOnlyV52{min-height:38px}
+.mapRegionsPaneV58{margin:4px 0 12px;padding:12px;border:1px solid #dce8e2;border-radius:14px;background:#fff}
+.mapRegionsHeadV58 h3{margin:.2rem 0 .3rem;color:var(--cc56-ink);font-size:.95rem}
+.mapRegionsHeadV58 p{margin:0 0 10px;color:var(--cc56-muted);font-size:.7rem;line-height:1.45}
+.mapRegionGridV58{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;margin:0!important}
+.mapRegionGridV58 button{
+  min-height:46px!important;display:flex;align-items:center;justify-content:center;gap:4px;
+  padding:6px!important;border-radius:10px!important;font-size:.72rem!important
+}
+.mapRegionGridV58 button span{font-size:.62rem;font-weight:760;color:inherit;opacity:.78}
+.mapRegionGridV58 button b{font-size:.9rem}
+.mapRegionGridV58 button.active span{opacity:1}
+.mapCanvasV58 #publicMap{min-height:580px!important}
+.mapCanvasV58 .mapCanvasHead{background:#fbfdfb}
+.mapFallbackV58{
+  min-height:580px;height:100%;display:grid;place-items:center;padding:24px;
+  background:
+    radial-gradient(circle at 28% 25%,rgba(191,240,84,.10),transparent 26%),
+    linear-gradient(145deg,#e8f0eb,#f7faf8)
+}
+.mapFallbackV58 .stateCardV57{max-width:620px;width:100%;box-shadow:0 16px 42px rgba(8,55,58,.08)}
+.mapStaticResultV58{
+  display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:9px;align-items:center;
+  padding:10px 3px;border-bottom:1px solid rgba(8,55,58,.08);text-decoration:none;color:inherit
+}
+.mapStaticResultV58>span{
+  width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#edf5f1;color:var(--cc-green-2)
+}
+.mapStaticResultV58>span .uiIcon{width:17px;height:17px}
+.mapStaticResultV58 b{display:block;color:var(--cc56-ink);font-size:.76rem;line-height:1.3}
+.mapStaticResultV58 small{display:block;margin-top:2px;color:var(--cc56-muted);font-size:.64rem}
+.mapStaticResultV58 em{font-style:normal;color:#5f7478;font-size:.62rem;font-weight:820;text-align:right}
+.mapEmptyV58{display:grid;justify-items:center;gap:7px;padding:24px 14px!important}
+.mapEmptyV58>span{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#edf5f1;color:var(--cc-green-2)}
+.mapEmptyV58>span .uiIcon{width:19px;height:19px}
+.mapEmptyV58 b{color:var(--cc56-ink)}
+.mapEmptyV58 p{margin:0;color:var(--cc56-muted);font-size:.72rem}
+.mapSideV58 .mapTerritorySummary{padding:10px!important;margin-bottom:10px!important}
+.mapSideV58 .mapTerritorySummary>div:first-child b{font-size:.8rem}
+.mapSideV58 .mapTerritorySummary>div:first-child small{font-size:.62rem}
+.mapSideV58 .mapTerritorySummary .regionMiniGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.mapSideV58 .mapTerritorySummary .regionMiniGrid span{min-height:38px}
+.mapSideV58 .mapTerritorySummary>a{min-height:38px!important}
+.mapMobileTabsV58 button{display:flex;align-items:center;justify-content:center;gap:6px}
+.mapMobileTabsV58 .uiIcon{width:16px;height:16px}
+
+@media(max-width:1020px) and (min-width:761px){
+  .mapExperienceV58{grid-template-columns:290px minmax(0,1fr)!important}
+  .mapRegionGridV58{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+@media(max-width:760px){
+  .mapSectionV53{padding-top:12px!important}
+  .mapCardV58{overflow:visible!important}
+  .mapMobileTabsV58{
+    grid-template-columns:repeat(3,1fr)!important;
+    position:sticky;top:70px;z-index:12;margin-bottom:9px!important
+  }
+  .mapMobileTabsV58 button{min-height:44px!important;font-size:.72rem!important}
+  .mapExperienceV58{display:block!important;min-height:0!important}
+  .mapExperienceV58 .mapSideV58{display:none}
+  .mapExperienceV58 .mapCanvasV58{display:flex}
+  .mapExperienceV58.showListV53 .mapSideV58{display:flex}
+  .mapExperienceV58.showListV53 .mapCanvasV58{display:none}
+  .mapExperienceV58.showListV53 .mapRegionsPaneV58{display:none}
+  .mapExperienceV58.showRegionsV58 .mapSideV58{display:flex}
+  .mapExperienceV58.showRegionsV58 .mapCanvasV58{display:none}
+  .mapExperienceV58.showRegionsV58 .mapSideHead,
+  .mapExperienceV58.showRegionsV58 .filters,
+  .mapExperienceV58.showRegionsV58 .statusQuick,
+  .mapExperienceV58.showRegionsV58 .mapBehaviorV55,
+  .mapExperienceV58.showRegionsV58 .mapSideActions,
+  .mapExperienceV58.showRegionsV58 .mapResultsV50{display:none!important}
+  .mapExperienceV58.showRegionsV58 .mapRegionsPaneV58{display:block}
+  .mapSideV58{padding:12px!important}
+  .mapRegionsPaneV58{margin:0;padding:14px}
+  .mapRegionGridV58{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .mapRegionGridV58 button{min-height:54px!important;flex-direction:column;gap:1px}
+  .mapCanvasV58 #publicMap,.mapFallbackV58{min-height:56vh!important}
+  .mapCanvasHeadV53{min-height:62px!important}
+  .mapContextV53{font-size:.68rem}
+  .mapStaticResultV58{grid-template-columns:34px minmax(0,1fr)}
+  .mapStaticResultV58 em{grid-column:2;justify-self:start}
+  .mapSideV58 .mapTerritorySummary .regionMiniGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+
+@media(max-width:440px){
+  .mapRegionGridV58{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .mapFallbackV58{padding:14px}
+  .mapFallbackV58 .stateCardV57{padding:15px}
+}
