@@ -91,10 +91,11 @@
   <main id="app" tabindex="-1"></main>
 
   <div class="mobileActions mobileActionsV51" aria-label="Atalhos principais">
-    <a href="#/"><span aria-hidden="true">⌂</span>Início</a>
-    <a href="#/registrar" data-primary="1"><span aria-hidden="true">＋</span>Registrar</a>
-    <a href="#/mapa"><span aria-hidden="true">⌖</span>Mapa</a>
-    <a href="#/acompanhar"><span aria-hidden="true">#</span>Protocolo</a>
+    <a href="#/" data-mobile-route=""><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5M9 20v-6h6v6"/></svg></span>Início</a>
+    <a href="#/registrar" data-mobile-route="registrar"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Registrar</a>
+    <a href="#/mapa" data-mobile-route="mapa"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"/><path d="M9 3v15m6-12v15"/></svg></span>Mapa</a>
+    <a href="#/acompanhar" data-mobile-route="acompanhar"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></span>Protocolo</a>
+    <button id="mobileMore" type="button" data-mobile-route="more" aria-label="Abrir mais opções"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></span>Mais</button>
   </div>
 
   <footer>
