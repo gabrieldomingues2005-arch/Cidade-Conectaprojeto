@@ -133,6 +133,9 @@ assert(privacyGeo.includes("PUBLIC_DECIMALS=3"),'Localização pública usa prec
 assert(privacyGeo.includes('exactLocation'),'Localização exata é separada no bloco privado local');
 assert(privacyGeo.includes('territoryResolutionStatus'),'Registro guarda estado da resolução territorial');
 
+const workflow=read('.github/workflows/quality.yml');
+assert(workflow.includes("node-version: '22'"),'CI usa Node.js 22 compatível com supabase-js atual');
+
 const runtime=read('assets/runtime-config.js');
 assert(runtime.includes("dataMode: 'hybrid-write'"),'Runtime usa modo híbrido com escrita segura');
 assert(runtime.includes("projectRef: 'yvmkgpijzewssdxgimit'"),'Runtime aponta para o Supabase exclusivo do Cidade Conecta');
@@ -159,6 +162,10 @@ assert(!authClient.includes('service_role'),'Frontend de autenticação não con
 assert(!authClient.includes('sb_secret_'),'Frontend de autenticação não contém chave secreta');
 assert(authClient.includes('sessionStorage.setItem(STORAGE_KEY'),'Sessão interna fica limitada à aba atual');
 assert(!authClient.includes('localStorage.setItem(STORAGE_KEY'),'Sessão interna não persiste token entre fechamentos do navegador');
+assert(authClient.includes('REQUEST_TIMEOUT_MS=12000'),'Auth limita tempo de espera de rede');
+assert(authClient.includes('isTransientError(error)'),'Auth diferencia falha transitória de sessão inválida');
+assert(authClient.includes("state.status='error'"),'Auth preserva sessão em indisponibilidade transitória');
+
 
 
 const adminEdge=read('supabase/functions/admin-occurrences/index.ts');
@@ -166,6 +173,12 @@ assert(adminEdge.includes('admin.auth.getUser(token)'),'Edge administrativa vali
 assert(adminEdge.includes('new Set(["triage", "admin"])'),'Edge administrativa limita acesso a triage/admin');
 assert(adminEdge.includes('internal_access_denied'),'Edge administrativa nega papel não autorizado');
 assert(adminEdge.includes('readOnly: true'),'Fase inicial do Admin real é somente leitura');
+assert(adminEdge.includes('npm:@supabase/supabase-js@2.117.3'),'Edge administrativa fixa versão do supabase-js');
+assert(adminEdge.includes('request_too_large'),'Edge administrativa limita payload de entrada');
+assert(adminEdge.includes('unsupported_media_type'),'Edge administrativa exige JSON');
+assert(!adminEdge.includes('select("id,name,email,role,auth_user_id")'),'Edge não lê e-mail do perfil sem necessidade');
+assert(!adminEdge.includes('protocol,title,description,neighborhood_label'),'Listagem não retorna descrição completa sem necessidade');
+
 assert(adminEdge.includes('.eq("ibge_code", "3538709")'),'Edge administrativa limita dados a Piracicaba');
 
 assert(!adminEdge.includes('"agency"')&&!adminEdge.includes("'agency'"),'Papel agency ainda não recebe acesso amplo sem vínculo de setor');
