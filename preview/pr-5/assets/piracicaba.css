@@ -1,0 +1,106 @@
+:root{
+  /* Paleta inspirada na identidade visual atual do Município de Piracicaba:
+     azul, verde, azul-claro e amarelo. O projeto continua independente e não oficial. */
+  --pira-navy:#2f3f88;
+  --pira-blue:#4f74bd;
+  --pira-green:#3aa63f;
+  --pira-teal:#4da9ad;
+  --pira-yellow:#f2d20a;
+  --brand:#2f3f88;
+  --brand-2:#2f9742;
+  --brand-3:#3d8799;
+  --surface-2:#edf4f8;
+  --surface-3:#f7fafc;
+  --focus:0 0 0 4px rgba(79,116,189,.18)
+}
+
+body{background:linear-gradient(180deg,#f6f9fb 0,#f3f7f8 430px)}
+.top{border-top:4px solid transparent;border-image:linear-gradient(90deg,var(--pira-green) 0 34%,var(--pira-blue) 34% 73%,var(--pira-yellow) 73% 100%) 1}
+.logo{background:linear-gradient(135deg,var(--pira-green),var(--pira-teal) 48%,var(--pira-blue));position:relative;overflow:hidden}
+.logo:after{content:"";position:absolute;left:6px;right:6px;bottom:5px;height:2px;border-radius:20px;background:var(--pira-yellow)}
+.primary{background:var(--pira-navy)}
+.primary:hover{background:#243471}
+.soft{color:var(--pira-navy);background:#eef3fb;border-color:#dbe4f4}
+.hero{background:radial-gradient(circle at 86% 12%,rgba(58,166,63,.17),transparent 27%),radial-gradient(circle at 70% 46%,rgba(79,116,189,.12),transparent 30%),linear-gradient(#fff,var(--bg))}
+.hero h1 span,.eyebrow{color:var(--pira-green)}
+.heroMap{background:linear-gradient(140deg,#e7f3e6,#eaf3f7 52%,#e8edf8)}
+.bar{background:linear-gradient(90deg,var(--pira-navy),var(--pira-blue),var(--pira-green))}
+.stepNum{background:var(--pira-navy)}
+.category:hover{border-color:#aebfe2}
+.callout .icon{background:#eef3fb}
+footer{background:linear-gradient(115deg,#252f68,#233b73 55%,#245d68)}
+
+.cityBand{background:#fff;border-bottom:1px solid var(--line)}
+.cityBandIn{min-height:42px;display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.85rem}
+.cityPlace{display:flex;align-items:center;gap:8px;font-weight:850;color:var(--pira-navy)}
+.cityPlace:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--pira-green);box-shadow:14px 0 0 var(--pira-blue),28px 0 0 var(--pira-yellow);margin-right:29px}
+.cityBand a{color:var(--pira-navy);font-weight:800;text-decoration:none}
+.cityBand a:hover{text-decoration:underline}
+
+.cityContext{padding-top:26px}
+.cityIntro{position:relative;overflow:hidden;border-color:#d8e1ee;background:linear-gradient(135deg,#fff,#f5f8fc)}
+.cityIntro:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--pira-green) 0 33%,var(--pira-blue) 33% 74%,var(--pira-yellow) 74% 100%)}
+.cityIntro h2{margin:.25rem 0 .55rem;font-size:clamp(1.55rem,3vw,2.25rem);letter-spacing:-.035em}
+.cityLabel{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#edf6ef;color:#277c35;font-size:.79rem;font-weight:900}
+.cityGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:18px}
+.cityFeature{padding:16px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.cityFeature b{display:block;margin-bottom:4px}
+.cityFeature .cityIcon{font-size:1.25rem;display:block;margin-bottom:8px}
+.cityOfficial{margin-top:16px;padding:14px 16px;border:1px solid #d9e2ef;border-radius:14px;background:#f6f8fc}
+.cityOfficial strong{color:var(--pira-navy)}
+.cityLinks{display:flex;gap:9px;flex-wrap:wrap;margin-top:11px}
+.cityLink{display:inline-flex;align-items:center;gap:6px;padding:9px 11px;border-radius:10px;text-decoration:none;background:#fff;border:1px solid #d8e1ee;color:var(--pira-navy);font-size:.85rem;font-weight:850}
+.cityLink:hover{border-color:#aebfe2;transform:translateY(-1px)}
+.cityDisclaimer{font-size:.8rem;color:var(--muted);margin-top:10px}
+.piraFooter{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.16)}
+.piraFooter a{display:inline-block;margin-right:12px;margin-top:5px;font-size:.84rem}
+
+.geoQuickStats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+.geoQuickStats>div,.geoBigStats>div{padding:15px;border:1px solid #dce5ef;background:#fff;border-radius:14px}
+.geoQuickStats b,.geoBigStats b{display:block;color:var(--pira-navy);font-size:1.35rem;line-height:1.15}
+.geoQuickStats span,.geoBigStats span{display:block;color:var(--muted);font-size:.78rem;margin-top:5px}
+.geoHighlight{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px;padding:13px 15px;border-radius:13px;background:linear-gradient(90deg,#eef8ef,#edf3fb);border:1px solid #d7e3dc}
+.geoHighlight span{font-size:.84rem;color:var(--muted)}
+.geoHighlight b{color:var(--pira-navy)}
+.geoHead{background:linear-gradient(135deg,#f4f8fe,#f2faf3)}
+.geoMunicipal{display:grid;grid-template-columns:1.35fr .65fr;gap:16px}
+.geoHeroCard{position:relative;overflow:hidden}
+.geoHeroCard:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--pira-green),var(--pira-blue),var(--pira-yellow))}
+.geoHeroCard h2,.geoLinksCard h2{margin:.6rem 0 .5rem}
+.geoBigStats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+.geoLinksCard{display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.geoLinksCard .btn{width:100%}
+.regionGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.regionCard{box-shadow:var(--shadow-sm);border-top:4px solid var(--pira-blue)}
+.regionCard:nth-child(3n+1){border-top-color:var(--pira-green)}
+.regionCard:nth-child(3n){border-top-color:var(--pira-yellow)}
+.regionHead{display:flex;align-items:center;gap:12px}
+.regionHead h3{margin:0;font-size:1.1rem}
+.regionHead span{font-size:.82rem;color:var(--muted)}
+.regionNumber{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:#eef3fb;color:var(--pira-navy)!important;font-weight:950;font-size:.9rem!important}
+.regionMetrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}
+.regionMetrics span{padding:9px;border-radius:10px;background:#f7fafc;color:var(--muted);font-size:.76rem}
+.regionMetrics b{display:block;color:var(--text);font-size:.9rem}
+.regionCard details{border-top:1px solid var(--line);padding-top:10px}
+.regionCard summary{cursor:pointer;font-weight:850;color:var(--pira-navy)}
+.bairroTags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.bairroTags span{padding:5px 8px;border-radius:999px;background:#eef4f7;border:1px solid #dde8eb;font-size:.76rem}
+.geoTags span{font-size:.8rem;background:#f7fafc}
+.geoSources{margin-top:16px;padding:12px 14px;border-left:4px solid var(--pira-blue);background:#f7fafc;border-radius:10px;font-size:.78rem;color:var(--muted)}
+.geoSources a{color:var(--pira-navy);font-weight:800}
+.territoryChart{display:grid;gap:10px}
+.territoryRow{display:grid;grid-template-columns:90px 1fr 34px;gap:10px;align-items:center}
+.territoryRow>span{font-size:.84rem;font-weight:800}
+.territoryTrack{height:11px;border-radius:999px;background:#e7edf2;overflow:hidden}
+.territoryTrack i{display:block;height:100%;min-width:2px;border-radius:999px;background:linear-gradient(90deg,var(--pira-navy),var(--pira-blue),var(--pira-green))}
+.territoryRow>b{text-align:right;color:var(--pira-navy)}
+.territoryUnknown{margin-top:8px;padding:9px 11px;border-radius:10px;background:#fff7e8;color:#745018;font-size:.82rem}
+.geoAdvisor{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;border:1px solid #d9e4ed;background:linear-gradient(135deg,#f7fbff,#f5fbf5);border-radius:13px}
+.geoAdvisor>div{display:flex;flex-direction:column;gap:3px;padding:7px 9px}
+.geoAdvisorLabel{text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-size:.68rem;font-weight:900}
+.geoAdvisor b{color:var(--pira-navy)}
+.geoAdvisor small{color:var(--muted);font-size:.74rem}
+
+@media(max-width:980px){.geoQuickStats{grid-template-columns:repeat(2,1fr)}.geoMunicipal{grid-template-columns:1fr}.regionGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){.cityGrid{grid-template-columns:1fr}.cityBandIn{align-items:flex-start;flex-direction:column;padding:8px 0;gap:4px}.cityBand .cityOfficialShortcut{margin-left:45px}.cityContext{padding-top:18px}.geoHighlight{align-items:flex-start;flex-direction:column}.geoAdvisor{grid-template-columns:1fr}}
+@media(max-width:620px){.geoQuickStats,.geoBigStats,.regionGrid{grid-template-columns:1fr}.regionMetrics{grid-template-columns:1fr 1fr}.territoryRow{grid-template-columns:75px 1fr 30px}.geoQuickStats b,.geoBigStats b{font-size:1.2rem}}

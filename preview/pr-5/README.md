@@ -1,0 +1,136 @@
+# Cidade Conecta
+
+Projeto de extensão universitária para registro, acompanhamento e análise de problemas urbanos em **Piracicaba/SP**.
+
+## Acesso
+
+**Site público principal (Manus):**
+https://cidconecta-nztptuci.manus.space
+
+**Preview técnico automático do GitHub:**
+https://gabrieldomingues2005-arch.github.io/Cidade-Conectaprojeto/
+
+A branch `main` é a fonte oficial do código. O preview do GitHub Pages é atualizado automaticamente para permitir testar as mudanças sem depender do Manus.
+
+A sincronização com `gh-pages` só ocorre após a validação do mesmo commit. Se algum teste falhar, a versão anterior do preview é preservada. Execuções antigas são ignoradas quando a `main` já avançou, e o envio para `gh-pages` não usa força. Pull requests executam a mesma validação, sem publicar.
+
+## Situação atual — MVP v5.5 + UI v5.6
+
+O protótipo já possui:
+
+- interface responsiva para computador e celular;
+- redesign v5.5 com identidade cívica própria, Atlas de bairros, mapa com clustering sem dependência externa, bairros acompanhados e continuidade dos padrões 21st adaptados ao produto;
+- camada Product Design v5.6 para hierarquia visual, foco de teclado, estados loading/vazio/erro/offline, responsividade, contraste e reduced motion;
+- identidade visual inspirada nas cores utilizadas pela cidade de Piracicaba, mantendo caráter independente;
+- registro de ocorrências com protocolo;
+- acompanhamento por protocolo e histórico;
+- área “Meus registros” no navegador atual, incluindo protocolos públicos salvos para acompanhamento;
+- mapa OpenStreetMap/Leaflet com painel de resultados, filtros rápidos, filtro por região administrativa, duas camadas-base, limite municipal do IBGE e ordenação por distância quando o usuário autoriza geolocalização;
+- geolocalização opcional;
+- localização pública aproximada e separação conceitual da localização exata privada;
+- foto opcional com otimização/compressão client-side para imagens grandes;
+- rascunho local;
+- acesso interno autenticado por Supabase Auth, com fila real somente leitura para papéis `triage` e `admin`;
+- atualização de status, setor e observações;
+- exportação/importação de backup;
+- indicadores por categoria, bairro, status e região;
+- geografia de Piracicaba com dados municipais de referência;
+- 9 regiões administrativas e seus bairros;
+- localizador de bairro/região;
+- tratamento de referências territoriais ambíguas;
+- limite municipal carregado por GeoJSON do IBGE;
+- catálogo de camadas cartográficas municipais;
+- sugestão demonstrativa de encaminhamento por categoria;
+- PWA e cache offline dos arquivos principais;
+- SEO local;
+- validação automática de qualidade no GitHub Actions, incluindo 247 verificações estáticas e smoke das rotas principais em Chrome headless;
+- status visual de conectividade e origem dos dados;
+- atalho `Ctrl/Cmd + K` para consulta de protocolo;
+- proteção do painel interno por sessão real e papel validado no backend;
+- botão para copiar o link do site;
+- mapa real também na Home;
+- prévia do que ficará público antes do envio da ocorrência;
+- detecção de possíveis registros semelhantes por categoria e proximidade para reduzir duplicidades;
+- explicação do status atual e próximos passos no detalhe do protocolo;
+- filtro “Somente abertas” no mapa;
+- Busca rápida global (Ctrl/Cmd + K) para ações, páginas, protocolos, bairros e ocorrências;
+- mapa com modo foco, visão compartilhável com filtros na URL e alternância Mapa/Lista no celular;
+- bento de leitura rápida na Home com hierarquia visual e insights do conjunto;
+- **Rede municipal de referência** com escala Entrada → Classificação → Área pública → Setor/serviço → Canal oficial;
+- diretório detalhado das áreas municipais diretamente ligadas às 9 categorias do MVP;
+- mapa filtrável também por área pública de referência;
+- ocorrência e dashboard mostram a competência de referência sem simular despacho oficial;
+- **Radar dos bairros** com página própria por bairro, indicadores, categorias, áreas de referência e mapa textual/cartográfico;
+- bairros podem ser acompanhados localmente e reaparecem em `Meus registros` e na busca global;
+- mapa agrupa pontos automaticamente em escalas amplas e permite desligar o agrupamento;
+- popups/listas do mapa levam diretamente ao Radar do bairro.
+
+## Piracicaba e geografia
+
+A base territorial está em `data/piracicaba.json` e utiliza referências públicas do IBGE e da Prefeitura de Piracicaba.
+
+O projeto não desenha limites internos aproximados das regiões administrativas. Polígonos de bairros/regiões só devem ser incorporados quando houver fonte vetorial adequada e validada.
+
+Documentação detalhada: `GEOGRAFIA.md`.
+
+## Banco de dados — Supabase
+
+O **Cidade Conecta deve usar um projeto Supabase próprio e separado** de Raiz Carbon / Carbon Track.
+
+O projeto usa o Supabase exclusivo do Cidade Conecta (`yvmkgpijzewssdxgimit`) em modo `hybrid-write`: leitura pública aprovada e submissão segura passam pelo backend, mantendo dados privados separados por políticas e Edge Functions.
+
+A preparação para conexão está em:
+
+- `assets/runtime-config.js` — configuração pública de runtime;
+- `SUPABASE.md` — regras de conexão e segurança;
+- `schema.sql` — proposta de estrutura PostgreSQL;
+- `API.md` — contrato de API proposto.
+
+Nunca devem ser colocadas no front-end público chaves `service_role`, senha do PostgreSQL ou credenciais administrativas.
+
+## Estrutura principal
+
+- `index.html` — shell principal;
+- `assets/app.js` — aplicação e fluxo de ocorrências;
+- `assets/styles.css` — estilos gerais;
+- `assets/design-v55.css` — base visual incremental do MVP v5.5;
+- `assets/design-v56.css` — camada Product Design v5.6 de hierarquia, acessibilidade, estados e responsividade;
+- `assets/piracicaba.js` — contexto territorial;
+- `assets/piracicaba-mapas.js` — geografia avançada e limite municipal;
+- `assets/privacy-geo.js` — proteção de localização;
+- `assets/runtime-config.js` — modo e configuração do backend;
+- `assets/auth.js` — sessão do acesso interno com Supabase Auth;
+- `assets/site-enhancements.js` — melhorias de UX e estado do sistema;
+- `data/piracicaba.json` — base territorial;
+- `schema.sql` — modelo PostgreSQL futuro;
+- `SUPABASE.md` — plano de integração Supabase;
+- `TESTES.md` — roteiro de validação;
+- `.github/workflows/quality.yml` — checagem automática estática + smoke de UI;
+- `scripts/smoke-ui.sh` — smoke das rotas principais em Chrome headless;
+- `.github/workflows/pages.yml` — sincronização do preview somente após o quality gate.
+
+## Privacidade
+
+O foco é registrar **problemas urbanos**, não acusações contra pessoas. Nome, e-mail e telefone não devem aparecer publicamente. A posição pública deve ser aproximada quando a coordenada exata puder expor residência ou pessoa.
+
+O MVP já possui backend seguro, RLS, submissão por Edge Function, armazenamento privado de anexos e trilha de auditoria. Antes de uso institucional ainda são necessários autenticação operacional completa, autorização administrativa real, políticas formais de retenção e revisão LGPD institucional.
+
+## Caráter institucional
+
+Cidade Conecta é um **projeto acadêmico independente**. Referências territoriais, links oficiais e cores inspiradas em Piracicaba não significam integração, aprovação ou operação pela Prefeitura Municipal de Piracicaba.
+
+## Próximas etapas
+
+1. Fazer smoke/QA complementar em celulares e navegadores físicos, já que o CI cobre automaticamente desktop e mobile headless.
+2. Validar usabilidade do seletor de categorias, mapa avançado, Rede Municipal e UI v5.6 com usuários reais.
+3. Validar a fase 1 do painel autenticado e, depois, implementar escrita administrativa transacional + auditoria antes de liberar edição.
+4. Evoluir moderação e notificações.
+5. Incorporar novas camadas geográficas somente quando houver fonte vetorial validada.
+6. Preparar demonstração acadêmica e eventual apresentação institucional futura.
+
+Projeto acadêmico — 2026.
+
+
+### Acesso interno
+
+A rota `#/admin` usa autenticação real do Supabase. Nesta primeira fase, somente `triage` e `admin` podem acessar a fila real, em modo somente leitura. O papel `agency` permanece bloqueado até existir escopo por órgão/setor. Detalhes: `AUTH-ADMIN.md`.

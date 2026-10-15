@@ -1,0 +1,69 @@
+name: Validar Cidade Conecta
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Validar JavaScript
+        run: |
+          node --check assets/runtime-config.js
+          node --check assets/auth.js
+          node --check assets/supabase-bridge.js
+          node --check assets/app.js
+          node --check assets/piracicaba.js
+          node --check assets/piracicaba-data.js
+          node --check assets/piracicaba-mapas.js
+          node --check assets/privacy-geo.js
+          node --check assets/site-enhancements.js
+          node --check sw.js
+          node --check scripts/validate-project.mjs
+          node --check scripts/smoke-browser.mjs
+          node --check scripts/test-auth.mjs
+          node --check scripts/test-sw.mjs
+          node --check scripts/test-edge.mjs
+
+      - name: Validar smoke test de UI
+        run: bash -n scripts/smoke-ui.sh
+
+      - name: Testar autenticação, Edge e Service Worker
+        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs
+
+      - name: Validar base territorial e referências
+        run: node scripts/validate-project.mjs
+
+      - name: Validar JSON do manifesto
+        run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8')); console.log('manifest.webmanifest válido')"
+
+      - name: Smoke test UI em Chrome headless
+        env:
+          SMOKE_SCREENSHOT_DIR: artifacts/ui-smoke
+        run: bash scripts/smoke-ui.sh
+
+      - name: Guardar capturas do smoke
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ui-smoke-screenshots
+          path: artifacts/ui-smoke
+          if-no-files-found: error
+          retention-days: 7
