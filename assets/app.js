@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const VERSION='5.5.0';
+const VERSION='5.7.1';
 const STORAGE_KEY='cidadeConecta2026v3';
 const DRAFT_KEY='cidadeConectaDraftV4';
 const BOOKMARK_KEY='cidadeConectaSavedProtocolsV1';
