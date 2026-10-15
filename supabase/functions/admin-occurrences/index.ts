@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2.117.3";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
@@ -68,7 +68,7 @@ Deno.serve(async (req: Request) => {
 
   const { data: profile, error: profileError } = await admin
     .from("users_profile")
-    .select("id,name,email,role,auth_user_id")
+    .select("id,name,role,auth_user_id")
     .eq("auth_user_id", user.id)
     .maybeSingle();
 
@@ -81,14 +81,14 @@ Deno.serve(async (req: Request) => {
     });
   }
 
-  const { data: municipality, error: municipalityError } = await admin
-    .from("municipalities")
-    .select("id")
-    .eq("ibge_code", "3538709")
-    .maybeSingle();
+  const contentType = (req.headers.get("content-type") ?? "").toLowerCase();
+  if (!contentType.includes("application/json")) {
+    return json(origin, 415, { error: "unsupported_media_type" });
+  }
 
-  if (municipalityError || !municipality?.id) {
-    return json(origin, 503, { error: "municipality_not_configured" });
+  const contentLength = Number(req.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > 16_384) {
+    return json(origin, 413, { error: "request_too_large" });
   }
 
   let body: Record<string, unknown> = {};
@@ -111,6 +111,16 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  const { data: municipality, error: municipalityError } = await admin
+    .from("municipalities")
+    .select("id")
+    .eq("ibge_code", "3538709")
+    .maybeSingle();
+
+  if (municipalityError || !municipality?.id) {
+    return json(origin, 503, { error: "municipality_not_configured" });
+  }
+
   if (action === "list") {
     const search = clean(body.search, 100).toLowerCase();
     const category = clean(body.category, 40);
@@ -118,7 +128,7 @@ Deno.serve(async (req: Request) => {
 
     const { data, error } = await admin
       .from("occurrences")
-      .select("id,protocol,title,description,neighborhood_label,status,responsible_agency,moderation_status,territory_resolution_status,created_at,updated_at,categories(slug,name)")
+      .select("protocol,title,neighborhood_label,status,responsible_agency,moderation_status,territory_resolution_status,created_at,updated_at,categories(slug,name)")
       .eq("municipality_id", municipality.id)
       .order("created_at", { ascending: false })
       .limit(400);
