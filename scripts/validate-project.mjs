@@ -106,7 +106,7 @@ const sw=read('sw.js');
 for(const ref of ['assets/app.js','assets/piracicaba.js','assets/piracicaba-mapas.js','assets/piracicaba-mapas.css','assets/privacy-geo.js','assets/runtime-config.js','assets/auth.js','assets/supabase-bridge.js','assets/site-enhancements.js','assets/site-enhancements.css','assets/design-v55.css','assets/design-v56.css','data/piracicaba.json','data/municipal-network.json']){
   assert(sw.includes(ref),`Service worker referencia ${ref}`);
 }
-assert(sw.includes("ignoreSearch:true"),'Service worker resolve assets versionados mesmo com query string');
+assert(!sw.includes("ignoreSearch:true")&&sw.includes("cache:'no-store'"),'Service worker revalida assets críticos sem colidir versões por query string');
 assert(sw.includes('startsWith(CACHE_PREFIX)'),'Service worker remove somente caches do Cidade Conecta');
 assert(index.includes('id="offlineNoticeV56"'),'Shell inclui aviso global de estado offline');
 
