@@ -6,6 +6,7 @@ const sb=cfg.supabase||{};
 const STORAGE_KEY='cidadeConectaAuthSessionV1';
 const ALLOWED_INTERNAL_ROLES=new Set(['triage','admin']);
 const REQUEST_TIMEOUT_MS=12000;
+let refreshPromise=null;
 
 const state={
   status:'checking',
@@ -21,8 +22,8 @@ function configured(){
 }
 
 function isTransientError(error){
-  const status=Number(error?.status||0);
-  return error?.status===0||status>=500||error?.code==='request_timeout'||error?.name==='AbortError';
+  const status=Number(error?.status);
+  return error?.status===0||status===408||status===425||status===429||status>=500||error?.code==='request_timeout'||error?.name==='AbortError';
 }
 
 async function fetchWithTimeout(url,options={}){
@@ -114,16 +115,24 @@ function normalizeSession(payload){
 }
 
 async function refreshSession(){
-  const current=state.session||readSession();
-  if(!current?.refresh_token)throw new Error('Sessão indisponível');
-  const payload=await authRequest('token?grant_type=refresh_token',{
-    method:'POST',
-    body:{refresh_token:current.refresh_token}
-  });
-  const session=normalizeSession(payload);
-  if(!session)throw new Error('Não foi possível renovar a sessão');
-  saveSession(session);
-  return session;
+  if(refreshPromise)return refreshPromise;
+  refreshPromise=(async()=>{
+    const current=state.session||readSession();
+    if(!current?.refresh_token)throw new Error('Sessão indisponível');
+    const payload=await authRequest('token?grant_type=refresh_token',{
+      method:'POST',
+      body:{refresh_token:current.refresh_token}
+    });
+    const session=normalizeSession(payload);
+    if(!session)throw new Error('Não foi possível renovar a sessão');
+    saveSession(session);
+    return session;
+  })();
+  try{
+    return await refreshPromise;
+  }finally{
+    refreshPromise=null;
+  }
 }
 
 async function ensureToken(){
@@ -147,7 +156,7 @@ async function verifyInternalAccess(token){
   });
   let payload=null;
   try{payload=await response.json()}catch{}
-  if(response.status===403){
+  if(response.status===403&&payload?.error==='internal_access_denied'){
     return {authorized:false,profile:payload?.profile||null,role:payload?.role||payload?.profile?.role||null};
   }
   if(!response.ok){
@@ -235,27 +244,33 @@ async function signOut(){
 }
 
 async function invokeInternal(payload){
+  const request=async token=>fetchWithTimeout(`${sb.url}/functions/v1/admin-occurrences`,{
+    method:'POST',
+    headers:baseHeaders(token,{'Content-Type':'application/json'}),
+    body:JSON.stringify(payload||{}),
+    cache:'no-store'
+  });
   try{
-    const token=await ensureToken();
+    let token=await ensureToken();
     if(!token){
       const error=new Error('Sessão expirada. Entre novamente.');
       error.status=401;
       throw error;
     }
-    const response=await fetchWithTimeout(`${sb.url}/functions/v1/admin-occurrences`,{
-      method:'POST',
-      headers:baseHeaders(token,{'Content-Type':'application/json'}),
-      body:JSON.stringify(payload||{}),
-      cache:'no-store'
-    });
+    let response=await request(token);
+    if(response.status===401){
+      const renewed=await refreshSession();
+      token=renewed.access_token;
+      response=await request(token);
+    }
     return await parseResponse(response);
   }catch(error){
     state.lastError=String(error?.message||error);
     state.user=null;
     state.profile=null;
-    if(isTransientError(error)){
+    if(isTransientError(error)||Number(error?.status)===403&&error?.payload?.error!=='internal_access_denied'){
       state.status='error';
-    }else if(Number(error?.status)===403){
+    }else if(Number(error?.status)===403&&error?.payload?.error==='internal_access_denied'){
       state.status='denied';
     }else{
       saveSession(null);
