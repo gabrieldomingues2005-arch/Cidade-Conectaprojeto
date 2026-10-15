@@ -317,7 +317,8 @@ body.adminRouteV57 .pageHead h1{font-size:clamp(2.05rem,4vw,3rem)!important}
 }
 .mapRegionGridV58 button span{font-size:.62rem;font-weight:760;color:inherit;opacity:.78}
 .mapRegionGridV58 button b{font-size:.9rem}
-.mapRegionGridV58 button.active span{opacity:1}
+.mapRegionGridV58 button em{font-style:normal;font-size:.58rem;color:#718387;font-weight:780;white-space:nowrap}
+.mapRegionGridV58 button.active span,.mapRegionGridV58 button.active em{opacity:1;color:inherit}
 .mapCanvasV58 #publicMap{min-height:580px!important}
 .mapCanvasV58 .mapCanvasHead{background:#fbfdfb}
 .mapFallbackV58{
