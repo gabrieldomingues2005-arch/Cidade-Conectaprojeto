@@ -22,7 +22,7 @@ button,a,input,select,textarea{touch-action:manipulation}
 .top{z-index:100}
 .topin{gap:18px}
 .brand{min-width:max-content}
-.nav{min-width:0;overflow-x:auto;scrollbar-width:none}
+.nav{min-width:0;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
 .nav::-webkit-scrollbar{display:none}
 .nav a{white-space:nowrap}
 .headerActions{flex:0 0 auto}
@@ -126,4 +126,276 @@ button,a,input,select,textarea{touch-action:manipulation}
 @media(prefers-contrast:more){
   .mapResultItem,.networkFlowRailV54 article,.networkSectorListV54 span{border-width:2px}
   .resultCount{border:2px solid #fff}
+}
+
+
+/* Acesso interno autenticado — fase 1 somente leitura. */
+.adminAuthCardV57{max-width:680px;margin-inline:auto;display:grid;gap:16px}
+.adminAuthCardV57 .field{display:grid;gap:7px}
+.adminAuthCardV57 input{min-height:48px}
+.adminAuthCardV57 .btn{justify-self:start}
+.adminSessionBarV57{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px;background:linear-gradient(135deg,#f7fbf9,#eef7f2)}
+.adminSessionBarV57 h2{margin:.2rem 0}
+.adminDetailV57{margin-top:16px;scroll-margin-top:96px}
+.adminReadOnlyV57{display:grid;gap:14px}
+.adminReadOnlyV57 h3{margin:0}
+.adminMetaGridV57{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.adminMetaGridV57>div{display:grid;gap:4px;padding:12px;border:1px solid #dce9e3;border-radius:13px;background:#f8fbf9}
+.adminMetaGridV57 small{color:#56736f}
+.adminMetaGridV57 b{overflow-wrap:anywhere}
+@media(max-width:760px){
+  .adminSessionBarV57{align-items:flex-start;flex-direction:column}
+  .adminMetaGridV57{grid-template-columns:1fr 1fr}
+}
+@media(max-width:440px){
+  .adminMetaGridV57{grid-template-columns:1fr}
+  .adminAuthCardV57 .btn{width:100%}
+}
+
+body.adminRouteV57 .pageHead{padding-top:34px;padding-bottom:34px}
+body.adminRouteV57 .pageHead h1{font-size:clamp(2.7rem,5vw,4rem)}
+body.adminRouteV57 .section{padding-top:28px}
+@media(max-width:760px){
+  body.adminRouteV57 .pageHead{padding-top:26px;padding-bottom:26px}
+  body.adminRouteV57 .pageHead h1{font-size:clamp(2.35rem,11vw,3.2rem)}
+  body.adminRouteV57 .section{padding-top:20px}
+}
+
+@media(min-width:900px) and (max-width:1450px){
+  .topin{gap:10px}
+  .nav{gap:2px}
+  .nav a{padding:9px 8px;font-size:.84rem}
+  .brand{gap:8px}
+  .brandWord{font-size:.94rem}
+  .commandTriggerV53 kbd{display:none}
+  .headerActions{gap:6px}
+}
+
+/* Header desktop compacto: evita cortar navegação em larguras intermediárias. */
+@media(min-width:1021px) and (max-width:1450px){
+  .nav{display:none}
+  .nav.open{
+    display:flex;
+    position:absolute;
+    top:78px;
+    left:16px;
+    right:16px;
+    padding:10px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    flex-direction:column;
+    align-items:stretch;
+    overflow:visible
+  }
+  .nav.open a{padding:11px 12px;font-size:.91rem}
+  .menu{display:inline-flex}
+}
+/* A área interna não compete com os atalhos públicos do app. */
+body.adminRouteV57 .mobileActions{display:none!important}
+@media(max-width:760px){
+  body.adminRouteV57 .pageHead{padding-top:18px;padding-bottom:18px}
+  body.adminRouteV57 .pageHead h1{font-size:clamp(2rem,10vw,2.65rem);margin-top:6px;margin-bottom:8px}
+  body.adminRouteV57 .pageHead p{font-size:.92rem;line-height:1.45}
+  body.adminRouteV57 .section{padding-top:14px}
+  body.adminRouteV57 .adminAuthCardV57{padding:16px}
+}
+
+
+/* Cidade Conecta UI/UX v5.7 — quick wins da auditoria visual */
+.pageHead{padding:28px 0 18px!important}
+.pageHead:after{display:none}
+.pageHead h1{font-size:clamp(2.15rem,4vw,3.35rem)!important;line-height:1.08!important;margin:.28rem 0 .5rem!important;max-width:900px}
+.pageHead p{font-size:1rem!important;line-height:1.5!important;margin:0;max-width:760px}
+
+.heroV53 .heroGrid{grid-template-columns:minmax(0,1.14fr) minmax(360px,.86fr);gap:40px}
+.heroV53 .heroCopy{max-width:760px}
+.heroV53 h1{font-size:clamp(2.7rem,4.7vw,4.5rem)!important;line-height:1.02!important;letter-spacing:-.055em}
+.heroV53 .actions{margin-top:22px}
+
+.stateCardV57{display:flex;align-items:flex-start;gap:14px;padding:18px;border:1px solid #d6e4dd;border-radius:16px;background:linear-gradient(180deg,#fff,#f7faf8)}
+.stateCardV57>span{width:42px;height:42px;display:grid;place-items:center;flex:0 0 auto;border-radius:12px;background:#eaf3ee;color:var(--cc56-ink)}
+.stateCardV57>span .uiIcon{width:21px;height:21px}
+.stateCardV57 h2,.stateCardV57 b{color:var(--cc56-ink)}
+.stateCardV57 p{margin:.3rem 0 0;color:var(--cc56-muted);line-height:1.45}
+.stateErrorV57{border-color:#ead6ad;background:#fffaf0}
+.homeMapFallbackV57{height:100%;min-height:220px;align-items:center;justify-content:center;text-align:left;border:0;border-radius:0;background:linear-gradient(145deg,#edf5f1,#f9fbf9)}
+
+.registerSubmitV51{position:static!important;bottom:auto!important;box-shadow:none!important;background:transparent!important;border:0!important;padding:12px 0 0!important}
+.registerSubmitV51 .btn[disabled]{opacity:.58;cursor:not-allowed}
+.clearActionV57{border-color:transparent!important;background:transparent!important;color:#657779!important}
+.formProgressV51{margin-top:10px}
+.formJourneyV51{position:relative!important;top:auto!important}
+
+.datasetChipV57{display:inline-flex;align-items:center;margin:0 0 12px;padding:7px 10px;border:1px solid #d9e5df;border-radius:999px;background:#f4f8f6;color:#496a67;font-size:.78rem;font-weight:820}
+.dashboardKpisV51 article small{font-size:.76rem!important}
+.pipelineStageV51>i{height:8px!important;border-radius:999px;overflow:hidden}
+
+.networkChooserFirstV57{margin-top:0!important;margin-bottom:14px}
+.networkHowV57{margin:0 0 22px;border:1px solid #dce7e1;border-radius:15px;background:#f8fbf9;overflow:hidden}
+.networkHowV57>summary{cursor:pointer;padding:13px 15px;color:var(--cc56-ink);font-weight:850;list-style:none}
+.networkHowV57>summary::-webkit-details-marker{display:none}
+.networkHowV57>summary:after{content:"+";float:right;font-size:1.15rem}
+.networkHowV57[open]>summary:after{content:"−"}
+.networkHowV57 .networkScaleV54,.networkHowV57 .networkDisclaimerV54{margin:0 14px 14px}
+
+.passwordFieldV57{position:relative}
+.passwordFieldV57 input{width:100%;padding-right:86px}
+.passwordToggleV57{position:absolute;right:7px;top:50%;transform:translateY(-50%);min-height:34px;border:0;background:transparent;color:var(--cc56-ink);font:inherit;font-size:.78rem;font-weight:850;cursor:pointer}
+.adminLoginCompactV57{max-width:560px}
+.adminLoginCompactV57 h2{margin:.1rem 0}
+body.adminRouteV57 .pageHead{padding:24px 0 16px!important}
+body.adminRouteV57 .pageHead h1{font-size:clamp(2.05rem,4vw,3rem)!important}
+
+.mobileActionsV51{grid-template-columns:repeat(5,1fr)!important}
+.mobileActionsV51 a,.mobileActionsV51 button{
+  min-width:0;min-height:48px;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px!important;
+  border:0!important;background:transparent!important;color:#587075!important;box-shadow:none!important;
+  padding:6px 2px!important;border-radius:10px!important;font:inherit;font-size:.72rem!important;font-weight:760;text-decoration:none!important;cursor:pointer
+}
+.mobileActionsV51 a.active,.mobileActionsV51 button.active{color:var(--cc-green)!important;background:#edf5f1!important;font-weight:900}
+.mobileActionsV51 .mobileNavIcon{width:21px;height:21px;display:grid;place-items:center}
+.mobileActionsV51 .mobileNavIcon svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mobileActionsV51 a[aria-current="page"],.mobileActionsV51 button[aria-current="page"]{text-decoration:none!important}
+
+#mapClear,#adminClear{background:transparent!important}
+.mapCardV50 .filters select{min-width:170px}
+
+@media(max-width:1020px){
+  .heroV53 .heroGrid{grid-template-columns:1fr}
+  .heroV53 .heroCopy{max-width:none}
+  .heroV53 .heroPanelLive{max-width:none}
+}
+@media(max-width:760px){
+  .cityBand{display:none}
+  .pageHead{padding:22px 0 15px!important}
+  .pageHead h1{font-size:clamp(2rem,9vw,2.75rem)!important}
+  .pageHead p{font-size:.94rem!important}
+  .heroV53{padding-top:34px!important}
+  .heroV53 h1{font-size:clamp(2.55rem,12vw,3.7rem)!important;line-height:1.03!important}
+  .heroV53 .actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .heroV53 .actions .btn{width:100%}
+  .formJourneyV51{display:grid;grid-template-columns:repeat(3,1fr)!important}
+  .formJourneyV51 button{min-width:0;display:flex;gap:4px!important;flex-direction:column}
+  .formJourneyV51 button b{display:block!important;font-size:.66rem!important}
+  .formJourneyV51 button span{font-size:.68rem}
+  .dashboardKpisV51{grid-template-columns:1fr 1fr!important}
+  .networkCategoryTabsV54{overflow-x:auto;flex-wrap:nowrap!important;scrollbar-width:none;padding-bottom:4px}
+  .networkCategoryTabsV54::-webkit-scrollbar{display:none}
+  .networkCategoryTabsV54 button{flex:0 0 auto;min-height:44px}
+  .networkHowV57 .networkScaleV54{display:grid!important;grid-template-columns:1fr!important}
+  .networkHowV57 .networkScaleV54>i{transform:rotate(90deg);justify-self:center}
+  body.adminRouteV57 .pageHead{padding:18px 0 13px!important}
+  body.adminRouteV57 .pageHead h1{font-size:clamp(2rem,9vw,2.55rem)!important}
+  .stateCardV57{flex-wrap:wrap}
+}
+@media(max-width:440px){
+  .mobileActionsV51 a,.mobileActionsV51 button{font-size:.66rem!important}
+  .mobileActionsV51 .mobileNavIcon,.mobileActionsV51 .mobileNavIcon svg{width:20px;height:20px}
+}
+
+
+/* Mapa v5.7.1 — mapa primeiro, lista resiliente e regiões legíveis */
+.mapSectionV53{padding-top:20px!important}
+.mapCardV58{overflow:hidden!important;border-radius:22px!important}
+.mapExperienceV58{grid-template-columns:minmax(300px,330px) minmax(0,1fr)!important;min-height:650px!important}
+.mapSideV58{padding:15px!important}
+.mapSideV58 .mapSideHead{margin-bottom:11px}
+.mapSideV58 .mapSideHead h2{margin:.18rem 0;font-size:1.1rem;color:var(--cc56-ink)}
+.mapPrimaryFiltersV58{gap:7px!important}
+.mapSideV58 .filters input,.mapSideV58 .filters select,.mapSideV58 .filters .btn{min-height:42px!important}
+.mapSideV58 .statusQuick{margin:10px 0}
+.mapSideV58 .statusQuick button,.mapSideV58 .openOnlyV52{min-height:38px}
+.mapRegionsPaneV58{margin:4px 0 12px;padding:12px;border:1px solid #dce8e2;border-radius:14px;background:#fff}
+.mapRegionsHeadV58 h3{margin:.2rem 0 .3rem;color:var(--cc56-ink);font-size:.95rem}
+.mapRegionsHeadV58 p{margin:0 0 10px;color:var(--cc56-muted);font-size:.7rem;line-height:1.45}
+.mapRegionGridV58{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;margin:0!important}
+.mapRegionGridV58 button{
+  min-height:46px!important;display:flex;align-items:center;justify-content:center;gap:4px;
+  padding:6px!important;border-radius:10px!important;font-size:.72rem!important
+}
+.mapRegionGridV58 button span{font-size:.62rem;font-weight:760;color:inherit;opacity:.78}
+.mapRegionGridV58 button b{font-size:.9rem}
+.mapRegionGridV58 button em{font-style:normal;font-size:.58rem;color:#718387;font-weight:780;white-space:nowrap}
+.mapRegionGridV58 button.active span,.mapRegionGridV58 button.active em{opacity:1;color:inherit}
+.mapCanvasV58 #publicMap{min-height:580px!important}
+.mapCanvasV58 .mapCanvasHead{background:#fbfdfb}
+.mapFallbackV58{
+  min-height:580px;height:100%;display:grid;place-items:center;padding:24px;
+  background:
+    radial-gradient(circle at 28% 25%,rgba(191,240,84,.10),transparent 26%),
+    linear-gradient(145deg,#e8f0eb,#f7faf8)
+}
+.mapFallbackV58 .stateCardV57{max-width:620px;width:100%;box-shadow:0 16px 42px rgba(8,55,58,.08)}
+.mapStaticResultV58{
+  display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:9px;align-items:center;
+  padding:10px 3px;border-bottom:1px solid rgba(8,55,58,.08);text-decoration:none;color:inherit
+}
+.mapStaticResultV58>span{
+  width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#edf5f1;color:var(--cc-green-2)
+}
+.mapStaticResultV58>span .uiIcon{width:17px;height:17px}
+.mapStaticResultV58 b{display:block;color:var(--cc56-ink);font-size:.76rem;line-height:1.3}
+.mapStaticResultV58 small{display:block;margin-top:2px;color:var(--cc56-muted);font-size:.64rem}
+.mapStaticResultV58 em{font-style:normal;color:#5f7478;font-size:.62rem;font-weight:820;text-align:right}
+.mapEmptyV58{display:grid;justify-items:center;gap:7px;padding:24px 14px!important}
+.mapEmptyV58>span{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#edf5f1;color:var(--cc-green-2)}
+.mapEmptyV58>span .uiIcon{width:19px;height:19px}
+.mapEmptyV58 b{color:var(--cc56-ink)}
+.mapEmptyV58 p{margin:0;color:var(--cc56-muted);font-size:.72rem}
+.mapSideV58 .mapTerritorySummary{padding:10px!important;margin-bottom:10px!important}
+.mapSideV58 .mapTerritorySummary>div:first-child b{font-size:.8rem}
+.mapSideV58 .mapTerritorySummary>div:first-child small{font-size:.62rem}
+.mapSideV58 .mapTerritorySummary .regionMiniGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.mapSideV58 .mapTerritorySummary .regionMiniGrid span{min-height:38px}
+.mapSideV58 .mapTerritorySummary>a{min-height:38px!important}
+.mapMobileTabsV58 button{display:flex;align-items:center;justify-content:center;gap:6px}
+.mapMobileTabsV58 .uiIcon{width:16px;height:16px}
+
+@media(max-width:1020px) and (min-width:761px){
+  .mapExperienceV58{grid-template-columns:290px minmax(0,1fr)!important}
+  .mapRegionGridV58{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+@media(max-width:760px){
+  .mapSectionV53{padding-top:12px!important}
+  .mapCardV58{overflow:visible!important}
+  .mapMobileTabsV58{
+    grid-template-columns:repeat(3,1fr)!important;
+    position:sticky;top:70px;z-index:12;margin-bottom:9px!important
+  }
+  .mapMobileTabsV58 button{min-height:44px!important;font-size:.72rem!important}
+  .mapExperienceV58{display:block!important;min-height:0!important}
+  .mapExperienceV58 .mapSideV58{display:none}
+  .mapExperienceV58 .mapCanvasV58{display:flex}
+  .mapExperienceV58.showListV53 .mapSideV58{display:flex}
+  .mapExperienceV58.showListV53 .mapCanvasV58{display:none}
+  .mapExperienceV58.showListV53 .mapRegionsPaneV58{display:none}
+  .mapExperienceV58.showRegionsV58 .mapSideV58{display:flex}
+  .mapExperienceV58.showRegionsV58 .mapCanvasV58{display:none}
+  .mapExperienceV58.showRegionsV58 .mapSideHead,
+  .mapExperienceV58.showRegionsV58 .filters,
+  .mapExperienceV58.showRegionsV58 .statusQuick,
+  .mapExperienceV58.showRegionsV58 .mapBehaviorV55,
+  .mapExperienceV58.showRegionsV58 .mapSideActions,
+  .mapExperienceV58.showRegionsV58 .mapResultsV50{display:none!important}
+  .mapExperienceV58.showRegionsV58 .mapRegionsPaneV58{display:block}
+  .mapSideV58{padding:12px!important}
+  .mapRegionsPaneV58{margin:0;padding:14px}
+  .mapRegionGridV58{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .mapRegionGridV58 button{min-height:54px!important;flex-direction:column;gap:1px}
+  .mapCanvasV58 #publicMap,.mapFallbackV58{min-height:56vh!important}
+  .mapFallbackV58{place-items:start center;padding:28px 14px 96px}
+  .mapCanvasHeadV53{min-height:62px!important}
+  .mapContextV53{font-size:.68rem}
+  .mapStaticResultV58{grid-template-columns:34px minmax(0,1fr)}
+  .mapStaticResultV58 em{grid-column:2;justify-self:start}
+  .mapSideV58 .mapTerritorySummary .regionMiniGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+
+@media(max-width:440px){
+  .mapRegionGridV58{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .mapFallbackV58{padding:14px}
+  .mapFallbackV58 .stateCardV57{padding:15px}
 }

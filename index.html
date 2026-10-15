@@ -27,9 +27,9 @@
   <link rel="stylesheet" href="assets/styles.css?v=5.5.0">
   <link rel="stylesheet" href="assets/piracicaba.css?v=5.5.0">
   <link rel="stylesheet" href="assets/piracicaba-mapas.css?v=5.5.0">
-  <link rel="stylesheet" href="assets/site-enhancements.css?v=5.5.0">
+  <link rel="stylesheet" href="assets/site-enhancements.css?v=5.7.1">
   <link rel="stylesheet" href="assets/design-v55.css?v=5.5.0">
-  <link rel="stylesheet" href="assets/design-v56.css?v=5.6.0">
+  <link rel="stylesheet" href="assets/design-v56.css?v=5.7.1">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -65,7 +65,7 @@
           <span class="commandTriggerIconV53" aria-hidden="true">⌕</span><span>Buscar</span><kbd>Ctrl K</kbd>
         </button>
         <button class="btn soft smallBtn installBtn hidden" type="button">Instalar app</button>
-        <button class="btn secondary menu" id="menu" type="button" aria-label="Abrir menu" aria-controls="nav">☰</button>
+        <button class="btn secondary menu" id="menu" type="button" aria-label="Abrir menu" aria-controls="nav" aria-expanded="false">☰</button>
       </div>
     </div>
   </header>
@@ -91,10 +91,11 @@
   <main id="app" tabindex="-1"></main>
 
   <div class="mobileActions mobileActionsV51" aria-label="Atalhos principais">
-    <a href="#/"><span aria-hidden="true">⌂</span>Início</a>
-    <a href="#/registrar" data-primary="1"><span aria-hidden="true">＋</span>Registrar</a>
-    <a href="#/mapa"><span aria-hidden="true">⌖</span>Mapa</a>
-    <a href="#/acompanhar"><span aria-hidden="true">#</span>Protocolo</a>
+    <a href="#/" data-mobile-route=""><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5M9 20v-6h6v6"/></svg></span>Início</a>
+    <a href="#/registrar" data-mobile-route="registrar"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Registrar</a>
+    <a href="#/mapa" data-mobile-route="mapa"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"/><path d="M9 3v15m6-12v15"/></svg></span>Mapa</a>
+    <a href="#/acompanhar" data-mobile-route="acompanhar"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></span>Protocolo</a>
+    <button id="mobileMore" type="button" data-mobile-route="more" aria-label="Abrir mais opções"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></span>Mais</button>
   </div>
 
   <footer>
@@ -102,7 +103,7 @@
       <div>
         <div class="footBrand">Cidade Conecta · Piracicaba</div>
         <p>Projeto acadêmico para participação cidadã e registro organizado de problemas urbanos em Piracicaba, São Paulo.</p>
-        <div class="version">MVP v5.5 · UI v5.6 · 2026</div>
+        <div class="version">MVP v5.5 · UI v5.7.1 · 2026</div>
       </div>
       <div>
         <b>Território e privacidade</b>
@@ -112,7 +113,7 @@
         <a href="#/rede-municipal">Rede municipal e setores</a><br>
         <a href="#/privacidade">Princípios de privacidade</a><br>
         <a href="#/sobre">Sobre o projeto</a><br>
-        <a href="#/admin">Painel demonstrativo</a>
+        <a href="#/admin">Acesso interno</a>
       </div>
       <div>
         <b>Serviços oficiais</b>
@@ -141,12 +142,13 @@
 
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="assets/runtime-config.js?v=5.5.0" defer></script>
+  <script src="assets/runtime-config.js?v=5.7.1" defer></script>
+  <script src="assets/auth.js?v=5.7.1" defer></script>
   <script src="assets/supabase-bridge.js?v=5.5.0" defer></script>
-  <script src="assets/app.js?v=5.5.0" defer></script>
+  <script src="assets/app.js?v=5.7.1" defer></script>
   <script src="assets/piracicaba.js?v=5.5.0" defer></script>
   <script src="assets/piracicaba-mapas.js?v=5.5.0" defer></script>
   <script src="assets/privacy-geo.js?v=5.5.0" defer></script>
-  <script src="assets/site-enhancements.js?v=5.5.0" defer></script>
+  <script src="assets/site-enhancements.js?v=5.7.1" defer></script>
 </body>
 </html>
