@@ -22,7 +22,7 @@ function configured(){
 
 function isTransientError(error){
   const status=Number(error?.status||0);
-  return status===0||status>=500||error?.code==='request_timeout'||error?.name==='AbortError';
+  return error?.status===0||status>=500||error?.code==='request_timeout'||error?.name==='AbortError';
 }
 
 async function fetchWithTimeout(url,options={}){
@@ -235,22 +235,35 @@ async function signOut(){
 }
 
 async function invokeInternal(payload){
-  const token=await ensureToken();
-  if(!token)throw new Error('Sessão expirada. Entre novamente.');
-  const response=await fetchWithTimeout(`${sb.url}/functions/v1/admin-occurrences`,{
-    method:'POST',
-    headers:baseHeaders(token,{'Content-Type':'application/json'}),
-    body:JSON.stringify(payload||{}),
-    cache:'no-store'
-  });
-  if(response.status===401){
-    saveSession(null);
-    state.status='anonymous';
+  try{
+    const token=await ensureToken();
+    if(!token){
+      const error=new Error('Sessão expirada. Entre novamente.');
+      error.status=401;
+      throw error;
+    }
+    const response=await fetchWithTimeout(`${sb.url}/functions/v1/admin-occurrences`,{
+      method:'POST',
+      headers:baseHeaders(token,{'Content-Type':'application/json'}),
+      body:JSON.stringify(payload||{}),
+      cache:'no-store'
+    });
+    return await parseResponse(response);
+  }catch(error){
+    state.lastError=String(error?.message||error);
     state.user=null;
     state.profile=null;
+    if(isTransientError(error)){
+      state.status='error';
+    }else if(Number(error?.status)===403){
+      state.status='denied';
+    }else{
+      saveSession(null);
+      state.status='anonymous';
+    }
     emit();
+    throw error;
   }
-  return parseResponse(response);
 }
 
 const ready=init();

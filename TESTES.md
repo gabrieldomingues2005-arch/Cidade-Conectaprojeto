@@ -385,3 +385,8 @@ O projeto está pronto para demonstração quando registro, protocolo, acompanha
 - executar `node scripts/validate-project.mjs`;
 - executar `bash scripts/smoke-ui.sh`;
 - confirmar smoke de `#/admin` no estado anônimo em desktop.
+
+
+## 20. QA com Supabase indisponível
+
+Executar `node --test scripts/test-auth.mjs scripts/test-sw.mjs` e `bash scripts/smoke-ui.sh`. O smoke cobre sete rotas em 390/768/1366 px, com backend externo interceptado, além de estados de erro de autenticação. Evidências e limites: `docs/QA-OFFLINE-20261015.md`. Não usar contas nem dados reais para esta rodada.

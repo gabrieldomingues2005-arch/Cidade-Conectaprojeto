@@ -1,5 +1,5 @@
 const CACHE_PREFIX='cidade-conecta-';
-const CACHE='cidade-conecta-v5-6-auth-phase-2';
+const CACHE='cidade-conecta-v5-6-auth-qa-20261015';
 const CORE=['./','./index.html','./assets/styles.css','./assets/app.js','./assets/piracicaba.css','./assets/piracicaba.js','./assets/piracicaba-mapas.js','./assets/piracicaba-mapas.css','./assets/privacy-geo.js','./assets/runtime-config.js','./assets/auth.js','./assets/supabase-bridge.js','./assets/site-enhancements.js','./assets/site-enhancements.css','./assets/design-v55.css','./assets/design-v56.css','./assets/brand-mark-v51.svg','./data/piracicaba.json','./data/municipal-network.json','./manifest.webmanifest','./favicon.svg'];
 
 self.addEventListener('install',event=>{
@@ -26,13 +26,13 @@ self.addEventListener('fetch',event=>{
           if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put('./index.html',copy));}
           return response;
         })
-        .catch(()=>caches.match('./index.html'))
+        .catch(()=>caches.open(CACHE).then(cache=>cache.match('./index.html')))
     );
     return;
   }
 
   event.respondWith(
-    caches.match(event.request,{ignoreSearch:true}).then(cached=>{
+    caches.open(CACHE).then(cache=>cache.match(event.request,{ignoreSearch:true})).then(cached=>{
       if(cached)return cached;
       return fetch(event.request).then(response=>{
         if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}
