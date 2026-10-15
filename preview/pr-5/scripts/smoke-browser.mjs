@@ -56,6 +56,11 @@ try{
    errors.length=0;await send('Page.navigate',{url:base+'/index.html'+hash});await waitFor(`Boolean(document.querySelector(${JSON.stringify(selector)}))`);await pause(350);
    const data=await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth,text:document.querySelector('#app').textContent,unlabelled:[...document.querySelectorAll('#app input:not([type=hidden]),#app select,#app textarea')].filter(e=>!e.labels?.length&&!e.getAttribute('aria-label')&&!e.getAttribute('aria-labelledby')).map(e=>e.id)})`);
    await capture(`${name}-${width}`);
+   if(name==='mapa'&&width===390){
+    await evaluate(`document.querySelector('[data-map-pane="list"]')?.click()`);await pause(80);await capture('mapa-lista-390');
+    await evaluate(`document.querySelector('[data-map-pane="regions"]')?.click()`);await pause(80);await capture('mapa-regioes-390');
+    await evaluate(`document.querySelector('[data-map-pane="map"]')?.click()`);await pause(80);
+   }
    assert.equal(data.width,width);assert.ok(data.scroll<=width+1,`${name} ${width}: overflow ${data.scroll}`);assert.ok(!data.text.includes('Página não encontrada'));assert.deepEqual(data.unlabelled,[],`${name}: campos sem label`);assert.deepEqual(errors,[],`${name}: erro JS`);
    // Menu abre, é anunciado e fecha por Escape.
    const visible=await evaluate(`getComputedStyle(document.querySelector('#menu')).display!=='none'`);

@@ -18,7 +18,7 @@ async function data(){
   if(dataCache)return dataCache;
   try{const r=await fetch(DATA_URL,{cache:'no-cache'});if(!r.ok)return null;dataCache=await r.json();return dataCache}catch{return null}
 }
-function readOccurrences(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}}
+function readOccurrences(){const live=window.CidadeConectaLocalDB;if(Array.isArray(live?.occurrences))return live.occurrences;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}}
 function allNeighborhoods(d){
   const names=[];
   for(const r of d?.administrativeRegions||[])for(const b of r.neighborhoods||[])names.push(b,b.replace(/^Parte do /i,''));
