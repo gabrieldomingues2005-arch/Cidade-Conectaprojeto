@@ -14,13 +14,14 @@ A branch `main` é a fonte oficial do código. O preview do GitHub Pages é atua
 
 A sincronização com `gh-pages` só ocorre após a validação do mesmo commit. Se algum teste falhar, a versão anterior do preview é preservada. Execuções antigas são ignoradas quando a `main` já avançou, e o envio para `gh-pages` não usa força. Pull requests executam a mesma validação, sem publicar.
 
-## Situação atual — MVP v5.5 + UI v5.6
+## Situação atual — MVP v5.5 + UI v5.7
 
 O protótipo já possui:
 
 - interface responsiva para computador e celular;
 - redesign v5.5 com identidade cívica própria, Atlas de bairros, mapa com clustering sem dependência externa, bairros acompanhados e continuidade dos padrões 21st adaptados ao produto;
 - camada Product Design v5.6 para hierarquia visual, foco de teclado, estados loading/vazio/erro/offline, responsividade, contraste e reduced motion;
+- UI/UX v5.7 com navegação mobile por rota, cabeçalhos compactos, estados de falha explícitos, linguagem administrativa simplificada, Dashboard contextualizado e Rede Municipal orientada por problema;
 - identidade visual inspirada nas cores utilizadas pela cidade de Piracicaba, mantendo caráter independente;
 - registro de ocorrências com protocolo;
 - acompanhamento por protocolo e histórico;
@@ -43,7 +44,7 @@ O protótipo já possui:
 - sugestão demonstrativa de encaminhamento por categoria;
 - PWA e cache offline dos arquivos principais;
 - SEO local;
-- validação automática de qualidade no GitHub Actions, incluindo 247 verificações estáticas e smoke das rotas principais em Chrome headless;
+- validação automática de qualidade no GitHub Actions, incluindo 282 verificações estáticas, 46 testes Auth/Edge/PWA e 28 cenários em Chrome headless;
 - status visual de conectividade e origem dos dados;
 - atalho `Ctrl/Cmd + K` para consulta de protocolo;
 - proteção do painel interno por sessão real e papel validado no backend;
