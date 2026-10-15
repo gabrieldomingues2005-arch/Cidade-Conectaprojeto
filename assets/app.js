@@ -43,6 +43,12 @@ function clone(v){return typeof structuredClone==='function'?structuredClone(v):
 function loadDB(){try{const raw=JSON.parse(localStorage.getItem(STORAGE_KEY));if(raw&&Array.isArray(raw.occurrences))return raw}catch{}return{occurrences:clone(seed)}}
 function saveDB(){localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}
 function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safeImageSrc(v=''){
+ const raw=String(v||'').trim();
+ if(!raw)return'';
+ if(/^data:image\/(?:jpeg|png|webp);base64,[a-z0-9+/=\r\n]+$/i.test(raw))return raw;
+ try{const u=new URL(raw,location.origin);return u.protocol==='https:'||u.origin===location.origin?u.href:''}catch{return''}
+}
 function cat(id){return CATEGORIES.find(c=>c[0]===id)||CATEGORIES[CATEGORIES.length-1]}
 function iconSvg(name,cls=''){
  const paths={
@@ -231,7 +237,7 @@ function detail(o,admin=false){
  '<section class="currentStatusV52"><span class="statusPulseV52" aria-hidden="true"></span><div><span class="miniLabel">Status atual</span><h3>'+esc(info[0])+'</h3><p>'+esc(info[1])+'</p><small>'+esc(info[2])+(last?' · '+esc(relativeTime(last)):'')+'</small></div></section>'+
  '<div class="statusFlowBlock"><span class="statusFlowLabel">Jornada do protocolo</span>'+statusStepper(o.status)+'</div>'+(()=>{const r=routingReference(o.category);return '<a class="agencyReferenceV54" href="#/rede-municipal?cat='+encodeURIComponent(o.category)+'"><span class="agencyReferenceIconV54">'+iconSvg('layers')+'</span><div><small>Área pública de referência</small><b>'+esc(r.agencyLabel)+'</b><em>'+esc(r.sector)+' · referência informativa</em></div><i>'+iconSvg('arrow')+'</i></a>'})()+
  '<div class="occurrenceBodyV52"><h3>Relato</h3><p>'+esc(o.description)+'</p>'+(o.address?'<p class="muted"><b>Referência:</b> '+esc(o.address)+'</p>':'')+'</div>'+
- (o.photo?'<img src="'+o.photo+'" class="photoPreview" alt="Foto anexada à ocorrência">':'')+
+ (safeImageSrc(o.photo)?'<img src="'+esc(safeImageSrc(o.photo))+'" class="photoPreview" alt="Foto anexada à ocorrência">':'')+
  (Number.isFinite(o.lat)&&Number.isFinite(o.lng)?'<div class="mapFrameV52"><div class="mapFrameHeadV52"><span>'+iconSvg('map')+' Localização pública aproximada</span><small>Precisão reduzida para privacidade</small></div><div id="detailMap" class="map detailMapV52"></div></div>':'')+
  '<div class="detailActionsV52"><button class="btn secondary" data-copy="'+esc(o.protocol)+'">Copiar protocolo</button><button class="btn secondary" data-share="'+esc(o.protocol)+'">Compartilhar</button><button class="btn '+(isSaved(o.protocol)?'soft':'secondary')+'" data-save="'+esc(o.protocol)+'">'+iconSvg('bookmark')+' '+(isSaved(o.protocol)?'Salvo':'Salvar acompanhamento')+'</button></div>'+
  (similar.length?'<section class="similarSectionV52"><div><span class="miniLabel">Na mesma área</span><h3>Registros parecidos próximos</h3></div>'+similar.map(x=>'<a href="#/ocorrencia/'+encodeURIComponent(x.protocol)+'"><span>'+catIcon(x.category)+'</span><div><b>'+esc(x.title)+'</b><small>'+esc(x.bairro)+(x._distance!=null?' · '+x._distance.toFixed(1)+' km':'')+'</small></div>'+badge(x.status)+'</a>').join('')+'</section>':'')+
