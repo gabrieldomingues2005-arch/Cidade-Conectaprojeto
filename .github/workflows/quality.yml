@@ -60,7 +60,7 @@ jobs:
 
       - name: Guardar capturas do smoke
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ui-smoke-screenshots
           path: artifacts/ui-smoke

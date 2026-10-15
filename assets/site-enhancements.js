@@ -93,7 +93,7 @@ function keyboardShortcuts(e){
     if(location.hash!=='#/')location.hash='#/';
     setTimeout(()=>$('#homeProtocol')?.focus(),100);
   }
-  if(e.key==='Escape')$('#nav')?.classList.remove('open');
+  if(e.key==='Escape'&&$('#nav')?.classList.contains('open')){$('#nav').classList.remove('open');$('#menu')?.setAttribute('aria-expanded','false');$('#menu')?.setAttribute('aria-label','Abrir menu');$('#menu')?.focus()}
 }
 function enhancePage(){
   ensureStatus();
