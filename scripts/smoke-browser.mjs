@@ -12,7 +12,7 @@ const chrome=spawn(process.env.CHROME_BIN||'google-chrome',['--headless=new','--
 let socket;const results=[];let scenario='unavailable';
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 try{
- const endpoint=await new Promise((resolve,reject)=>{let log='';const timer=setTimeout(()=>reject(new Error('Chrome não iniciou em 10s')),10000);chrome.stderr.on('data',chunk=>{log+=chunk;const match=log.match(/DevTools listening on (ws:\/\/[^\s]+)/);if(match){clearTimeout(timer);resolve(match[1])}});chrome.once('error',reject);chrome.once('exit',code=>reject(new Error(`Chrome encerrou: ${code}`)))});
+ const endpoint=await new Promise((resolve,reject)=>{let log='';const timer=setTimeout(()=>reject(new Error('Chrome não iniciou em 30s: '+log)),30000);chrome.stderr.on('data',chunk=>{log+=chunk;const match=log.match(/DevTools listening on (ws:\/\/[^\s]+)/);if(match){clearTimeout(timer);resolve(match[1])}});chrome.once('error',reject);chrome.once('exit',code=>reject(new Error(`Chrome encerrou: ${code}`)))});
  const port=new URL(endpoint).port;
  const targets=await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
  socket=new WebSocket(targets.find(t=>t.type==='page').webSocketDebuggerUrl);
