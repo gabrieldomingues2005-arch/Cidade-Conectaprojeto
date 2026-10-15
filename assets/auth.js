@@ -164,6 +164,7 @@ async function verifyInternalAccess(token){
     const error=new Error(String(message));
     error.status=response.status;
     error.payload=payload;
+    if(response.status===403)error.code='internal_service_forbidden';
     throw error;
   }
   return {authorized:payload?.authenticated===true,profile:payload?.profile||null,role:payload?.profile?.role||null};
@@ -199,7 +200,7 @@ async function init(){
     state.status=access.authorized&&access.profile&&ALLOWED_INTERNAL_ROLES.has(access.profile.role)?'authorized':'denied';
   }catch(error){
     state.lastError=String(error?.message||error);
-    if(isTransientError(error)||Number(error?.status)===403&&error?.payload?.error!=='internal_access_denied'){
+    if(isTransientError(error)||error?.code==='internal_service_forbidden'){
       state.status='error';
       emit();
       return state;
