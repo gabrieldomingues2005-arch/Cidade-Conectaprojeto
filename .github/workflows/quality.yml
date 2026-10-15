@@ -59,6 +59,55 @@ jobs:
           SMOKE_SCREENSHOT_DIR: artifacts/ui-smoke
         run: bash scripts/smoke-ui.sh
 
+      - name: Montar pacote editável para Claude
+        if: success()
+        run: |
+          rm -rf artifacts/claude-ui
+          mkdir -p artifacts/claude-ui/assets artifacts/claude-ui/data artifacts/claude-ui/docs artifacts/claude-ui/scripts artifacts/claude-ui/screenshots
+          cp index.html sw.js manifest.webmanifest favicon.svg README.md artifacts/claude-ui/
+          cp assets/app.js assets/styles.css assets/design-v55.css assets/design-v56.css artifacts/claude-ui/assets/
+          cp assets/site-enhancements.js assets/site-enhancements.css artifacts/claude-ui/assets/
+          cp assets/piracicaba.js assets/piracicaba.css assets/piracicaba-data.js artifacts/claude-ui/assets/
+          cp assets/piracicaba-mapas.js assets/piracicaba-mapas.css assets/privacy-geo.js artifacts/claude-ui/assets/
+          cp assets/supabase-bridge.js assets/auth.js assets/brand-mark-v51.svg artifacts/claude-ui/assets/
+          cp data/piracicaba.json data/municipal-network.json artifacts/claude-ui/data/
+          cp docs/UI-UX-V57.md docs/MAP-UX-V571.md docs/CLAUDE-UI-HANDOFF.md artifacts/claude-ui/docs/
+          cp scripts/smoke-browser.mjs scripts/validate-project.mjs scripts/smoke-ui.sh artifacts/claude-ui/scripts/
+          cp -R artifacts/ui-smoke/. artifacts/claude-ui/screenshots/
+          cat > artifacts/claude-ui/assets/runtime-config.js <<'EOF'
+          // Configuração sanitizada somente para revisão offline de UI.
+          window.CIDADE_CONECTA_CONFIG = Object.freeze({
+            appVersion: '5.7.1-claude-offline',
+            city: 'Piracicaba',
+            state: 'SP',
+            municipalityIbgeCode: '3538709',
+            dataMode: 'local',
+            supabase: Object.freeze({
+              enabled: false,
+              projectRef: '',
+              url: '',
+              publishableKey: '',
+              legacyAnonJwt: '',
+              submitFunction: 'submit-occurrence',
+              trackFunction: 'track-occurrence'
+            })
+          });
+          EOF
+          cat > artifacts/claude-ui/LEIA-PRIMEIRO.txt <<'EOF'
+          Abra docs/CLAUDE-UI-HANDOFF.md antes de editar.
+          Este pacote é uma cópia offline de UI. Não contém credenciais privadas.
+          Edite somente frontend/layout conforme o handoff e devolva os arquivos alterados + CLAUDE-CHANGELOG.md.
+          EOF
+
+      - name: Guardar pacote editável para Claude
+        if: success()
+        uses: actions/upload-artifact@v6
+        with:
+          name: claude-ui-v571
+          path: artifacts/claude-ui
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Guardar capturas do smoke
         if: always()
         uses: actions/upload-artifact@v6
