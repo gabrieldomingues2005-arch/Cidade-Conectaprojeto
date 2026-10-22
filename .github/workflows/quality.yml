@@ -41,6 +41,7 @@ jobs:
           node --check scripts/test-auth.mjs
           node --check scripts/test-sw.mjs
           node --check scripts/test-edge.mjs
+          node --check scripts/validate-recovery.mjs
 
       - name: Validar smoke test de UI
         run: bash -n scripts/smoke-ui.sh
@@ -50,6 +51,9 @@ jobs:
 
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs
+
+      - name: Validar recuperação do backend
+        run: node scripts/validate-recovery.mjs
 
       - name: Validar JSON do manifesto
         run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8')); console.log('manifest.webmanifest válido')"
