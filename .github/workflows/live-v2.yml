@@ -1,0 +1,34 @@
+name: Live Supabase v2 validation
+
+on:
+  push:
+    branches:
+      - feature/cidade-conecta-backend-recovery-20261022
+    paths:
+      - '.github/workflows/live-v2.yml'
+      - 'scripts/test-live-v2.mjs'
+      - 'assets/runtime-config.js'
+
+permissions:
+  contents: read
+
+jobs:
+  live-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Testar fluxo real Cidade Conecta v2
+        run: node scripts/test-live-v2.mjs
+      - name: Guardar resultado
+        uses: actions/upload-artifact@v6
+        with:
+          name: live-v2-result
+          path: artifacts/live-v2/result.json
+          if-no-files-found: error
+          retention-days: 3
