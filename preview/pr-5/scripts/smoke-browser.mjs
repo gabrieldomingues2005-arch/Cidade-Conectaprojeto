@@ -25,6 +25,23 @@ try{
  // Fixtures existem apenas no browser de QA: nenhuma chamada externa sai do teste.
  await send('Page.addScriptToEvaluateOnNewDocument',{source:`
  window.__qaScenario='unavailable';
+ if(location.search.includes('qaLeaflet=1')){
+  window.__leafletQA={fit:0,fly:0,popup:0,invalidates:0};
+  const chain=()=>({addTo(){return this},bindPopup(){return this},openPopup(){window.__leafletQA.popup++;return this},on(){return this},setLatLng(){return this},getLatLng(){return {lat:-22.725,lng:-47.649}}});
+  const mapObj={
+   _zoom:12,remove(){window.__leafletQA.removed=true;return this},setView(){return this},getZoom(){return this._zoom},removeLayer(){return this},
+   fitBounds(){window.__leafletQA.fit++;return this},flyTo(){window.__leafletQA.fly++;return this},
+   invalidateSize(){window.__leafletQA.invalidates++;return this},on(){return this}
+  };
+  window.L={
+   map(){return mapObj},
+   tileLayer(){const handlers={};return{on(name,fn){handlers[name]=fn;if(name==='load')setTimeout(fn,10);return this}}},
+   marker(){return chain()},circleMarker(){return chain()},divIcon(o){return o},
+   latLngBounds(){return{pad(){return this}}},
+   geoJSON(){return chain()},
+   control:{zoom(){return{addTo(){return this}}},layers(){return{addTo(){return this}}}}
+  };
+ }
  const originalFetch=window.fetch.bind(window);
  window.fetch=async function(input,options={}){
   const url=new URL(typeof input==='string'?input:input.url,location.href);
@@ -56,6 +73,11 @@ try{
    errors.length=0;await send('Page.navigate',{url:base+'/index.html'+hash});await waitFor(`Boolean(document.querySelector(${JSON.stringify(selector)}))`);await pause(350);
    const data=await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth,text:document.querySelector('#app').textContent,unlabelled:[...document.querySelectorAll('#app input:not([type=hidden]),#app select,#app textarea')].filter(e=>!e.labels?.length&&!e.getAttribute('aria-label')&&!e.getAttribute('aria-labelledby')).map(e=>e.id)})`);
    await capture(`${name}-${width}`);
+   if(name==='mapa'){
+    if(width===390)await evaluate(`document.querySelector('[data-map-pane="list"]')?.click()`);
+    const overlapping=await evaluate(`[...document.querySelectorAll('.mapResultItemV58')].filter(row=>{const radar=row.querySelector('.mapResultRadarV58')?.getBoundingClientRect(),meta=row.querySelector('.mapResultMeta')?.getBoundingClientRect();return radar&&meta&&radar.height>0&&meta.height>0&&radar.top<meta.bottom-1}).length`);
+    assert.equal(overlapping,0,`mapa ${width}: Radar do bairro sobrepõe o status`);
+   }
    if(name==='mapa'&&width===390){
     await evaluate(`document.querySelector('[data-map-pane="list"]')?.click()`);await pause(80);await capture('mapa-lista-390');
     await evaluate(`document.querySelector('[data-map-pane="regions"]')?.click()`);await pause(80);await capture('mapa-regioes-390');
@@ -72,13 +94,45 @@ try{
  for(scenario of ['unavailable','network','timeout','offline','401','403','empty']){
   await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:true});window.dispatchEvent(new Event('online'));window.__qaScenario=${JSON.stringify(scenario)};sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));location.hash='#/admin';`);
   if(scenario==='offline')await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:false});window.dispatchEvent(new Event('offline'))`);
-  await evaluate('window.CidadeConectaAuth.init()');await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);await pause(150);
+  await evaluate('window.CidadeConectaAuth.init()');await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);
+  if(scenario==='401')await waitFor(`Boolean(document.querySelector('#adminLoginForm'))`);else await pause(180);
   const state=await evaluate(`({status:CidadeConectaAuth.state.status,saved:!!sessionStorage.getItem('cidadeConectaAuthSessionV1'),login:!!document.querySelector('#adminLoginForm'),text:document.querySelector('#app').textContent})`);
   await capture(`admin-${scenario}`);
   assert.equal(state.status,scenario==='401'?'anonymous':scenario==='403'?'denied':scenario==='empty'?'authorized':'error');assert.equal(state.saved,scenario!=='401');if(scenario==='401')assert.ok(state.login);
   if(scenario==='offline')assert.equal(await evaluate(`document.querySelector('#offlineNoticeV56').hidden`),false);
   results.push({scenario,status:'PASS'});console.log(`✓ admin ${scenario}`);
  }
+ // Exercita o caminho real do mapa com uma implementação Leaflet local de QA.
+ errors.length=0;
+ await evaluate(`sessionStorage.removeItem('cidadeConectaAuthSessionV1')`);
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+ await send('Page.navigate',{url:base+'/index.html?qaLeaflet=1#/mapa'});
+ await waitFor(`Boolean(window.L)&&document.querySelectorAll('[data-map-open]').length>0`);
+ await pause(250);
+ let leaf=await evaluate(`({...window.__leafletQA,items:document.querySelectorAll('[data-map-open]').length,hash:location.hash})`);
+ assert.ok(leaf.items>0,'mapa Leaflet QA: lista vazia');
+ assert.ok(leaf.fit>0,'mapa Leaflet QA: fitBounds inicial não executou');
+ await evaluate(`document.querySelector('[data-map-pane="list"]')?.click();document.querySelector('[data-map-status="Em andamento"]')?.click()`);
+ await pause(80);
+ assert.ok((await evaluate('location.hash')).includes('status=Em+andamento'),'mapa Leaflet QA: filtros não sincronizaram a URL');
+ const fitBefore=await evaluate('window.__leafletQA.fit');
+ await evaluate(`document.querySelector('[data-map-pane="map"]')?.click()`);
+ await pause(120);
+ assert.ok((await evaluate('window.__leafletQA.fit'))>fitBefore,'mapa Leaflet QA: fit adiado não executou ao voltar ao mapa');
+ await evaluate(`document.querySelector('[data-map-pane="list"]')?.click();document.querySelector('[data-map-open]')?.click()`);
+ await pause(700);
+ leaf=await evaluate(`({...window.__leafletQA})`);
+ assert.ok(leaf.fly>0,'mapa Leaflet QA: item da lista não focou o marcador');
+ assert.ok(leaf.popup>0,'mapa Leaflet QA: popup do marcador não abriu');
+ assert.deepEqual(errors,[],'mapa Leaflet QA: erro JS');
+ await capture('mapa-leaflet-stub-390');
+ results.push({scenario:'map-leaflet-stub',status:'PASS'});console.log('✓ mapa Leaflet stub 390');
+
+ await evaluate(`location.hash='#/admin'`);
+ await waitFor(`Boolean(document.querySelector('#adminLoginForm'))`);
+ assert.equal(await evaluate('Boolean(window.__leafletQA.removed)'),true,'Leaflet stub deve permitir destruir o mapa ao sair da rota');
+ assert.deepEqual(errors,[],'Transição mapa → admin deve ocorrer sem exceções');
+
  console.log(`✓ ${results.length} cenários de navegador`);
 }catch(error){results.push({scenario,status:'FAIL',error:String(error)});throw error}
 finally{await writeFile(path.join(output,'results.json'),JSON.stringify(results,null,2));socket?.close();chrome.kill();await rm(profile,{recursive:true,force:true,maxRetries:5,retryDelay:200})}
