@@ -63,6 +63,19 @@ jobs:
           SMOKE_SCREENSHOT_DIR: artifacts/ui-smoke
         run: bash scripts/smoke-ui.sh
 
+      - name: Smoke real do Supabase v2
+        if: github.ref == 'refs/heads/feature/cidade-conecta-backend-recovery-20261022'
+        run: node scripts/test-live-v2.mjs
+
+      - name: Guardar resultado do smoke real v2
+        if: github.ref == 'refs/heads/feature/cidade-conecta-backend-recovery-20261022'
+        uses: actions/upload-artifact@v6
+        with:
+          name: live-v2-result
+          path: artifacts/live-v2/result.json
+          if-no-files-found: error
+          retention-days: 3
+
       - name: Montar backup Supabase pré-exclusão
         if: always()
         run: |
