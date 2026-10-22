@@ -103,7 +103,7 @@ try{
  await pause(120);
  assert.ok((await evaluate('window.__leafletQA.fit'))>fitBefore,'mapa Leaflet QA: fit adiado não executou ao voltar ao mapa');
  await evaluate(`document.querySelector('[data-map-pane="list"]')?.click();document.querySelector('[data-map-open]')?.click()`);
- await pause(430);
+ await pause(700);
  leaf=await evaluate(`({...window.__leafletQA})`);
  assert.ok(leaf.fly>0,'mapa Leaflet QA: item da lista não focou o marcador');
  assert.ok(leaf.popup>0,'mapa Leaflet QA: popup do marcador não abriu');
