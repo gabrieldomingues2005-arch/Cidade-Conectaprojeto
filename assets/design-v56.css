@@ -405,192 +405,192 @@ body.adminRouteV57 .pageHead h1{font-size:clamp(2.05rem,4vw,3rem)!important}
    UI v5.8 — Mapa: layout, filtros, lista e regiões
    Escopo: .mapCardV58. Somente apresentação; sem mudança de dados.
    ========================================================= */
-.mapCardV58{--m58-line:rgba(7,56,58,.13);--m58-soft:#f4f8f6;--m58-top:70px}
+.mapCardV58{--m58-top:70px}
 .mapCardV58 [hidden]{display:none!important}
 
 /* Painel lateral: cabeçalho enxuto, filtros compactos */
-.mapSideV58{padding:14px!important;gap:0}
-.mapSideV58 .mapSideHead{align-items:flex-start;margin-bottom:10px;padding-bottom:10px}
-.mapSideV58 .mapSideHead h2{margin:.1rem 0 0;font-size:1.15rem}
-.mapSideV58 .mapSideHead small{font-size:.78rem;color:var(--cc56-muted)}
-.mapSideV58 .mapSideHead #mapClear{width:auto;min-height:34px;margin-top:6px;padding:0 12px;border-radius:10px;font-size:.78rem;border:1px solid var(--m58-line);background:#fff;color:var(--civic-900)}
-.mapSideV58 .resultCount{min-width:40px;height:40px;font-size:1rem}
-.mapFilterBarV58{display:grid;gap:8px;flex:none}
-.mapSideV58 .mapPrimaryFiltersV58{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:8px!important;padding:0!important;margin:0!important;border:0!important;background:transparent!important}
-.mapSideV58 .mapPrimaryFiltersV58 input,.mapSideV58 .mapPrimaryFiltersV58 select{width:100%;min-height:42px;font-size:.9rem}
-.mapFilterGroupV58{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mapFilterGroupV58 #mapAgency{grid-column:1/-1}
-.mapFilterGroupV58 #mapStatus{display:none}
-.mapFiltersToggleV58{display:none;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:0 14px;border:1px solid var(--m58-line);border-radius:14px;background:#fff;color:var(--civic-900);font-weight:800;font-size:.86rem;cursor:pointer}
-.mapFiltersToggleV58 .uiIcon{width:17px;height:17px}
-.mapFiltersToggleV58[aria-expanded=true]{background:var(--lime-soft);border-color:rgba(7,56,58,.28)}
-.mapFiltersToggleV58 em,.mapToolBtnV58 em{font-style:normal;min-width:20px;height:20px;padding:0 6px;display:inline-grid;place-items:center;border-radius:999px;background:var(--civic-950);color:#fff;font-size:.7rem;font-weight:900}
+:where(.mapCardV58) .mapSideV58{padding:14px!important;gap:0}
+:where(.mapCardV58) .mapSideV58 .mapSideHead{align-items:flex-start;margin-bottom:10px;padding-bottom:10px}
+:where(.mapCardV58) .mapSideV58 .mapSideHead h2{margin:.1rem 0 0;font-size:1.15rem}
+:where(.mapCardV58) .mapSideV58 .mapSideHead small{font-size:.78rem;color:var(--cc56-muted)}
+:where(.mapCardV58) .mapSideV58 .mapSideHead #mapClear{width:auto;min-height:34px;margin-top:6px;padding:0 12px;border-radius:10px;font-size:.78rem;border:1px solid var(--cc56-border);background:var(--cc56-surface);color:var(--civic-900)}
+:where(.mapCardV58) .mapSideV58 .resultCount{min-width:40px;height:40px;font-size:1rem}
+:where(.mapCardV58) .mapFilterBarV58{display:grid;gap:8px;flex:none}
+:where(.mapCardV58) .mapSideV58 .mapPrimaryFiltersV58{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:8px!important;padding:0!important;margin:0!important;border:0!important;background:transparent!important}
+:where(.mapCardV58) .mapSideV58 .mapPrimaryFiltersV58 input,:where(.mapCardV58) .mapSideV58 .mapPrimaryFiltersV58 select{width:100%;min-height:42px;font-size:.9rem}
+:where(.mapCardV58) .mapFilterGroupV58{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+:where(.mapCardV58) .mapFilterGroupV58 #mapAgency{grid-column:1/-1}
+:where(.mapCardV58) .mapFilterGroupV58 #mapStatus{display:none}
+:where(.mapCardV58) .mapFiltersToggleV58{display:none;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:0 14px;border:1px solid var(--cc56-border);border-radius:14px;background:var(--cc56-surface);color:var(--civic-900);font-weight:800;font-size:.86rem;cursor:pointer}
+:where(.mapCardV58) .mapFiltersToggleV58 .uiIcon{width:17px;height:17px}
+:where(.mapCardV58) .mapFiltersToggleV58[aria-expanded=true]{background:var(--lime-soft);border-color:var(--cc56-border)}
+:where(.mapCardV58) .mapFiltersToggleV58 em,:where(.mapCardV58) .mapToolBtnV58 em{font-style:normal;min-width:20px;height:20px;padding:0 6px;display:inline-grid;place-items:center;border-radius:999px;background:var(--civic-950);color:var(--cc56-surface);font-size:.7rem;font-weight:900}
 
 /* Chips de status */
-.mapSideV58 .statusQuick{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:10px 0 8px}
-.statusChipsV58{display:contents}
-.mapSideV58 .statusQuick button{min-height:34px;padding:0 12px;font-size:.78rem;white-space:nowrap}
-.mapSideV58 .statusQuick button.active{background:var(--civic-950);border-color:var(--civic-950);color:#fff}
-.mapSideV58 .openOnlyV52{min-height:34px;padding:0 12px;font-size:.78rem}
+:where(.mapCardV58) .mapSideV58 .statusQuick{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:10px 0 8px}
+:where(.mapCardV58) .statusChipsV58{display:contents}
+:where(.mapCardV58) .mapSideV58 .statusQuick button{min-height:34px;padding:0 12px;font-size:.78rem;white-space:nowrap}
+:where(.mapCardV58) .mapSideV58 .statusQuick button.active{background:var(--civic-950);border-color:var(--civic-950);color:var(--cc56-surface)}
+:where(.mapCardV58) .mapSideV58 .openOnlyV52{min-height:34px;padding:0 12px;font-size:.78rem}
 
 /* Lista: título legível, status em badge, bairro/protocolo/área em linhas próprias */
-.mapResultItemV58{display:grid!important;grid-template-columns:minmax(0,1fr)!important;border-radius:14px;overflow:hidden}
-.mapResultItemV58>.mapResultOpenV58{display:grid!important;grid-template-columns:38px minmax(0,1fr);grid-template-areas:"icon main" "icon meta";gap:2px 12px;align-items:start;width:100%;min-height:64px;padding:12px 12px 8px;border:0;background:transparent;text-align:left;color:inherit;font:inherit;text-decoration:none;cursor:pointer}
-.mapResultOpenV58 .mapResultIcon{grid-area:icon;width:38px;height:38px}
-.mapResultOpenV58 .mapResultMain{grid-area:main}
-.mapResultOpenV58 .mapResultMeta{grid-area:meta;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:4px}
-.mapResultItemV58 .mapResultMain b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;overflow:hidden;font-size:.92rem;line-height:1.3;color:var(--cc56-ink)}
-.mapResultItemV58 .mapResultMain small{white-space:normal;margin-top:2px;font-size:.78rem;line-height:1.4;color:var(--cc56-muted)}
-.mapResultItemV58 .mapResultAgencyV58{color:var(--civic-700)}
-.mapResultDistV58{font-size:.76rem;font-weight:800;color:var(--civic-700)}
-.mapResultItemV58>a.mapResultRadarV58{display:flex!important;align-items:center;justify-content:flex-start;min-width:0;min-height:38px;padding:0 12px 0 62px!important;border-left:0!important;border-top:1px solid rgba(8,55,58,.07);font-size:.78rem;font-weight:800;color:var(--civic-700)}
-.mapResultItemV58>a.mapResultRadarV58:hover{background:var(--m58-soft)}
-.mapSideV58 .mapEmptyV58{padding:22px 14px}
+:where(.mapCardV58) .mapResultItemV58{display:grid!important;grid-template-columns:minmax(0,1fr)!important;border-radius:14px;overflow:hidden}
+:where(.mapCardV58) .mapResultItemV58>.mapResultOpenV58{display:grid!important;grid-template-columns:38px minmax(0,1fr);grid-template-areas:"icon main" "icon meta";gap:2px 12px;align-items:start;width:100%;min-height:64px;padding:12px 12px 8px;border:0;background:transparent;text-align:left;color:inherit;font:inherit;text-decoration:none;cursor:pointer}
+:where(.mapCardV58) .mapResultOpenV58 .mapResultIcon{grid-area:icon;width:38px;height:38px}
+:where(.mapCardV58) .mapResultOpenV58 .mapResultMain{grid-area:main}
+:where(.mapCardV58) .mapResultOpenV58 .mapResultMeta{grid-area:meta;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:4px}
+:where(.mapCardV58) .mapResultItemV58 .mapResultMain b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;overflow:hidden;font-size:.92rem;line-height:1.3;color:var(--cc56-ink)}
+:where(.mapCardV58) .mapResultItemV58 .mapResultMain small{white-space:normal;margin-top:2px;font-size:.78rem;line-height:1.4;color:var(--cc56-muted)}
+:where(.mapCardV58) .mapResultItemV58 .mapResultAgencyV58{color:var(--civic-700)}
+:where(.mapCardV58) .mapResultDistV58{font-size:.76rem;font-weight:800;color:var(--civic-700)}
+:where(.mapCardV58) .mapResultItemV58>a.mapResultRadarV58{display:flex!important;align-items:center;justify-content:flex-start;min-width:0;min-height:38px;padding:0 12px 0 62px!important;border-left:0!important;border-top:1px solid var(--line-soft);font-size:.78rem;font-weight:800;color:var(--civic-700)}
+:where(.mapCardV58) .mapResultItemV58>a.mapResultRadarV58:hover{background:var(--cc56-surface-soft)}
+:where(.mapCardV58) .mapSideV58 .mapEmptyV58{padding:22px 14px}
 
 /* Barra de ações e contexto do mapa */
-.mapToolbarV58{display:flex;gap:8px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;background:#fff;border-bottom:1px solid var(--m58-line)}
-.mapToolbarV58::-webkit-scrollbar,.statusChipsV58::-webkit-scrollbar{display:none}
-.mapToolBtnV58{flex:none;display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 14px;border:1px solid var(--m58-line);border-radius:999px;background:#fff;color:var(--civic-900);font-size:.8rem;font-weight:800;cursor:pointer}
-.mapToolBtnV58 .uiIcon{width:16px;height:16px}
-.mapToolBtnV58:hover{background:var(--m58-soft)}
-.mapToolBtnV58:disabled{opacity:.6;cursor:progress}
-.mapToolFiltersV58{display:none}
-.mapContextV53 .mapBehaviorV58{padding:0;border:0;margin-left:auto}
-.mapContextV53 .mapBehaviorV58 label{min-height:34px;font-size:.78rem}
-.mapStageV58{position:relative;flex:1;min-height:0;display:flex}
-.mapStageV58 #publicMap{flex:1;min-width:0;min-height:0!important;height:auto!important}
-.mapNoteV58{position:absolute;left:12px;top:12px;z-index:900;max-width:min(420px,calc(100% - 76px));padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.96);border:1px solid var(--m58-line);box-shadow:0 8px 24px rgba(8,55,58,.14);font-size:.82rem;line-height:1.4;color:var(--civic-950);pointer-events:none}
-.mapNoLeafletV58 #mapLocate,.mapNoLeafletV58 #mapFit,.mapNoLeafletV58 #mapFocus,.mapNoLeafletV58 .mapBehaviorV58,.mapNoLeafletV58 .mapLegendInline{display:none!important}
-.mapNoLeafletV58 #publicMap{overflow:auto}
+:where(.mapCardV58) .mapToolbarV58{display:flex;gap:8px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;background:var(--cc56-surface);border-bottom:1px solid var(--cc56-border)}
+:where(.mapCardV58) .mapToolbarV58::-webkit-scrollbar,:where(.mapCardV58) .statusChipsV58::-webkit-scrollbar{display:none}
+:where(.mapCardV58) .mapToolBtnV58{flex:none;display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 14px;border:1px solid var(--cc56-border);border-radius:999px;background:var(--cc56-surface);color:var(--civic-900);font-size:.8rem;font-weight:800;cursor:pointer}
+:where(.mapCardV58) .mapToolBtnV58 .uiIcon{width:16px;height:16px}
+:where(.mapCardV58) .mapToolBtnV58:hover{background:var(--cc56-surface-soft)}
+:where(.mapCardV58) .mapToolBtnV58:disabled{opacity:.6;cursor:progress}
+:where(.mapCardV58) .mapToolFiltersV58{display:none}
+:where(.mapCardV58) .mapContextV53 .mapBehaviorV58{padding:0;border:0;margin-left:auto}
+:where(.mapCardV58) .mapContextV53 .mapBehaviorV58 label{min-height:34px;font-size:.78rem}
+:where(.mapCardV58) .mapStageV58{position:relative;flex:1;min-height:0;display:flex}
+:where(.mapCardV58) .mapStageV58 #publicMap{flex:1;min-width:0;min-height:0!important;height:auto!important}
+:where(.mapCardV58) .mapNoteV58{position:absolute;left:12px;top:12px;z-index:900;max-width:min(420px,calc(100% - 76px));padding:10px 12px;border-radius:12px;background:var(--cc56-surface);border:1px solid var(--cc56-border);box-shadow:var(--shadow-float);font-size:.82rem;line-height:1.4;color:var(--civic-950);pointer-events:none}
+:where(.mapCardV58) .mapNoLeafletV58 #mapLocate,:where(.mapCardV58) .mapNoLeafletV58 #mapFit,:where(.mapCardV58) .mapNoLeafletV58 #mapFocus,:where(.mapCardV58) .mapNoLeafletV58 .mapBehaviorV58,:where(.mapCardV58) .mapNoLeafletV58 .mapLegendInline{display:none!important}
+:where(.mapCardV58) .mapNoLeafletV58 #publicMap{overflow:auto}
 
 /* Regiões: linhas com bairros da base existente; nenhum nome ou limite é inventado */
-.mapRegionGridV58 button{display:grid!important;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:12px;min-height:60px;padding:10px 12px;text-align:left;border-radius:14px;background:#fff;color:var(--cc56-ink);cursor:pointer}
-.mapRegionGridV58 button:disabled{opacity:.6;cursor:not-allowed}
-.mapRegionGridV58 button b{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:var(--lime-soft);color:var(--civic-950);font-size:1.05rem}
-.mapRegionTextV58 strong{display:block;font-size:.9rem}
-.mapRegionTextV58 small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:1px;font-size:.78rem;line-height:1.35;color:var(--cc56-muted)}
-.mapRegionGridV58 button em{font-size:.76rem;font-weight:800;color:var(--civic-700);white-space:nowrap}
-.mapRegionGridV58 button.active{background:var(--civic-950);border-color:var(--civic-950);color:#fff}
-.mapRegionGridV58 button.active .mapRegionTextV58 small,.mapRegionGridV58 button.active em{color:#d8e7e4}
-.mapRegionGridV58 button.active b{background:var(--lime);color:var(--civic-1000)}
-.mapRegionStatusV58{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--lime-soft);border:1px solid rgba(7,56,58,.14);font-size:.82rem;color:var(--civic-950)}
-.mapRegionStatusV58.isWarn{background:#fff8e8;border-color:#ecd8ab;color:#755117}
-.mapRegionActionsV58{display:flex;flex-wrap:wrap;gap:6px}
-.mapRegionActionsV58 button{min-height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--m58-line);background:#fff;color:var(--civic-900);font-size:.78rem;font-weight:800;cursor:pointer}
-.mapRegionsFootV58{display:inline-block;margin-top:12px;font-size:.82rem;font-weight:800;color:var(--civic-700)}
-.mapRegionsPaneV58 .mapTerritorySummary{display:flex!important;flex-direction:column;align-items:flex-start;gap:8px;margin:0 0 12px!important}
-.mapRegionsPaneV58 .mapTerritorySummary .btn{width:auto;min-height:38px}
+:where(.mapCardV58) .mapRegionGridV58 button{display:grid!important;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:12px;min-height:60px;padding:10px 12px;text-align:left;border-radius:14px;background:var(--cc56-surface);color:var(--cc56-ink);cursor:pointer}
+:where(.mapCardV58) .mapRegionGridV58 button:disabled{opacity:.6;cursor:not-allowed}
+:where(.mapCardV58) .mapRegionGridV58 button b{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:var(--lime-soft);color:var(--civic-950);font-size:1.05rem}
+:where(.mapCardV58) .mapRegionTextV58 strong{display:block;font-size:.9rem}
+:where(.mapCardV58) .mapRegionTextV58 small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:1px;font-size:.78rem;line-height:1.35;color:var(--cc56-muted)}
+:where(.mapCardV58) .mapRegionGridV58 button em{font-size:.76rem;font-weight:800;color:var(--civic-700);white-space:nowrap}
+:where(.mapCardV58) .mapRegionGridV58 button.active{background:var(--civic-950);border-color:var(--civic-950);color:var(--cc56-surface)}
+:where(.mapCardV58) .mapRegionGridV58 button.active .mapRegionTextV58 small,:where(.mapCardV58) .mapRegionGridV58 button.active em{color:var(--lime-soft)}
+:where(.mapCardV58) .mapRegionGridV58 button.active b{background:var(--lime);color:var(--civic-1000)}
+:where(.mapCardV58) .mapRegionStatusV58{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--lime-soft);border:1px solid var(--cc56-border);font-size:.82rem;color:var(--civic-950)}
+:where(.mapCardV58) .mapRegionStatusV58.isWarn{background:var(--warm);border-color:var(--cc56-border);color:var(--civic-900)}
+:where(.mapCardV58) .mapRegionActionsV58{display:flex;flex-wrap:wrap;gap:6px}
+:where(.mapCardV58) .mapRegionActionsV58 button{min-height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--cc56-border);background:var(--cc56-surface);color:var(--civic-900);font-size:.78rem;font-weight:800;cursor:pointer}
+:where(.mapCardV58) .mapRegionsFootV58{display:inline-block;margin-top:12px;font-size:.82rem;font-weight:800;color:var(--civic-700)}
+:where(.mapCardV58) .mapRegionsPaneV58 .mapTerritorySummary{display:flex!important;flex-direction:column;align-items:flex-start;gap:8px;margin:0 0 12px!important}
+:where(.mapCardV58) .mapRegionsPaneV58 .mapTerritorySummary .btn{width:auto;min-height:38px}
 
 /* Desktop (≥900): painel + mapa com altura própria; só a lista rola */
 @media(min-width:900px){
-  .mapExperienceV58{grid-template-columns:minmax(320px,360px) minmax(0,1fr)!important;height:clamp(600px,calc(100dvh - 150px),820px);min-height:0!important}
-  .mapFocusModeV53 .mapExperienceV58{height:calc(100dvh - 24px)}
-  .mapSideV58{min-height:0;overflow:hidden}
-  .mapSideV58 .mapResultsV50{flex:1 1 auto;min-height:0;margin-top:10px}
-  .mapRegionsPaneV58{flex:none;margin:8px 0 0;padding:10px 12px}
-  .mapRegionsHeadV58 p,.mapRegionsFootV58,.mapRegionsPaneV58 .mapTerritorySummary{display:none!important}
-  .mapRegionsHeadV58 h3{font-size:.85rem;margin:0 0 6px}
-  .mapRegionsHeadV58 .miniLabel{display:none}
-  .mapRegionGridV58{grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:4px!important}
-  .mapRegionGridV58 button{grid-template-columns:1fr;min-height:36px;padding:0;gap:0;justify-items:center;border-radius:10px}
-  .mapRegionGridV58 button b{width:100%;height:34px;background:transparent;font-size:.9rem}
-  .mapRegionGridV58 button.active b{background:transparent;color:#fff}
-  .mapRegionTextV58,.mapRegionGridV58 button em{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-  .mapRegionGridV58 button{position:relative}
-  #mapFallbackList{display:none}
+  :where(.mapCardV58) .mapExperienceV58{grid-template-columns:minmax(320px,360px) minmax(0,1fr)!important;height:clamp(600px,calc(100dvh - 150px),820px);min-height:0!important}
+  :where(.mapCardV58).mapFocusModeV53 .mapExperienceV58{height:calc(100dvh - 24px)}
+  :where(.mapCardV58) .mapSideV58{min-height:0;overflow:hidden}
+  :where(.mapCardV58) .mapSideV58 .mapResultsV50{flex:1 1 auto;min-height:0;margin-top:10px}
+  :where(.mapCardV58) .mapRegionsPaneV58{flex:none;margin:8px 0 0;padding:10px 12px}
+  :where(.mapCardV58) .mapRegionsHeadV58 p,:where(.mapCardV58) .mapRegionsFootV58,:where(.mapCardV58) .mapRegionsPaneV58 .mapTerritorySummary{display:none!important}
+  :where(.mapCardV58) .mapRegionsHeadV58 h3{font-size:.85rem;margin:0 0 6px}
+  :where(.mapCardV58) .mapRegionsHeadV58 .miniLabel{display:none}
+  :where(.mapCardV58) .mapRegionGridV58{grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:4px!important}
+  :where(.mapCardV58) .mapRegionGridV58 button{grid-template-columns:1fr;min-height:36px;padding:0;gap:0;justify-items:center;border-radius:10px}
+  :where(.mapCardV58) .mapRegionGridV58 button b{width:100%;height:34px;background:transparent;font-size:.9rem}
+  :where(.mapCardV58) .mapRegionGridV58 button.active b{background:transparent;color:var(--cc56-surface)}
+  :where(.mapCardV58) .mapRegionTextV58,:where(.mapCardV58) .mapRegionGridV58 button em{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  :where(.mapCardV58) .mapRegionGridV58 button{position:relative}
+  :where(.mapCardV58) #mapFallbackList{display:none}
 }
 
 /* Tablet (761–899): mapa em largura total e painel abaixo */
 @media(min-width:761px) and (max-width:899px){
-  .mapExperienceV58{display:flex!important;flex-direction:column;height:auto;min-height:0!important}
-  .mapCanvasV58{order:1}
-  .mapSideV58{order:2;border-right:0;border-top:1px solid #dce8e2}
-  .mapStageV58{flex:none;height:clamp(420px,60dvh,560px)}
-  .mapFilterGroupV58{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .mapFilterGroupV58 #mapAgency{grid-column:auto}
-  .mapSideV58 .mapResultsV50{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;margin-top:10px}
-  .mapRegionGridV58{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  .mapRegionsPaneV58 .mapTerritorySummary{display:none!important}
-  #mapFallbackList{display:none}
+  :where(.mapCardV58) .mapExperienceV58{display:flex!important;flex-direction:column;height:auto;min-height:0!important}
+  :where(.mapCardV58) .mapCanvasV58{order:1}
+  :where(.mapCardV58) .mapSideV58{order:2;border-right:0;border-top:1px solid var(--cc56-border)}
+  :where(.mapCardV58) .mapStageV58{flex:none;height:clamp(420px,60dvh,560px)}
+  :where(.mapCardV58) .mapFilterGroupV58{grid-template-columns:repeat(3,minmax(0,1fr))}
+  :where(.mapCardV58) .mapFilterGroupV58 #mapAgency{grid-column:auto}
+  :where(.mapCardV58) .mapSideV58 .mapResultsV50{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;margin-top:10px}
+  :where(.mapCardV58) .mapRegionGridV58{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  :where(.mapCardV58) .mapRegionsPaneV58 .mapTerritorySummary{display:none!important}
+  :where(.mapCardV58) #mapFallbackList{display:none}
 }
 
 /* Mobile (≤760): abas Mapa / Lista / Regiões */
 @media(max-width:760px){
-  .pageHead:has(+.mapSectionV53) p{display:none}
-  .pageHead:has(+.mapSectionV53){padding:22px 0 8px}
-  .pageHead:has(+.mapSectionV53) h1{font-size:1.7rem}
-  .mapExperienceV58{height:auto}
-  .mapStageV58{flex:none;height:clamp(320px,calc(100dvh - 520px),600px)}
-  .mapNoLeafletV58 .mapStageV58{height:auto;min-height:0}
-  .mapToolFiltersV58{display:inline-flex}
-  .mapToolBtnV58{min-height:44px}
-  .mapSideV58{padding:12px!important;border-radius:16px}
-  .mapSideV58 .mapSideHead{margin-bottom:6px}
-  .mapFilterBarV58{position:sticky;top:calc(var(--m58-top) + 54px);z-index:8;margin:0 -12px;padding:8px 12px;background:#f8fbf9;border-bottom:1px solid #dce8e2}
-  .mapSideV58 .mapPrimaryFiltersV58{grid-template-columns:minmax(0,1fr) auto!important}
-  .mapSideV58 .mapPrimaryFiltersV58 input,.mapSideV58 .mapPrimaryFiltersV58 select{min-height:44px;font-size:16px}
-  .mapFiltersToggleV58{display:inline-flex}
-  .mapFilterGroupV58{grid-column:1/-1;grid-template-columns:1fr;display:none}
-  .mapPrimaryFiltersV58.open .mapFilterGroupV58{display:grid}
-  .mapSideV58 .statusQuick{flex-wrap:nowrap;margin:0}
-  .statusChipsV58{display:flex;flex:1;min-width:0;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0}
-  .mapSideV58 .statusQuick button,.mapSideV58 .openOnlyV52{min-height:44px;flex:none}
-  .mapSideV58 .mapResultsV50{max-height:none;overflow:visible;margin-top:10px}
-  .mapResultItemV58>a.mapResultRadarV58{min-height:44px}
-  .mapRegionGridV58{grid-template-columns:1fr!important;gap:8px!important}
-  .mapRegionGridV58 button{min-height:64px}
-  .mapRegionActionsV58 button{min-height:44px}
-  .mapExperienceV58.showRegionsV58 .mapFilterBarV58,.mapExperienceV58.showRegionsV58 .mapResultsV50,.mapExperienceV58.showRegionsV58 .mapSideHead{display:none!important}
-  .mapContextV53 .mapBehaviorV58{margin-left:0}
-  .mapContextV53 .mapBehaviorV58 label{min-height:44px}
+  .pageHead:has(+.mapSectionV53 .mapCardV58) p{display:none}
+  .pageHead:has(+.mapSectionV53 .mapCardV58){padding:22px 0 8px}
+  .pageHead:has(+.mapSectionV53 .mapCardV58) h1{font-size:1.7rem}
+  :where(.mapCardV58) .mapExperienceV58{height:auto}
+  :where(.mapCardV58) .mapStageV58{flex:none;height:clamp(320px,calc(100dvh - 520px),600px)}
+  :where(.mapCardV58) .mapNoLeafletV58 .mapStageV58{height:auto;min-height:0}
+  :where(.mapCardV58) .mapToolFiltersV58{display:inline-flex}
+  :where(.mapCardV58) .mapToolBtnV58{min-height:44px}
+  :where(.mapCardV58) .mapSideV58{padding:12px!important;border-radius:16px}
+  :where(.mapCardV58) .mapSideV58 .mapSideHead{margin-bottom:6px}
+  :where(.mapCardV58) .mapFilterBarV58{position:sticky;top:calc(var(--m58-top) + 54px);z-index:8;margin:0 -12px;padding:8px 12px;background:var(--paper);border-bottom:1px solid var(--cc56-border)}
+  :where(.mapCardV58) .mapSideV58 .mapPrimaryFiltersV58{grid-template-columns:minmax(0,1fr) auto!important}
+  :where(.mapCardV58) .mapSideV58 .mapPrimaryFiltersV58 input,:where(.mapCardV58) .mapSideV58 .mapPrimaryFiltersV58 select{min-height:44px;font-size:16px}
+  :where(.mapCardV58) .mapFiltersToggleV58{display:inline-flex}
+  :where(.mapCardV58) .mapFilterGroupV58{grid-column:1/-1;grid-template-columns:1fr;display:none}
+  :where(.mapCardV58) .mapPrimaryFiltersV58.open .mapFilterGroupV58{display:grid}
+  :where(.mapCardV58) .mapSideV58 .statusQuick{flex-wrap:nowrap;margin:0}
+  :where(.mapCardV58) .statusChipsV58{display:flex;flex:1;min-width:0;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+  :where(.mapCardV58) .mapSideV58 .statusQuick button,:where(.mapCardV58) .mapSideV58 .openOnlyV52{min-height:44px;flex:none}
+  :where(.mapCardV58) .mapSideV58 .mapResultsV50{max-height:none;overflow:visible;margin-top:10px}
+  :where(.mapCardV58) .mapResultItemV58>a.mapResultRadarV58{min-height:44px}
+  :where(.mapCardV58) .mapRegionGridV58{grid-template-columns:1fr!important;gap:8px!important}
+  :where(.mapCardV58) .mapRegionGridV58 button{min-height:64px}
+  :where(.mapCardV58) .mapRegionActionsV58 button{min-height:44px}
+  :where(.mapCardV58) .mapExperienceV58.showRegionsV58 .mapFilterBarV58,:where(.mapCardV58) .mapExperienceV58.showRegionsV58 .mapResultsV50,:where(.mapCardV58) .mapExperienceV58.showRegionsV58 .mapSideHead{display:none!important}
+  :where(.mapCardV58) .mapContextV53 .mapBehaviorV58{margin-left:0}
+  :where(.mapCardV58) .mapContextV53 .mapBehaviorV58 label{min-height:44px}
 }
 @media(min-width:561px) and (max-width:760px){
-  .mapRegionGridV58{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .mapFilterGroupV58{grid-template-columns:repeat(2,minmax(0,1fr))}
+  :where(.mapCardV58) .mapRegionGridV58{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  :where(.mapCardV58) .mapFilterGroupV58{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
 /* v5.8 ajustes: grade sem estouro, linhas da lista que não encolhem, chips mais compactos */
-.mapFilterGroupV58{grid-template-columns:repeat(2,minmax(0,1fr))}
-.mapFilterGroupV58 select,.mapSideV58 .mapPrimaryFiltersV58 input,.mapSideV58 .mapPrimaryFiltersV58 select{min-width:0;text-overflow:ellipsis}
-.mapResultItemV58{flex:none}
-.mapCanvasV58:after{display:none!important}
+:where(.mapCardV58) .mapFilterGroupV58{grid-template-columns:repeat(2,minmax(0,1fr))}
+:where(.mapCardV58) .mapFilterGroupV58 select,:where(.mapCardV58) .mapSideV58 .mapPrimaryFiltersV58 input,:where(.mapCardV58) .mapSideV58 .mapPrimaryFiltersV58 select{min-width:0;text-overflow:ellipsis}
+:where(.mapCardV58) .mapResultItemV58{flex:none}
+:where(.mapCardV58) .mapCanvasV58:after{display:none!important}
 @media(min-width:761px){
-  .mapSideV58 .statusQuick{gap:5px 6px;margin:8px 0 6px}
-  .mapSideV58 .statusQuick button,.mapSideV58 .openOnlyV52{min-height:30px;padding:0 10px;font-size:.74rem}
-  .mapSideV58 .mapSideHead{margin-bottom:8px;padding-bottom:8px}
+  :where(.mapCardV58) .mapSideV58 .statusQuick{gap:5px 6px;margin:8px 0 6px}
+  :where(.mapCardV58) .mapSideV58 .statusQuick button,:where(.mapCardV58) .mapSideV58 .openOnlyV52{min-height:30px;padding:0 10px;font-size:.74rem}
+  :where(.mapCardV58) .mapSideV58 .mapSideHead{margin-bottom:8px;padding-bottom:8px}
 }
-@media(min-width:761px) and (max-width:899px){.mapFilterGroupV58{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:761px) and (max-width:899px){:where(.mapCardV58) .mapFilterGroupV58{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:761px){
-  .mapResultItemV58{position:relative}
-  .mapResultItemV58>.mapResultOpenV58{padding-bottom:12px}
-  .mapResultItemV58>a.mapResultRadarV58{position:absolute;right:10px;bottom:9px;min-height:0;padding:0!important;border-top:0;background:transparent!important;font-size:.74rem}
-  .mapResultItemV58>a.mapResultRadarV58:hover{text-decoration:underline}
+  :where(.mapCardV58) .mapResultItemV58{position:relative}
+  :where(.mapCardV58) .mapResultItemV58>.mapResultOpenV58{padding-bottom:12px}
+  :where(.mapCardV58) .mapResultItemV58>a.mapResultRadarV58{position:absolute;right:10px;bottom:9px;min-height:0;padding:0!important;border-top:0;background:transparent!important;font-size:.74rem}
+  :where(.mapCardV58) .mapResultItemV58>a.mapResultRadarV58:hover{text-decoration:underline}
 }
-.mapFilterBarV58{grid-template-columns:minmax(0,1fr);min-width:0}
-.mapFilterBarV58>*{min-width:0}
-.mapSideV58{min-width:0}
+:where(.mapCardV58) .mapFilterBarV58{grid-template-columns:minmax(0,1fr);min-width:0}
+:where(.mapCardV58) .mapFilterBarV58>*{min-width:0}
+:where(.mapCardV58) .mapSideV58{min-width:0}
 @media(min-width:761px) and (max-width:899px){
-  .mapSideV58 .mapResultsV50{order:2}
-  .mapRegionsPaneV58{order:3;margin-top:14px}
-  .mapRegionGridV58{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  :where(.mapCardV58) .mapSideV58 .mapResultsV50{order:2}
+  :where(.mapCardV58) .mapRegionsPaneV58{order:3;margin-top:14px}
+  :where(.mapCardV58) .mapRegionGridV58{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 @media(max-width:899px){
-  .mapRegionGridV58 button{grid-template-columns:40px minmax(0,1fr)}
-  .mapRegionGridV58 button em{grid-column:2;grid-row:2;margin-top:-4px}
-  .mapRegionGridV58 button b{grid-row:1/3}
+  :where(.mapCardV58) .mapRegionGridV58 button{grid-template-columns:40px minmax(0,1fr)}
+  :where(.mapCardV58) .mapRegionGridV58 button em{grid-column:2;grid-row:2;margin-top:-4px}
+  :where(.mapCardV58) .mapRegionGridV58 button b{grid-row:1/3}
 }
 @media(max-width:760px){
-  .pageHead:has(+.mapSectionV53) h1{font-size:1.65rem!important;line-height:1.1;margin:0}
-  .pageHead:has(+.mapSectionV53) .eyebrow{font-size:.7rem}
-  .mapCanvasHeadV53{min-height:0!important;padding:8px 12px!important}
-  .mapCanvasHeadV53 .miniLabel,.mapCanvasHeadV53>div:first-child>b{display:none}
-  .mapCanvasHeadV53 .mapMiniStatsV53{margin-top:0}
-  .mapCanvasHeadV53 .mapMiniStatsV53 span{font-size:.78rem}
-  .mapCanvasHeadV53 .mapMiniStatsV53 b{font-size:.84rem}
+  .pageHead:has(+.mapSectionV53 .mapCardV58) h1{font-size:1.65rem!important;line-height:1.1;margin:0}
+  .pageHead:has(+.mapSectionV53 .mapCardV58) .eyebrow{font-size:.7rem}
+  :where(.mapCardV58) .mapCanvasHeadV53{min-height:0!important;padding:8px 12px!important}
+  :where(.mapCardV58) .mapCanvasHeadV53 .miniLabel,:where(.mapCardV58) .mapCanvasHeadV53>div:first-child>b{display:none}
+  :where(.mapCardV58) .mapCanvasHeadV53 .mapMiniStatsV53{margin-top:0}
+  :where(.mapCardV58) .mapCanvasHeadV53 .mapMiniStatsV53 span{font-size:.78rem}
+  :where(.mapCardV58) .mapCanvasHeadV53 .mapMiniStatsV53 b{font-size:.84rem}
 }
-.mapRegionGridV58 button .mapRegionTextV58{opacity:1;font-size:inherit;font-weight:400;color:inherit}
-.mapRegionGridV58 button .mapRegionTextV58 strong{font-weight:800}
-.mapRegionGridV58 button .mapRegionTextV58 small{font-weight:500}
-.mapRegionStatusV58{margin:0 0 10px}
-@media(min-width:900px){.mapRegionStatusV58{margin:0 0 8px;padding:8px 10px;font-size:.78rem}}
-@media(min-width:761px){.mapRegionActionsV58 [data-region-view]{display:none}}
+:where(.mapCardV58) .mapRegionGridV58 button .mapRegionTextV58{opacity:1;font-size:inherit;font-weight:400;color:inherit}
+:where(.mapCardV58) .mapRegionGridV58 button .mapRegionTextV58 strong{font-weight:800}
+:where(.mapCardV58) .mapRegionGridV58 button .mapRegionTextV58 small{font-weight:500}
+:where(.mapCardV58) .mapRegionStatusV58{margin:0 0 10px}
+@media(min-width:900px){:where(.mapCardV58) .mapRegionStatusV58{margin:0 0 8px;padding:8px 10px;font-size:.78rem}}
+@media(min-width:761px){:where(.mapCardV58) .mapRegionActionsV58 [data-region-view]{display:none}}
