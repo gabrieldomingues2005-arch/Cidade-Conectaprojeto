@@ -138,7 +138,8 @@ assert(workflow.includes("node-version: '22'"),'CI usa Node.js 22 compatível co
 
 const runtime=read('assets/runtime-config.js');
 assert(runtime.includes("dataMode: 'hybrid-write'"),'Runtime usa modo híbrido com escrita segura');
-assert(runtime.includes("projectRef: 'yvmkgpijzewssdxgimit'"),'Runtime aponta para o Supabase exclusivo do Cidade Conecta');
+assert(runtime.includes("projectRef: 'qzpofoxxrjunyayczcfu'"),'Runtime aponta para o Supabase Cidade Conecta v2');
+assert(!runtime.includes("htzigdvatjpvvkwswjof"),'Runtime nunca aponta para o Supabase Raiz Carbon');
 assert(runtime.includes('publishableKey'),'Runtime prevê somente chave pública do cliente');
 assert(!runtime.includes('service_role:'),'Runtime não contém campo service_role');
 assert(!runtime.includes('sb_secret_'),'Runtime não contém chave secreta Supabase');
