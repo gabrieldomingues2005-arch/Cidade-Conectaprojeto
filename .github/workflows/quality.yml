@@ -63,6 +63,29 @@ jobs:
           SMOKE_SCREENSHOT_DIR: artifacts/ui-smoke
         run: bash scripts/smoke-ui.sh
 
+      - name: Montar backup Supabase pré-exclusão
+        if: always()
+        run: |
+          rm -rf artifacts/supabase-predelete
+          mkdir -p artifacts/supabase-predelete
+          cp -R supabase/backup-20261022 artifacts/supabase-predelete/
+          cp -R supabase/recovery artifacts/supabase-predelete/
+          cp -R supabase/migrations artifacts/supabase-predelete/
+          cp -R supabase/functions artifacts/supabase-predelete/
+          cp schema.sql SUPABASE.md data/piracicaba.json artifacts/supabase-predelete/
+          cp docs/BACKEND-RECOVERY-20261022.md artifacts/supabase-predelete/
+          git rev-parse HEAD > artifacts/supabase-predelete/BACKUP_COMMIT.txt
+          printf '%s\n' 'feature/cidade-conecta-backend-recovery-20261022' > artifacts/supabase-predelete/BACKUP_BRANCH.txt
+
+      - name: Guardar backup Supabase pré-exclusão
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: supabase-predelete-backup
+          path: artifacts/supabase-predelete
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Montar pacote editável para Claude
         if: success()
         run: |
