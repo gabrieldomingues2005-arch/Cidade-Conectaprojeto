@@ -1,0 +1,90 @@
+{
+  "backup_date": "2026-10-22",
+  "source_project": {
+    "id": "yvmkgpijzewssdxgimit",
+    "name": "Cidade Conecta",
+    "organization_id": "hprdatxrtwfdbohmqaek",
+    "region": "sa-east-1",
+    "status": "COMING_UP",
+    "database": {
+      "host": "db.yvmkgpijzewssdxgimit.supabase.co",
+      "version": "17.6.1.166",
+      "postgres_engine": "17",
+      "release_channel": "ga"
+    },
+    "created_at": "2026-09-17T21:03:17.479185Z",
+    "project_url": "https://yvmkgpijzewssdxgimit.supabase.co"
+  },
+  "database_export": {
+    "status": "UNAVAILABLE",
+    "reason": "Project COMING_UP rejects read-only database access with authentication errors; list_tables and list_migrations could not connect.",
+    "data_dump_created": false
+  },
+  "deployed_edge_functions": [
+    {
+      "slug": "submit-occurrence",
+      "name": "submit-occurrence",
+      "status": "ACTIVE",
+      "version": 3,
+      "created_at": 1789685558207,
+      "updated_at": 1790287153492,
+      "verify_jwt": true,
+      "ezbr_sha256": "8934fc0aeea6da04bc0d8c5d6e20ace5cd660903773e44fba46ca7e268bd7f00",
+      "files": [
+        "index.ts",
+        "deno.json"
+      ]
+    },
+    {
+      "slug": "track-occurrence",
+      "name": "track-occurrence",
+      "status": "ACTIVE",
+      "version": 1,
+      "created_at": 1789686357199,
+      "updated_at": 1789686357199,
+      "verify_jwt": true,
+      "ezbr_sha256": "6a9706f138863345060e97f1215e99f829765c13d9bf556eeaf543cb690f0c55",
+      "files": [
+        "index.ts",
+        "deno.json"
+      ]
+    },
+    {
+      "slug": "admin-occurrences",
+      "name": "admin-occurrences",
+      "status": "ACTIVE",
+      "version": 2,
+      "created_at": 1791498283310,
+      "updated_at": 1792101588417,
+      "verify_jwt": true,
+      "ezbr_sha256": "b9d76ffaa03f6eb6220d676fe29058a7b19b814c719e926858605c92afbf401a",
+      "files": [
+        "index.ts",
+        "deno.json"
+      ]
+    }
+  ],
+  "publishable_key_metadata": [
+    {
+      "id": "anon",
+      "name": "anon",
+      "type": "legacy",
+      "disabled": false,
+      "description": "Legacy anon API key"
+    },
+    {
+      "id": "d0500cf3-3193-4d5d-bde3-19a572e6a5a6",
+      "name": "default",
+      "type": "publishable",
+      "disabled": false,
+      "description": null
+    }
+  ],
+  "publishable_key_values_in_backup": false,
+  "service_role_key_in_backup": false,
+  "notes": [
+    "Exact deployed Edge Function source files were preserved.",
+    "Database/Auth/Storage records could not be exported while the project is stuck in COMING_UP.",
+    "Do not treat this package as a full data backup."
+  ]
+}
