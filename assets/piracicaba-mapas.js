@@ -185,8 +185,8 @@ function renderMapTerritory(d){
   const stats=regionStats(d),known=stats.reduce((s,x)=>s+x.count,0),total=readOccurrences().length;
   const box=document.createElement('div');box.id='mapTerritorySummary';box.className='mapTerritorySummary';
   box.innerHTML=`<div><span class="geoAdvisorLabel">Leitura territorial</span><b>${known} de ${total} registros reconhecidos por região</b><small>Classificação calculada pelo nome do bairro.</small></div><a class="btn soft smallBtn" href="#/piracicaba">Ver geografia</a>`;
-  const filters=card.querySelector('.filters');if(filters)filters.insertAdjacentElement('beforebegin',box);else card.prepend(box);
-  stats.forEach(x=>{const count=document.querySelector('[data-map-region-count="'+x.r.id+'"]');if(count)count.textContent=x.count+' reg.'});
+  const regionsHead=card.querySelector('.mapRegionsHeadV58'),filters=card.querySelector('.filters');if(regionsHead)regionsHead.insertAdjacentElement('afterend',box);else if(filters)filters.insertAdjacentElement('beforebegin',box);else card.prepend(box);
+  stats.forEach(x=>{const count=document.querySelector('[data-map-region-count="'+x.r.id+'"]');if(count)count.textContent=x.count===1?'1 ocorrência':x.count+' ocorrências'});
 }
 function renderAdminHint(d){
   if(route()!=='admin'||document.querySelector('#adminGeoHint'))return;
