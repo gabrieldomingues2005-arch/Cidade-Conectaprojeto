@@ -6,8 +6,16 @@ Branch: `feature/cidade-conecta-backend-recovery-20261022`
 
 ## Situação
 
-O projeto Supabase original `yvmkgpijzewssdxgimit` permanece em `COMING_UP`.
-Ele deve permanecer intocado durante esta recuperação.
+O projeto Supabase original `yvmkgpijzewssdxgimit` foi removido após backup técnico parcial, porque permaneceu preso em `COMING_UP`.
+
+Novo projeto criado:
+- nome: `Cidade Conecta v2`
+- project ref: `qzpofoxxrjunyayczcfu`
+- região: `sa-east-1`
+- status inicial: `ACTIVE_HEALTHY`
+- custo informado na criação: US$ 0/mês
+
+A reconstrução foi aplicada somente ao novo projeto.
 
 Nunca usar o Supabase Raiz Carbon `htzigdvatjpvvkwswjof`.
 
@@ -75,3 +83,20 @@ Depois:
 
 A criação ainda NÃO foi executada. O Supabase exige escolher a organização e pode haver custo.
 Antes de criar o projeto, confirmar explicitamente em qual organização ele deve ficar e aceitar eventual custo informado pela plataforma.
+
+
+## Checkpoint do novo projeto
+
+Aplicado no `qzpofoxxrjunyayczcfu`:
+- recovery 001–011;
+- PostGIS e pgcrypto em `extensions`;
+- 5 fontes territoriais;
+- 9 regiões;
+- 71 bairros urbanos únicos;
+- 72 vínculos bairro/região;
+- 14 núcleos isolados;
+- 9 categorias;
+- bucket privado `occurrence-attachments`;
+- Edge Functions `submit-occurrence`, `track-occurrence` e `admin-occurrences` ativas;
+- branch de recovery apontada para o novo project ref com chave publishable moderna;
+- privilégios anon removidos de perfis, localização privada, auditoria, contatos e anexos.
