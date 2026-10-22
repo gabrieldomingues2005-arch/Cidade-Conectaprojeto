@@ -25,6 +25,23 @@ try{
  // Fixtures existem apenas no browser de QA: nenhuma chamada externa sai do teste.
  await send('Page.addScriptToEvaluateOnNewDocument',{source:`
  window.__qaScenario='unavailable';
+ if(location.search.includes('qaLeaflet=1')){
+  window.__leafletQA={fit:0,fly:0,popup:0,invalidates:0};
+  const chain=()=>({addTo(){return this},bindPopup(){return this},openPopup(){window.__leafletQA.popup++;return this},on(){return this},setLatLng(){return this},getLatLng(){return {lat:-22.725,lng:-47.649}}});
+  const mapObj={
+   _zoom:12,setView(){return this},getZoom(){return this._zoom},removeLayer(){return this},
+   fitBounds(){window.__leafletQA.fit++;return this},flyTo(){window.__leafletQA.fly++;return this},
+   invalidateSize(){window.__leafletQA.invalidates++;return this},on(){return this}
+  };
+  window.L={
+   map(){return mapObj},
+   tileLayer(){const handlers={};return{on(name,fn){handlers[name]=fn;if(name==='load')setTimeout(fn,10);return this}}},
+   marker(){return chain()},circleMarker(){return chain()},divIcon(o){return o},
+   latLngBounds(){return{pad(){return this}}},
+   geoJSON(){return chain()},
+   control:{zoom(){return{addTo(){return this}}},layers(){return{addTo(){return this}}}}
+  };
+ }
  const originalFetch=window.fetch.bind(window);
  window.fetch=async function(input,options={}){
   const url=new URL(typeof input==='string'?input:input.url,location.href);
@@ -69,6 +86,31 @@ try{
    results.push({route:hash,width,status:'PASS'});console.log(`✓ ${name} ${width}`);
   }
  }
+ // Exercita o caminho real do mapa com uma implementação Leaflet local de QA.
+ errors.length=0;
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+ await send('Page.navigate',{url:base+'/index.html?qaLeaflet=1#/mapa'});
+ await waitFor(`Boolean(window.L)&&document.querySelectorAll('[data-map-open]').length>0`);
+ await pause(250);
+ let leaf=await evaluate(`({...window.__leafletQA,items:document.querySelectorAll('[data-map-open]').length,hash:location.hash})`);
+ assert.ok(leaf.items>0,'mapa Leaflet QA: lista vazia');
+ assert.ok(leaf.fit>0,'mapa Leaflet QA: fitBounds inicial não executou');
+ await evaluate(`document.querySelector('[data-map-pane="list"]')?.click();document.querySelector('[data-map-status="Em andamento"]')?.click()`);
+ await pause(80);
+ assert.ok((await evaluate('location.hash')).includes('status=Em+andamento'),'mapa Leaflet QA: filtros não sincronizaram a URL');
+ const fitBefore=await evaluate('window.__leafletQA.fit');
+ await evaluate(`document.querySelector('[data-map-pane="map"]')?.click()`);
+ await pause(120);
+ assert.ok((await evaluate('window.__leafletQA.fit'))>fitBefore,'mapa Leaflet QA: fit adiado não executou ao voltar ao mapa');
+ await evaluate(`document.querySelector('[data-map-pane="list"]')?.click();document.querySelector('[data-map-open]')?.click()`);
+ await pause(430);
+ leaf=await evaluate(`({...window.__leafletQA})`);
+ assert.ok(leaf.fly>0,'mapa Leaflet QA: item da lista não focou o marcador');
+ assert.ok(leaf.popup>0,'mapa Leaflet QA: popup do marcador não abriu');
+ assert.deepEqual(errors,[],'mapa Leaflet QA: erro JS');
+ await capture('mapa-leaflet-stub-390');
+ results.push({scenario:'map-leaflet-stub',status:'PASS'});console.log('✓ mapa Leaflet stub 390');
+
  for(scenario of ['unavailable','network','timeout','offline','401','403','empty']){
   await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:true});window.dispatchEvent(new Event('online'));window.__qaScenario=${JSON.stringify(scenario)};sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));location.hash='#/admin';`);
   if(scenario==='offline')await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:false});window.dispatchEvent(new Event('offline'))`);
