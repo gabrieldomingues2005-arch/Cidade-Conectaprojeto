@@ -3,8 +3,9 @@
 -- NÃO executar no projeto travado yvmkgpijzewssdxgimit.
 -- NÃO recria schemas internos auth/realtime/storage.
 
-create extension if not exists pgcrypto;
-create extension if not exists postgis;
+create schema if not exists extensions;
+create extension if not exists pgcrypto with schema extensions;
+create extension if not exists postgis with schema extensions;
 
 create schema if not exists private;
 revoke all on schema private from public, anon, authenticated;
