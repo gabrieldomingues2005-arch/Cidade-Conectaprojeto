@@ -55,6 +55,8 @@ Criar um novo projeto Supabase para o Cidade Conecta e reconstruir de forma repr
 7. `supabase/migrations/20260924_harden_occurrence_contacts_privileges.sql`
 8. `supabase/recovery/003_storage_bucket.sql`
 9. `supabase/recovery/004_private_hardening.sql`
+10. `supabase/recovery/005_post_advisor_tuning.sql`
+11. `supabase/recovery/006_sensitive_privilege_hardening.sql`
 
 Depois:
 - executar Security Advisor e Performance Advisor;
@@ -81,9 +83,7 @@ Depois:
 
 ## Criação do novo projeto
 
-A criação ainda NÃO foi executada. O Supabase exige escolher a organização e pode haver custo.
-Antes de criar o projeto, confirmar explicitamente em qual organização ele deve ficar e aceitar eventual custo informado pela plataforma.
-
+Concluída em 22/10/2026 na mesma organização, região `sa-east-1`, com custo informado de US$ 0/mês.
 
 ## Checkpoint do novo projeto
 
