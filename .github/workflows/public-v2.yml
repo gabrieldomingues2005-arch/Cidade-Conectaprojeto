@@ -1,0 +1,75 @@
+name: Public v2 validation
+
+on:
+  push:
+    branches:
+      - feature/cidade-conecta-backend-recovery-20261022
+    paths:
+      - '.github/workflows/public-v2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  public-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Validar REST/RLS público
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs/promises';
+          const runtime=await fs.readFile('assets/runtime-config.js','utf8');
+          const pick=(name)=>{
+            const m=runtime.match(new RegExp(name+"\\s*:\\s*'([^']+)'"));
+            if(!m) throw new Error('runtime missing '+name);
+            return m[1];
+          };
+          const base=pick('url');
+          const apikey=pick('publishableKey');
+          const anon=pick('legacyAnonJwt');
+          const headers={apikey,authorization:'Bearer '+anon,accept:'application/json'};
+          const protocol='CC-2026-01001';
+
+          const pub=await fetch(base+'/rest/v1/occurrences?select=protocol,title,status,moderation_status,public_latitude,public_longitude,neighborhood_label&protocol=eq.'+protocol,{headers});
+          if(pub.status!==200) throw new Error('public REST status '+pub.status+' '+await pub.text());
+          const rows=await pub.json();
+          if(rows.length!==1) throw new Error('public occurrence expected 1, got '+rows.length);
+          const row=rows[0];
+          if(row.moderation_status!=='approved') throw new Error('not approved');
+          if(Number(row.public_latitude)!==-22.725||Number(row.public_longitude)!==-47.649) throw new Error('public coordinates not rounded');
+
+          const track=await fetch(base+'/functions/v1/track-occurrence',{
+            method:'POST',
+            headers:{...headers,'content-type':'application/json',origin:'https://gabrieldomingues2005-arch.github.io'},
+            body:JSON.stringify({protocol})
+          });
+          const trackJson=await track.json();
+          if(track.status!==200||!trackJson.occurrence||trackJson.occurrence.protocol!==protocol) throw new Error('public tracking failed '+JSON.stringify(trackJson));
+
+          const privateRes=await fetch(base+'/rest/v1/occurrence_private_location?select=occurrence_id,exact_latitude&limit=1',{headers});
+          if(privateRes.status===200) throw new Error('anon unexpectedly has table access to private location');
+
+          const profilesRes=await fetch(base+'/rest/v1/users_profile?select=id&limit=1',{headers});
+          if(profilesRes.status===200) throw new Error('anon unexpectedly has table access to profiles');
+
+          const auditRes=await fetch(base+'/rest/v1/audit_log?select=id&limit=1',{headers});
+          if(auditRes.status===200) throw new Error('anon unexpectedly has table access to audit log');
+
+          console.log('PUBLIC_V2_RESULT '+JSON.stringify({
+            protocol,
+            publicRows:rows.length,
+            publicLatitude:row.public_latitude,
+            publicLongitude:row.public_longitude,
+            trackingWithoutToken:track.status,
+            privateLocationStatus:privateRes.status,
+            profilesStatus:profilesRes.status,
+            auditStatus:auditRes.status
+          }));
+          NODE
