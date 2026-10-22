@@ -114,7 +114,8 @@ try{
  for(scenario of ['unavailable','network','timeout','offline','401','403','empty']){
   await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:true});window.dispatchEvent(new Event('online'));window.__qaScenario=${JSON.stringify(scenario)};sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));location.hash='#/admin';`);
   if(scenario==='offline')await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:false});window.dispatchEvent(new Event('offline'))`);
-  await evaluate('window.CidadeConectaAuth.init()');await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);await pause(150);
+  await evaluate('window.CidadeConectaAuth.init()');await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);
+  if(scenario==='401')await waitFor(`Boolean(document.querySelector('#adminLoginForm'))`);else await pause(180);
   const state=await evaluate(`({status:CidadeConectaAuth.state.status,saved:!!sessionStorage.getItem('cidadeConectaAuthSessionV1'),login:!!document.querySelector('#adminLoginForm'),text:document.querySelector('#app').textContent})`);
   await capture(`admin-${scenario}`);
   assert.equal(state.status,scenario==='401'?'anonymous':scenario==='403'?'denied':scenario==='empty'?'authorized':'error');assert.equal(state.saved,scenario!=='401');if(scenario==='401')assert.ok(state.login);
