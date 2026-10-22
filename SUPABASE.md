@@ -104,3 +104,22 @@ As migrations aplicadas estão em `supabase/migrations/`; as Edge Functions est�
 - Bucket `occurrence-attachments` permanece privado e aceita apenas JPEG/PNG/WebP.
 - Foi endurecido o ACL de `occurrence_contacts`: `authenticated` agora mantém somente `SELECT`, ainda limitado por RLS.
 - Hardening pendente: avaliar habilitação de RLS nas tabelas `private.occurrence_tracking_tokens`, `private.submission_rate_limits` e `private.tracking_rate_limits`. Hoje elas não têm grants diretos para `anon` ou `authenticated`, mas a recomendação é não depender apenas de grants.
+
+
+## Autenticação interna — fase 1
+
+A área `#/admin` passa a usar Supabase Auth em vez do antigo modo local de demonstração.
+
+- cliente: `assets/auth.js`;
+- Edge Function: `admin-occurrences`;
+- papéis habilitados: `triage` e `admin`;
+- `citizen`: sem acesso interno;
+- `agency`: bloqueado até existir vínculo seguro usuário → órgão/setor;
+- sessão interna limitada ao `sessionStorage` da aba;
+- papel é validado no backend a partir de `users_profile`;
+- o frontend não usa `user_metadata` para autorização;
+- `service_role` permanece somente na Edge Function;
+- a fila administrativa real é somente leitura nesta fase;
+- contato privado e localização exata não são retornados pela função administrativa.
+
+A escrita administrativa só deve ser liberada quando atualização + auditoria forem uma operação transacional. Ver `AUTH-ADMIN.md`.

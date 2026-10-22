@@ -1,6 +1,6 @@
 const CACHE_PREFIX='cidade-conecta-';
-const CACHE='cidade-conecta-v5-6-product-design';
-const CORE=['./','./index.html','./assets/styles.css','./assets/app.js','./assets/piracicaba.css','./assets/piracicaba.js','./assets/piracicaba-mapas.js','./assets/piracicaba-mapas.css','./assets/privacy-geo.js','./assets/runtime-config.js','./assets/supabase-bridge.js','./assets/site-enhancements.js','./assets/site-enhancements.css','./assets/design-v55.css','./assets/design-v56.css','./assets/brand-mark-v51.svg','./data/piracicaba.json','./data/municipal-network.json','./manifest.webmanifest','./favicon.svg'];
+const CACHE='cidade-conecta-v5-7-1-map-20261015';
+const CORE=['./','./index.html','./assets/styles.css','./assets/app.js','./assets/piracicaba.css','./assets/piracicaba.js','./assets/piracicaba-mapas.js','./assets/piracicaba-mapas.css','./assets/privacy-geo.js','./assets/runtime-config.js','./assets/auth.js','./assets/supabase-bridge.js','./assets/site-enhancements.js','./assets/site-enhancements.css','./assets/design-v55.css','./assets/design-v56.css','./assets/brand-mark-v51.svg','./data/piracicaba.json','./data/municipal-network.json','./manifest.webmanifest','./favicon.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
@@ -26,16 +26,24 @@ self.addEventListener('fetch',event=>{
           if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put('./index.html',copy));}
           return response;
         })
-        .catch(()=>caches.match('./index.html'))
+        .catch(()=>caches.open(CACHE).then(cache=>cache.match('./index.html')))
     );
     return;
   }
 
+  const freshAsset=/\.(?:js|css|json|webmanifest)$/i.test(url.pathname);
   event.respondWith(
-    caches.match(event.request,{ignoreSearch:true}).then(cached=>{
+    caches.open(CACHE).then(async cache=>{
+      const cached=await cache.match(event.request);
+      if(freshAsset){
+        return fetch(event.request,{cache:'no-store'}).then(response=>{
+          if(response.ok)cache.put(event.request,response.clone());
+          return response;
+        }).catch(()=>cached);
+      }
       if(cached)return cached;
       return fetch(event.request).then(response=>{
-        if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}
+        if(response.ok)cache.put(event.request,response.clone());
         return response;
       });
     })
