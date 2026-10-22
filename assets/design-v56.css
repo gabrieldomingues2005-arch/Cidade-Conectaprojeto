@@ -561,9 +561,6 @@ body.adminRouteV57 .pageHead h1{font-size:clamp(2.05rem,4vw,3rem)!important}
 }
 @media(min-width:761px) and (max-width:899px){:where(.mapCardV58) .mapFilterGroupV58{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:761px){
-  :where(.mapCardV58) .mapResultItemV58{position:relative}
-  :where(.mapCardV58) .mapResultItemV58>.mapResultOpenV58{padding-bottom:12px}
-  :where(.mapCardV58) .mapResultItemV58>a.mapResultRadarV58{position:absolute;right:10px;bottom:9px;min-height:0;padding:0!important;border-top:0;background:transparent!important;font-size:.74rem}
   :where(.mapCardV58) .mapResultItemV58>a.mapResultRadarV58:hover{text-decoration:underline}
 }
 :where(.mapCardV58) .mapFilterBarV58{grid-template-columns:minmax(0,1fr);min-width:0}

@@ -73,6 +73,11 @@ try{
    errors.length=0;await send('Page.navigate',{url:base+'/index.html'+hash});await waitFor(`Boolean(document.querySelector(${JSON.stringify(selector)}))`);await pause(350);
    const data=await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth,text:document.querySelector('#app').textContent,unlabelled:[...document.querySelectorAll('#app input:not([type=hidden]),#app select,#app textarea')].filter(e=>!e.labels?.length&&!e.getAttribute('aria-label')&&!e.getAttribute('aria-labelledby')).map(e=>e.id)})`);
    await capture(`${name}-${width}`);
+   if(name==='mapa'){
+    if(width===390)await evaluate(`document.querySelector('[data-map-pane="list"]')?.click()`);
+    const overlapping=await evaluate(`[...document.querySelectorAll('.mapResultItemV58')].filter(row=>{const radar=row.querySelector('.mapResultRadarV58')?.getBoundingClientRect(),meta=row.querySelector('.mapResultMeta')?.getBoundingClientRect();return radar&&meta&&radar.height>0&&meta.height>0&&radar.top<meta.bottom-1}).length`);
+    assert.equal(overlapping,0,`mapa ${width}: Radar do bairro sobrepõe o status`);
+   }
    if(name==='mapa'&&width===390){
     await evaluate(`document.querySelector('[data-map-pane="list"]')?.click()`);await pause(80);await capture('mapa-lista-390');
     await evaluate(`document.querySelector('[data-map-pane="regions"]')?.click()`);await pause(80);await capture('mapa-regioes-390');
