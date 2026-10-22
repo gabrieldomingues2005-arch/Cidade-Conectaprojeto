@@ -16,7 +16,7 @@ function statusText(){
   const mode=dataMode();
   if(mode==='hybrid-write'){const latency=window.CidadeConectaSupabase?.state?.details?.readLatencyMs;return {label:'Supabase ativo'+(latency?' · '+latency+'ms':''),detail:'Leitura pública e envio seguro de ocorrências conectados ao backend do Cidade Conecta.',cls:'cloud'}};
   if(mode==='hybrid-read')return {label:'Supabase leitura',detail:'Backend conectado para leitura; escrita segura indisponível no momento.',cls:'cloud'};
-  if(mode==='configured')return {label:'Supabase configurado',detail:'Backend configurado; aguardando confirmação da conexão',cls:'local'};
+  if(mode==='configured'){const failed=Boolean(window.CidadeConectaSupabase?.state?.lastError);return {label:failed?'Dados ao vivo indisponíveis':'Conectando…',detail:failed?'Modo demonstração ativo. Atualizações ao vivo, envio de ocorrências e acesso interno podem estar temporariamente indisponíveis.':'Aguardando confirmação da conexão com o serviço.',cls:failed?'degraded':'local'}};
   if(mode==='cloud')return {label:'Banco conectado',detail:'Backend do Cidade Conecta configurado',cls:'cloud'};
   return {label:'Modo local',detail:'Dados demonstrativos neste navegador',cls:'local'};
 }
@@ -93,7 +93,7 @@ function keyboardShortcuts(e){
     if(location.hash!=='#/')location.hash='#/';
     setTimeout(()=>$('#homeProtocol')?.focus(),100);
   }
-  if(e.key==='Escape')$('#nav')?.classList.remove('open');
+  if(e.key==='Escape'&&$('#nav')?.classList.contains('open')){$('#nav').classList.remove('open');$('#menu')?.setAttribute('aria-expanded','false');$('#menu')?.setAttribute('aria-label','Abrir menu');$('#menu')?.focus()}
 }
 function enhancePage(){
   ensureStatus();
