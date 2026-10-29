@@ -86,7 +86,8 @@ async function runBrowser(){
   assert.ok(await evaluate(`document.querySelector('#mapResults')?.textContent?.includes('${PROTOCOL}')`),'Centro/Região 1 não manteve ocorrência QA');
   results.push({gate:'regioes-real',status:'PASS',region1Count:regionNumber});
 
-  await evaluate(`document.querySelector('[data-map-open="${PROTOCOL}"]').click();document.querySelector('[data-map-pane="map"]').click();true`);await pause(900);
+  await evaluate(`document.querySelector('[data-map-open="${PROTOCOL}"]').click();document.querySelector('[data-map-pane="map"]').click();true`);
+  await waitFor(`document.querySelector('.leaflet-popup-content')?.textContent?.includes('${TITLE}')`);
   const popup=await evaluate(`document.querySelector('.leaflet-popup-content')?.textContent||''`);
   assert.ok(popup.includes(TITLE),'Marcador real não abriu popup da ocorrência QA');
   assert.deepEqual(jsErrors,[],'Erros JavaScript no mapa real');
