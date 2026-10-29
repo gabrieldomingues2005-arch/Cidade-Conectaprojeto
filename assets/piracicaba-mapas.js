@@ -18,7 +18,7 @@ async function data(){
   if(dataCache)return dataCache;
   try{const r=await fetch(DATA_URL,{cache:'no-cache'});if(!r.ok)return null;dataCache=await r.json();return dataCache}catch{return null}
 }
-function readOccurrences(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}}
+function readOccurrences(){const live=window.CidadeConectaLocalDB;if(Array.isArray(live?.occurrences))return live.occurrences;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}}
 function allNeighborhoods(d){
   const names=[];
   for(const r of d?.administrativeRegions||[])for(const b of r.neighborhoods||[])names.push(b,b.replace(/^Parte do /i,''));
@@ -184,8 +184,9 @@ function renderMapTerritory(d){
   const card=document.querySelector('#publicMap')?.closest('.card');if(!card)return;
   const stats=regionStats(d),known=stats.reduce((s,x)=>s+x.count,0),total=readOccurrences().length;
   const box=document.createElement('div');box.id='mapTerritorySummary';box.className='mapTerritorySummary';
-  box.innerHTML=`<div><span class="geoAdvisorLabel">Leitura territorial</span><b>${known} de ${total} registros reconhecidos por região</b><small>Classificação calculada pelo nome do bairro.</small></div><div class="regionMiniGrid">${stats.map(x=>`<span title="Região ${x.r.id}">R${x.r.id}<b>${x.count}</b></span>`).join('')}</div><a class="btn soft smallBtn" href="#/piracicaba">Ver geografia</a>`;
-  const filters=card.querySelector('.filters');if(filters)filters.insertAdjacentElement('beforebegin',box);else card.prepend(box);
+  box.innerHTML=`<div><span class="geoAdvisorLabel">Leitura territorial</span><b>${known} de ${total} registros reconhecidos por região</b><small>Classificação calculada pelo nome do bairro.</small></div><a class="btn soft smallBtn" href="#/piracicaba">Ver geografia</a>`;
+  const regionsHead=card.querySelector('.mapRegionsHeadV58'),filters=card.querySelector('.filters');if(regionsHead)regionsHead.insertAdjacentElement('afterend',box);else if(filters)filters.insertAdjacentElement('beforebegin',box);else card.prepend(box);
+  stats.forEach(x=>{const count=document.querySelector('[data-map-region-count="'+x.r.id+'"]');if(count)count.textContent=x.count===1?'1 ocorrência':x.count+' ocorrências'});
 }
 function renderAdminHint(d){
   if(route()!=='admin'||document.querySelector('#adminGeoHint'))return;
