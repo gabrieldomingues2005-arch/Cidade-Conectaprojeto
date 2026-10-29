@@ -57,6 +57,7 @@ Criar um novo projeto Supabase para o Cidade Conecta e reconstruir de forma repr
 9. `supabase/recovery/004_private_hardening.sql`
 10. `supabase/recovery/005_post_advisor_tuning.sql`
 11. `supabase/recovery/006_sensitive_privilege_hardening.sql`
+12. `supabase/recovery/007_exact_client_privileges.sql`
 
 Depois:
 - executar Security Advisor e Performance Advisor;
@@ -88,7 +89,7 @@ Concluída em 22/10/2026 na mesma organização, região `sa-east-1`, com custo 
 ## Checkpoint do novo projeto
 
 Aplicado no `qzpofoxxrjunyayczcfu`:
-- recovery 001–011;
+- recovery 001–012;
 - PostGIS e pgcrypto em `extensions`;
 - 5 fontes territoriais;
 - 9 regiões;
@@ -99,4 +100,8 @@ Aplicado no `qzpofoxxrjunyayczcfu`:
 - bucket privado `occurrence-attachments`;
 - Edge Functions `submit-occurrence`, `track-occurrence` e `admin-occurrences` ativas;
 - branch de recovery apontada para o novo project ref com chave publishable moderna;
-- privilégios anon removidos de perfis, localização privada, auditoria, contatos e anexos.
+- privilégios anon removidos de perfis, localização privada, auditoria, contatos e anexos;
+- `anon` reduzido a SELECT nas oito tabelas públicas previstas;
+- `authenticated` reduzido a SELECT + UPDATE somente de `users_profile`;
+- TRUNCATE/REFERENCES/TRIGGER removidos de papéis de cliente;
+- default privileges de `postgres` endurecidos para novos objetos.
