@@ -532,8 +532,18 @@ function bindMap(query=new URLSearchParams()){
  function addSingle(o){const popup='<div class="mapPopupV50 mapPopupV55"><span class="popupCategory">'+catIcon(o.category)+' '+esc(cat(o.category)[2])+'</span><b>'+esc(o.title)+'</b><small>'+esc(o.bairro)+' · '+esc(o.protocol)+'</small><div class="popupAgencyV54">'+iconSvg('layers')+' '+esc(routingReference(o.category).agencyLabel)+'</div><div>'+badge(o.status)+'</div><div class="mapPopupActionsV55"><a href="#/ocorrencia/'+encodeURIComponent(o.protocol)+'">Abrir ocorrência →</a><a href="#/bairro?nome='+encodeURIComponent(o.bairro)+'">Radar do bairro →</a></div></div>';const marker=L.marker([o.lat,o.lng],{icon:mapMarkerIcon(o.status)}).addTo(currentMap).bindPopup(popup,{maxWidth:310});markers.push(marker);markerByProtocol.set(o.protocol,marker);return marker}
  function addCluster(group){const lat=group.reduce((s,o)=>s+o.lat,0)/group.length,lng=group.reduce((s,o)=>s+o.lng,0)/group.length,marker=L.marker([lat,lng],{icon:clusterIcon(group),keyboard:true,title:group.length+' ocorrências próximas'}).addTo(currentMap);marker.on('click',()=>{const bounds=L.latLngBounds(group.map(o=>[o.lat,o.lng]));currentMap.fitBounds(bounds.pad(.45),{maxZoom:16})});markers.push(marker);return marker}
  function fitRows(){if(lastRows.length)currentMap.fitBounds(L.latLngBounds(lastRows.map(o=>[o.lat,o.lng])).pad(.18),{maxZoom:15});else currentMap.setView(PIRACICABA,12)}
+ function updateRegionCounts(){
+  if(!territoryIndex)return;
+  const rows=publicMetricRecords();
+  for(let id=1;id<=9;id++){
+   const count=rows.filter(o=>(territoryIndex.get(normText(o.bairro))||[]).includes(id)).length;
+   const el=document.querySelector('[data-map-region-count="'+id+'"]');
+   if(el)el.textContent=String(count)
+  }
+ }
  function draw(fit=true){
   if(!alive())return;
+  updateRegionCounts();
   if(!hasMap){renderResults(filtered(false));syncUrl();return}
   markers.forEach(m=>currentMap.removeLayer(m));markers=[];markerByProtocol.clear();
   const arr=filtered(),groups=clusterGroups(arr);lastRows=arr;
