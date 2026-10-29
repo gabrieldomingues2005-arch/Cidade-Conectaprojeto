@@ -155,6 +155,18 @@ try{
  assert.equal(await evaluate('Boolean(window.__leafletQA.removed)'),true,'Leaflet stub deve permitir destruir o mapa ao sair da rota');
  assert.deepEqual(errors,[],'Transição mapa → admin deve ocorrer sem exceções');
 
+ // Conexão saudável com base vazia deve substituir a demonstração e atualizar a UI.
+ await send('Emulation.setDeviceMetricsOverride',{width:1366,height:900,deviceScaleFactor:1,mobile:false});
+ await send('Page.navigate',{url:base+'/index.html?qaPublic=empty#/dashboard'});
+ await waitFor(`document.querySelector('.datasetChipV57')?.textContent.includes('Ocorrências públicas aprovadas')`);
+ assert.equal(await evaluate(`document.querySelector('.dashboardKpisV51 b').textContent`),'0');
+ await capture('public-empty-dashboard');
+ results.push({scenario:'public-empty-dashboard',status:'PASS'});console.log('✓ dashboard conectado sem dados demonstrativos');
+ await evaluate(`location.hash='#/mapa'`);
+ await waitFor(`document.querySelector('#mapResultCount')?.textContent==='0'&&Boolean(document.querySelector('.mapEmptyV58'))`);
+ await waitFor(`document.querySelector('#mapTerritorySummary')?.textContent.includes('0 de 0')`);
+ await capture('public-empty-map');
+ results.push({scenario:'public-empty-map',status:'PASS'});console.log('✓ mapa conectado com estado vazio real');
  console.log(`✓ ${results.length} cenários de navegador`);
 }catch(error){results.push({scenario,status:'FAIL',error:String(error)});throw error}
 finally{await writeFile(path.join(output,'results.json'),JSON.stringify(results,null,2));socket?.close();chrome.kill();await rm(profile,{recursive:true,force:true,maxRetries:5,retryDelay:200})}

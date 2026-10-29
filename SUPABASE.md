@@ -131,3 +131,6 @@ A área `#/admin` passa a usar Supabase Auth em vez do antigo modo local de demo
 - contato privado e localização exata não são retornados pela função administrativa.
 
 A escrita administrativa só deve ser liberada quando atualização + auditoria forem uma operação transacional. Ver `AUTH-ADMIN.md`.
+
+
+Validação complementar de dados públicos, contagens vazias e timeout de corpo: `docs/INTEGRACAO-V2-20261029.md`. O smoke inclui ainda dashboard vazio conectado e consistência da contagem territorial.

@@ -150,7 +150,6 @@ async function fetchCloudOccurrence(protocol,trackingKey=null){
  const api=cloudApi();if(!api?.trackOccurrence||!api.state?.connected)return null;
  const row=await api.trackOccurrence(protocol,trackingKey);return row?remoteToOccurrence(row,findProtocol(protocol)):null;
 }
-window.CidadeConectaPublicRecords=()=>publicMetricRecords().map(publicExportOccurrence);
 function publicMetricRecords(){return db.occurrences.filter(o=>cloudPublicProtocols!==null?o.cloudOrigin&&o.moderationStatus==='approved'&&cloudPublicProtocols.has(o.protocol):!o.cloudOrigin||o.moderationStatus==='approved')}
 async function syncPublicCloudOccurrences(){
  const api=cloudApi();if(!api?.listPublicOccurrences)return false;
@@ -162,6 +161,9 @@ async function syncPublicCloudOccurrences(){
  }catch(error){console.warn('Sincronização pública indisponível:',String(error?.message||error));return false}
 }
 function publicExportOccurrence(o){const {privateData,...safe}=o||{};return {...safe,photo:'',address:o?.cloudOrigin?'':(safe.address||'')}}
+
+window.CidadeConectaPublicRecords=()=>publicMetricRecords().map(publicExportOccurrence);
+window.CidadeConectaPublicData=Object.freeze({records:()=>publicMetricRecords().map(publicExportOccurrence)});
 
 function pageHead(k,t,p){return `<section class="pageHead"><div class="wrap"><div class="eyebrow">${k}</div><h1>${t}</h1><p class="muted">${p}</p></div></section>`}
 function internalRoleLabel(role){return({triage:'Triagem',admin:'Administração',agency:'Órgão/setor',citizen:'Cidadão'})[String(role||'')]||'Sem papel interno'}

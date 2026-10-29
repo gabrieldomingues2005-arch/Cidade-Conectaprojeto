@@ -90,3 +90,6 @@ O projeto correto `yvmkgpijzewssdxgimit` foi restaurado e está `ACTIVE_HEALTHY`
 ## QA isolado — 15/10/2026
 
 Continuar na branch `feature/cidade-conecta-auth-admin-20261008`. Não fazer merge do PR #5 enquanto o Supabase oficial estiver indisponível. Esta rodada não acessou nem alterou Supabase. Relatório e limites: `docs/QA-OFFLINE-20261015.md`. Foram adicionados 31 testes de Auth/SW e smoke de 28 cenários com rede externa interceptada, Node 22 e screenshots no CI.
+
+
+Validação complementar de dados públicos, contagens vazias e timeout de corpo: `docs/INTEGRACAO-V2-20261029.md`. O smoke inclui ainda dashboard vazio conectado e consistência da contagem territorial.

@@ -47,7 +47,8 @@ async function loadNetwork(){
 }
 
 function route(){return location.hash.replace(/^#\/?/,'').split('/')[0]}
-function readOccurrences(){if(window.CidadeConectaPublicRecords)return window.CidadeConectaPublicRecords();
+function readOccurrences(){
+  if(window.CidadeConectaPublicData)return window.CidadeConectaPublicData.records();
   try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}
 }
 function findRegion(bairro,data=cityData){

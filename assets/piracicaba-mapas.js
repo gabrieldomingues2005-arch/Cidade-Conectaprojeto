@@ -18,7 +18,7 @@ async function data(){
   if(dataCache)return dataCache;
   try{const r=await fetch(DATA_URL,{cache:'no-cache'});if(!r.ok)return null;dataCache=await r.json();return dataCache}catch{return null}
 }
-function readOccurrences(){if(window.CidadeConectaPublicRecords)return window.CidadeConectaPublicRecords();const live=window.CidadeConectaLocalDB;if(Array.isArray(live?.occurrences))return live.occurrences;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}}
+function readOccurrences(publicOnly=false){if(publicOnly&&window.CidadeConectaPublicData)return window.CidadeConectaPublicData.records();const live=window.CidadeConectaLocalDB;if(Array.isArray(live?.occurrences))return live.occurrences;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}}
 function allNeighborhoods(d){
   const names=[];
   for(const r of d?.administrativeRegions||[])for(const b of r.neighborhoods||[])names.push(b,b.replace(/^Parte do /i,''));
@@ -164,7 +164,7 @@ function renderRoutingTable(d){
 }
 
 function regionStats(d){
-  const occ=readOccurrences();
+  const occ=readOccurrences(true);
   return(d.administrativeRegions||[]).map(r=>{
     const list=occ.filter(o=>occurrenceRegion(o,d).some(x=>x.id===r.id));
     const count=list.length,per10k=r.population?count/r.population*10000:0;
@@ -182,7 +182,7 @@ function renderDashboardRates(d){
 function renderMapTerritory(d){
   if(route()!=='mapa'||document.querySelector('#mapTerritorySummary'))return;
   const card=document.querySelector('#publicMap')?.closest('.card');if(!card)return;
-  const stats=regionStats(d),known=stats.reduce((s,x)=>s+x.count,0),total=readOccurrences().length;
+  const stats=regionStats(d),known=stats.reduce((s,x)=>s+x.count,0),total=readOccurrences(true).length;
   const box=document.createElement('div');box.id='mapTerritorySummary';box.className='mapTerritorySummary';
   box.innerHTML=`<div><span class="geoAdvisorLabel">Leitura territorial</span><b>${known} de ${total} registros reconhecidos por região</b><small>Classificação calculada pelo nome do bairro.</small></div><a class="btn soft smallBtn" href="#/piracicaba">Ver geografia</a>`;
   const regionsHead=card.querySelector('.mapRegionsHeadV58'),filters=card.querySelector('.filters');if(regionsHead)regionsHead.insertAdjacentElement('afterend',box);else if(filters)filters.insertAdjacentElement('beforebegin',box);else card.prepend(box);
