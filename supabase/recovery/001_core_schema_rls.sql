@@ -350,25 +350,56 @@ drop policy if exists audit_staff_read on public.audit_log;
 create policy audit_staff_read on public.audit_log
 for select to authenticated using (private.is_staff());
 
-revoke insert, update, delete on public.municipalities from anon, authenticated;
-revoke insert, update, delete on public.territorial_sources from anon, authenticated;
-revoke insert, update, delete on public.administrative_regions from anon, authenticated;
-revoke insert, update, delete on public.neighborhoods from anon, authenticated;
-revoke insert, update, delete on public.neighborhood_regions from anon, authenticated;
-revoke insert, update, delete on public.categories from anon, authenticated;
-revoke insert, delete on public.users_profile from anon, authenticated;
-revoke insert, update, delete on public.occurrences from anon, authenticated;
-revoke insert, update, delete on public.occurrence_private_location from anon, authenticated;
-revoke insert, update, delete on public.occurrence_history from anon, authenticated;
-revoke insert, update, delete on public.occurrence_attachments from anon, authenticated;
-revoke insert, update, delete on public.audit_log from anon, authenticated;
+-- Privilégios de cliente são explícitos: primeiro zera, depois regranta o mínimo.
+revoke all privileges on all tables in schema public from anon;
+revoke all privileges on all tables in schema public from authenticated;
+revoke all privileges on all sequences in schema public from anon;
+revoke all privileges on all sequences in schema public from authenticated;
 
 grant usage on schema public to anon, authenticated;
-grant select on public.municipalities, public.territorial_sources, public.administrative_regions,
-  public.neighborhoods, public.neighborhood_regions, public.categories to anon, authenticated;
-grant select on public.occurrences, public.occurrence_history to anon, authenticated;
-grant select on public.users_profile, public.occurrence_private_location,
-  public.occurrence_attachments, public.audit_log to authenticated;
+
+grant select on table
+  public.municipalities,
+  public.territorial_sources,
+  public.administrative_regions,
+  public.neighborhoods,
+  public.neighborhood_regions,
+  public.categories,
+  public.occurrences,
+  public.occurrence_history
+to anon;
+
+grant select on table
+  public.municipalities,
+  public.territorial_sources,
+  public.administrative_regions,
+  public.neighborhoods,
+  public.neighborhood_regions,
+  public.categories,
+  public.occurrences,
+  public.occurrence_history,
+  public.users_profile,
+  public.occurrence_private_location,
+  public.occurrence_attachments,
+  public.audit_log
+to authenticated;
+
+grant update on table public.users_profile to authenticated;
+
+alter default privileges for role postgres in schema public
+  revoke all on tables from anon;
+alter default privileges for role postgres in schema public
+  revoke all on tables from authenticated;
+alter default privileges for role postgres in schema public
+  revoke all on sequences from anon;
+alter default privileges for role postgres in schema public
+  revoke all on sequences from authenticated;
+alter default privileges for role postgres in schema public
+  revoke execute on functions from public;
+alter default privileges for role postgres in schema public
+  revoke execute on functions from anon;
+alter default privileges for role postgres in schema public
+  revoke execute on functions from authenticated;
 
 revoke all on function private.set_updated_at() from public, anon, authenticated;
 revoke all on function private.current_profile_id() from public, anon;
