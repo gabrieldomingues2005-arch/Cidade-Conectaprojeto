@@ -7,6 +7,7 @@ const required=[
   'supabase/recovery/004_private_hardening.sql',
   'supabase/recovery/005_post_advisor_tuning.sql',
   'supabase/recovery/006_sensitive_privilege_hardening.sql',
+  'supabase/recovery/007_exact_client_privileges.sql',
   'supabase/migrations/20260917_secure_occurrence_submission_v1.sql',
   'supabase/migrations/20260917_reserve_demo_protocol_range.sql',
   'supabase/migrations/20260917_restrict_profile_self_role.sql',
@@ -26,6 +27,7 @@ const storage=read('supabase/recovery/003_storage_bucket.sql');
 const hard=read('supabase/recovery/004_private_hardening.sql');
 const tuning=read('supabase/recovery/005_post_advisor_tuning.sql');
 const sensitive=read('supabase/recovery/006_sensitive_privilege_hardening.sql');
+const exact=read('supabase/recovery/007_exact_client_privileges.sql');
 const all=required.filter(p=>p.endsWith('.sql')).map(read).join('\n');
 
 if(/create\s+schema\s+(?:if\s+not\s+exists\s+)?(?:auth|storage|realtime)\b/i.test(all)){
@@ -79,6 +81,15 @@ for(const snippet of [
   'revoke all on table public.audit_log from anon'
 ]){
   if(!sensitive.includes(snippet))throw new Error('Recovery sensitive: invariável ausente: '+snippet);
+}
+for(const snippet of [
+  'revoke all privileges on all tables in schema public from anon',
+  'revoke all privileges on all tables in schema public from authenticated',
+  'revoke execute on all functions in schema public from anon',
+  'alter default privileges for role postgres in schema public',
+  'grant update on table public.users_profile to authenticated'
+]){
+  if(!exact.includes(snippet))throw new Error('Recovery grants: invariável ausente: '+snippet);
 }
 console.log('Recovery DB: arquivos e invariantes estruturais OK');
 console.log('Seed: 5 fontes, 9 regiões, 71 bairros urbanos, 72 vínculos, 14 núcleos e 9 categorias');
