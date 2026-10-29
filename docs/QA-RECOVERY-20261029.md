@@ -4,17 +4,27 @@ Branch: feature/cidade-conecta-backend-recovery-20261022. Base 283d4dd. Sem merg
 
 ## Decisão
 
-NÃO liberar o preview oficial ainda. Há privilégio TRUNCATE indevido de anon em oito tabelas públicas, inclusive occurrences e occurrence_history. Confirmado por information_schema.table_privileges e has_table_privilege; não foi executado TRUNCATE nem alterado ACL. RLS habilitado não substitui a revisão desses privilégios. Corrigir em trabalho autorizado e repetir auditoria antes da liberação.
+O bloqueio ACL encontrado no QA foi CORRIGIDO em 29/10/2026 pela migration `recovery_012_exact_client_privileges`.
+
+Ainda não liberar o preview oficial somente por duas validações funcionais pendentes: Admin autenticado real (não há conta QA provisionada) e renderização da ocorrência real no navegador em Mapa/Lista/Regiões.
 
 ## Infraestrutura — PASS
 
-Projeto qzpofoxxrjunyayczcfu ACTIVE_HEALTHY, sa-east-1. Onze migrations recovery_001–011 registradas. PostGIS e pgcrypto instalados. Todas as 13 tabelas public e três private têm RLS. Bucket occurrence-attachments public=false. Base: 9 regiões, 85 bairros/núcleos, 72 vínculos e 9 categorias. Runtime aponta ao ref correto; varredura frontend sem chave service_role ou sb_secret.
+Projeto qzpofoxxrjunyayczcfu ACTIVE_HEALTHY, sa-east-1. Doze migrations recovery_001–012 registradas. PostGIS e pgcrypto instalados. Todas as 13 tabelas public e três private têm RLS. Bucket occurrence-attachments public=false. Base: 9 regiões, 85 bairros/núcleos, 72 vínculos e 9 categorias. Runtime aponta ao ref correto; varredura frontend sem chave service_role ou sb_secret.
 
-## Segurança — PASS parcial / bloqueio ACL
+## Segurança — PASS
 
-anon: INSERT em occurrences negado por HTTP 401/42501; tabelas occurrence_private_location, occurrence_contacts, users_profile e audit_log negadas; private não exposto na API (406) e sem USAGE nem grants de tabelas; RPCs internos sem EXECUTE para anon. service_role possui EXECUTE em submit_occurrence_internal, track_occurrence e funções de quota; envio e acompanhamento reais confirmaram execução dos RPCs pelo backend. Não foram extraídas credenciais administrativas.
+anon: INSERT em occurrences negado; tabelas occurrence_private_location, occurrence_contacts, users_profile e audit_log negadas; private não exposto e sem USAGE; RPCs internos sem EXECUTE para anon. service_role mantém EXECUTE nos RPCs internos necessários.
 
-FAIL: anon mantém SELECT/TRUNCATE/REFERENCES/TRIGGER em municipalities, territorial_sources, administrative_regions, neighborhoods, neighborhood_regions, categories, occurrences e occurrence_history. O teste não demonstrou exploração via HTTP; o ACL é suficiente para bloquear a aprovação de segurança até revisão.
+Correção ACL validada:
+- anon tem somente SELECT em municipalities, territorial_sources, administrative_regions, neighborhoods, neighborhood_regions, categories, occurrences e occurrence_history;
+- authenticated tem somente SELECT nas tabelas necessárias e UPDATE adicional apenas em users_profile;
+- TRUNCATE, REFERENCES e TRIGGER foram removidos de anon/authenticated;
+- has_table_privilege confirmou TRUNCATE=false em occurrences e occurrence_history;
+- anon continua sem EXECUTE em submit_occurrence_internal;
+- service_role continua com EXECUTE;
+- não há objetos de aplicação em public pertencentes a supabase_admin;
+- default privileges de postgres foram endurecidos para novos objetos.
 
 ## Ocorrência e tracking — PASS
 
@@ -38,7 +48,7 @@ Security: primeira chamada teve timeout; segunda completou. Três INFO rls_enabl
 
 Performance: vinte INFO unused_index, esperados em base recente; nenhum índice removido. Referência: https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index
 
-Bloqueante encontrado fora dos advisors: ACL TRUNCATE de anon. Importante: completar QA com conta interna e mapa real. Os advisors não substituem a revisão dos grants.
+Bloqueio ACL resolvido. Importante: completar QA com conta interna e mapa real. Os advisors permanecem apenas informativos.
 
 ## Validação e CI
 
@@ -47,3 +57,8 @@ Local: 283 verificações estáticas PASS (aviso conhecido Guamium), 46 testes A
 ## Limpeza
 
 Ocorrência CC-2026-01002 mantida explicitamente como QA, pending e public_visible=false. Retirada da leitura pública após o teste. Evento occurrence.qa_retained_private registra essa decisão. Não apagada porque a exclusão em cascata apagaria histórico e relações necessárias à evidência. Dados são fictícios; sem anexo ou usuário criado. Tokens e histórico permanecem privados. Não foram alterados schema, RLS, Auth ou Storage.
+
+
+## Remediação ACL — 29/10/2026
+
+A migration `recovery_012_exact_client_privileges` foi aplicada ao projeto v2. A regra usa revoke-all + grants mínimos explícitos e protege também novos objetos criados por postgres. Security Advisor permaneceu apenas com três INFO nas tabelas private; Performance Advisor retornou 17 INFO de índices sem uso, esperados numa base nova. Nenhum índice foi removido.
