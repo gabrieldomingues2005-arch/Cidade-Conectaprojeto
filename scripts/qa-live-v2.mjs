@@ -79,7 +79,7 @@ async function runBrowser(){
   const regionCount=await evaluate(`document.querySelector('[data-map-region-count="1"]').textContent`);
   const regionDiag=await evaluate(`(async()=>{const d=await fetch('data/piracicaba.json',{cache:'no-cache'}).then(r=>r.json());const reg=(d.administrativeRegions||[]).find(r=>Number(r.id)===1);const norm=v=>String(v||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();const hoods=(reg?.neighborhoods||[]).map(x=>norm(String(x).replace(/^Parte do /i,'')));const rows=(window.CidadeConectaLocalDB?.occurrences||[]).map(o=>({protocol:o.protocol,bairro:o.bairro,cloudOrigin:Boolean(o.cloudOrigin),moderationStatus:o.moderationStatus}));return{countText:document.querySelector('[data-map-region-count="1"]').textContent,region1Hoods:hoods,rows,matching:rows.filter(o=>hoods.includes(norm(o.bairro))).map(o=>o.protocol)}})()`);
   console.log('QA_REGION_DIAG '+JSON.stringify(regionDiag));
-  const regionNumber=Number((String(regionCount).match(/\\d+/)||[])[0]||0);
+  const regionNumber=Number((String(regionCount).match(/[0-9]+/)||[])[0]||0);
   assert.ok(regionNumber>=1,'Região 1 deveria conter pelo menos a ocorrência QA em Centro');
   await capture('regioes-real-390');
   await evaluate(`document.querySelector('[data-map-region="1"]').click();document.querySelector('[data-map-pane="list"]').click();true`);await pause(250);
