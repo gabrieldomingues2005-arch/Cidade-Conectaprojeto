@@ -37,7 +37,8 @@ Também foi observado HTTP 200 no health do Auth. Não foram enviados registros,
 - 283 verificações estáticas aprovadas; aviso conhecido de Guamium em múltiplas regiões.
 - 69 testes de Auth/Edge/ponte pública/acompanhamento/PWA aprovados localmente.
 - Syntax checks e `git diff --check` aprovados.
-- Smoke ampliado de 29 para 31 cenários: inclui backend público vazio e um registro aprovado simulado. O resultado Chrome deve ser conferido no CI deste commit, com screenshots como artefato.
+- Smoke ampliado de 29 para 31 cenários: inclui backend público vazio e um registro aprovado simulado. Todos passaram no workflow 40964140428 (commit `1ee062a`), com screenshots como artefato.
+- Actions `checkout` e `setup-node` atualizadas para v7, conforme documentação oficial, mantendo Node 22, sem cache de pacotes e sem persistir credenciais. Motivação: aviso DEP0040 emitido por setup-node v5 no workflow anterior.
 
 ## Limites
 

@@ -14,12 +14,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           package-manager-cache: false
@@ -43,6 +43,7 @@ jobs:
           node --check scripts/test-edge.mjs
           node --check scripts/test-bridge.mjs
           node --check scripts/test-public-ui.mjs
+          node --check scripts/check-backend.mjs
           node --check scripts/validate-recovery.mjs
 
       - name: Validar smoke test de UI
