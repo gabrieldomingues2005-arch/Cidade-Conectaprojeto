@@ -2,12 +2,20 @@
 
 O Cidade Conecta usa projeto Supabase próprio, separado de Raiz Carbon / Carbon Track.
 
+## Situação confirmada em 29/10/2026
+
+O projeto atual é **Cidade Conecta v2**, `qzpofoxxrjunyayczcfu`, região `sa-east-1`, confirmado `ACTIVE_HEALTHY`. O projeto original foi substituído após a recuperação documentada em `docs/BACKEND-RECOVERY-20261022.md`.
+
+As três Edge Functions estão `ACTIVE`. A checagem HTTP somente leitura confirmou município, base territorial, listagem pública, CORS e bloqueios anônimos. Nesta rodada não houve SQL, execução de migrations, alterações de RLS/Auth/Storage, criação de usuários ou escrita de dados. Autenticação interna completa ainda exige uma sessão real de `triage`/`admin`.
+
+Os detalhes anteriores de 17/09 e 24/09 abaixo são históricos e não devem ser reaplicados automaticamente. Relatório: `docs/QA-INTEGRACAO-20261029.md`.
+
 ## Projeto oficial
 
-- Nome: `Cidade Conecta`
-- Project ref: `yvmkgpijzewssdxgimit`
+- Nome: `Cidade Conecta v2`
+- Project ref: `qzpofoxxrjunyayczcfu`
 - Região: `sa-east-1`
-- URL pública: `https://yvmkgpijzewssdxgimit.supabase.co`
+- URL pública: `https://qzpofoxxrjunyayczcfu.supabase.co`
 
 **Nunca usar o projeto RAIZ CARBON `htzigdvatjpvvkwswjof`.**
 
@@ -104,3 +112,25 @@ As migrations aplicadas estão em `supabase/migrations/`; as Edge Functions est�
 - Bucket `occurrence-attachments` permanece privado e aceita apenas JPEG/PNG/WebP.
 - Foi endurecido o ACL de `occurrence_contacts`: `authenticated` agora mantém somente `SELECT`, ainda limitado por RLS.
 - Hardening pendente: avaliar habilitação de RLS nas tabelas `private.occurrence_tracking_tokens`, `private.submission_rate_limits` e `private.tracking_rate_limits`. Hoje elas não têm grants diretos para `anon` ou `authenticated`, mas a recomendação é não depender apenas de grants.
+
+
+## Autenticação interna — fase 1
+
+A área `#/admin` passa a usar Supabase Auth em vez do antigo modo local de demonstração.
+
+- cliente: `assets/auth.js`;
+- Edge Function: `admin-occurrences`;
+- papéis habilitados: `triage` e `admin`;
+- `citizen`: sem acesso interno;
+- `agency`: bloqueado até existir vínculo seguro usuário → órgão/setor;
+- sessão interna limitada ao `sessionStorage` da aba;
+- papel é validado no backend a partir de `users_profile`;
+- o frontend não usa `user_metadata` para autorização;
+- `service_role` permanece somente na Edge Function;
+- a fila administrativa real é somente leitura nesta fase;
+- contato privado e localização exata não são retornados pela função administrativa.
+
+A escrita administrativa só deve ser liberada quando atualização + auditoria forem uma operação transacional. Ver `AUTH-ADMIN.md`.
+
+
+Validação complementar de dados públicos, contagens vazias e timeout de corpo: `docs/INTEGRACAO-V2-20261029.md`. O smoke inclui ainda dashboard vazio conectado e consistência da contagem territorial.

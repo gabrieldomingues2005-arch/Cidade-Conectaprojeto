@@ -2,6 +2,14 @@
 
 Projeto de extensão universitária para registro, acompanhamento e análise de problemas urbanos em **Piracicaba/SP**.
 
+## Integração atual — 29/10/2026
+
+A branch `feature/cidade-conecta-auth-admin-20261008` reúne o mapa v5.8 e a recuperação do **Cidade Conecta v2** (`qzpofoxxrjunyayczcfu`). A `main` e o site publicado ainda precisam da revisão do PR #5; não houve merge nesta rodada.
+
+O frontend agora limita chamadas públicas a 12 s por requisição, distingue indisponibilidade de protocolo inexistente, atualiza a leitura na reconexão e usa versões exatas dos assets no cache offline. Quando a leitura real responde, mapas, regiões e indicadores usam somente o conjunto público aprovado, inclusive quando vazio. Os protocolos locais continuam disponíveis para acompanhamento.
+
+Validação e limites: `docs/QA-INTEGRACAO-20261029.md`. A checagem real somente leitura pode ser repetida com `node scripts/check-backend.mjs`; o CI padrão usa respostas simuladas e não depende do Supabase.
+
 ## Acesso
 
 **Site público principal (Manus):**
@@ -14,13 +22,14 @@ A branch `main` é a fonte oficial do código. O preview do GitHub Pages é atua
 
 A sincronização com `gh-pages` só ocorre após a validação do mesmo commit. Se algum teste falhar, a versão anterior do preview é preservada. Execuções antigas são ignoradas quando a `main` já avançou, e o envio para `gh-pages` não usa força. Pull requests executam a mesma validação, sem publicar.
 
-## Situação atual — MVP v5.5 + UI v5.6
+## Situação atual — MVP v5.5 + UI v5.7
 
 O protótipo já possui:
 
 - interface responsiva para computador e celular;
 - redesign v5.5 com identidade cívica própria, Atlas de bairros, mapa com clustering sem dependência externa, bairros acompanhados e continuidade dos padrões 21st adaptados ao produto;
 - camada Product Design v5.6 para hierarquia visual, foco de teclado, estados loading/vazio/erro/offline, responsividade, contraste e reduced motion;
+- UI/UX v5.7 com navegação mobile por rota, cabeçalhos compactos, estados de falha explícitos, linguagem administrativa simplificada, Dashboard contextualizado e Rede Municipal orientada por problema;
 - identidade visual inspirada nas cores utilizadas pela cidade de Piracicaba, mantendo caráter independente;
 - registro de ocorrências com protocolo;
 - acompanhamento por protocolo e histórico;
@@ -30,7 +39,7 @@ O protótipo já possui:
 - localização pública aproximada e separação conceitual da localização exata privada;
 - foto opcional com otimização/compressão client-side para imagens grandes;
 - rascunho local;
-- painel administrativo demonstrativo;
+- acesso interno autenticado por Supabase Auth, com fila real somente leitura para papéis `triage` e `admin`;
 - atualização de status, setor e observações;
 - exportação/importação de backup;
 - indicadores por categoria, bairro, status e região;
@@ -43,10 +52,10 @@ O protótipo já possui:
 - sugestão demonstrativa de encaminhamento por categoria;
 - PWA e cache offline dos arquivos principais;
 - SEO local;
-- validação automática de qualidade no GitHub Actions, incluindo 247 verificações estáticas e smoke das rotas principais em Chrome headless;
+- validação automática de qualidade no GitHub Actions, incluindo 282 verificações estáticas, 46 testes Auth/Edge/PWA e 28 cenários em Chrome headless;
 - status visual de conectividade e origem dos dados;
 - atalho `Ctrl/Cmd + K` para consulta de protocolo;
-- opção de restaurar dados demonstrativos no painel Admin;
+- proteção do painel interno por sessão real e papel validado no backend;
 - botão para copiar o link do site;
 - mapa real também na Home;
 - prévia do que ficará público antes do envio da ocorrência;
@@ -77,7 +86,7 @@ Documentação detalhada: `GEOGRAFIA.md`.
 
 O **Cidade Conecta deve usar um projeto Supabase próprio e separado** de Raiz Carbon / Carbon Track.
 
-O projeto usa o Supabase exclusivo do Cidade Conecta (`yvmkgpijzewssdxgimit`) em modo `hybrid-write`: leitura pública aprovada e submissão segura passam pelo backend, mantendo dados privados separados por políticas e Edge Functions.
+O projeto usa o Supabase exclusivo do Cidade Conecta (`qzpofoxxrjunyayczcfu`) em modo `hybrid-write`: leitura pública aprovada e submissão segura passam pelo backend, mantendo dados privados separados por políticas e Edge Functions.
 
 A preparação para conexão está em:
 
@@ -99,6 +108,7 @@ Nunca devem ser colocadas no front-end público chaves `service_role`, senha do 
 - `assets/piracicaba-mapas.js` — geografia avançada e limite municipal;
 - `assets/privacy-geo.js` — proteção de localização;
 - `assets/runtime-config.js` — modo e configuração do backend;
+- `assets/auth.js` — sessão do acesso interno com Supabase Auth;
 - `assets/site-enhancements.js` — melhorias de UX e estado do sistema;
 - `data/piracicaba.json` — base territorial;
 - `schema.sql` — modelo PostgreSQL futuro;
@@ -122,9 +132,14 @@ Cidade Conecta é um **projeto acadêmico independente**. Referências territori
 
 1. Fazer smoke/QA complementar em celulares e navegadores físicos, já que o CI cobre automaticamente desktop e mobile headless.
 2. Validar usabilidade do seletor de categorias, mapa avançado, Rede Municipal e UI v5.6 com usuários reais.
-3. Planejar e implementar autenticação/roles reais para substituir o Admin demonstrativo somente com escopo explícito de segurança.
+3. Validar a fase 1 do painel autenticado e, depois, implementar escrita administrativa transacional + auditoria antes de liberar edição.
 4. Evoluir moderação e notificações.
 5. Incorporar novas camadas geográficas somente quando houver fonte vetorial validada.
 6. Preparar demonstração acadêmica e eventual apresentação institucional futura.
 
 Projeto acadêmico — 2026.
+
+
+### Acesso interno
+
+A rota `#/admin` usa autenticação real do Supabase. Nesta primeira fase, somente `triage` e `admin` podem acessar a fila real, em modo somente leitura. O papel `agency` permanece bloqueado até existir escopo por órgão/setor. Detalhes: `AUTH-ADMIN.md`.
