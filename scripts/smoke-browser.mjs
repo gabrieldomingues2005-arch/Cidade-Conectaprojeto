@@ -80,7 +80,10 @@ try{
    }
    if(name==='mapa'&&width===390){
     await evaluate(`document.querySelector('[data-map-pane="list"]')?.click()`);await pause(80);await capture('mapa-lista-390');
-    await evaluate(`document.querySelector('[data-map-pane="regions"]')?.click()`);await pause(80);await capture('mapa-regioes-390');
+    await evaluate(`document.querySelector('[data-map-pane="regions"]')?.click()`);
+    await waitFor(`!document.querySelector('[data-map-region="1"]')?.disabled`);
+    assert.ok(await evaluate(`/\\d/.test(document.querySelector('[data-map-region-count="1"]')?.textContent||'')`),'mapa regiões: contador da Região 1 não foi preenchido');
+    await pause(80);await capture('mapa-regioes-390');
     await evaluate(`document.querySelector('[data-map-pane="map"]')?.click()`);await pause(80);
    }
    assert.equal(data.width,width);assert.ok(data.scroll<=width+1,`${name} ${width}: overflow ${data.scroll}`);assert.ok(!data.text.includes('Página não encontrada'));assert.deepEqual(data.unlabelled,[],`${name}: campos sem label`);assert.deepEqual(errors,[],`${name}: erro JS`);
