@@ -24,7 +24,7 @@ try{
  const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.exception?.description||'Falha de avaliação');return r.result.value};
  // Fixtures existem apenas no browser de QA: nenhuma chamada externa sai do teste.
  await send('Page.addScriptToEvaluateOnNewDocument',{source:`
- window.__qaScenario='unavailable';
+ window.__qaScenario=location.search.includes('qaPublic=empty')?'public-empty':location.search.includes('qaPublic=approved')?'public-approved':'unavailable';
  if(location.search.includes('qaLeaflet=1')){
   window.__leafletQA={fit:0,fly:0,popup:0,invalidates:0};
   const chain=()=>({addTo(){return this},bindPopup(){return this},openPopup(){window.__leafletQA.popup++;return this},on(){return this},setLatLng(){return this},getLatLng(){return {lat:-22.725,lng:-47.649}}});
@@ -50,6 +50,12 @@ try{
   if(mode==='network'||mode==='offline')throw new TypeError('Rede indisponível (QA)');
   if(mode==='timeout')return new Promise((resolve,reject)=>options.signal?.addEventListener('abort',()=>reject(Object.assign(new Error('Timeout QA'),{name:'AbortError'}))));
   const json=(status,payload)=>Promise.resolve(new Response(JSON.stringify(payload),{status,headers:{'Content-Type':'application/json'}}));
+  if(mode.startsWith('public-')&&url.pathname.startsWith('/rest/v1/')){
+   if(url.pathname.endsWith('/municipalities'))return json(200,[{ibge_code:'3538709',name:'Piracicaba'}]);
+   if(options.headers?.Prefer)return new Response('[]',{headers:{'Content-Range':'0-0/0'}});
+   if(url.pathname.endsWith('/occurrences'))return json(200,mode==='public-empty'?[]:[{protocol:'CC-2026-01001',title:'Registro público de QA',neighborhood_label:'Centro',public_latitude:-22.725,public_longitude:-47.649,status:'Recebida',moderation_status:'approved',created_at:'2026-10-29T12:00:00Z',categories:{slug:'vias',name:'Vias públicas'}}]);
+   return json(200,[]);
+  }
   if(url.pathname.includes('/auth/v1/')){
    if(mode==='unavailable')return json(503,{message:'Serviço temporariamente indisponível'});
    if(mode==='401')return json(401,{message:'Sessão inválida'});
@@ -101,6 +107,22 @@ try{
   assert.equal(state.status,scenario==='401'?'anonymous':scenario==='403'?'denied':scenario==='empty'?'authorized':'error');assert.equal(state.saved,scenario!=='401');if(scenario==='401')assert.ok(state.login);
   if(scenario==='offline')assert.equal(await evaluate(`document.querySelector('#offlineNoticeV56').hidden`),false);
   results.push({scenario,status:'PASS'});console.log(`✓ admin ${scenario}`);
+ }
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+ for(const mode of ['empty','approved']){
+  errors.length=0;
+  scenario='public-'+mode;
+  await send('Page.navigate',{url:base+'/index.html?qaPublic='+mode+'#/mapa'});
+  await waitFor(`Boolean(document.querySelector('#mapResults'))&&document.querySelector('#systemStatus')?.textContent.includes('Supabase ativo')`);
+  const expected=mode==='empty'?0:1;
+  await waitFor(`document.querySelector('#mapResultCount')?.textContent==='${expected}'`);
+  await waitFor(`document.querySelectorAll('[data-map-region]').length===9`);
+  // Métricas do território e mapa devem ter a mesma origem; nenhum seed vira registro ao vivo.
+  const text=await evaluate(`document.querySelector('#mapResults').textContent`);
+  if(mode==='empty')assert.ok(text.includes('Ainda não há ocorrências públicas'));else assert.ok(text.includes('Registro público de QA'));
+  assert.ok(!text.includes('Poste sem iluminação'));
+  assert.deepEqual(errors,[],scenario+': erro JS');
+  await capture(scenario+'-390');results.push({scenario,status:'PASS'});console.log('✓ '+scenario);
  }
  // Exercita o caminho real do mapa com uma implementação Leaflet local de QA.
  errors.length=0;

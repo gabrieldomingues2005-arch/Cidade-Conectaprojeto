@@ -122,3 +122,12 @@ test('fresh critical asset updates current cache',async()=>{
   assert.equal(h.writes.length,1);
   assert.equal(h.writes[0][0],request);
 });
+
+test('first installation precaches every exact version requested by the HTML shell',async()=>{
+  const h=harness();let p;
+  h.handlers.install({waitUntil:x=>p=x});await p;
+  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+  const refs=[...html.matchAll(/(?:src|href)="(assets\/[^"?]+\?v=[^"]+)"/g)].map(m=>'./'+m[1]);
+  assert.ok(refs.length>10);
+  for(const ref of refs)assert.ok(h.getCore().includes(ref),`Versão ausente no cache: ${ref}`);
+});

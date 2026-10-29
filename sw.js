@@ -1,9 +1,10 @@
 const CACHE_PREFIX='cidade-conecta-';
-const CACHE='cidade-conecta-v5-7-1-map-20261015';
+const CACHE='cidade-conecta-v5-7-2-integration-20261029';
 const CORE=['./','./index.html','./assets/styles.css','./assets/app.js','./assets/piracicaba.css','./assets/piracicaba.js','./assets/piracicaba-mapas.js','./assets/piracicaba-mapas.css','./assets/privacy-geo.js','./assets/runtime-config.js','./assets/auth.js','./assets/supabase-bridge.js','./assets/site-enhancements.js','./assets/site-enhancements.css','./assets/design-v55.css','./assets/design-v56.css','./assets/brand-mark-v51.svg','./data/piracicaba.json','./data/municipal-network.json','./manifest.webmanifest','./favicon.svg'];
+const VERSIONED_CORE=['./assets/styles.css?v=5.5.0', './assets/piracicaba.css?v=5.5.0', './assets/piracicaba-mapas.css?v=5.5.0', './assets/site-enhancements.css?v=5.7.1', './assets/design-v55.css?v=5.5.0', './assets/design-v56.css?v=5.7.1-ui4', './assets/brand-mark-v51.svg?v=5.5.0', './assets/runtime-config.js?v=5.7.2-integration', './assets/auth.js?v=5.7.1', './assets/supabase-bridge.js?v=5.7.2-integration', './assets/app.js?v=5.7.2-integration', './assets/piracicaba.js?v=5.7.2-integration', './assets/piracicaba-mapas.js?v=5.7.2-integration', './assets/privacy-geo.js?v=5.5.0', './assets/site-enhancements.js?v=5.7.2-integration'];
 
 self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll([...CORE,...VERSIONED_CORE])).then(()=>self.skipWaiting()));
 });
 
 self.addEventListener('activate',event=>{

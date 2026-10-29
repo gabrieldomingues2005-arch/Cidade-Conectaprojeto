@@ -2,6 +2,15 @@
 
 > **Leia este arquivo primeiro. Não recomece o projeto.** A branch `main` é a fonte de verdade.
 
+## Checkpoint atual — 29/10/2026
+
+- Branch autorizada: `feature/cidade-conecta-auth-admin-20261008`; `main` preservada e PR #5 sem merge.
+- Recuperação v2 integrada a partir de `283d4dd` da branch de recovery.
+- Projeto ativo: **Cidade Conecta v2**, `qzpofoxxrjunyayczcfu`, confirmado `ACTIVE_HEALTHY` nesta data.
+- O ref anterior `yvmkgpijzewssdxgimit` foi removido, conforme `docs/BACKEND-RECOVERY-20261022.md`.
+- Nesta rodada, não executar SQL, migrations, alterações de RLS/Auth/Storage ou dados. Recuperação presente no histórico não é autorização para reaplicá-la.
+- Relatório atual: `docs/QA-INTEGRACAO-20261029.md`. Os checkpoints abaixo são históricos.
+
 ## Identidade oficial
 - Projeto: **Cidade Conecta Piracicaba**
 - GitHub: `gabrieldomingues2005-arch/Cidade-Conectaprojeto`
@@ -9,7 +18,7 @@
 - Preview: `https://gabrieldomingues2005-arch.github.io/Cidade-Conectaprojeto/`
 - Site Manus histórico: `https://cidconecta-nztptuci.manus.space`
 - Supabase oficial: **Cidade Conecta**
-- `project_ref`: `yvmkgpijzewssdxgimit`
+- `project_ref`: `qzpofoxxrjunyayczcfu`
 - Região: `sa-east-1`
 
 **NUNCA use ou altere Supabase do Raiz Carbon, especialmente `htzigdvatjpvvkwswjof`.**

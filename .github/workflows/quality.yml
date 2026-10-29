@@ -41,13 +41,15 @@ jobs:
           node --check scripts/test-auth.mjs
           node --check scripts/test-sw.mjs
           node --check scripts/test-edge.mjs
+          node --check scripts/test-bridge.mjs
+          node --check scripts/test-public-ui.mjs
           node --check scripts/validate-recovery.mjs
 
       - name: Validar smoke test de UI
         run: bash -n scripts/smoke-ui.sh
 
       - name: Testar autenticação, Edge e Service Worker
-        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs
+        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-bridge.mjs scripts/test-public-ui.mjs
 
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs

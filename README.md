@@ -2,6 +2,14 @@
 
 Projeto de extensão universitária para registro, acompanhamento e análise de problemas urbanos em **Piracicaba/SP**.
 
+## Integração atual — 29/10/2026
+
+A branch `feature/cidade-conecta-auth-admin-20261008` reúne o mapa v5.8 e a recuperação do **Cidade Conecta v2** (`qzpofoxxrjunyayczcfu`). A `main` e o site publicado ainda precisam da revisão do PR #5; não houve merge nesta rodada.
+
+O frontend agora limita chamadas públicas a 12 s por requisição, distingue indisponibilidade de protocolo inexistente, atualiza a leitura na reconexão e usa versões exatas dos assets no cache offline. Quando a leitura real responde, mapas, regiões e indicadores usam somente o conjunto público aprovado, inclusive quando vazio. Os protocolos locais continuam disponíveis para acompanhamento.
+
+Validação e limites: `docs/QA-INTEGRACAO-20261029.md`. A checagem real somente leitura pode ser repetida com `node scripts/check-backend.mjs`; o CI padrão usa respostas simuladas e não depende do Supabase.
+
 ## Acesso
 
 **Site público principal (Manus):**
@@ -78,7 +86,7 @@ Documentação detalhada: `GEOGRAFIA.md`.
 
 O **Cidade Conecta deve usar um projeto Supabase próprio e separado** de Raiz Carbon / Carbon Track.
 
-O projeto usa o Supabase exclusivo do Cidade Conecta (`yvmkgpijzewssdxgimit`) em modo `hybrid-write`: leitura pública aprovada e submissão segura passam pelo backend, mantendo dados privados separados por políticas e Edge Functions.
+O projeto usa o Supabase exclusivo do Cidade Conecta (`qzpofoxxrjunyayczcfu`) em modo `hybrid-write`: leitura pública aprovada e submissão segura passam pelo backend, mantendo dados privados separados por políticas e Edge Functions.
 
 A preparação para conexão está em:
 
