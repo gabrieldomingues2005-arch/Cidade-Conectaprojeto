@@ -1,106 +1,54 @@
-# Cidade Conecta — Supabase v5.2
+# Cidade Conecta — Supabase v2
 
-O Cidade Conecta usa projeto Supabase próprio, separado de Raiz Carbon / Carbon Track.
+O Cidade Conecta usa projeto próprio, separado de Raiz Carbon / Carbon Track.
 
 ## Projeto oficial
 
-- Nome: `Cidade Conecta`
-- Project ref: `yvmkgpijzewssdxgimit`
-- Região: `sa-east-1`
-- URL pública: `https://yvmkgpijzewssdxgimit.supabase.co`
+- Nome: `Cidade Conecta v2`.
+- Project ref: `qzpofoxxrjunyayczcfu`.
+- Região: `sa-east-1`.
+- URL pública: `https://qzpofoxxrjunyayczcfu.supabase.co`.
+- Status consultado em 02/11/2026: `ACTIVE_HEALTHY`.
 
-**Nunca usar o projeto RAIZ CARBON `htzigdvatjpvvkwswjof`.**
+**Nunca usar o Raiz Carbon `htzigdvatjpvvkwswjof`.** O antigo `yvmkgpijzewssdxgimit` foi descartado e não é destino de configuração ou operações.
 
-## Estado atual
+## Estado validado
 
-O backend foi provisionado em 17/09/2026, foi restaurado em 24/09/2026 e está saudável (`ACTIVE_HEALTHY`).
+O QA de recovery foi aprovado em 29/10/2026. Ver `docs/QA-RECOVERY-20261029.md` para evidências, advisors e limitações.
 
-Já foram aplicadas migrations para:
+- PostgreSQL com PostGIS e pgcrypto; schema `private`.
+- RLS em todas as tabelas verificadas de `public` e `private`.
+- 9 regiões administrativas, 71 bairros urbanos, 72 vínculos bairro/região, 14 núcleos isolados e 9 categorias.
+- Bucket privado `occurrence-attachments`.
+- Edge Functions `submit-occurrence`, `track-occurrence` e `admin-occurrences`.
+- Protocolo real, token com hash no banco, rate limit, histórico e auditoria.
+- Contato e posição exata separados da localização pública aproximada.
+- `anon` não insere diretamente em `occurrences`, não lê tabelas sensíveis, não acessa `private` e não executa RPCs internos.
+- Privilégios indevidos de TRUNCATE/REFERENCES/TRIGGER removidos dos papéis de cliente.
 
-- PostgreSQL base;
-- PostGIS;
-- município de Piracicaba;
-- 9 regiões administrativas em estado `metadata-only`;
-- bairros e vínculo N:N com regiões;
-- categorias;
-- perfis ligados ao Supabase Auth;
-- ocorrências;
-- localização pública e localização exata privada;
-- histórico;
-- anexos;
-- auditoria;
-- RLS;
-- índices geográficos e relacionais;
-- bucket privado `occurrence-attachments`.
-
-O Security Advisor não apresenta lints ativos. O Performance Advisor aponta apenas índices ainda não utilizados, esperado enquanto o banco está praticamente vazio. Uma auditoria adicional identificou que as tabelas do schema `private` não têm grants diretos para `anon`/`authenticated`, porém continuam com RLS desabilitado; isso deve ser tratado como hardening pendente.
+Doze migrations de recovery foram registradas no projeto. Os arquivos de `supabase/recovery/` documentam o estado reconstruído; sua numeração não é idêntica à da migration aplicada. Por exemplo, `007_exact_client_privileges.sql` corresponde a `recovery_012_exact_client_privileges`. Não reaplicar automaticamente os arquivos SQL.
 
 ## Integração do frontend
 
-A configuração pública fica em `assets/runtime-config.js` e a leitura técnica em `assets/supabase-bridge.js`.
+`assets/runtime-config.js` contém somente configuração pública do projeto oficial. `assets/supabase-bridge.js` realiza leitura pública aprovada e envio seguro via Edge Functions, em modo `hybrid-write`.
 
-O site está em `dataMode: hybrid-write`: leitura pública aprovada vem do Supabase e a criação de ocorrências passa pela Edge Function segura `submit-occurrence`. O Admin visual continua demonstrativo.
+A interface v6 preserva os contratos validados. Publicação exige moderação aprovada e visibilidade pública. Registros demonstrativos são identificados como demonstração. O código privado de acompanhamento fica no aparelho de origem; os dados privados não integram mapas, contagens ou exportações públicas.
 
-No navegador podem existir somente:
+Podem estar no cliente somente URL, project ref, chave publishable e configuração pública. Nunca incluir `service_role`, `sb_secret_*`, senha de banco ou credencial administrativa no frontend.
 
-- URL pública do projeto Supabase;
-- `project_ref` público;
-- chave `publishable` do cliente;
-- configurações não secretas.
+## Autenticação e Admin
 
-Nunca colocar no GitHub ou JavaScript público:
+- Cliente: `assets/auth.js`; autorização: Edge Function `admin-occurrences`.
+- Papéis internos permitidos: `triage` e `admin`, verificados no backend a partir de `users_profile`.
+- `citizen`, `agency` e papéis desconhecidos ficam bloqueados para a fila interna.
+- Sessão em `sessionStorage` da aba; `user_metadata` não é fonte de autorização.
+- Fila e detalhe internos são somente leitura e não retornam contato ou posição exata.
+- Escrita administrativa permanece fora do escopo até existir operação transacional com auditoria.
 
-- `service_role`;
-- `sb_secret_*`;
-- senha do PostgreSQL;
-- tokens administrativos;
-- chaves privadas;
-- credenciais de outro projeto.
+Não criar contas ou promover papéis automaticamente para testar a interface. O QA aprovado removeu suas contas temporárias; a ocorrência `CC-2026-01002` foi preservada como evidência, pendente e fora da leitura pública.
 
-## Segurança
+## Promoção para main
 
-Todas as tabelas expostas têm RLS. Dados territoriais/categorias têm leitura pública controlada. Ocorrências públicas exigem `public_visible = true` e moderação aprovada. Dados privados exigem usuário proprietário ou perfil interno autorizado. Alteração de `role` não é permitida ao próprio usuário pelo cliente.
+A autorização para integrar o estado aprovado na principal ocorreu em 02/11/2026. Essa promoção altera o código publicado e sua configuração pública; não executa SQL, migrations, deploy de Edge Functions ou alterações em Auth/RLS/Storage. Ver `docs/INTEGRACAO-MAIN-20261102.md`.
 
-O bucket de anexos é privado e permite upload/leitura do próprio usuário autenticado; equipe autorizada poderá acessar conforme RLS.
-
-## Próximas etapas
-
-1. Manter leitura do backend validada no preview.
-2. Criar fluxo seguro de escrita de ocorrências.
-3. Migrar gradualmente os registros do `localStorage`.
-4. Conectar Auth à interface.
-5. Conectar Storage às fotos.
-6. Substituir o Admin demonstrativo por autorização real.
-7. Somente depois habilitar integrações externas.
-
-## Princípio
-
-Se houver dúvida sobre qual projeto Supabase está selecionado, nenhuma alteração deve ser executada. Cidade Conecta e Raiz Carbon permanecem totalmente separados.
-
-
-## Atualização v4.6 — escrita segura
-
-Projeto oficial: `yvmkgpijzewssdxgimit` (`sa-east-1`).
-
-- `submit-occurrence`: valida entrada, aplica rate limiting, cria protocolo/token, salva contato/localização privada e opcionalmente anexo privado.
-- `track-occurrence`: aplica rate limiting e chama internamente `track_occurrence`; a RPC é restrita a `service_role`.
-- `occurrence_contacts`: dados de contato privados.
-- `private.occurrence_tracking_tokens`: somente hash do token.
-- `private.submission_rate_limits` e `private.tracking_rate_limits`: controles de abuso.
-- `profile_self_update` impede autopromoção de papel por cidadão.
-
-As migrations aplicadas estão em `supabase/migrations/`; as Edge Functions estão em `supabase/functions/`.
-
-
-## Atualização 24/09/2026
-
-- Projeto restaurado com sucesso: `ACTIVE_HEALTHY`.
-- `submit-occurrence` redeployada como versão 3.
-- Corrigida a validação de longitude para rejeitar corretamente valores fora de `-180..180`.
-- `track-occurrence` segue ativa com `verify_jwt: true`.
-- Migrations preservadas: core, índices, submissão segura, reserva de protocolos demo, restrição de papel e tracking seguro.
-- Base territorial preservada: 1 município, 5 fontes, 9 regiões, 71 bairros, 72 vínculos e 9 categorias.
-- Nenhuma ocorrência, contato, anexo ou token residual ficou gravado após os testes.
-- Bucket `occurrence-attachments` permanece privado e aceita apenas JPEG/PNG/WebP.
-- Foi endurecido o ACL de `occurrence_contacts`: `authenticated` agora mantém somente `SELECT`, ainda limitado por RLS.
-- Hardening pendente: avaliar habilitação de RLS nas tabelas `private.occurrence_tracking_tokens`, `private.submission_rate_limits` e `private.tracking_rate_limits`. Hoje elas não têm grants diretos para `anon` ou `authenticated`, mas a recomendação é não depender apenas de grants.
+Se houver dúvida sobre o projeto selecionado, não executar alteração. Cidade Conecta e Raiz Carbon permanecem separados.
