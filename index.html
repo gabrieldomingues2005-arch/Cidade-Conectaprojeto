@@ -62,7 +62,7 @@
         <a href="#/piracicaba" data-route="piracicaba">Piracicaba</a>
       </nav>
       <div class="headerActions">
-        <button class="commandTriggerV53" id="globalSearchBtn" type="button" aria-label="Buscar no Cidade Conecta">
+        <button class="commandTriggerV53" id="globalSearchBtn" type="button" aria-haspopup="dialog" aria-controls="commandPalette" aria-expanded="false" aria-label="Buscar no Cidade Conecta">
           <span class="commandTriggerIconV53" aria-hidden="true">⌕</span><span>Buscar</span><kbd>Ctrl K</kbd>
         </button>
         <button class="btn soft smallBtn installBtn hidden" type="button">Instalar app</button>
@@ -136,7 +136,7 @@
         <button id="commandClose" type="button" aria-label="Fechar busca">Esc</button>
       </div>
       <div class="commandMetaV53"><strong id="commandTitle">Busca rápida</strong><span>Ações, páginas e ocorrências públicas</span></div>
-      <div id="commandResults" class="commandResultsV53" role="listbox"></div>
+      <div id="commandResults" class="commandResultsV53" role="group" aria-label="Resultados da busca"></div>
       <div class="commandFooterV53"><span>↑↓ navegar</span><span>↵ abrir</span><span>Esc fechar</span></div>
     </div>
   </div>
@@ -146,10 +146,10 @@
   <script src="assets/runtime-config.js?v=5.7.1" defer></script>
   <script src="assets/auth.js?v=5.7.1" defer></script>
   <script src="assets/supabase-bridge.js?v=5.5.0" defer></script>
-  <script src="assets/app.js?v=5.7.1-ui2" defer></script>
+  <script src="assets/app.js?v=6.0.0" defer></script>
   <script src="assets/piracicaba.js?v=5.5.0" defer></script>
   <script src="assets/piracicaba-mapas.js?v=5.5.0-ui2" defer></script>
   <script src="assets/privacy-geo.js?v=5.5.0" defer></script>
-  <script src="assets/site-enhancements.js?v=5.7.1" defer></script>
+  <script src="assets/site-enhancements.js?v=6.0.0" defer></script>
 </body>
 </html>
