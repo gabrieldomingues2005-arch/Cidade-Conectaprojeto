@@ -60,14 +60,18 @@ try{
    const body=JSON.parse(options.body||'{}');
    if(mode==='403')return json(403,{error:'internal_access_denied',message:'Permissão insuficiente',role:'citizen'});
    if(mode==='empty')return json(200,body.action==='session'?{authenticated:true,profile:{id:'qa-profile',role:'triage'}}:{occurrences:[]});
+   if(mode==='qa-list'){
+    const rows=[{protocol:'CC-2026-09001',title:'Iluminação de demonstração para QA',neighborhood_label:'Centro',status:'Recebida',categories:{slug:'iluminacao',name:'Iluminação'},created_at:'2026-11-02T12:00:00Z'},{protocol:'CC-2026-09002',title:'Calçada de demonstração para QA',neighborhood_label:'Paulista',status:'Em análise',categories:{slug:'acessibilidade',name:'Acessibilidade'},created_at:'2026-11-02T13:00:00Z'}];
+    return json(200,body.action==='session'?{authenticated:true,profile:{id:'qa-profile',role:'triage',name:'Equipe de teste'}}:body.action==='detail'?{occurrence:{...rows.find(r=>r.protocol===body.protocol),description:'Descrição pública de demonstração, sem dados pessoais.',history:[{status:'Recebida',note:'Nota pública para QA.',created_at:'2026-11-02T12:00:00Z'}]}}:{occurrences:rows});
+   }
   }
   return json(503,{message:'Serviço temporariamente indisponível'});
  };
  `});
  const capture=async name=>{const metrics=await send('Page.getLayoutMetrics');const size=metrics.cssContentSize||metrics.contentSize||{width:1366,height:900};const image=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:true,clip:{x:0,y:0,width:Math.ceil(size.width),height:Math.min(Math.ceil(size.height),5000),scale:1}});await writeFile(path.join(output,name+'.png'),Buffer.from(image.data,'base64'))};
  const waitFor=async expression=>{for(let n=0;n<150;n++){if(await evaluate(expression))return;await pause(100)}throw new Error(`Condição não atendida: ${expression}`)};
- const routes=[['home','#/','#homeSearch'],['registrar','#/registrar','#occForm'],['acompanhar','#/acompanhar','#followForm'],['mapa','#/mapa','#publicMap'],['dashboard','#/dashboard','.dashboardKpisV51'],['rede','#/rede-municipal','#municipalNetworkRoot'],['admin','#/admin','#adminLoginForm']];
- for(const width of [390,768,1366]){
+ const routes=[['home','#/','#homeSearch'],['registrar','#/registrar','#occForm'],['acompanhar','#/acompanhar','#followForm'],['mapa','#/mapa','#publicMap'],['dashboard','#/dashboard','.dashboardKpisV51'],['rede','#/rede-municipal','#municipalNetworkRoot'],['admin','#/admin','#adminLoginForm'],['minhas','#/minhas','.mineSummaryV50'],['bairro','#/bairro?nome=Centro','.neighborhoodHeroV55'],['ocorrencia','#/ocorrencia/CC-2026-00001','.detailV52'],['piracicaba','#/piracicaba','.geoMunicipal'],['sobre','#/sobre','#app .grid2'],['privacidade','#/privacidade','#app .grid2']];
+ for(const width of [320,390,768,1366]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
   for(const [name,hash,selector] of routes){
    errors.length=0;await send('Page.navigate',{url:base+'/index.html'+hash});await waitFor(`Boolean(document.querySelector(${JSON.stringify(selector)}))`);await pause(350);
@@ -90,6 +94,9 @@ try{
    // Menu abre, é anunciado e fecha por Escape.
    const visible=await evaluate(`getComputedStyle(document.querySelector('#menu')).display!=='none'`);
    if(visible){await evaluate(`document.querySelector('#menu').click()`);assert.equal(await evaluate(`document.querySelector('#menu').getAttribute('aria-expanded')`),'true');await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});assert.equal(await evaluate(`document.querySelector('#menu').getAttribute('aria-expanded')`),'false')}
+   if(width===1366)assert.equal(await evaluate(`getComputedStyle(document.querySelector('#nav')).display`),'flex','Navegação desktop deve ficar visível');
+   const cutControls=await evaluate(`[...document.querySelectorAll('#app input:not([type=hidden]),#app select,#app textarea')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.left< -1||r.right>innerWidth+1)}).map(e=>e.id)`);
+   assert.deepEqual(cutControls,[],name+' '+width+': controle cortado');
    if(name==='admin'){await evaluate(`document.querySelector('#adminEmail').focus()`);await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Tab',code:'Tab',windowsVirtualKeyCode:9});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Tab',code:'Tab',windowsVirtualKeyCode:9});assert.equal(await evaluate('document.activeElement.id'),'adminPassword')}
    results.push({route:hash,width,status:'PASS'});console.log(`✓ ${name} ${width}`);
   }
@@ -104,6 +111,43 @@ try{
   assert.equal(state.status,scenario==='401'?'anonymous':scenario==='403'?'denied':scenario==='empty'?'authorized':'error');assert.equal(state.saved,scenario!=='401');if(scenario==='401')assert.ok(state.login);
   if(scenario==='offline')assert.equal(await evaluate(`document.querySelector('#offlineNoticeV56').hidden`),false);
   results.push({scenario,status:'PASS'});console.log(`✓ admin ${scenario}`);
+ }
+ // Busca modal: atalho preserva rota, Tab fica contido e Escape devolve foco.
+ errors.length=0;
+ await send('Emulation.setDeviceMetricsOverride',{width:1366,height:900,deviceScaleFactor:1,mobile:false});
+ await send('Page.navigate',{url:base+'/index.html#/mapa'});await waitFor(`Boolean(document.querySelector('#mapSearch'))`);
+ await evaluate(`document.querySelector('#globalSearchBtn').focus()`);
+ const press=async(key,code,modifiers=0)=>{await send('Input.dispatchKeyEvent',{type:'keyDown',key,code,modifiers});await send('Input.dispatchKeyEvent',{type:'keyUp',key,code,modifiers})};
+ await press('k','KeyK',2);await waitFor(`document.activeElement.id==='commandInput'`);
+ assert.equal(await evaluate('location.hash'),'#/mapa','Busca não deve mudar a rota ao abrir');
+ assert.equal(await evaluate(`document.querySelector('#app').inert`),true);
+ await press('Tab','Tab',8);
+ assert.equal(await evaluate('document.activeElement.classList.contains("commandItemV53")'),true,'Shift+Tab deve ir ao último resultado');
+ await press('Tab','Tab');assert.equal(await evaluate('document.activeElement.id'),'commandInput');
+ await capture('busca-modal-1366');await press('Escape','Escape');
+ assert.equal(await evaluate('document.activeElement.id'),'globalSearchBtn');assert.equal(await evaluate(`document.querySelector('#app').inert`),false);
+ assert.deepEqual(errors,[],'Busca: erro JS');results.push({scenario:'busca-teclado',status:'PASS'});
+ // Preenchimento apenas local: nenhuma submissão, nenhum dado real.
+ await send('Page.navigate',{url:base+'/index.html#/registrar'});await waitFor(`Boolean(document.querySelector('#title'))`);
+ await evaluate(`document.querySelector('[data-category-choice="vias"]').click();for(const [id,value] of Object.entries({bairro:'Centro',title:'Verificação visual do formulário',description:'Descrição pública fictícia usada apenas no navegador de QA.',name:'Contato privado de QA',email:'qa@example.invalid'})){const el=document.getElementById(id);el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}))}`);
+ assert.ok((await evaluate(`document.querySelector('#publicPreview').textContent`)).includes('Verificação visual do formulário'));
+ assert.ok(!(await evaluate(`document.querySelector('#publicPreview').textContent`)).includes('qa@example.invalid'));
+ await evaluate(`document.querySelector('#saveDraft').click()`);assert.ok(await evaluate(`Boolean(localStorage.getItem('cidadeConectaDraftV4'))`));
+ await capture('registrar-preenchido-1366');results.push({scenario:'formulario-previa-privacidade',status:'PASS'});
+ // Admin preenchido somente por fixtures; RLS/Auth reais não são contornados.
+ for(const width of [390,1366]){
+  await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
+  await send('Page.navigate',{url:base+'/index.html#/admin'});await waitFor(`Boolean(document.querySelector('#adminLoginForm'))`);
+  await evaluate(`window.__qaScenario='qa-list';sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));window.CidadeConectaAuth.init()`);
+  await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);
+  await waitFor(`document.querySelectorAll('.adminTableV60 tbody tr').length===2`);await capture('admin-fila-'+width);
+  assert.ok(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));
+  await evaluate(`const e=document.querySelector('#adminSearch');e.value='não existe';e.dispatchEvent(new Event('input',{bubbles:true}))`);
+  assert.ok((await evaluate(`document.querySelector('#adminList').textContent`)).includes('Nenhuma ocorrência encontrada'));
+  await evaluate(`document.querySelector('#adminClear').click()`);await waitFor(`document.querySelectorAll('.adminTableV60 tbody tr').length===2`);
+  await evaluate(`document.querySelector('[data-admin-open]').click()`);await waitFor(`Boolean(document.querySelector('.adminReadOnlyV57'))`);
+  await capture('admin-detalhe-'+width);results.push({scenario:'admin-fila-filtros-'+width,status:'PASS'});
+  await evaluate(`sessionStorage.removeItem('cidadeConectaAuthSessionV1')`);
  }
  // Exercita o caminho real do mapa com uma implementação Leaflet local de QA.
  errors.length=0;

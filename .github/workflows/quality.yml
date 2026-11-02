@@ -2,7 +2,7 @@ name: Validar Cidade Conecta
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, feature/cidade-conecta-backend-recovery-20261022]
   workflow_call:
 
 permissions:
@@ -41,13 +41,14 @@ jobs:
           node --check scripts/test-auth.mjs
           node --check scripts/test-sw.mjs
           node --check scripts/test-edge.mjs
+          node --check scripts/test-design.mjs
           node --check scripts/validate-recovery.mjs
 
       - name: Validar smoke test de UI
         run: bash -n scripts/smoke-ui.sh
 
       - name: Testar autenticação, Edge e Service Worker
-        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs
+        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-design.mjs
 
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs
@@ -93,7 +94,7 @@ jobs:
           rm -rf artifacts/claude-ui
           mkdir -p artifacts/claude-ui/assets artifacts/claude-ui/data artifacts/claude-ui/docs artifacts/claude-ui/scripts artifacts/claude-ui/screenshots
           cp index.html sw.js manifest.webmanifest favicon.svg README.md artifacts/claude-ui/
-          cp assets/app.js assets/styles.css assets/design-v55.css assets/design-v56.css artifacts/claude-ui/assets/
+          cp assets/app.js assets/styles.css assets/design-v55.css assets/design-v56.css assets/design-system.css artifacts/claude-ui/assets/
           cp assets/site-enhancements.js assets/site-enhancements.css artifacts/claude-ui/assets/
           cp assets/piracicaba.js assets/piracicaba.css assets/piracicaba-data.js artifacts/claude-ui/assets/
           cp assets/piracicaba-mapas.js assets/piracicaba-mapas.css assets/privacy-geo.js artifacts/claude-ui/assets/
