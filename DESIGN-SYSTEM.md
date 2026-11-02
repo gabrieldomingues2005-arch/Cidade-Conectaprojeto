@@ -1,267 +1,106 @@
-# Cidade Conecta — Design System v5.5
-
-Este documento consolida a direção visual do Cidade Conecta depois da interrupção da tarefa Manus por limite de créditos. Ele descreve o que está realmente aplicado na `main` e serve como handoff para o Work.
-
-## Princípio visual
-
-A interface v5.5 combina clareza de Swiss/International Typographic Style com Civic Tech editorial, cartografia e sinalização urbana, reduzindo de propósito efeitos decorativos e aparência de template. O resultado deve parecer cívico, acessível e confiável sem imitar identidade governamental oficial.
-
-Evitar: excesso de glassmorphism, gradientes decorativos, aparência de fintech/SaaS genérico, ícones multicoloridos em excesso e linguagem visual burocrática.
-
-## Marca
-
-O símbolo v5.5 substitui o bloco textual “CC” por uma marca abstrata construída em CSS e refletida no `favicon.svg`.
-
-Conceito:
-- arco aberto = cidade em movimento / conexão em construção;
-- nós = pontos, bairros e ocorrências conectadas;
-- verde-lima = ação/progresso;
-- teal = território/rede;
-- fundo verde cívico = confiança e estabilidade.
-
-Regras:
-- nunca usar o símbolo para sugerir vínculo oficial com a Prefeitura;
-- manter área de respiro equivalente a pelo menos 25% da largura do símbolo;
-- evitar reduzir abaixo de 24 px;
-- em fundo claro usar versão verde cívico;
-- em fundo escuro manter arco lima e nós claros.
-
-## Paleta
-
-### Primária
-- Civic 1000 — `#032f31`
-- Civic 950 — `#07383a`
-- Civic 900 — `#094649`
-- Civic 800 — `#0d5758`
-- Civic 700 — `#13706e`
-- Civic 600 — `#218784`
-
-### Acento
-- Lime — `#bff054`
-- Lime Strong — `#a9e93d`
-- Lime Soft — `#eef9cb`
-
-### Suporte
-- Teal — `#4da9ad`
-- Blue — `#4f74bd`
-- Paper — `#fbfcf9`
-- Warm — `#f6f4ed`
-- Ink — `#12353b`
-- Ink Soft — `#4f686d`
-
-### Semânticas de status
-- Recebida: azul suave
-- Em análise: âmbar
-- Encaminhada: violeta
-- Em andamento: teal
-- Resolvida: verde
-
-Status nunca deve depender somente de cor: usar texto e posição no stepper.
-
-## Tipografia
-
-A base atual prioriza a pilha de fontes do sistema para carregamento rápido e boa legibilidade. Manter:
-- títulos com alto peso, tracking negativo discreto;
-- texto de interface com peso médio/semibold;
-- corpo com line-height aproximado de 1.6–1.7;
-- evitar caixa alta em textos longos;
-- caixa alta reservada para eyebrow/labels curtos.
-
-## Espaçamento e formas
-
-- raios principais: 14–23 px;
-- botões principais: formato pill;
-- cards: raio de 20–23 px;
-- inputs: 14 px;
-- sombra leve para cards e sombra maior só em elementos focais;
-- grid máximo centralizado pela classe `.wrap`;
-- respiro vertical amplo entre seções.
-
-## Componentes principais
-
-### Header
-- sticky;
-- fundo translúcido muito leve;
-- CTA Registrar recebe destaque lima;
-- Admin fica visualmente secundário.
-
-### Hero
-- verde cívico escuro;
-- CTA primário lima;
-- mapa visual como assinatura da plataforma;
-- evitar adicionar mais efeitos sem função.
-
-### Formulário
-O formulário continua em uma única página, mas foi dividido visualmente em:
-1. Descreva o problema;
-2. Mostre onde está;
-3. Contato opcional e privado.
-
-Não transformar em wizard obrigatório sem evidência de melhoria de usabilidade.
-
-### Protocolo
-Usar o stepper:
-Recebida → Em análise → Encaminhada → Em andamento → Resolvida.
-
-Etapa atual usa maior ênfase, anteriores usam check e futuras permanecem neutras.
-
-### Mapa
-Marcadores próprios:
-- draft/localização: azul;
-- análise/encaminhada: âmbar;
-- andamento: teal;
-- resolvida: verde.
+# Cidade Conecta — Design System 6
+
+Direção aplicada em 02/11/2026 na branch `feature/cidade-conecta-design-system-20261102`, sobre o checkpoint de recuperação `37c161e`. O histórico v5.x permanece no Git. Este documento descreve componentes existentes e o que foi efetivamente implementado, sem implicar aprovação institucional ou conformidade WCAG completa.
+
+## Identidade e princípio
+
+Cidade Conecta organiza participação cidadã, acompanhamento e leitura territorial de Piracicaba. A expressão visual combina verde cívico profundo, acento lima, superfícies de papel e uma hierarquia editorial direta. A cartografia é ferramenta de navegação, não decoração. Dados demográficos de referência, exemplos demonstrativos e ocorrências públicas devem permanecer identificáveis.
+
+Marca: preservar `assets/brand-mark-v51.svg` e `favicon.svg`. A assinatura não representa vínculo com a Prefeitura. Área livre mínima: um quarto da largura do símbolo. Tamanho preferencial: 40 px no desktop e 36 px no mobile. Sem gerar nova marca ou redesenhar o símbolo em CSS.
+
+O aviso de projeto acadêmico independente permanece em todas as rotas. A interface pública evita termos de implementação como nomes de banco, latência, branches ou versão de framework. O status informa Conectado, Somente leitura, Conectando, Serviço indisponível, Offline ou Demonstração; o detalhe explica o impacto no uso.
+
+## Fonte de verdade
+
+`assets/design-system.css`, carregado após as camadas v5.5/v5.6, define tokens `--cc6-*` e regras limitadas a `.cc-product`. A seção final de compatibilidade documenta a substituição das regras históricas com `!important`. Nenhum reset de componente deve depender de cores literais espalhadas pela aplicação. Não acrescentar uma nova folha por versão de tela: evoluir esta camada.
+
+## Cores semânticas
+
+| Token `--cc6-` | Valor | Aplicação |
+|---|---|---|
+| brand | #07383a | marca, ação primária, navegação ativa |
+| brand-hover | #0d5758 | ação primária em hover |
+| accent / accent-ink | #bff054 / #234416 | CTA no hero e seleções pontuais |
+| accent-soft | #eef9cb | escolha ativa e apoio à ação |
+| bg / surface | #f5f6f2 / #ffffff | página e superfície de conteúdo |
+| soft / warm | #edf3ef / #f6f4ed | apoio, agrupamento e aviso institucional |
+| ink / muted | #153e40 / #526b6d | texto principal e secundário |
+| border / border-strong | #d4dfd8 / #71877b | divisões decorativas / contorno de controles |
+| focus | #13706e | foco em superfície clara |
+| inverse | #f6faf6 | texto sobre verde profundo |
+| success / success-bg | #236141 / #e8f4ec | resolvida / confirmação |
+| warning / warning-bg | #805317 / #fff5df | em análise / atenção |
+| danger / danger-bg | #9b3434 / #fff0ed | erro destrutivo/validação |
+| info / info-bg | #355b85 / #edf3fa | recebida / informação |
+| forward / forward-bg | #69449a / #f2edf9 | encaminhada |
+
+Status sempre inclui texto. Cor sozinha não comunica resolução, erro, seleção ou indisponibilidade. Acento lima sobre branco não serve como texto; usar `accent-ink` ou `brand`. Os pares textuais da tabela são testados a 4,5:1 e contornos de controle a 3:1. Isso não verifica todos os textos herdados e não equivale a uma certificação de acessibilidade.
+
+## Tipografia e densidade
+
+Fonte do sistema: `ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif`. Sem download de fonte, troca de tecnologia ou dependência de internet para renderizar a interface.
+
+| Token | Escala | Uso |
+|---|---|---|
+| text-xs | 0,75 rem | metadados curtos, contagem e badges |
+| text-sm | 0,875 rem | controles, apoio, tabelas e labels |
+| text-base | 1 rem | campos editáveis e corpo |
+| text-lg | 1,125 rem | introdução e etapas |
+| title-sm | 1,25 rem | títulos de painéis |
+| title-md | 1,625 rem | seções e números de apoio |
+| title-lg | clamp 1,875–2,75 rem | título da página |
+| display | clamp 2,5–4 rem | apresentação da Home |
+
+Pesos: 400 corpo, 550 apoio, 650 labels, 750 títulos. Entrelinha: 1,6 corpo, 1,12 títulos. Números operacionais usam `tabular-nums`. Caixa alta só em rótulos curtos. No mobile títulos de página usam 1,75–2,25 rem e campos mantêm 16 px para leitura e prevenção de zoom involuntário.
+
+## Grid, espaços e superfícies
+
+- Conteúdo máximo: 1240 px. Margens externas: 32 px desktop, 16 px mobile.
+- Escala de espaçamento: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64 e 80 px, via `space-*`.
+- Header: 76 px desktop; 68 px mobile. Navegação completa a partir de 1200 px. Abaixo disso, menu explícito.
+- Layout de formulário: conteúdo flexível + lateral de 320 px; coluna única até 1020 px. Sem wizard obrigatório.
+- Mapa: duas áreas no desktop, mapa em largura total e painel abaixo no tablet, Mapa/Lista/Regiões no mobile.
+- Raios: 8 px controles, 14 px painéis, 20 px somente elementos focais. Pills apenas quando o agrupamento é naturalmente curto.
+- Sombras: pequena para separação, média para superfície focal, flutuante para menu/modal. Painéis de dados não se elevam como se fossem botões.
+
+## Componentes e contratos
+
+| Componente | Aplicação e comportamento |
+|---|---|
+| Botões | `.btn.primary`, `.secondary`, `.soft`; mínimo 48 px, 44 px em controles compactos; ação principal por contexto; hover sem deslocamento |
+| Campos | label persistente, fundo branco, contorno forte; ajuda associada por `aria-describedby`; checkbox nativo com texto clicável |
+| Categoria | grupo de rádios com `aria-checked`, setas/Home/End e foco móvel; borda e superfície distinguem seleção; duas colunas no mobile e uma até 360 px para preservar os rótulos |
+| Badges/chips | texto + semântica de cor; 12 px; sem indicar ação se não forem interativos |
+| Cards | uma superfície principal, título e conteúdo em sequência; borda discreta e raios constantes |
+| Navegação | `aria-current=page`; menu com `aria-expanded`; Escape fecha e devolve foco; clique externo fecha; todos os destinos existentes preservados |
+| Busca modal | `role=dialog`, `aria-modal`, nome, pesquisa e botões de resultado nativos; Tab contido, fundo inerte, Escape e retorno de foco; Ctrl/Cmd+K preservado |
+| Selects/dropdowns | selects nativos com nome acessível; menu de navegação é uma região de links, sem imitar `role=menu` de aplicação |
+| Tooltips | apenas ajuda suplementar (`title`); a ação sempre tem nome/label independente do tooltip |
+| Tabelas | caption e cabeçalhos com `scope=col`; linha é leitura; botão Abrir tem protocolo no nome; apresentação em cartões até 480 px, com labels de coluna |
+| Indicadores | valores tabulares, unidades e origem do conjunto; gráficos acompanhados de valores textuais; zero não vira desempenho oficial |
+| Mapa | Leaflet preservado; atribuição visível inclusive na Home; coordenadas públicas aproximadas; lista textual e filtros disponíveis no fallback |
+| Regiões | nomes/bairros derivados da base existente; duas colunas no tablet e uma no mobile; sem polígonos inventados |
+| Admin | autenticação e autorização existentes preservadas; layout compacto para entrar; fila somente leitura e exportações mantidas |
+| Timeline | status, data e nota em sequência legível; etapa atual não depende só de cor |
+| Arquivo | input nativo com botão legível; formatos, limite e orientação de privacidade próximos do campo |
+
+## Estados e movimento
+
+- Loading: mensagem textual e `aria-busy` onde existente; skeleton decorativo oculto do leitor de tela.
+- Vazio: informar o conjunto/filtro sem culpar o usuário; oferecer ação aplicável. Indicadores têm estado vazio próprio.
+- Erro: mensagem objetiva com efeito sobre a tarefa e possibilidade de tentar novamente; dados/sessão seguem contratos existentes.
+- Offline: aviso global persistente, leitura cacheada identificada, sem simular que escrita ocorreu.
+- Disabled: elemento nativo realmente desabilitado; explicação do formulário continua visível.
+- Foco: contorno de 3 px, afastamento de 3–4 px; no hero escuro usar lima com anel escuro para manter separação.
+- Movimento: 160 ms e apenas mudanças de cor/borda/sombra em controles; nenhum pulso contínuo em status. `prefers-reduced-motion` desativa transições, animações e scroll suave.
+- `prefers-contrast:more`: contornos mais fortes. O tamanho do texto permanece controlado pelo navegador, com rem e quebra de linha.
+
+## Privacidade e consistência da leitura
+
+A camada visual não recebe nem gera credenciais. Não alterar contratos de `runtime-config.js`, Auth, Edge Functions, RLS ou Storage para resolver um problema de apresentação. A visão territorial pública usa o mesmo conjunto sanitizado dos indicadores, sem dados privados de contato/token. A consulta de registros do próprio navegador mantém seu caminho separado. Dados demonstrativos continuam claramente identificados; não apresentar exemplos como números oficiais.
+
+## Verificação e continuidade
 
-O centro interno usa o acento lima, mantendo ligação com a identidade.
+`docs/design-v60/AUDITORIA.md` registra a auditoria inicial. `scripts/test-design.mjs` verifica pares de contraste, cache versionado, semântica/escape da tabela e fonte pública das contagens territoriais. O smoke de navegador cobre rotas, tamanhos, menu, busca por teclado, formulário, filtros, Admin simulado e mapa com Leaflet stub. Screenshots não substituem teste com leitor de tela ou aparelhos físicos.
 
-### Mobile
-- barra inferior com Registrar + Acompanhar;
-- respeitar `safe-area-inset-bottom`;
-- alvos de toque com mínimo visual próximo de 44 px;
-- stepper vertical em telas estreitas;
-- menu em painel.
-
-## Acessibilidade
-
-- foco visível;
-- contraste reforçado em `prefers-contrast: more`;
-- animações desativadas em `prefers-reduced-motion: reduce`;
-- status com texto + posição, não apenas cor;
-- navegação por teclado preservada;
-- mensagens de privacidade explícitas.
-
-## Arquivos de referência
-
-- `assets/design-v55.css` — camada visual principal;
-- `assets/app.js` — componentes de interface e fluxo;
-- `favicon.svg` — símbolo compacto;
-- `manifest.webmanifest` — cores PWA;
-- `WORK-CONTINUAR.md` — handoff operacional.
-
-## Próximos refinamentos possíveis
-
-1. trocar gradualmente emojis de categoria por um conjunto próprio de ícones lineares;
-2. validar contraste e legibilidade em aparelhos físicos;
-3. testar o formulário com usuários e decidir se a divisão visual atual é suficiente;
-4. fazer QA do mapa em telas pequenas;
-5. consolidar componentes repetidos antes de qualquer reescrita maior.
-
-Não recriar o projeto para implementar esses refinamentos.
-
-
-## Revisão rígida v5.5
-
-A v5.5 aumenta o padrão visual e funcional sem reescrever a arquitetura.
-
-### Mudanças de design
-- hero claro/editorial com mapa como elemento focal;
-- sombras mais contidas e bordas mais consistentes;
-- botões menos arredondados e com aparência mais institucional;
-- navegação pública simplificada; Sobre/Admin ficam acessíveis pelo rodapé;
-- conjunto de ícones lineares substitui emojis nas áreas principais;
-- seletor de categoria em cards de escolha;
-- melhor leitura de tabelas, ocorrências, métricas e formulários.
-
-### Mapa avançado
-- painel lateral de ocorrências;
-- filtros rápidos por status;
-- busca também por protocolo;
-- duas camadas-base do OpenStreetMap;
-- limite municipal carregado pela API do IBGE;
-- ação "Perto de mim" com permissão explícita de geolocalização;
-- distância aproximada ordenada no navegador;
-- marcadores próprios por estado;
-- lista e mapa sincronizados.
-
-### Acompanhamento
-O usuário pode salvar protocolos públicos no navegador. Isso não cria conta, não envia preferência ao servidor e não altera a ocorrência.
-
-### Regra de qualidade
-Não adicionar função apenas por efeito visual. Novas funções devem melhorar localização, compreensão, acompanhamento ou segurança.
-
-
-## Integração visual Manus — v5.5
-
-O pacote React produzido pelo Manus foi tratado como referência de Product Design, não como substituição automática da arquitetura existente.
-
-Foram incorporados e aprofundados:
-- mapa como elemento central da identidade;
-- leitura territorial mais visível;
-- fluxo de registro guiado visualmente;
-- categorias tratadas como escolhas visuais;
-- dashboard com melhor hierarquia;
-- navegação mobile mais próxima de produto;
-- marca gráfica consistente.
-
-A v5.5 também adiciona:
-- mapa Leaflet real na Home;
-- filtro por região administrativa no mapa público, derivado da base territorial local;
-- prévia pública durante o preenchimento;
-- medidor de completude do formulário;
-- círculo visual de privacidade ao marcar localização;
-- compressão de imagem client-side;
-- filtro regional sem inventar polígonos internos;
-- layout próprio de indicadores de completude do conjunto.
-
-Não foi adotada a migração completa para React porque o pacote Manus estava orientado a estado local/demonstração e não preservava por si só o fluxo seguro já existente com Supabase, Edge Functions, RLS, tokens e moderação.
-
-
-## Refinamento v5.5
-
-A v5.5 concentra qualidade percebida e prevenção de erro, não apenas decoração.
-
-- página de acompanhamento com acessos rápidos do navegador;
-- detalhe do protocolo com explicação do status atual, próximo passo e recência da atualização;
-- ocorrência semelhante por proximidade/categoria para reduzir duplicidade;
-- sugestão de bairros conhecidos a partir da base territorial local;
-- filtro de mapa para mostrar somente registros ainda abertos;
-- títulos de página por rota e `aria-current` na navegação;
-- acabamento visual específico para detalhe, acompanhamento e prevenção de duplicidades.
-
-Regra: sugestões de duplicidade são apenas assistivas; nunca bloqueiam o envio.
-
-
-## Referências 21st.dev — v5.5
-
-A v5.5 usa o 21st.dev como referência de padrões, não como origem para copiar uma aplicação pronta.
-
-Padrões adaptados:
-- **Bento hierarchy**: cards de tamanhos diferentes para indicar prioridade, em vez de tratar toda métrica como equivalente.
-- **Spotlight surface**: radial gradient leve guiado pelo ponteiro somente em superfícies selecionadas; sem dependência de animação pesada.
-- **Command palette**: busca global real para ações, páginas e ocorrências, acessível por Ctrl/Cmd + K.
-- **Composable map workspace**: mapa, controles, resultados, legenda e ações funcionam como partes independentes e coerentes.
-
-Decisões:
-- nenhuma migração para React/Tailwind foi feita apenas para adotar componentes;
-- nenhum componente do 21st foi copiado integralmente;
-- os padrões foram reimplementados em HTML/CSS/JS compatíveis com a arquitetura atual;
-- efeitos que não melhoram navegação, hierarquia ou leitura foram evitados.
-
-
-## Rede Municipal — v5.5
-
-A nova página de competências usa uma hierarquia visual em cinco níveis: Entrada comunitária → Classificação → Área pública de referência → Setor/serviço → Canal oficial.
-
-Princípios:
-- a hierarquia deve explicar, não fingir workflow institucional;
-- secretarias e órgãos aparecem como **referência pública**, nunca como destinatários já integrados;
-- setores são apresentados a partir de competências/cartas de serviços oficiais consultadas;
-- contatos e links externos ficam claramente separados das ações internas do Cidade Conecta;
-- o mapa pode filtrar ocorrências pela área de referência da categoria, mas isso não equivale a fila de trabalho real da Prefeitura;
-- a identidade continua verde cívico + lima, com cartões de rede mais técnicos e compactos para diferenciar informação institucional de conteúdo comunitário.
-
-
-## Atlas cívico — v5.5
-
-A v5.5 adiciona uma camada territorial centrada no bairro e melhora a escala do mapa.
-
-Padrões visuais e de UX:
-- **cluster cartográfico próprio** em zoom amplo, reduzindo excesso de marcadores DOM;
-- o agrupamento pode ser desligado pelo usuário;
-- a informação do mapa continua duplicada em lista textual acessível;
-- cada bairro tem uma página própria com KPIs, categorias, áreas públicas de referência, mapa e registros recentes;
-- bairros podem ser salvos no navegador e reaparecem em `Meus registros` e na busca global;
-- nenhum polígono de bairro é inventado: o Radar usa somente o nome do bairro e os pontos existentes;
-- a estética do Radar usa grade cartográfica sutil, hero cívico escuro, números tabulares e painéis compactos.
-
-O padrão segue a orientação de produto já adotada do 21st: mapa interativo somente quando pan/zoom/agrupamento realmente fazem parte do produto; em paralelo, manter lista textual para acessibilidade e fallback.
+Antes de alterar componente, identificar seu equivalente existente e o token correspondente. Testar estados, teclado e larguras depois de cada bloco relevante. Não mudar backend, publicar o preview oficial ou fazer merge como consequência automática de uma melhoria visual.
