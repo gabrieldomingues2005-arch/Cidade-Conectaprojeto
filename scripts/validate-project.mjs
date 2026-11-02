@@ -186,7 +186,7 @@ assert(!adminEdge.includes('"agency"')&&!adminEdge.includes("'agency'"),'Papel a
 
 
 const enhancements=read('assets/site-enhancements.js');
-assert(enhancements.includes('Supabase ativo'),'Interface informa leitura e escrita conectadas ao Supabase');
+assert(enhancements.includes("label:'Conectado'")&&enhancements.includes("label:'Somente leitura'"),'Interface distingue conexão e leitura sem expor detalhes técnicos no rótulo');
 assert(enhancements.includes('Restaurar demo'),'Painel permite restaurar dados demonstrativos');
 
 const app=read('assets/app.js');
