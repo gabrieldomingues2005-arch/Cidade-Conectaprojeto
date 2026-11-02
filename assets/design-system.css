@@ -52,6 +52,7 @@
 .cc-product :where(.miniLabel){color:var(--cc6-muted)}
 .cc-product :where(.uiIcon){flex:none;width:20px;height:20px}
 .cc-product :where(.card){padding:var(--cc6-space-6);background:var(--cc6-surface);border:1px solid var(--cc6-border);border-radius:var(--cc6-radius);box-shadow:var(--cc6-shadow-sm)}
+.cc-product :where(.card,.row,.heroPanel,.heroMetric){animation:none;transition:background var(--cc6-motion),border-color var(--cc6-motion),box-shadow var(--cc6-motion)}
 .cc-product :where(.btn){min-height:var(--cc6-control);padding:var(--cc6-space-3) var(--cc6-space-5);border-radius:var(--cc6-radius-sm);font-size:var(--cc6-text-sm);font-weight:var(--cc6-weight-label);line-height:1.4;box-shadow:none;transition:background var(--cc6-motion),border-color var(--cc6-motion),box-shadow var(--cc6-motion)}
 .cc-product :where(.btn:hover){transform:none}
 .cc-product .btn.primary{background:var(--cc6-brand);color:var(--cc6-inverse);border:1px solid var(--cc6-brand)}

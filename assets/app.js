@@ -401,7 +401,7 @@ function bindHome(){
  const f=$('#homeSearch');if(f)f.onsubmit=e=>{e.preventDefault();const p=$('#homeProtocol').value.trim();if(p)location.hash='#/ocorrencia/'+encodeURIComponent(p)};
  const el=$('#homeMap');if(!el)return;if(!window.L){el.innerHTML='<div class="stateCardV57 homeMapFallbackV57"><span>'+iconSvg('map')+'</span><div><b>Mapa temporariamente indisponível</b><p>Você ainda pode explorar os registros pela lista e pelos indicadores.</p><a class="miniLink" href="#/mapa">Abrir área do mapa →</a></div></div>';return}
  const records=publicMetricRecords().filter(o=>Number.isFinite(o.lat)&&Number.isFinite(o.lng)).slice(0,20);
- currentMap=L.map(el,{zoomControl:false,attributionControl:false,scrollWheelZoom:false}).setView(PIRACICABA,12);
+ currentMap=L.map(el,{zoomControl:false,attributionControl:true,scrollWheelZoom:false}).setView(PIRACICABA,12);
  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap'}).addTo(currentMap);
  const markers=[];records.forEach(o=>{const marker=L.marker([o.lat,o.lng],{icon:mapMarkerIcon(o.status),title:o.title,alt:'Ocorrência: '+o.title}).addTo(currentMap).bindTooltip(esc(o.title),{direction:'top'});marker.on('click',()=>location.hash='#/ocorrencia/'+encodeURIComponent(o.protocol));markers.push(marker)});
  if(markers.length)currentMap.fitBounds(L.featureGroup(markers).getBounds().pad(.28),{maxZoom:13});

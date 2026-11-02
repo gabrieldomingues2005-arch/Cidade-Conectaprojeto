@@ -116,7 +116,7 @@ try{
  errors.length=0;
  await evaluate(`sessionStorage.removeItem('cidadeConectaAuthSessionV1')`);
  await send('Emulation.setDeviceMetricsOverride',{width:1366,height:900,deviceScaleFactor:1,mobile:false});
- await send('Page.navigate',{url:base+'/index.html#/mapa'});await waitFor(`Boolean(document.querySelector('#mapSearch'))`);
+ await send('Page.navigate',{url:base+'/index.html?qaView=keyboard#/mapa'});await waitFor(`Boolean(document.querySelector('#mapSearch'))`);
  await evaluate(`document.querySelector('#globalSearchBtn').focus()`);
  const press=async(key,code,modifiers=0)=>{await send('Input.dispatchKeyEvent',{type:'keyDown',key,code,modifiers});await send('Input.dispatchKeyEvent',{type:'keyUp',key,code,modifiers})};
  await press('k','KeyK',2);await waitFor(`document.activeElement.id==='commandInput'`);
@@ -129,7 +129,7 @@ try{
  assert.equal(await evaluate('document.activeElement.id'),'globalSearchBtn');assert.equal(await evaluate(`document.querySelector('#app').inert`),false);
  assert.deepEqual(errors,[],'Busca: erro JS');results.push({scenario:'busca-teclado',status:'PASS'});
  // Preenchimento apenas local: nenhuma submissão, nenhum dado real.
- await send('Page.navigate',{url:base+'/index.html#/registrar'});await waitFor(`Boolean(document.querySelector('#title'))`);
+ await send('Page.navigate',{url:base+'/index.html?qaView=form#/registrar'});await waitFor(`Boolean(document.querySelector('#title'))`);
  await evaluate(`document.querySelector('[data-category-choice="vias"]').click();for(const [id,value] of Object.entries({bairro:'Centro',title:'Verificação visual do formulário',description:'Descrição pública fictícia usada apenas no navegador de QA.',name:'Contato privado de QA',email:'qa@example.invalid'})){const el=document.getElementById(id);el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}))}`);
  assert.ok((await evaluate(`document.querySelector('#publicPreview').textContent`)).includes('Verificação visual do formulário'));
  assert.ok(!(await evaluate(`document.querySelector('#publicPreview').textContent`)).includes('qa@example.invalid'));
@@ -138,7 +138,7 @@ try{
  // Admin preenchido somente por fixtures; RLS/Auth reais não são contornados.
  for(const width of [390,1366]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
-  await send('Page.navigate',{url:base+'/index.html#/admin'});await waitFor(`Boolean(document.querySelector('#adminLoginForm'))`);
+  await send('Page.navigate',{url:base+'/index.html?qaView=admin-'+width+'#/admin'});await waitFor(`Boolean(document.querySelector('#adminLoginForm'))`);
   await evaluate(`window.__qaScenario='qa-list';sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));window.CidadeConectaAuth.init()`);
   await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);
   await waitFor(`document.querySelectorAll('.adminTableV60 tbody tr').length===2`);await capture('admin-fila-'+width);
