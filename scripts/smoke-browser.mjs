@@ -136,7 +136,7 @@ try{
  await evaluate(`document.querySelector('#saveDraft').click()`);assert.ok(await evaluate(`Boolean(localStorage.getItem('cidadeConectaDraftV4'))`));
  await capture('registrar-preenchido-1366');results.push({scenario:'formulario-previa-privacidade',status:'PASS'});
  // Admin preenchido somente por fixtures; RLS/Auth reais não são contornados.
- for(const width of [390,1366]){
+ for(const width of [320,390,1366]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
   await send('Page.navigate',{url:base+'/index.html?qaView=admin-'+width+'#/admin'});await waitFor(`Boolean(document.querySelector('#adminLoginForm'))`);
   await evaluate(`window.__qaScenario='qa-list';sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));window.CidadeConectaAuth.init()`);

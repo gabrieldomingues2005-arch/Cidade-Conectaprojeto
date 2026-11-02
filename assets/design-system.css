@@ -369,6 +369,8 @@
 .cc-product td:first-child{font-variant-numeric:tabular-nums;white-space:nowrap}
 .cc-product tbody tr:hover{background:var(--cc6-soft)}
 .cc-product .tableWrap{border:1px solid var(--cc6-border);border-radius:var(--cc6-radius-sm);overflow:auto}
+.cc-product .adminOccurrenceCellV60{display:flex;align-items:flex-start;gap:var(--cc6-space-2);min-width:0}
+.cc-product .adminOccurrenceCellV60>span:last-child{min-width:0;overflow-wrap:anywhere}
 .cc-product .adminMetaGridV57>div{border:0;background:var(--cc6-soft);border-radius:var(--cc6-radius-sm)}
 .cc-product .adminMetaGridV57 small{font-size:var(--cc6-text-xs)}
 .cc-product .detailHeaderV52 h2{font-size:var(--cc6-title-md);line-height:1.25}
@@ -500,6 +502,7 @@
  .cc-product .adminTableV60 td{display:grid;grid-template-columns:80px minmax(0,1fr);gap:var(--cc6-space-3);border:0;padding:var(--cc6-space-2) 0;white-space:normal}
  .cc-product .adminTableV60 td::before{content:attr(data-label);font-size:var(--cc6-text-xs);color:var(--cc6-muted);font-weight:var(--cc6-weight-label)}
  .cc-product .adminTableV60 td>button{justify-self:start}
+ .cc-product .adminTableV60 td>.badge{justify-self:start}
 }
 @media(max-width:360px){
  .cc-product .categoryChooser{grid-template-columns:1fr}
