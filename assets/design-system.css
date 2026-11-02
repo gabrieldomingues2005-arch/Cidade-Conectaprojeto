@@ -245,7 +245,8 @@
 .cc-product .formStage small{font-size:var(--cc6-text-sm);color:var(--cc6-muted);line-height:1.5}
 .cc-product .stageIndex{border-radius:var(--cc6-radius-sm);background:var(--cc6-brand);color:var(--cc6-accent);min-width:36px}
 .cc-product .categoryChooser{gap:var(--cc6-space-2)}
-.cc-product .categoryChoice{min-height:56px;border:1px solid var(--cc6-border);border-radius:var(--cc6-radius-sm);background:var(--cc6-surface);font-size:var(--cc6-text-sm);font-weight:var(--cc6-weight-label);line-height:1.35;padding:var(--cc6-space-3)}
+.cc-product .categoryChoice{min-width:0;min-height:56px;border:1px solid var(--cc6-border);border-radius:var(--cc6-radius-sm);background:var(--cc6-surface);font-size:var(--cc6-text-sm);font-weight:var(--cc6-weight-label);line-height:1.35;padding:var(--cc6-space-3)}
+.cc-product .categoryChoice span{min-width:0;white-space:normal;overflow-wrap:anywhere}
 .cc-product .categoryChoice.active{background:var(--cc6-accent-soft);border-color:var(--cc6-brand);color:var(--cc6-brand);box-shadow:inset 0 0 0 1px var(--cc6-brand)}
 .cc-product .categoryChoice .uiIcon{width:20px;height:20px}
 .cc-product .registerAsideV51{gap:var(--cc6-space-4);top:calc(var(--cc6-header) + 24px)}
@@ -445,7 +446,7 @@
  .cc-product .formJourneyV51 button{flex-direction:column;gap:4px;padding:var(--cc6-space-2) 0;font-size:var(--cc6-text-xs)}
  .cc-product .formJourneyV51 button b{font-size:var(--cc6-text-xs)}
  .cc-product .categoryChooser{grid-template-columns:repeat(2,minmax(0,1fr))}
- .cc-product .categoryChoice{min-height:64px;font-size:var(--cc6-text-sm)}
+ .cc-product .categoryChoice{min-height:80px;font-size:var(--cc6-text-sm);flex-direction:column;justify-content:center;text-align:center;gap:var(--cc6-space-2)}
  .cc-product .registerSubmitV51 .btn{width:100%;min-height:48px}
  .cc-product .followLayoutV52{grid-template-columns:1fr}
  .cc-product .followSearchV52{padding:var(--cc6-space-6)}

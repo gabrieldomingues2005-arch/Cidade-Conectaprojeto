@@ -114,6 +114,7 @@ try{
  }
  // Busca modal: atalho preserva rota, Tab fica contido e Escape devolve foco.
  errors.length=0;
+ await evaluate(`sessionStorage.removeItem('cidadeConectaAuthSessionV1')`);
  await send('Emulation.setDeviceMetricsOverride',{width:1366,height:900,deviceScaleFactor:1,mobile:false});
  await send('Page.navigate',{url:base+'/index.html#/mapa'});await waitFor(`Boolean(document.querySelector('#mapSearch'))`);
  await evaluate(`document.querySelector('#globalSearchBtn').focus()`);
