@@ -4,7 +4,9 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 const read=file=>readFileSync(new URL('../'+file,import.meta.url),'utf8');
 const css=read('assets/design-system.css');
-const tokens=Object.fromEntries([...css.matchAll(/--cc6-([\w-]+):\s*(#[a-f\d]{6})[;\s]/gi)].map(m=>[m[1],m[2]]));
+// Testa a paleta padrão; overrides de prefers-contrast não podem mascará-la.
+const rootTokens=css.match(/:root\s*\{([^}]+)\}/)[1];
+const tokens=Object.fromEntries([...rootTokens.matchAll(/--cc6-([\w-]+):\s*(#[a-f\d]{6})[;\s]/gi)].map(m=>[m[1],m[2]]));
 function luminance(hex){return hex.slice(1).match(/../g).map(x=>parseInt(x,16)/255).map(c=>c<=.04045?c/12.92:((c+.055)/1.055)**2.4).reduce((sum,c,i)=>sum+c*[.2126,.7152,.0722][i],0)}
 function contrast(a,b){const [x,y]=[luminance(a),luminance(b)].sort((a,b)=>b-a);return(x+.05)/(y+.05)}
 for(const [fg,bg] of [['ink','surface'],['muted','surface'],['muted','soft'],['inverse','brand'],['accent-ink','accent'],['success','success-bg'],['warning','warning-bg'],['danger','danger-bg'],['info','info-bg'],['forward','forward-bg']])test(`text contrast ${fg}/${bg} >=4.5`,()=>assert.ok(contrast(tokens[fg],tokens[bg])>=4.5,`${fg}/${bg}: ${contrast(tokens[fg],tokens[bg]).toFixed(2)}`));
