@@ -26,15 +26,27 @@ jobs:
       contents: write
     steps:
       - name: Baixar branch main
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Sincronizar gh-pages com main
         run: |
-          git fetch origin main
+          git fetch origin main gh-pages
           if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
             echo "A main avançou; esta execução não substituirá o preview."
+            exit 0
+          fi
+          # gh-pages também contém prévias históricas. Mesclar mantém esses
+          # caminhos e permite publicar sem reset, exclusão ou push forçado.
+          git switch --create pages-sync origin/gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git merge --no-edit "$GITHUB_SHA"
+          git diff --quiet "$GITHUB_SHA" HEAD -- . ':!preview/**'
+          git fetch origin main
+          if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
+            echo "A main avançou durante a sincronização; preview preservado."
             exit 0
           fi
           git push origin HEAD:refs/heads/gh-pages
