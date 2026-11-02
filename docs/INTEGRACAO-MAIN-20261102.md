@@ -38,3 +38,11 @@ O site da main é https://gabrieldomingues2005-arch.github.io/Cidade-Conectaproj
 - A inspeção do site publicado confirma a interface v6 e o runtime apontando para o projeto oficial; nenhum envio real de ocorrência é necessário nesta promoção.
 
 Pendências da rodada visual permanecem registradas: leitor de tela/aparelhos físicos e confirmação da cartografia no domínio publicado. Não se declara conformidade WCAG integral.
+
+## Conferência pública e correção pontual
+
+O PR #9 foi incorporado à main em `d364eed83c12e68ade31a10cc84c7c0391758bb5`. O quality gate da main e a publicação de Pages passaram (runs `41510972431` e `41511210976`), com `preview/` preservado e os demais caminhos idênticos à main.
+
+A página pública carregou a interface v6 e confirmou conexão com o backend oficial. A conferência identificou que a folha do Leaflet não carregava: o atributo de integridade do CSS 1.9.4 estava incorreto. O arquivo fixo de https://unpkg.com/leaflet@1.9.4/dist/leaflet.css foi conferido por SHA-256, resultando em `sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=`. Corrige-se o hash mantendo versão, CDN e verificação de integridade.
+
+O HTML também passa a usar o preconnect do Supabase oficial e as URLs canônica/OG/JSON-LD do site publicado da main, coerentes com sitemap e robots. O cache PWA avança para r3 para atualizar o shell offline. Não há mudança no JavaScript da aplicação, geometrias, dados ou backend nessa correção.
