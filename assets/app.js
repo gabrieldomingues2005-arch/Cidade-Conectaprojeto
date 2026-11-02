@@ -148,6 +148,7 @@ async function fetchCloudOccurrence(protocol,trackingKey=null){
  const api=cloudApi();if(!api?.trackOccurrence||!api.state?.connected)return null;
  const row=await api.trackOccurrence(protocol,trackingKey);return row?remoteToOccurrence(row,findProtocol(protocol)):null;
 }
+window.CidadeConectaPublicRecords=()=>publicMetricRecords().map(publicExportOccurrence);
 function publicMetricRecords(){return db.occurrences.filter(o=>!o.cloudOrigin||o.moderationStatus==='approved')}
 async function syncPublicCloudOccurrences(){
  const api=cloudApi();if(!api?.listPublicOccurrences)return 0;
@@ -163,7 +164,7 @@ function publicExportOccurrence(o){const {privateData,...safe}=o||{};return {...
 function pageHead(k,t,p){return `<section class="pageHead"><div class="wrap"><div class="eyebrow">${k}</div><h1>${t}</h1><p class="muted">${p}</p></div></section>`}
 function internalRoleLabel(role){return({triage:'Triagem',admin:'Administração',agency:'Órgão/setor',citizen:'Cidadão'})[String(role||'')]||'Sem papel interno'}
 function metrics(){const a=publicMetricRecords(),total=a.length,resolved=a.filter(o=>o.status==='Resolvida').length;return{total,resolved,active:a.filter(o=>['Em análise','Encaminhada','Em andamento'].includes(o.status)).length,received:a.filter(o=>o.status==='Recebida').length,bairros:new Set(a.map(o=>o.bairro).filter(Boolean)).size,rate:total?Math.round(resolved/total*100):0}}
-function homeInsights(){const rows=publicMetricRecords(),cats=CATEGORIES.map(c=>({id:c[0],label:c[2],count:rows.filter(o=>o.category===c[0]).length})).sort((a,b)=>b.count-a.count),hoods=[...new Set(rows.map(o=>o.bairro).filter(Boolean))].map(name=>({name,count:rows.filter(o=>o.bairro===name).length})).sort((a,b)=>b.count-a.count);return{topCat:cats[0]||{id:'outros',label:'Sem dados',count:0},topHood:hoods[0]||{name:'Sem dados',count:0}}}
+function homeInsights(){const rows=publicMetricRecords(),cats=CATEGORIES.map(c=>({id:c[0],label:c[2],count:rows.filter(o=>o.category===c[0]).length})).sort((a,b)=>b.count-a.count),hoods=[...new Set(rows.map(o=>o.bairro).filter(Boolean))].map(name=>({name,count:rows.filter(o=>o.bairro===name).length})).sort((a,b)=>b.count-a.count);return{topCat:cats[0]?.count?cats[0]:{id:'outros',label:'Sem dados',count:0},topHood:hoods[0]||{name:'Sem dados',count:0}}}
 function nextProtocol(){const year=new Date().getFullYear();const nums=db.occurrences.map(o=>Number((o.protocol.match(/(\d{5})$/)||[])[1]||0));return `CC-${year}-${String(Math.max(0,...nums)+1).padStart(5,'0')}`}
 function destroyMaps(){if(currentMap){currentMap.remove();currentMap=null}if(formMap){formMap.remove();formMap=null}formMarker=null;formPrivacyCircle=null}
 function mapMarkerIcon(status='draft'){
@@ -258,7 +259,8 @@ function dashboard(){
  const approvedCloud=visible.filter(o=>o.cloudOrigin&&o.moderationStatus==='approved').length;
  const agencyGroups=[...new Map(CATEGORIES.map(c=>{const r=routingReference(c[0]);return[r.agencyId,{id:r.agencyId,label:r.agencyLabel}]})).values()].map(a=>({...a,count:visible.filter(o=>routingReference(o.category).agencyId===a.id).length})).sort((a,b)=>b.count-a.count),maxAgency=Math.max(1,...agencyGroups.map(x=>x.count));
  return pageHead('Indicadores','Como as ocorrências andam em Piracicaba','Leitura do conjunto demonstrativo e das ocorrências públicas aprovadas. Não são estatísticas oficiais do Município.')+
- '<section class="section dashboardV51"><div class="wrap"><div class="datasetChipV57">Dados de demonstração · n = '+m.total+'</div>'+
+ '<section class="section dashboardV51"><div class="wrap"><div class="datasetChipV57">'+(approvedCloud?'Demonstração + registros públicos aprovados':'Dados de demonstração')+' · n = '+m.total+'</div>'+
+ (!m.total?'<div class="empty dashboardEmptyV60" role="status"><h2>Ainda não há registros neste conjunto</h2><p>Os indicadores serão preenchidos conforme as ocorrências estiverem disponíveis para leitura pública.</p><a class="btn secondary" href="#/registrar">Registrar uma ocorrência</a></div>':'')+
  '<div class="dashboardKpisV51"><article><span>'+iconSvg('list')+'</span><div><b>'+m.total+'</b><small>registros visíveis</small></div></article><article><span>'+iconSvg('route')+'</span><div><b>'+m.active+'</b><small>em acompanhamento</small></div></article><article><span>'+iconSvg('chart')+'</span><div><b>'+m.resolved+' de '+m.total+'</b><small>resolvidos · '+m.rate+'%</small></div></article><article><span>'+iconSvg('map')+'</span><div><b>'+m.bairros+'</b><small>bairros representados</small></div></article></div>'+
  '<div class="dashboardGridV51"><article class="card dashboardPanelV51 dashboardPipelineV51"><div class="panelHeadV51"><div><span class="miniLabel">Jornada</span><h2>Fluxo das ocorrências</h2></div><span class="panelNote">do recebimento à resolução</span></div><div class="pipelineV51">'+
  STATUSES.map((s,i)=>{const n=visible.filter(o=>o.status===s).length;return '<div class="pipelineStageV51"><span class="pipelineIndex">0'+(i+1)+'</span><b>'+esc(s)+'</b><strong>'+n+'</strong><i style="--stage:'+Math.round(n/total*100)+'%"></i></div>'}).join('')+
