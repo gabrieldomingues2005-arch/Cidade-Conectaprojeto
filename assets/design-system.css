@@ -501,6 +501,10 @@
  .cc-product .adminTableV60 td::before{content:attr(data-label);font-size:var(--cc6-text-xs);color:var(--cc6-muted);font-weight:var(--cc6-weight-label)}
  .cc-product .adminTableV60 td>button{justify-self:start}
 }
+@media(max-width:360px){
+ .cc-product .categoryChooser{grid-template-columns:1fr}
+ .cc-product .categoryChoice{flex-direction:row;justify-content:flex-start;text-align:left;min-height:56px}
+}
 /* Foco precisa permanecer visível também sobre o fundo escuro da Home. */
 .cc-product .heroV53 :focus-visible{outline:3px solid var(--cc6-accent)!important;outline-offset:4px!important;box-shadow:0 0 0 6px var(--cc6-brand)!important}
 .cc-product .heroPanelLive :focus-visible{outline-color:var(--cc6-focus)!important;box-shadow:0 0 0 6px var(--cc6-accent-soft)!important}

@@ -69,7 +69,7 @@ Pesos: 400 corpo, 550 apoio, 650 labels, 750 títulos. Entrelinha: 1,6 corpo, 1,
 |---|---|
 | Botões | `.btn.primary`, `.secondary`, `.soft`; mínimo 48 px, 44 px em controles compactos; ação principal por contexto; hover sem deslocamento |
 | Campos | label persistente, fundo branco, contorno forte; ajuda associada por `aria-describedby`; checkbox nativo com texto clicável |
-| Categoria | grupo de rádios com `aria-checked`, setas/Home/End e foco móvel; borda e superfície distinguem seleção; grade de duas colunas no mobile |
+| Categoria | grupo de rádios com `aria-checked`, setas/Home/End e foco móvel; borda e superfície distinguem seleção; duas colunas no mobile e uma até 360 px para preservar os rótulos |
 | Badges/chips | texto + semântica de cor; 12 px; sem indicar ação se não forem interativos |
 | Cards | uma superfície principal, título e conteúdo em sequência; borda discreta e raios constantes |
 | Navegação | `aria-current=page`; menu com `aria-expanded`; Escape fecha e devolve foco; clique externo fecha; todos os destinos existentes preservados |
