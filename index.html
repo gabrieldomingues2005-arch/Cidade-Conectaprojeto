@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="assets/design-v55.css?v=5.5.0">
   <link rel="stylesheet" href="assets/design-v56.css?v=5.7.1-ui4">
   <link rel="stylesheet" href="assets/design-system.css?v=6.0.1">
+  <link rel="stylesheet" href="assets/civic.css?v=7.0.0-1">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -56,12 +57,13 @@
         <a href="#/" data-route="">Início</a>
         <a href="#/registrar" data-route="registrar">Registrar</a>
         <a href="#/acompanhar" data-route="acompanhar">Acompanhar</a>
-        <a href="#/minhas" data-route="minhas">Meus registros</a>
+        <a href="#/minhas" data-route="minhas">Meu Cidade Conecta</a>
         <a href="#/mapa" data-route="mapa">Mapa</a>
         <a href="#/dashboard" data-route="dashboard">Indicadores</a>
         <a href="#/piracicaba" data-route="piracicaba">Piracicaba</a>
       </nav>
       <div class="headerActions">
+        <button class="civic-notification-trigger" id="notificationBtn" type="button" aria-label="Notificações, nenhuma não lida" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span data-notification-count hidden>0</span></button>
         <button class="commandTriggerV53" id="globalSearchBtn" type="button" aria-haspopup="dialog" aria-controls="commandPalette" aria-expanded="false" aria-label="Buscar no Cidade Conecta">
           <span class="commandTriggerIconV53" aria-hidden="true">⌕</span><span>Buscar</span><kbd>Ctrl K</kbd>
         </button>
@@ -142,14 +144,17 @@
   </div>
 
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
   <script src="assets/runtime-config.js?v=5.7.1" defer></script>
   <script src="assets/auth.js?v=5.7.1" defer></script>
   <script src="assets/supabase-bridge.js?v=5.5.0" defer></script>
-  <script src="assets/app.js?v=6.0.1" defer></script>
+  <script src="assets/civic-data.js?v=7.0.0-1" defer></script>
+  <script src="assets/civic-store.js?v=7.0.0-1" defer></script>
+  <script src="assets/app.js?v=7.0.0-1" defer></script>
   <script src="assets/piracicaba.js?v=6.0.1" defer></script>
   <script src="assets/piracicaba-mapas.js?v=6.0.1" defer></script>
   <script src="assets/privacy-geo.js?v=5.5.0" defer></script>
   <script src="assets/site-enhancements.js?v=6.0.1" defer></script>
+  <script src="assets/civic-ui.js?v=7.0.0-1" defer></script>
 </body>
 </html>
