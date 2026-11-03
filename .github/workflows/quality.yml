@@ -44,13 +44,15 @@ jobs:
           node --check scripts/test-design.mjs
           node --check assets/civic-data.js
           node --check scripts/test-civic-data.mjs
+          node --check assets/civic-store.js
+          node --check scripts/test-civic-store.mjs
           node --check scripts/validate-recovery.mjs
 
       - name: Validar smoke test de UI
         run: bash -n scripts/smoke-ui.sh
 
       - name: Testar autenticação, Edge e Service Worker
-        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-design.mjs scripts/test-civic-data.mjs
+        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-design.mjs scripts/test-civic-data.mjs scripts/test-civic-store.mjs
 
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs
