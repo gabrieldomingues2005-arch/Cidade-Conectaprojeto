@@ -45,6 +45,7 @@ jobs:
           node --check assets/civic-data.js
           node --check scripts/test-civic-data.mjs
           node --check assets/civic-ui.js
+          node --check assets/civic-pages.js
           node --check assets/civic-store.js
           node --check scripts/test-civic-store.mjs
           node --check scripts/validate-recovery.mjs
