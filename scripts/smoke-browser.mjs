@@ -210,12 +210,13 @@ try{
  await evaluate(`document.querySelector('[name=resolution][value=yes]').checked=true;document.querySelector('[data-community-feedback]').requestSubmit()`);
  await waitFor(`document.querySelector('.civic-community-message')?.textContent.includes('confirmada')`);
  results.push({scenario:'civic-follow-notifications-recurrence-feedback',status:'PASS'});
+ await waitFor(`document.querySelector('#toast').classList.contains('hidden')`);
  for(const width of [390,768,1366]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
   for(const [name,hash]of [['agora','agora'],['pulso','dashboard'],['dados','dados-abertos'],['relatorio','relatorios'],['feed','feed'],['pessoal','minhas?tab=acompanhando'],['comparacao','comparar?hood=Centro&hood=Paulista'],['radar','bairro?nome=Centro'],['resolucao','ocorrencia/CC-2026-09000']]){
    await evaluate(`location.hash=${JSON.stringify('#/'+hash)}`);await pause(180);
    assert.ok(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),name+' populated '+width+' overflow');
-   assert.deepEqual(errors,[],name+' populated JS');await capture('civic-'+name+'-'+width);results.push({scenario:'civic-'+name,width,status:'PASS'});
+   if(name==='pulso'){assert.equal(await evaluate(`Boolean(document.querySelector('#territoryDash,#geoRates'))`),false,'Pulso não deve misturar extensões demonstrativas')}assert.deepEqual(errors,[],name+' populated JS');await capture('civic-'+name+'-'+width);results.push({scenario:'civic-'+name,width,status:'PASS'});
   }
  }
  await evaluate(`location.hash='#/dados-abertos'`);await pause(80);

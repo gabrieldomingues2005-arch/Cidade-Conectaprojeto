@@ -172,7 +172,7 @@ function regionStats(d){
   });
 }
 function renderDashboardRates(d){
-  if(route()!=='dashboard'||document.querySelector('#geoRates'))return;
+  if(route()!=='dashboard'||document.querySelector('#civicPublicPage')||document.querySelector('#geoRates'))return;
   const app=document.querySelector('#app');if(!app)return;
   const stats=regionStats(d),max=Math.max(1,...stats.map(x=>x.per10k));
   const section=document.createElement('section');section.id='geoRates';section.className='section sectionSoft';

@@ -28,3 +28,7 @@
 
 @media(max-width:760px){.cc-product .brand{min-width:0;flex:1}.cc-product .brandWord{white-space:normal;overflow-wrap:anywhere;line-height:1.2}.cc-product .brandWord small{white-space:normal}.cc-product .topin{height:auto;min-height:72px;padding-top:10px;padding-bottom:10px}.cc-product .headerActions{flex-shrink:0}}
 .civic-kpis>div,.civic-shortcuts>a,.civic-shortcuts>button{min-width:0;overflow-wrap:anywhere}.civic-kpis span{overflow-wrap:anywhere}.civic-shortcuts>a,.civic-shortcuts>button{white-space:normal}
+
+.civic-filter-disclosure{margin:24px 0;border:1px solid var(--cc6-border);border-radius:var(--cc6-radius);background:var(--cc6-surface)}.civic-filter-disclosure>summary{font-size:.875rem;font-weight:650;padding:18px 20px;min-height:56px;cursor:pointer;color:var(--cc6-brand)}.civic-filter-disclosure .civic-filters{border:0;border-top:1px solid var(--cc6-border);border-radius:0;margin:0;background:transparent}.civic-filter-disclosure:focus-within{outline-offset:3px}@media print{.civic-filter-disclosure{display:none!important}}
+/* Min-content não pode alargar o card quando o texto é ampliado. */
+.civic-records{grid-template-columns:minmax(0,1fr)}.civic-record{min-width:0;max-width:100%}.civic-record-actions{min-width:0;max-width:100%;flex-wrap:wrap}.civic-record-body .miniLabel{white-space:normal;overflow-wrap:anywhere}.civic-record-actions .btn{max-width:100%;white-space:normal}
