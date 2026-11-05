@@ -10,11 +10,19 @@ const time=v=>{const n=Date.parse(v);return Number.isFinite(n)?n:null};
 const clean=(v,max=160)=>String(v??'').replace(/[\u0000-\u001f]/g,' ').trim().slice(0,max);
 const publicText=(v,max=160)=>clean(v,max).replace(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi,'[contato protegido]').replace(/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g,'[dado protegido]').replace(/(?:\+55\s*)?\(?\d{2}\)?[ .-]*9?\d{4}[ .-]*\d{4}\b/g,'[contato protegido]').replace(/\b(?:sb_secret_[\w-]+|Bearer\s+[\w.-]+)\b/gi,'[credencial protegida]');
 const coord=(v,max)=>v===null||v===undefined||v===''?null:Number.isFinite(Number(v))&&Math.abs(Number(v))<=max?Number(Number(v).toFixed(3)):null;
+const PUBLIC_MEDIA_ORIGIN='https://qzpofoxxrjunyayczcfu.supabase.co/storage/v1/object/public/occurrence-public-media/';
+function mediaFrom(value){
+ const raw=Array.isArray(value)?value[0]:value;if(!raw||typeof raw!=='object')return null;
+ const key=clean(raw.storage_key,220),mime=clean(raw.mime_type,40),alt=publicText(raw.alt_text,180);
+ if(!/^CC-\d{4}-\d{5}\/[0-9a-f-]{36}\.(jpg|png|webp)$/i.test(key))return null;
+ if(!['image/jpeg','image/png','image/webp'].includes(mime))return null;
+ return{storageKey:key,mime,alt,url:PUBLIC_MEDIA_ORIGIN+key.split('/').map(encodeURIComponent).join('/')};
+}
 function project(o){
  if(!o||!validProtocol(o.protocol))return null;
  const history=(Array.isArray(o.history)?o.history:[]).filter(h=>h&&h.public_note!==false).map(h=>({status:clean(Array.isArray(h)?h[0]:h.status,30),date:clean(Array.isArray(h)?h[1]:h.created_at||h.date,40),note:publicText(Array.isArray(h)?h[2]:h.note,500)})).filter(h=>STATUSES.includes(h.status)&&time(h.date)!==null);
  const category=o.category||o.category_slug||o.categories?.slug||'outros';
- return {protocol:String(o.protocol),title:publicText(o.title,100),description:publicText(o.description,700),category:Object.hasOwn(CATEGORIES,category)?category:'outros',bairro:publicText(o.bairro??o.neighborhood_label,90),status:STATUSES.includes(o.status)?o.status:'Recebida',agency:publicText(o.agency??o.responsible_agency,150),created:clean(o.created??o.created_at,40),updated:clean(o.updated??o.updated_at,40),resolved:clean(o.resolved??o.resolved_at,40),lat:coord(o.public_latitude??o.lat,90),lng:coord(o.public_longitude??o.lng,180),history,public:o.public!==false&&o.public_visible!==false,cloudOrigin:o.cloudOrigin===true,moderationStatus:clean(o.moderationStatus??o.moderation_status,20)};
+ return {protocol:String(o.protocol),title:publicText(o.title,100),description:publicText(o.description,700),category:Object.hasOwn(CATEGORIES,category)?category:'outros',bairro:publicText(o.bairro??o.neighborhood_label,90),status:STATUSES.includes(o.status)?o.status:'Recebida',agency:publicText(o.agency??o.responsible_agency,150),created:clean(o.created??o.created_at,40),updated:clean(o.updated??o.updated_at,40),resolved:clean(o.resolved??o.resolved_at,40),lat:coord(o.public_latitude??o.lat,90),lng:coord(o.public_longitude??o.lng,180),history,media:mediaFrom(o.media??o.occurrence_public_media),public:o.public!==false&&o.public_visible!==false,cloudOrigin:o.cloudOrigin===true,moderationStatus:clean(o.moderationStatus??o.moderation_status,20)};
 }
 function publicRows(rows){return(rows||[]).map(project).filter(o=>o&&o.public&&(!o.cloudOrigin||o.moderationStatus==='approved'))}
 const realRows=rows=>publicRows(rows).filter(o=>o.cloudOrigin&&o.moderationStatus==='approved');
@@ -59,8 +67,8 @@ function observedTimes(rows,now=Date.now()){
 function feed(rows,limit=60,now=Date.now()){
  const items=[];
  for(const o of realRows(rows)){
-  if(time(o.created)!==null)items.push({id:o.protocol+':created:'+o.created,protocol:o.protocol,title:o.title,bairro:o.bairro,category:o.category,status:'Recebida',date:o.created,type:'created'});
-  for(const h of o.history){if(h.status==='Recebida'&&time(h.date)===time(o.created))continue;items.push({id:o.protocol+':'+h.status+':'+h.date,protocol:o.protocol,title:o.title,bairro:o.bairro,category:o.category,status:h.status,date:h.date,type:h.status==='Resolvida'?'resolved':'updated'})}
+  if(time(o.created)!==null)items.push({id:o.protocol+':created:'+o.created,protocol:o.protocol,title:o.title,bairro:o.bairro,category:o.category,status:'Recebida',date:o.created,type:'created',media:o.media});
+  for(const h of o.history){if(h.status==='Recebida'&&time(h.date)===time(o.created))continue;items.push({id:o.protocol+':'+h.status+':'+h.date,protocol:o.protocol,title:o.title,bairro:o.bairro,category:o.category,status:h.status,date:h.date,type:h.status==='Resolvida'?'resolved':'updated',media:o.media})}
  }
  return[...new Map(items.map(x=>[x.id,x])).values()].filter(x=>time(x.date)<=now).sort((a,b)=>time(b.date)-time(a.date)).slice(0,limit);
 }
