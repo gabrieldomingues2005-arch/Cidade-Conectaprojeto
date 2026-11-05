@@ -214,7 +214,7 @@ try{
  await waitFor(`document.querySelector('#toast').classList.contains('hidden')`);
  for(const width of [390,768,1366]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
-  for(const [name,hash]of [['home-noticias',''],['agora','agora'],['noticias','noticias'],['noticia-detalhe','noticias?protocolo=CC-2026-09000'],['pulso','dashboard'],['dados','dados-abertos'],['relatorio','relatorios'],['feed','feed'],['pessoal','minhas?tab=acompanhando'],['comparacao','comparar?hood=Centro&hood=Paulista'],['radar','bairro?nome=Centro'],['resolucao','ocorrencia/CC-2026-09000']]){
+  for(const [name,hash]of [['home-noticias',''],['agora','agora'],['noticias','noticias'],['noticias-demo','noticias?demo=1'],['perfil-demo','perfil-demo'],['noticia-detalhe','noticias?protocolo=CC-2026-09000'],['pulso','dashboard'],['dados','dados-abertos'],['relatorio','relatorios'],['feed','feed'],['pessoal','minhas?tab=acompanhando'],['comparacao','comparar?hood=Centro&hood=Paulista'],['radar','bairro?nome=Centro'],['resolucao','ocorrencia/CC-2026-09000']]){
    await evaluate(`location.hash=${JSON.stringify('#/'+hash)}`);await pause(180);
    assert.ok(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),name+' populated '+width+' overflow');
    if(name==='pulso'){assert.equal(await evaluate(`Boolean(document.querySelector('#territoryDash,#geoRates'))`),false,'Pulso não deve misturar extensões demonstrativas')}assert.deepEqual(errors,[],name+' populated JS');await capture('civic-'+name+'-'+width);results.push({scenario:'civic-'+name,width,status:'PASS'});
