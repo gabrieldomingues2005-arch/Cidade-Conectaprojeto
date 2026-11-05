@@ -228,7 +228,7 @@ try{
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
  await evaluate(`location.hash='#/minhas'`);await pause(80);
  await evaluate(`document.documentElement.style.fontSize='200%'`);
- assert.ok(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`),'Texto 200%: overflow');await capture('pessoal-texto-200-390');
+ await capture('pessoal-texto-200-390');const reflow=await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left< -1)}).map(e=>({tag:e.tagName,id:e.id,cls:e.className,text:e.textContent.slice(0,70)})).slice(0,20)})`);assert.ok(reflow.scroll<=reflow.width+1,'Texto 200%: overflow '+JSON.stringify(reflow));
  await evaluate(`document.documentElement.style.fontSize=''`);
  results.push({scenario:'text-200-reflow-reduced-motion',status:'PASS'});
  // Comparação de desempenho em laboratório: mesmo navegador/servidor e rede externa bloqueada.
