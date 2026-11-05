@@ -165,12 +165,16 @@ Deno.serve(async (req: Request) => {
     const { error: uploadError } = await admin.storage.from(PUBLIC_MEDIA_BUCKET).upload(publicKey, blob, { contentType: mime, upsert: true, cacheControl: "3600" });
     if (uploadError) return json(origin, 500, { error: "public_media_upload_failed" });
     const { data: previous } = await admin.from("occurrence_public_media").select("storage_key").eq("protocol", protocol).maybeSingle();
-    const now = new Date().toISOString();
-    const { error: mediaError } = await admin.from("occurrence_public_media").upsert({ protocol, storage_key: publicKey, mime_type: mime, alt_text: altText, published_at: now, updated_at: now }, { onConflict: "protocol" });
-    if (mediaError) { await admin.storage.from(PUBLIC_MEDIA_BUCKET).remove([publicKey]); return json(origin, 500, { error: "public_media_metadata_failed" }); }
     await admin.from("occurrence_attachments").update({ public_visible: false }).eq("occurrence_id", occurrence.id).neq("id", attachmentId);
     const { error: attachmentUpdateError } = await admin.from("occurrence_attachments").update({ public_visible: true, moderation_status: "approved" }).eq("id", attachmentId).eq("occurrence_id", occurrence.id);
-    if (attachmentUpdateError) return json(origin, 500, { error: "attachment_moderation_update_failed" });
+    if (attachmentUpdateError) { await admin.storage.from(PUBLIC_MEDIA_BUCKET).remove([publicKey]); return json(origin, 500, { error: "attachment_moderation_update_failed" }); }
+    const now = new Date().toISOString();
+    const { error: mediaError } = await admin.from("occurrence_public_media").upsert({ protocol, storage_key: publicKey, mime_type: mime, alt_text: altText, published_at: now, updated_at: now }, { onConflict: "protocol" });
+    if (mediaError) {
+      await admin.from("occurrence_attachments").update({ public_visible: false }).eq("id", attachmentId).eq("occurrence_id", occurrence.id);
+      await admin.storage.from(PUBLIC_MEDIA_BUCKET).remove([publicKey]);
+      return json(origin, 500, { error: "public_media_metadata_failed" });
+    }
     if (previous?.storage_key && previous.storage_key !== publicKey) await admin.storage.from(PUBLIC_MEDIA_BUCKET).remove([String(previous.storage_key)]);
     await admin.from("audit_log").insert({ actor_id: profile.id, action: "media_published", entity_type: "occurrence", entity_id: occurrence.id, metadata: { protocol, attachment_id: attachmentId, public_storage_key: publicKey } });
     const publicUrl = admin.storage.from(PUBLIC_MEDIA_BUCKET).getPublicUrl(publicKey).data.publicUrl;
