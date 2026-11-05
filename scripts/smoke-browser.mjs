@@ -25,8 +25,9 @@ try{
  // Fixtures existem apenas no browser de QA: nenhuma chamada externa sai do teste.
  await send('Page.addScriptToEvaluateOnNewDocument',{source:`
  window.__qaScenario=location.search.includes('qaCivic=1')?'qa-public':'unavailable';
+ if(location.search.includes('qaPerf=1')&&navigator.serviceWorker)navigator.serviceWorker.register=async()=>{throw Error('Worker registration excluded from lab navigation timing')};
  if(location.search.includes('qaLeaflet=1')){
-  window.__leafletQA={fit:0,fly:0,popup:0,invalidates:0};
+  window.__leafletQA={fit:0,fly:0,popup:0,invalidates:0,heatCoordinates:[]};
   const chain=()=>({addTo(){return this},bindPopup(){return this},openPopup(){window.__leafletQA.popup++;return this},on(){return this},setLatLng(){return this},getLatLng(){return {lat:-22.725,lng:-47.649}}});
   const mapObj={
    _zoom:12,remove(){window.__leafletQA.removed=true;return this},setView(){return this},getZoom(){return this._zoom},removeLayer(){return this},
@@ -36,7 +37,7 @@ try{
   window.L={
    map(){return mapObj},
    tileLayer(){const handlers={};return{on(name,fn){handlers[name]=fn;if(name==='load')setTimeout(fn,10);return this}}},
-   marker(){return chain()},circleMarker(){return chain()},divIcon(o){return o},
+   marker(){return chain()},circleMarker(coords,options){if(options?.interactive===false)window.__leafletQA.heatCoordinates.push(coords);return chain()},divIcon(o){return o},
    latLngBounds(){return{pad(){return this}}},
    geoJSON(){return chain()},
    control:{zoom(){return{addTo(){return this}}},layers(){return{addTo(){return this}}}}
@@ -220,11 +221,32 @@ try{
   }
  }
  await evaluate(`location.hash='#/dados-abertos'`);await pause(80);
+ const exported=await evaluate(`(async()=>{const original=URL.createObjectURL;URL.createObjectURL=blob=>{window.__qaExportBlob=blob;return original(blob)};document.querySelector('[data-civic-export=json]').click();const text=await window.__qaExportBlob.text();URL.createObjectURL=original;return JSON.parse(text)})()`);
+ assert.equal(exported.occurrences.length,40);assert.equal(Object.keys(exported.occurrences[0]).length,12);
+ for(const marker of ['PRIVATE_EMAIL_QA','PRIVATE_ADDRESS_QA','PRIVATE_TOKEN_QA','PRIVATE_AUTH_QA','PRIVATE_NOTE_QA'])assert.ok(!JSON.stringify(exported).includes(marker));
+ results.push({scenario:'public-export-button-allowlist',status:'PASS'});
  await evaluate(`document.querySelector('[data-civic-share-page]').click()`);await waitFor(`Boolean(document.querySelector('#civicShowQr'))`);
  await evaluate(`document.querySelector('#civicShowQr').click()`);await waitFor(`Boolean(document.querySelector('#civicQr svg'))`);
  assert.ok((await evaluate(`document.querySelector('#civicShareUrl').value`)).endsWith('#/dados-abertos'));
  await capture('compartilhar-qr-1366');await press('Escape','Escape');
  results.push({scenario:'public-share-local-qr',status:'PASS'});
+
+ // Camadas, filtros e localização aproximada: apenas dados públicos, sem persistir posição atual.
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+ await send('Page.navigate',{url:base+'/index.html?qaCivic=1&qaLeaflet=1#/mapa'});
+ await waitFor(`window.CidadeConectaPublicSource?.state().status==='live'&&Boolean(document.querySelector('#mapHeat'))`);
+ await evaluate(`document.querySelector('#mapHeat').checked=true;document.querySelector('#mapHeat').dispatchEvent(new Event('change',{bubbles:true}))`);
+ await waitFor(`window.__leafletQA.heatCoordinates.length>0`);
+ assert.ok(await evaluate(`window.__leafletQA.heatCoordinates.every(c=>c.every(n=>Number(n.toFixed(3))===n))`),'Calor deve usar apenas coordenadas públicas aproximadas');
+ await evaluate(`document.querySelector('#mapFrom').value='2099-01-01';document.querySelector('#mapFrom').dispatchEvent(new Event('change',{bubbles:true}))`);
+ assert.equal(await evaluate(`document.querySelector('#mapResultCount').textContent`),'0');
+ await evaluate(`document.querySelector('#mapClear').click();window.__qaGeoCalls=0;Object.defineProperty(navigator,'geolocation',{configurable:true,value:{getCurrentPosition(ok){window.__qaGeoCalls++;ok({coords:{latitude:-22.725987654321,longitude:-47.649987654321}})}}});document.querySelector('#mapLocate').click()`);
+ assert.equal(await evaluate('window.__qaGeoCalls'),0,'Localização não deve ser pedida antes da explicação');
+ await evaluate(`document.querySelector('#confirmNearby').click()`);assert.equal(await evaluate('window.__qaGeoCalls'),1);
+ assert.ok(await evaluate(`!location.href.includes('987654321')&&!JSON.stringify(localStorage).includes('987654321')`),'Posição atual não pode ir para URL ou armazenamento');
+ await capture('mapa-camadas-proximidade-390');
+ results.push({scenario:'map-heat-dates-nearby-privacy',status:'PASS'});
+
  // Zoom/reflow e reduced motion no conteúdo novo, sem esconder funcionalidades.
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
  await evaluate(`location.hash='#/minhas'`);await pause(80);
@@ -232,9 +254,25 @@ try{
  await capture('pessoal-texto-200-390');const reflow=await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left< -1)}).map(e=>({tag:e.tagName,id:e.id,cls:e.className,text:e.textContent.slice(0,70)})).slice(0,20)})`);assert.ok(reflow.scroll<=reflow.width+1,'Texto 200%: overflow '+JSON.stringify(reflow));
  await evaluate(`document.documentElement.style.fontSize=''`);
  results.push({scenario:'text-200-reflow-reduced-motion',status:'PASS'});
+
+ // Offline real no navegador: shell vem do Service Worker; preferências continuam locais.
+ await evaluate(`navigator.serviceWorker.ready`);await send('Network.setBypassServiceWorker',{bypass:false});
+ await send('Network.emulateNetworkConditions',{offline:true,latency:0,downloadThroughput:0,uploadThroughput:0});
+ await send('Page.navigate',{url:base+'/index.html#/minhas'});await waitFor(`Boolean(document.querySelector('#myCity'))`);
+ assert.equal(await evaluate(`document.querySelector('#offlineNoticeV56').hidden`),false);
+ assert.equal(await evaluate(`CidadeConectaCitizen.isFollowing('CC-2026-09000')`),true);
+ await capture('pwa-offline-pessoal-390');
+ await evaluate(`location.hash='#/registrar'`);await waitFor(`Boolean(document.querySelector('#occForm'))`);
+ await evaluate(`document.querySelector('[data-category-choice="iluminacao"]').click();for(const[id,value]of Object.entries({bairro:'Centro',title:'QA offline controlado',description:'Este formulário não pode ser enviado quando o navegador está offline.'})){const x=document.getElementById(id);x.value=value;x.dispatchEvent(new Event('input',{bubbles:true}))}document.querySelector('#agree').checked=true;document.querySelector('#occForm').requestSubmit()`);
+ await waitFor(`document.querySelector('#toast')?.textContent.includes('Nada foi enviado')`);
+ assert.equal(await evaluate(`CidadeConectaLocalDB.occurrences.filter(o=>o.localOwner).length`),0,'Offline não pode inventar um envio ou protocolo');
+ await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
+ await send('Network.setBypassServiceWorker',{bypass:true});await send('Network.setCacheDisabled',{cacheDisabled:true});
+ results.push({scenario:'pwa-offline-shell-preferences-no-fake-send',status:'PASS'});
+
  // Comparação de desempenho em laboratório: mesmo navegador/servidor e rede externa bloqueada.
  await send('Performance.enable');const performanceSamples=[];
- for(const [version,url]of [['before',base+'/artifacts/baseline/index.html#/'],['after',base+'/index.html#/']])for(let sample=0;sample<3;sample++){
+ for(const [version,url]of [['before',base+'/artifacts/baseline/index.html?qaPerf=1#/'],['after',base+'/index.html?qaPerf=1#/']])for(let sample=0;sample<3;sample++){
   await send('Page.navigate',{url});await waitFor(`Boolean(document.querySelector('#homeSearch'))`);await pause(550);
   const nav=await evaluate(`(()=>{const n=performance.getEntriesByType('navigation')[0],r=performance.getEntriesByType('resource').filter(x=>new URL(x.name).origin===location.origin);return{domContentLoadedMs:n.domContentLoadedEventEnd,loadMs:n.loadEventEnd,resourceBytes:r.reduce((n,x)=>n+x.encodedBodySize,0),requests:r.length}})()`);
   const m=await send('Performance.getMetrics');performanceSamples.push({version,sample,...nav,metrics:Object.fromEntries(m.metrics.filter(x=>['ScriptDuration','LayoutDuration','TaskDuration','JSHeapUsedSize'].includes(x.name)).map(x=>[x.name,x.value]))});
