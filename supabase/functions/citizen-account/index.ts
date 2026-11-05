@@ -69,6 +69,27 @@ Deno.serve(async req=>{
     });
   }
 
+  if(action==="sync_local"){
+    const protocols=Array.isArray(body.protocols)?[...new Set(body.protocols.map(x=>clean(x,32).toUpperCase()).filter(protocolOk))].slice(0,80):[];
+    const neighborhoods=Array.isArray(body.neighborhoods)?[...new Set(body.neighborhoods.map(x=>clean(x,100)).filter(x=>x.length>=2))].slice(0,30):[];
+    if(protocols.length){
+      const {data:validRows,error:validError}=await admin.from("occurrences").select("protocol").in("protocol",protocols).eq("public_visible",true).eq("moderation_status","approved");
+      if(validError) return reply(origin,500,{error:"sync_validation_failed"});
+      const valid=new Set((validRows??[]).map((x:any)=>x.protocol));
+      const payload=protocols.filter(x=>valid.has(x)).map(protocol=>({auth_user_id:user.id,protocol}));
+      if(payload.length){
+        const {error}=await admin.from("citizen_occurrence_follows").upsert(payload,{onConflict:"auth_user_id,protocol"});
+        if(error) return reply(origin,500,{error:"sync_follow_failed"});
+      }
+    }
+    if(neighborhoods.length){
+      const payload=neighborhoods.map(neighborhood_label=>({auth_user_id:user.id,neighborhood_label}));
+      const {error}=await admin.from("citizen_favorite_neighborhoods").upsert(payload,{onConflict:"auth_user_id,neighborhood_label"});
+      if(error) return reply(origin,500,{error:"sync_neighborhood_failed"});
+    }
+    return reply(origin,200,{synced:true,protocols:protocols.length,neighborhoods:neighborhoods.length});
+  }
+
   if(action==="save_preferences"){
     const displayName=clean(body.displayName,80);
     const digest=clean(body.digestFrequency,20)||"none";
