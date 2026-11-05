@@ -125,7 +125,7 @@ function addRegisterAdvisor(data,network){
 }
 
 function addDashboardTerritory(data){
-  if(route()!=='dashboard'||document.querySelector('#territoryDash'))return;
+  if(route()!=='dashboard'||document.querySelector('#civicPublicPage')||document.querySelector('#territoryDash'))return;
   const app=document.querySelector(APP);if(!app)return;
   const occ=readOccurrences();
   const grouped=(data.administrativeRegions||[]).map(r=>({r,count:occ.filter(o=>findRegion(o.bairro,data)?.id===r.id).length}));

@@ -24,7 +24,7 @@ try{
  const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.exception?.description||'Falha de avaliação');return r.result.value};
  // Fixtures existem apenas no browser de QA: nenhuma chamada externa sai do teste.
  await send('Page.addScriptToEvaluateOnNewDocument',{source:`
- window.__qaScenario='unavailable';
+ window.__qaScenario=location.search.includes('qaCivic=1')?'qa-public':'unavailable';
  if(location.search.includes('qaLeaflet=1')){
   window.__leafletQA={fit:0,fly:0,popup:0,invalidates:0};
   const chain=()=>({addTo(){return this},bindPopup(){return this},openPopup(){window.__leafletQA.popup++;return this},on(){return this},setLatLng(){return this},getLatLng(){return {lat:-22.725,lng:-47.649}}});
@@ -50,6 +50,11 @@ try{
   if(mode==='network'||mode==='offline')throw new TypeError('Rede indisponível (QA)');
   if(mode==='timeout')return new Promise((resolve,reject)=>options.signal?.addEventListener('abort',()=>reject(Object.assign(new Error('Timeout QA'),{name:'AbortError'}))));
   const json=(status,payload)=>Promise.resolve(new Response(JSON.stringify(payload),{status,headers:{'Content-Type':'application/json'}}));
+  if(mode==='qa-public'&&url.pathname.includes('/rest/v1/occurrences')){
+   const rows=Array.from({length:40},(_,i)=>{const created=new Date(Date.now()-(i<20?10:40)*86400000-i*60000).toISOString(),updated=i===0&&window.__qaUpdated?new Date().toISOString():new Date(Date.parse(created)+86400000).toISOString(),status=i===0?(window.__qaUpdated?'Resolvida':'Em andamento'):i%4===0?'Resolvida':'Recebida';return{protocol:'CC-2026-'+String(9000+i).padStart(5,'0'),title:'QA iluminação pública '+i,description:'Relato público fictício para QA do navegador.',neighborhood_label:i%2?'Paulista':'Centro',status,public_visible:true,moderation_status:'approved',public_latitude:-22.725123-i*.0001,public_longitude:-47.649456-i*.0001,responsible_agency:'Referência de QA',created_at:created,updated_at:updated,resolved_at:status==='Resolvida'?updated:null,categories:{slug:'iluminacao',name:'Iluminação'},occurrence_history:[{status:'Recebida',note:'Nota pública de QA',public_note:true,created_at:created},{status,note:'Atualização pública de QA',public_note:true,created_at:updated},{status:'Recebida',note:'PRIVATE_NOTE_QA',public_note:false,created_at:updated}],email:'PRIVATE_EMAIL_QA',exact_address:'PRIVATE_ADDRESS_QA',trackingKey:'PRIVATE_TOKEN_QA',auth_user_id:'PRIVATE_AUTH_QA'}});
+   return new Response(JSON.stringify(rows),{status:200,headers:{'Content-Type':'application/json','Content-Range':'0-39/40'}});
+  }
+  if(mode==='qa-public'&&url.pathname.includes('/functions/v1/community-actions')){const b=JSON.parse(options.body||'{}');window.__qaCommunity=window.__qaCommunity||{};if(b.action==='recurrence')window.__qaCommunity[b.protocol]=true;return json(200,{protocol:b.protocol,registered:!!window.__qaCommunity[b.protocol],recurrenceCount:window.__qaCommunity[b.protocol]?7:6,canGiveFeedback:true,feedbackSaved:b.action==='feedback',myResolution:b.resolution||null,satisfaction:null})}
   if(url.pathname.includes('/auth/v1/')){
    if(mode==='unavailable')return json(503,{message:'Serviço temporariamente indisponível'});
    if(mode==='401')return json(401,{message:'Sessão inválida'});
@@ -180,6 +185,62 @@ try{
  await waitFor(`Boolean(document.querySelector('#adminLoginForm'))`);
  assert.equal(await evaluate('Boolean(window.__leafletQA.removed)'),true,'Leaflet stub deve permitir destruir o mapa ao sair da rota');
  assert.deepEqual(errors,[],'Transição mapa → admin deve ocorrer sem exceções');
+
+
+ // Novas leituras: fixtures isoladas, nunca inseridas no backend real.
+ scenario='civic-populated';errors.length=0;
+ await send('Page.navigate',{url:base+'/index.html?qaCivic=1#/agora'});
+ await waitFor(`window.CidadeConectaPublicSource?.state().status==='live'&&document.querySelector('.civic-kpis')?.textContent.includes('40')`);
+ assert.equal(await evaluate('CidadeConectaPublicSource.state().rows.length'),40);
+ for(const marker of ['PRIVATE_EMAIL_QA','PRIVATE_ADDRESS_QA','PRIVATE_TOKEN_QA','PRIVATE_AUTH_QA','PRIVATE_NOTE_QA'])assert.ok(!(await evaluate(`document.querySelector('#app').textContent`)).includes(marker));
+ await evaluate(`location.hash='#/ocorrencia/CC-2026-09000'`);await waitFor(`Boolean(document.querySelector('[data-civic-follow]'))`);
+ await evaluate(`document.querySelector('[data-civic-follow]').click()`);
+ assert.equal(await evaluate(`CidadeConectaCitizen.isFollowing('CC-2026-09000')`),true);
+ await evaluate(`window.__qaUpdated=true;CidadeConectaPublicSource.refresh(true)`);
+ await waitFor(`CidadeConectaCitizen.state().unread===1`);
+ await evaluate(`document.querySelector('#notificationBtn').focus();document.querySelector('#notificationBtn').click()`);
+ assert.equal(await evaluate(`document.querySelector('#app').inert`),true);
+ await capture('notificacoes-atualizacao-1366');
+ await evaluate(`document.querySelector('[data-civic-read-all]').click()`);assert.equal(await evaluate(`CidadeConectaCitizen.state().unread`),0);
+ await press('Escape','Escape');assert.equal(await evaluate('document.activeElement.id'),'notificationBtn');
+ await evaluate(`location.hash='#/ocorrencia/CC-2026-09000'`);await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);
+ await waitFor(`Boolean(document.querySelector('[data-community-feedback]'))`);
+ await evaluate(`document.querySelector('[data-community-recurrence]').click()`);
+ await waitFor(`document.querySelector('[data-community-recurrence]')?.textContent==='Relato semelhante registrado'`);
+ await evaluate(`document.querySelector('[name=resolution][value=yes]').checked=true;document.querySelector('[data-community-feedback]').requestSubmit()`);
+ await waitFor(`document.querySelector('.civic-community-message')?.textContent.includes('confirmada')`);
+ results.push({scenario:'civic-follow-notifications-recurrence-feedback',status:'PASS'});
+ await waitFor(`document.querySelector('#toast').classList.contains('hidden')`);
+ for(const width of [390,768,1366]){
+  await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
+  for(const [name,hash]of [['agora','agora'],['pulso','dashboard'],['dados','dados-abertos'],['relatorio','relatorios'],['feed','feed'],['pessoal','minhas?tab=acompanhando'],['comparacao','comparar?hood=Centro&hood=Paulista'],['radar','bairro?nome=Centro'],['resolucao','ocorrencia/CC-2026-09000']]){
+   await evaluate(`location.hash=${JSON.stringify('#/'+hash)}`);await pause(180);
+   assert.ok(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),name+' populated '+width+' overflow');
+   if(name==='pulso'){assert.equal(await evaluate(`Boolean(document.querySelector('#territoryDash,#geoRates'))`),false,'Pulso não deve misturar extensões demonstrativas')}assert.deepEqual(errors,[],name+' populated JS');await capture('civic-'+name+'-'+width);results.push({scenario:'civic-'+name,width,status:'PASS'});
+  }
+ }
+ await evaluate(`location.hash='#/dados-abertos'`);await pause(80);
+ await evaluate(`document.querySelector('[data-civic-share-page]').click()`);await waitFor(`Boolean(document.querySelector('#civicShowQr'))`);
+ await evaluate(`document.querySelector('#civicShowQr').click()`);await waitFor(`Boolean(document.querySelector('#civicQr svg'))`);
+ assert.ok((await evaluate(`document.querySelector('#civicShareUrl').value`)).endsWith('#/dados-abertos'));
+ await capture('compartilhar-qr-1366');await press('Escape','Escape');
+ results.push({scenario:'public-share-local-qr',status:'PASS'});
+ // Zoom/reflow e reduced motion no conteúdo novo, sem esconder funcionalidades.
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+ await evaluate(`location.hash='#/minhas'`);await pause(80);
+ await evaluate(`document.documentElement.style.fontSize='200%'`);
+ await capture('pessoal-texto-200-390');const reflow=await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left< -1)}).map(e=>({tag:e.tagName,id:e.id,cls:e.className,text:e.textContent.slice(0,70)})).slice(0,20)})`);assert.ok(reflow.scroll<=reflow.width+1,'Texto 200%: overflow '+JSON.stringify(reflow));
+ await evaluate(`document.documentElement.style.fontSize=''`);
+ results.push({scenario:'text-200-reflow-reduced-motion',status:'PASS'});
+ // Comparação de desempenho em laboratório: mesmo navegador/servidor e rede externa bloqueada.
+ await send('Performance.enable');const performanceSamples=[];
+ for(const [version,url]of [['before',base+'/artifacts/baseline/index.html#/'],['after',base+'/index.html#/']])for(let sample=0;sample<3;sample++){
+  await send('Page.navigate',{url});await waitFor(`Boolean(document.querySelector('#homeSearch'))`);await pause(550);
+  const nav=await evaluate(`(()=>{const n=performance.getEntriesByType('navigation')[0],r=performance.getEntriesByType('resource').filter(x=>new URL(x.name).origin===location.origin);return{domContentLoadedMs:n.domContentLoadedEventEnd,loadMs:n.loadEventEnd,resourceBytes:r.reduce((n,x)=>n+x.encodedBodySize,0),requests:r.length}})()`);
+  const m=await send('Performance.getMetrics');performanceSamples.push({version,sample,...nav,metrics:Object.fromEntries(m.metrics.filter(x=>['ScriptDuration','LayoutDuration','TaskDuration','JSHeapUsedSize'].includes(x.name)).map(x=>[x.name,x.value]))});
+ }
+ await writeFile(path.join(output,'performance-before-after.json'),JSON.stringify({scope:'Lab comparison; external network blocked; not Core Web Vitals',samples:performanceSamples},null,2));
+ results.push({scenario:'performance-before-after',status:'PASS'});
 
  console.log(`✓ ${results.length} cenários de navegador`);
 }catch(error){results.push({scenario,status:'FAIL',error:String(error)});throw error}
