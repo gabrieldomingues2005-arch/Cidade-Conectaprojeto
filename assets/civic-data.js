@@ -13,7 +13,7 @@ const coord=(v,max)=>v===null||v===undefined||v===''?null:Number.isFinite(Number
 const PUBLIC_MEDIA_ORIGIN='https://qzpofoxxrjunyayczcfu.supabase.co/storage/v1/object/public/occurrence-public-media/';
 function mediaFrom(value){
  const raw=Array.isArray(value)?value[0]:value;if(!raw||typeof raw!=='object')return null;
- const key=clean(raw.storage_key,220),mime=clean(raw.mime_type,40),alt=publicText(raw.alt_text,180);
+ const key=clean(raw.storage_key??raw.storageKey,220),mime=clean(raw.mime_type??raw.mime,40),alt=publicText(raw.alt_text??raw.alt,180);
  if(!/^CC-\d{4}-\d{5}\/[0-9a-f-]{36}\.(jpg|png|webp)$/i.test(key))return null;
  if(!['image/jpeg','image/png','image/webp'].includes(mime))return null;
  return{storageKey:key,mime,alt,url:PUBLIC_MEDIA_ORIGIN+key.split('/').map(encodeURIComponent).join('/')};
