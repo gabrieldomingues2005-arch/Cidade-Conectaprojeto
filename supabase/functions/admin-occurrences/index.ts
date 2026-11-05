@@ -8,13 +8,16 @@ const FIXED_ORIGINS = new Set([
   "https://cidconecta-nztptuci.manus.space",
 ]);
 const ALLOWED_ROLES = new Set(["triage", "admin"]);
+const MEDIA_WRITE_ROLES = new Set(["admin"]);
 const MAX_BODY_BYTES = 16_384;
+const PRIVATE_MEDIA_BUCKET = "occurrence-attachments";
+const PUBLIC_MEDIA_BUCKET = "occurrence-public-media";
+const IMAGE_MIMES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 function isAllowedOrigin(origin: string): boolean {
   if (FIXED_ORIGINS.has(origin)) return true;
   return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
 }
-
 function cors(origin: string): Record<string, string> {
   const allowed = isAllowedOrigin(origin) ? origin : "https://gabrieldomingues2005-arch.github.io";
   return {
@@ -25,7 +28,6 @@ function cors(origin: string): Record<string, string> {
     "Vary": "Origin",
   };
 }
-
 function json(origin: string, status: number, body: Record<string, unknown>): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -38,181 +40,157 @@ function json(origin: string, status: number, body: Record<string, unknown>): Re
     },
   });
 }
-
 function clean(value: unknown, max = 120): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+function validProtocol(value: string): boolean {
+  return /^CC-\d{4}-\d{5}$/.test(value);
+}
+function validUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+function extensionFor(mime: string): string {
+  return mime === "image/jpeg" ? "jpg" : mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "";
 }
 
 Deno.serve(async (req: Request) => {
   const origin = req.headers.get("origin") ?? "";
-
   if (req.method === "OPTIONS") {
     if (origin && !isAllowedOrigin(origin)) return json(origin, 403, { error: "origin_not_allowed" });
     return new Response(null, { status: 204, headers: cors(origin) });
   }
-
   if (req.method !== "POST") return json(origin, 405, { error: "method_not_allowed" });
   if (origin && !isAllowedOrigin(origin)) return json(origin, 403, { error: "origin_not_allowed" });
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY) return json(origin, 503, { error: "backend_not_configured" });
 
-  const authHeader = req.headers.get("authorization") ?? "";
-  const token = authHeader.match(/^Bearer\s+(.+)$/i)?.[1] ?? "";
+  const token = (req.headers.get("authorization") ?? "").match(/^Bearer\s+(.+)$/i)?.[1] ?? "";
   if (!token) return json(origin, 401, { error: "authentication_required" });
-
-  const contentType = (req.headers.get("content-type") ?? "").toLowerCase();
-  if (!contentType.includes("application/json")) {
-    return json(origin, 415, { error: "unsupported_media_type" });
-  }
-
+  if (!(req.headers.get("content-type") ?? "").toLowerCase().includes("application/json")) return json(origin, 415, { error: "unsupported_media_type" });
   const contentLength = Number(req.headers.get("content-length") ?? "0");
-  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
-    return json(origin, 413, { error: "request_too_large" });
-  }
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) return json(origin, 413, { error: "request_too_large" });
 
-  const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-
+  const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data: userData, error: userError } = await admin.auth.getUser(token);
   const user = userData.user;
   if (userError) {
     const status = Number((userError as { status?: number }).status ?? 0);
-    if (status === 0 || status === 408 || status === 425 || status === 429 || status >= 500) {
-      return json(origin, 503, { error: "auth_temporarily_unavailable" });
-    }
+    if (status === 0 || status === 408 || status === 425 || status === 429 || status >= 500) return json(origin, 503, { error: "auth_temporarily_unavailable" });
     return json(origin, 401, { error: "invalid_session" });
   }
   if (!user?.id) return json(origin, 401, { error: "invalid_session" });
 
-  const { data: profile, error: profileError } = await admin
-    .from("users_profile")
-    .select("id,name,role,auth_user_id")
-    .eq("auth_user_id", user.id)
-    .maybeSingle();
-
+  const { data: profile, error: profileError } = await admin.from("users_profile").select("id,name,role,auth_user_id").eq("auth_user_id", user.id).maybeSingle();
   if (profileError) return json(origin, 503, { error: "profile_lookup_failed" });
   if (!profile || !ALLOWED_ROLES.has(String(profile.role))) {
-    return json(origin, 403, {
-      error: "internal_access_denied",
-      role: profile?.role ?? null,
-      profile: profile ? { id: profile.id, name: profile.name, role: profile.role } : null,
-    });
+    return json(origin, 403, { error: "internal_access_denied", role: profile?.role ?? null, profile: profile ? { id: profile.id, name: profile.name, role: profile.role } : null });
   }
 
   let rawBody = "";
-  try {
-    rawBody = await req.text();
-  } catch {
-    return json(origin, 400, { error: "invalid_body" });
-  }
-  if (new TextEncoder().encode(rawBody).byteLength > MAX_BODY_BYTES) {
-    return json(origin, 413, { error: "request_too_large" });
-  }
-
+  try { rawBody = await req.text(); } catch { return json(origin, 400, { error: "invalid_body" }); }
+  if (new TextEncoder().encode(rawBody).byteLength > MAX_BODY_BYTES) return json(origin, 413, { error: "request_too_large" });
   let parsedBody: unknown;
-  try {
-    parsedBody = JSON.parse(rawBody);
-  } catch {
-    return json(origin, 400, { error: "invalid_json" });
-  }
-  if (!parsedBody || typeof parsedBody !== "object" || Array.isArray(parsedBody)) {
-    return json(origin, 400, { error: "invalid_json_object" });
-  }
+  try { parsedBody = JSON.parse(rawBody); } catch { return json(origin, 400, { error: "invalid_json" }); }
+  if (!parsedBody || typeof parsedBody !== "object" || Array.isArray(parsedBody)) return json(origin, 400, { error: "invalid_json_object" });
   const body = parsedBody as Record<string, unknown>;
-
   const action = clean(body.action, 30) || "session";
 
-  if (action === "session") {
-    return json(origin, 200, {
-      authenticated: true,
-      profile: {
-        id: profile.id,
-        name: profile.name,
-        role: profile.role,
-      },
-    });
-  }
+  if (action === "session") return json(origin, 200, { authenticated: true, profile: { id: profile.id, name: profile.name, role: profile.role } });
 
-  const { data: municipality, error: municipalityError } = await admin
-    .from("municipalities")
-    .select("id")
-    .eq("ibge_code", "3538709")
-    .maybeSingle();
-
-  if (municipalityError || !municipality?.id) {
-    return json(origin, 503, { error: "municipality_not_configured" });
-  }
+  const { data: municipality, error: municipalityError } = await admin.from("municipalities").select("id").eq("ibge_code", "3538709").maybeSingle();
+  if (municipalityError || !municipality?.id) return json(origin, 503, { error: "municipality_not_configured" });
 
   if (action === "list") {
-    const search = clean(body.search, 100).toLowerCase();
-    const category = clean(body.category, 40);
-    const status = clean(body.status, 40);
-
-    const { data, error } = await admin
-      .from("occurrences")
+    const search = clean(body.search, 100).toLowerCase(), category = clean(body.category, 40), status = clean(body.status, 40);
+    const { data, error } = await admin.from("occurrences")
       .select("protocol,title,neighborhood_label,status,responsible_agency,moderation_status,territory_resolution_status,created_at,updated_at,categories(slug,name)")
-      .eq("municipality_id", municipality.id)
-      .order("created_at", { ascending: false })
-      .limit(400);
-
+      .eq("municipality_id", municipality.id).order("created_at", { ascending: false }).limit(400);
     if (error) return json(origin, 500, { error: "occurrence_list_failed" });
-
     const rows = (data ?? []).filter((row: Record<string, unknown>) => {
-      const cat = row.categories && typeof row.categories === "object"
-        ? String((row.categories as Record<string, unknown>).slug ?? "")
-        : "";
+      const cat = row.categories && typeof row.categories === "object" ? String((row.categories as Record<string, unknown>).slug ?? "") : "";
       if (category && cat !== category) return false;
       if (status && String(row.status ?? "") !== status) return false;
-      if (search) {
-        const haystack = [
-          row.protocol,
-          row.title,
-          row.neighborhood_label,
-          row.responsible_agency,
-        ].map((v) => String(v ?? "").toLowerCase()).join(" ");
-        if (!haystack.includes(search)) return false;
-      }
+      if (search && ![row.protocol,row.title,row.neighborhood_label,row.responsible_agency].map(v=>String(v??"").toLowerCase()).join(" ").includes(search)) return false;
       return true;
     });
+    return json(origin, 200, { occurrences: rows, total: rows.length, role: profile.role, readOnly: true, mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)) });
+  }
 
+  const protocol = clean(body.protocol, 32).toUpperCase();
+  if (!validProtocol(protocol)) return json(origin, 400, { error: "invalid_protocol" });
+  const { data: occurrence, error: occurrenceError } = await admin.from("occurrences")
+    .select("id,protocol,title,description,neighborhood_label,public_location,public_latitude,public_longitude,status,responsible_agency,public_visible,moderation_status,territory_resolution_status,created_at,updated_at,resolved_at,categories(slug,name)")
+    .eq("protocol", protocol).eq("municipality_id", municipality.id).maybeSingle();
+  if (occurrenceError) return json(origin, 500, { error: "occurrence_detail_failed" });
+  if (!occurrence) return json(origin, 404, { error: "occurrence_not_found" });
+
+  if (action === "detail") {
+    const [{ data: history, error: historyError }, { data: attachments, error: attachmentError }, { data: publicMedia, error: publicMediaError }] = await Promise.all([
+      admin.from("occurrence_history").select("status,note,public_note,created_at").eq("occurrence_id", occurrence.id).order("created_at", { ascending: true }),
+      admin.from("occurrence_attachments").select("id,mime_type,file_size_bytes,public_visible,moderation_status,created_at,storage_key").eq("occurrence_id", occurrence.id).order("created_at", { ascending: true }),
+      admin.from("occurrence_public_media").select("protocol,storage_key,mime_type,alt_text,published_at,updated_at").eq("protocol", protocol).maybeSingle(),
+    ]);
+    if (historyError) return json(origin, 500, { error: "occurrence_history_failed" });
+    if (attachmentError || publicMediaError) return json(origin, 500, { error: "occurrence_media_lookup_failed" });
+    const safeAttachments = [];
+    for (const item of attachments ?? []) {
+      const { data: signed } = await admin.storage.from(PRIVATE_MEDIA_BUCKET).createSignedUrl(String(item.storage_key), 300);
+      safeAttachments.push({
+        id: item.id, mime_type: item.mime_type, file_size_bytes: item.file_size_bytes,
+        public_visible: item.public_visible, moderation_status: item.moderation_status,
+        created_at: item.created_at, preview_url: signed?.signedUrl ?? null,
+      });
+    }
+    const publicUrl = publicMedia?.storage_key ? admin.storage.from(PUBLIC_MEDIA_BUCKET).getPublicUrl(String(publicMedia.storage_key)).data.publicUrl : null;
     return json(origin, 200, {
-      occurrences: rows,
-      total: rows.length,
-      role: profile.role,
-      readOnly: true,
+      occurrence: { ...occurrence, history: history ?? [], attachments: safeAttachments, public_media: publicMedia ? { ...publicMedia, public_url: publicUrl } : null },
+      role: profile.role, readOnly: true, mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)),
     });
   }
 
-  if (action === "detail") {
-    const protocol = clean(body.protocol, 32).toUpperCase();
-    if (!/^CC-\d{4}-\d{5,}$/.test(protocol)) return json(origin, 400, { error: "invalid_protocol" });
+  if (action === "publish_media") {
+    if (!MEDIA_WRITE_ROLES.has(String(profile.role))) return json(origin, 403, { error: "media_moderation_denied" });
+    if (occurrence.public_visible !== true || occurrence.moderation_status !== "approved") return json(origin, 409, { error: "occurrence_not_publicly_approved" });
+    const attachmentId = clean(body.attachmentId, 64), altText = clean(body.altText, 180);
+    if (!validUuid(attachmentId)) return json(origin, 400, { error: "invalid_attachment_id" });
+    if (altText.length < 5) return json(origin, 400, { error: "alt_text_required" });
+    const { data: attachment, error: attachmentError } = await admin.from("occurrence_attachments")
+      .select("id,occurrence_id,storage_key,mime_type,file_size_bytes").eq("id", attachmentId).eq("occurrence_id", occurrence.id).maybeSingle();
+    if (attachmentError || !attachment) return json(origin, 404, { error: "attachment_not_found" });
+    const mime = String(attachment.mime_type ?? "");
+    const ext = extensionFor(mime);
+    if (!IMAGE_MIMES.has(mime) || !ext) return json(origin, 400, { error: "unsupported_attachment_type" });
+    const { data: blob, error: downloadError } = await admin.storage.from(PRIVATE_MEDIA_BUCKET).download(String(attachment.storage_key));
+    if (downloadError || !blob) return json(origin, 500, { error: "private_media_download_failed" });
+    const publicKey = `${protocol}/${attachmentId}.${ext}`;
+    const { error: uploadError } = await admin.storage.from(PUBLIC_MEDIA_BUCKET).upload(publicKey, blob, { contentType: mime, upsert: true, cacheControl: "3600" });
+    if (uploadError) return json(origin, 500, { error: "public_media_upload_failed" });
+    const { data: previous } = await admin.from("occurrence_public_media").select("storage_key").eq("protocol", protocol).maybeSingle();
+    const now = new Date().toISOString();
+    const { error: mediaError } = await admin.from("occurrence_public_media").upsert({ protocol, storage_key: publicKey, mime_type: mime, alt_text: altText, published_at: now, updated_at: now }, { onConflict: "protocol" });
+    if (mediaError) { await admin.storage.from(PUBLIC_MEDIA_BUCKET).remove([publicKey]); return json(origin, 500, { error: "public_media_metadata_failed" }); }
+    await admin.from("occurrence_attachments").update({ public_visible: false }).eq("occurrence_id", occurrence.id).neq("id", attachmentId);
+    const { error: attachmentUpdateError } = await admin.from("occurrence_attachments").update({ public_visible: true, moderation_status: "approved" }).eq("id", attachmentId).eq("occurrence_id", occurrence.id);
+    if (attachmentUpdateError) return json(origin, 500, { error: "attachment_moderation_update_failed" });
+    if (previous?.storage_key && previous.storage_key !== publicKey) await admin.storage.from(PUBLIC_MEDIA_BUCKET).remove([String(previous.storage_key)]);
+    await admin.from("audit_log").insert({ actor_id: profile.id, action: "media_published", entity_type: "occurrence", entity_id: occurrence.id, metadata: { protocol, attachment_id: attachmentId, public_storage_key: publicKey } });
+    const publicUrl = admin.storage.from(PUBLIC_MEDIA_BUCKET).getPublicUrl(publicKey).data.publicUrl;
+    return json(origin, 200, { published: true, protocol, publicUrl });
+  }
 
-    const { data: occurrence, error: occurrenceError } = await admin
-      .from("occurrences")
-      .select("id,protocol,title,description,neighborhood_label,public_location,public_latitude,public_longitude,status,responsible_agency,moderation_status,territory_resolution_status,created_at,updated_at,resolved_at,categories(slug,name)")
-      .eq("protocol", protocol)
-      .eq("municipality_id", municipality.id)
-      .maybeSingle();
-
-    if (occurrenceError) return json(origin, 500, { error: "occurrence_detail_failed" });
-    if (!occurrence) return json(origin, 404, { error: "occurrence_not_found" });
-
-    const { data: history, error: historyError } = await admin
-      .from("occurrence_history")
-      .select("status,note,public_note,created_at")
-      .eq("occurrence_id", occurrence.id)
-      .order("created_at", { ascending: true });
-
-    if (historyError) return json(origin, 500, { error: "occurrence_history_failed" });
-
-    return json(origin, 200, {
-      occurrence: {
-        ...occurrence,
-        history: history ?? [],
-      },
-      role: profile.role,
-      readOnly: true,
-    });
+  if (action === "unpublish_media") {
+    if (!MEDIA_WRITE_ROLES.has(String(profile.role))) return json(origin, 403, { error: "media_moderation_denied" });
+    const { data: media, error: mediaError } = await admin.from("occurrence_public_media").select("storage_key").eq("protocol", protocol).maybeSingle();
+    if (mediaError) return json(origin, 500, { error: "public_media_lookup_failed" });
+    if (!media?.storage_key) return json(origin, 200, { published: false, protocol });
+    const storageKey = String(media.storage_key);
+    const attachmentId = storageKey.split("/").pop()?.replace(/\.(jpg|png|webp)$/i, "") ?? "";
+    const { error: removeError } = await admin.storage.from(PUBLIC_MEDIA_BUCKET).remove([storageKey]);
+    if (removeError) return json(origin, 500, { error: "public_media_remove_failed" });
+    const { error: deleteError } = await admin.from("occurrence_public_media").delete().eq("protocol", protocol);
+    if (deleteError) return json(origin, 500, { error: "public_media_metadata_remove_failed" });
+    if (validUuid(attachmentId)) await admin.from("occurrence_attachments").update({ public_visible: false }).eq("id", attachmentId).eq("occurrence_id", occurrence.id);
+    await admin.from("audit_log").insert({ actor_id: profile.id, action: "media_unpublished", entity_type: "occurrence", entity_id: occurrence.id, metadata: { protocol, public_storage_key: storageKey } });
+    return json(origin, 200, { published: false, protocol });
   }
 
   return json(origin, 400, { error: "unsupported_action" });
