@@ -9,6 +9,9 @@ const FIXED_ORIGINS = new Set([
 ]);
 const ALLOWED_ROLES = new Set(["triage", "admin"]);
 const MEDIA_WRITE_ROLES = new Set(["admin"]);
+const OPERATION_ROLES = new Set(["triage", "admin"]);
+const RESTRICTED_OPERATION_ROLES = new Set(["admin"]);
+const OCCURRENCE_STATUSES = new Set(["Recebida", "Em análise", "Encaminhada", "Em andamento", "Resolvida"]);
 const MAX_BODY_BYTES = 16_384;
 const PRIVATE_MEDIA_BUCKET = "occurrence-attachments";
 const PUBLIC_MEDIA_BUCKET = "occurrence-public-media";
@@ -112,7 +115,7 @@ Deno.serve(async (req: Request) => {
       if (search && ![row.protocol,row.title,row.neighborhood_label,row.responsible_agency].map(v=>String(v??"").toLowerCase()).join(" ").includes(search)) return false;
       return true;
     });
-    return json(origin, 200, { occurrences: rows, total: rows.length, role: profile.role, readOnly: true, mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)) });
+    return json(origin, 200, { occurrences: rows, total: rows.length, role: profile.role, readOnly: false, operations: OPERATION_ROLES.has(String(profile.role)), mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)), municipalAdapterConfigured: false });
   }
 
   const protocol = clean(body.protocol, 32).toUpperCase();
@@ -124,13 +127,15 @@ Deno.serve(async (req: Request) => {
   if (!occurrence) return json(origin, 404, { error: "occurrence_not_found" });
 
   if (action === "detail") {
-    const [{ data: history, error: historyError }, { data: attachments, error: attachmentError }, { data: publicMedia, error: publicMediaError }] = await Promise.all([
+    const [{ data: history, error: historyError }, { data: attachments, error: attachmentError }, { data: publicMedia, error: publicMediaError }, { data: resolutionMedia, error: resolutionMediaError }, { data: integrationRows, error: integrationError }] = await Promise.all([
       admin.from("occurrence_history").select("status,note,public_note,created_at").eq("occurrence_id", occurrence.id).order("created_at", { ascending: true }),
       admin.from("occurrence_attachments").select("id,mime_type,file_size_bytes,public_visible,moderation_status,created_at,storage_key").eq("occurrence_id", occurrence.id).order("created_at", { ascending: true }),
       admin.from("occurrence_public_media").select("protocol,storage_key,mime_type,alt_text,published_at,updated_at").eq("protocol", protocol).maybeSingle(),
+      admin.from("occurrence_resolution_media").select("protocol,storage_key,mime_type,alt_text,published_at,updated_at").eq("protocol", protocol).maybeSingle(),
+      admin.schema("private").from("municipal_integration_outbox").select("id,status,adapter_key,action,attempt_count,last_error,created_at,updated_at").eq("occurrence_id", occurrence.id).order("created_at", { ascending: false }).limit(5),
     ]);
     if (historyError) return json(origin, 500, { error: "occurrence_history_failed" });
-    if (attachmentError || publicMediaError) return json(origin, 500, { error: "occurrence_media_lookup_failed" });
+    if (attachmentError || publicMediaError || resolutionMediaError || integrationError) return json(origin, 500, { error: "occurrence_media_lookup_failed" });
     const safeAttachments = [];
     for (const item of attachments ?? []) {
       const { data: signed } = await admin.storage.from(PRIVATE_MEDIA_BUCKET).createSignedUrl(String(item.storage_key), 300);
@@ -141,10 +146,135 @@ Deno.serve(async (req: Request) => {
       });
     }
     const publicUrl = publicMedia?.storage_key ? admin.storage.from(PUBLIC_MEDIA_BUCKET).getPublicUrl(String(publicMedia.storage_key)).data.publicUrl : null;
+    const resolutionUrl = resolutionMedia?.storage_key ? admin.storage.from(PUBLIC_MEDIA_BUCKET).getPublicUrl(String(resolutionMedia.storage_key)).data.publicUrl : null;
     return json(origin, 200, {
-      occurrence: { ...occurrence, history: history ?? [], attachments: safeAttachments, public_media: publicMedia ? { ...publicMedia, public_url: publicUrl } : null },
-      role: profile.role, readOnly: true, mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)),
+      occurrence: {
+        ...occurrence,
+        history: history ?? [],
+        attachments: safeAttachments,
+        public_media: publicMedia ? { ...publicMedia, public_url: publicUrl } : null,
+        resolution_media: resolutionMedia ? { ...resolutionMedia, public_url: resolutionUrl } : null,
+        municipal_integration: integrationRows ?? [],
+      },
+      role: profile.role,
+      readOnly: false,
+      operations: OPERATION_ROLES.has(String(profile.role)),
+      mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)),
+      municipalAdapterConfigured: false,
     });
+  }
+
+  if (action === "operate") {
+    if (!OPERATION_ROLES.has(String(profile.role))) return json(origin, 403, { error: "operation_denied" });
+    const operation = clean(body.operation, 40);
+    const note = clean(body.note, 500);
+    const agency = clean(body.agency, 150);
+    const requestedStatus = clean(body.status, 40);
+    const publicNote = body.publicNote === true;
+    const previous = {
+      status: String(occurrence.status ?? ""),
+      responsible_agency: occurrence.responsible_agency ?? null,
+      moderation_status: String(occurrence.moderation_status ?? ""),
+      public_visible: occurrence.public_visible === true,
+      resolved_at: occurrence.resolved_at ?? null,
+    };
+    const changes: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    let auditAction = "";
+    let historyStatus = previous.status;
+    let historyNote = note;
+    let historyPublic = publicNote;
+
+    if (operation === "approve") {
+      changes.moderation_status = "approved";
+      changes.public_visible = true;
+      auditAction = "occurrence_approved";
+      historyNote = note || "Ocorrência aprovada para publicação.";
+      historyPublic = false;
+    } else if (operation === "reject") {
+      if (!RESTRICTED_OPERATION_ROLES.has(String(profile.role))) return json(origin, 403, { error: "restricted_operation_denied" });
+      if (note.length < 5) return json(origin, 400, { error: "rejection_reason_required" });
+      changes.moderation_status = "rejected";
+      changes.public_visible = false;
+      auditAction = "occurrence_rejected";
+      historyNote = note;
+      historyPublic = false;
+    } else if (operation === "set_status") {
+      if (!OCCURRENCE_STATUSES.has(requestedStatus)) return json(origin, 400, { error: "invalid_status" });
+      changes.status = requestedStatus;
+      if (agency) changes.responsible_agency = agency;
+      changes.resolved_at = requestedStatus === "Resolvida" ? new Date().toISOString() : null;
+      auditAction = "occurrence_status_changed";
+      historyStatus = requestedStatus;
+      historyNote = note || `Status atualizado para ${requestedStatus}.`;
+    } else if (operation === "assign_agency") {
+      if (agency.length < 2) return json(origin, 400, { error: "agency_required" });
+      changes.responsible_agency = agency;
+      auditAction = "occurrence_agency_assigned";
+      historyNote = note || `Encaminhada para ${agency}.`;
+    } else if (operation === "reopen") {
+      if (previous.status !== "Resolvida") return json(origin, 409, { error: "occurrence_not_resolved" });
+      changes.status = "Em análise";
+      changes.resolved_at = null;
+      auditAction = "occurrence_reopened";
+      historyStatus = "Em análise";
+      historyNote = note || "Ocorrência reaberta para nova análise.";
+      historyPublic = publicNote;
+    } else {
+      return json(origin, 400, { error: "unsupported_operation" });
+    }
+
+    const { error: updateError } = await admin.from("occurrences").update(changes).eq("id", occurrence.id);
+    if (updateError) return json(origin, 500, { error: "occurrence_update_failed" });
+
+    const { error: historyWriteError } = await admin.from("occurrence_history").insert({
+      occurrence_id: occurrence.id,
+      status: historyStatus,
+      note: historyNote || null,
+      public_note: historyPublic,
+      changed_by: profile.id,
+    });
+    if (historyWriteError) {
+      await admin.from("occurrences").update({ ...previous, updated_at: occurrence.updated_at }).eq("id", occurrence.id);
+      return json(origin, 500, { error: "occurrence_history_write_failed" });
+    }
+
+    await admin.from("audit_log").insert({
+      actor_id: profile.id,
+      action: auditAction,
+      entity_type: "occurrence",
+      entity_id: occurrence.id,
+      metadata: { protocol, operation, before: previous, requested_status: requestedStatus || null, agency: agency || null, public_note: historyPublic },
+    });
+    return json(origin, 200, { updated: true, protocol, operation });
+  }
+
+  if (action === "prepare_dispatch") {
+    if (!RESTRICTED_OPERATION_ROLES.has(String(profile.role))) return json(origin, 403, { error: "restricted_operation_denied" });
+    const dispatchAction = clean(body.dispatchAction, 60) || "occurrence_update";
+    const safePayload = {
+      protocol,
+      status: occurrence.status,
+      neighborhood: occurrence.neighborhood_label,
+      responsible_agency: occurrence.responsible_agency,
+      public_location: occurrence.public_location,
+    };
+    const { data: row, error: queueError } = await admin.schema("private").from("municipal_integration_outbox").insert({
+      occurrence_id: occurrence.id,
+      action: dispatchAction,
+      adapter_key: "unconfigured",
+      payload: safePayload,
+      status: "disabled",
+      created_by: profile.id,
+    }).select("id,status,adapter_key,created_at").single();
+    if (queueError) return json(origin, 500, { error: "municipal_outbox_failed" });
+    await admin.from("audit_log").insert({
+      actor_id: profile.id,
+      action: "municipal_dispatch_prepared",
+      entity_type: "occurrence",
+      entity_id: occurrence.id,
+      metadata: { protocol, outbox_id: row.id, adapter_key: "unconfigured" },
+    });
+    return json(origin, 200, { configured: false, queued: false, reason: "official_adapter_not_configured", outbox: row });
   }
 
   if (action === "publish_media") {
