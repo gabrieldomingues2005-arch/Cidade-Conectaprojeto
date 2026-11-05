@@ -1,0 +1,56 @@
+{
+  "at": "2026-11-05T00:49:10.565Z",
+  "project": "qzpofoxxrjunyayczcfu",
+  "results": [
+    {
+      "name": "community leitura pública com chave publishable",
+      "status": 404,
+      "result": "PASS"
+    },
+    {
+      "name": "community registro não publicado",
+      "status": 404,
+      "result": "PASS"
+    },
+    {
+      "name": "community protocolo inválido",
+      "status": 400,
+      "result": "PASS"
+    },
+    {
+      "name": "community array recusado",
+      "status": 400,
+      "result": "PASS"
+    },
+    {
+      "name": "community origem recusada",
+      "status": 403,
+      "result": "PASS"
+    },
+    {
+      "name": "RPC interno negado anon",
+      "status": 401,
+      "result": "PASS"
+    },
+    {
+      "name": "Admin negado anon",
+      "status": 401,
+      "result": "PASS"
+    },
+    {
+      "name": "anon não lê occurrence_private_location",
+      "status": 401,
+      "result": "PASS"
+    },
+    {
+      "name": "anon não lê users_profile",
+      "status": 401,
+      "result": "PASS"
+    },
+    {
+      "name": "anon não lê audit_log",
+      "status": 401,
+      "result": "PASS"
+    }
+  ]
+}

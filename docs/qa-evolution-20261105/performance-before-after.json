@@ -1,0 +1,89 @@
+{
+  "scope": "Lab comparison; external network blocked; not Core Web Vitals",
+  "samples": [
+    {
+      "version": "before",
+      "sample": 0,
+      "domContentLoadedMs": 82.89999999999418,
+      "loadMs": 102.29999999998836,
+      "resourceBytes": 457819,
+      "requests": 24,
+      "metrics": {
+        "LayoutDuration": 0.017581,
+        "ScriptDuration": 0.011463,
+        "TaskDuration": 0.097163,
+        "JSHeapUsedSize": 8163128
+      }
+    },
+    {
+      "version": "before",
+      "sample": 1,
+      "domContentLoadedMs": 82.89999999999418,
+      "loadMs": 102.29999999998836,
+      "resourceBytes": 457819,
+      "requests": 24,
+      "metrics": {
+        "LayoutDuration": 0.017581,
+        "ScriptDuration": 0.011463,
+        "TaskDuration": 0.102046,
+        "JSHeapUsedSize": 8165812
+      }
+    },
+    {
+      "version": "before",
+      "sample": 2,
+      "domContentLoadedMs": 82.89999999999418,
+      "loadMs": 102.29999999998836,
+      "resourceBytes": 457819,
+      "requests": 24,
+      "metrics": {
+        "LayoutDuration": 0.017581,
+        "ScriptDuration": 0.011463,
+        "TaskDuration": 0.103817,
+        "JSHeapUsedSize": 8168496
+      }
+    },
+    {
+      "version": "after",
+      "sample": 0,
+      "domContentLoadedMs": 99,
+      "loadMs": 114.69999999998254,
+      "resourceBytes": 601268,
+      "requests": 34,
+      "metrics": {
+        "LayoutDuration": 0.009179,
+        "ScriptDuration": 0.019635,
+        "TaskDuration": 0.10502,
+        "JSHeapUsedSize": 7005720
+      }
+    },
+    {
+      "version": "after",
+      "sample": 1,
+      "domContentLoadedMs": 99,
+      "loadMs": 114.69999999998254,
+      "resourceBytes": 601268,
+      "requests": 34,
+      "metrics": {
+        "LayoutDuration": 0.009179,
+        "ScriptDuration": 0.019635,
+        "TaskDuration": 0.106646,
+        "JSHeapUsedSize": 7008584
+      }
+    },
+    {
+      "version": "after",
+      "sample": 2,
+      "domContentLoadedMs": 99,
+      "loadMs": 114.69999999998254,
+      "resourceBytes": 601268,
+      "requests": 34,
+      "metrics": {
+        "LayoutDuration": 0.009179,
+        "ScriptDuration": 0.019635,
+        "TaskDuration": 0.108348,
+        "JSHeapUsedSize": 7011432
+      }
+    }
+  ]
+}
