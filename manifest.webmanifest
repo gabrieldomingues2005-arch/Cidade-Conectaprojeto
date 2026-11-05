@@ -70,6 +70,18 @@
           "type": "image/png"
         }
       ]
+    },
+    {
+      "name": "Notícias da Cidade",
+      "short_name": "Notícias",
+      "url": "./#/noticias",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
