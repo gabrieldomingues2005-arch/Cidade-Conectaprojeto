@@ -185,3 +185,15 @@
 .homeNewsVisual.has-real-image{background:#e9efed}
 .homeNewsVisual.has-real-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .homeNewsVisual.has-real-image::after{background:linear-gradient(180deg,transparent 60%,rgba(3,47,49,.2));opacity:1;transform:none;border-radius:0;inset:0;height:auto}
+
+
+/* Moderação segura de mídia no Admin. */
+.adminMediaV73{margin:24px 0;padding-top:22px;border-top:1px solid var(--cc6-border)}
+.adminMediaGridV73{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+.adminMediaCardV73{overflow:hidden;border:1px solid var(--cc6-border);border-radius:var(--cc6-radius-sm);background:var(--cc6-soft)}
+.adminMediaCardV73>img,.adminMediaPlaceholderV73{width:100%;aspect-ratio:16/10;object-fit:cover;display:grid;place-items:center;background:#e8efed;color:var(--cc6-muted)}
+.adminMediaCardV73>div:last-child{padding:14px}
+.adminMediaCardV73 p{font-size:.8125rem;color:var(--cc6-muted)}
+.adminMediaCardV73 label{display:grid;gap:6px;font-size:.75rem;font-weight:700;margin:12px 0}
+.adminMediaCardV73 input{width:100%;min-height:44px}
+@media(max-width:700px){.adminMediaGridV73{grid-template-columns:1fr}}
