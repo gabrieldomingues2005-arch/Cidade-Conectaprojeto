@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {validate} from '../supabase/functions/community-actions/validation.mjs';
+const base={action:'read',protocol:'CC-2026-09001',deviceKey:'a'.repeat(64)};
+test('community recusa corpo inválido e identificadores arbitrários',()=>{for(const x of [null,[],1,'a',{}, {...base,protocol:'CC-1'},{...base,deviceKey:'email@example.invalid'},{...base,action:'admin'}])assert.ok(validate(x).error)});
+test('community aceita somente avaliação opcional dentro da escala',()=>{for(const rating of [0,6,'5',1.2])assert.equal(validate({...base,action:'feedback',resolution:'yes',rating}).error,'invalid_feedback');for(const rating of [undefined,null,1,5])assert.ok(!validate({...base,action:'feedback',resolution:'partial',rating}).error)});
+test('community ignora campos inesperados em vez de encaminhá-los ao banco',()=>{const r=validate({...base,email:'private@example.invalid',lat:-22.12345,serviceRole:'SECRET'});assert.ok(!JSON.stringify(r).includes('private@example.invalid'));assert.ok(!JSON.stringify(r).includes('SECRET'));assert.ok(!('lat'in r))});
+test('community permite token apenas no corpo com formato limitado',()=>{assert.equal(validate({...base,trackingKey:'short'}).error,'invalid_tracking_key');assert.ok(!validate({...base,trackingKey:'x'.repeat(64)}).error)});
+test('Edge community fixa projeto, limita corpo real e usa somente RPC autorizado',()=>{const s=readFileSync('supabase/functions/community-actions/index.ts','utf8');assert.ok(s.includes("URL!=='https://qzpofoxxrjunyayczcfu.supabase.co'"));assert.ok(s.includes('n>2048'));assert.ok(s.includes('community_participation_internal'));assert.ok(!s.includes('console.log'));assert.ok(!s.includes('client.from('));assert.ok(s.includes("'Cache-Control':'no-store'"))});
