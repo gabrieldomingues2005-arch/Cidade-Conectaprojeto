@@ -65,6 +65,9 @@ jobs:
       - name: Testar autenticação, Edge e Service Worker
         run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-design.mjs scripts/test-civic-data.mjs scripts/test-civic-store.mjs scripts/test-civic-pages.mjs scripts/test-community.mjs scripts/test-pwa-assets.mjs
 
+      - name: Verificar privacidade do cliente
+        run: node scripts/qa-client-privacy.mjs
+
       - name: Validar base territorial e referências
         run: node scripts/validate-project.mjs
 

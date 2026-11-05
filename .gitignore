@@ -1,2 +1,3 @@
 artifacts/
 .smoke-index.html
+supabase/.temp/
