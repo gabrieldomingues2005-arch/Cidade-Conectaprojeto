@@ -221,6 +221,10 @@ try{
   }
  }
  await evaluate(`location.hash='#/dados-abertos'`);await pause(80);
+ const exported=await evaluate(`(async()=>{const original=URL.createObjectURL;URL.createObjectURL=blob=>{window.__qaExportBlob=blob;return original(blob)};document.querySelector('[data-civic-export=json]').click();const text=await window.__qaExportBlob.text();URL.createObjectURL=original;return JSON.parse(text)})()`);
+ assert.equal(exported.occurrences.length,40);assert.equal(Object.keys(exported.occurrences[0]).length,12);
+ for(const marker of ['PRIVATE_EMAIL_QA','PRIVATE_ADDRESS_QA','PRIVATE_TOKEN_QA','PRIVATE_AUTH_QA','PRIVATE_NOTE_QA'])assert.ok(!JSON.stringify(exported).includes(marker));
+ results.push({scenario:'public-export-button-allowlist',status:'PASS'});
  await evaluate(`document.querySelector('[data-civic-share-page]').click()`);await waitFor(`Boolean(document.querySelector('#civicShowQr'))`);
  await evaluate(`document.querySelector('#civicShowQr').click()`);await waitFor(`Boolean(document.querySelector('#civicQr svg'))`);
  assert.ok((await evaluate(`document.querySelector('#civicShareUrl').value`)).endsWith('#/dados-abertos'));
@@ -230,7 +234,7 @@ try{
  // Camadas, filtros e localização aproximada: apenas dados públicos, sem persistir posição atual.
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
  await send('Page.navigate',{url:base+'/index.html?qaCivic=1&qaLeaflet=1#/mapa'});
- await waitFor(`CidadeConectaPublicSource?.state().status==='live'&&Boolean(document.querySelector('#mapHeat'))`);
+ await waitFor(`window.CidadeConectaPublicSource?.state().status==='live'&&Boolean(document.querySelector('#mapHeat'))`);
  await evaluate(`document.querySelector('#mapHeat').checked=true;document.querySelector('#mapHeat').dispatchEvent(new Event('change',{bubbles:true}))`);
  await waitFor(`window.__leafletQA.heatCoordinates.length>0`);
  assert.ok(await evaluate(`window.__leafletQA.heatCoordinates.every(c=>c.every(n=>Number(n.toFixed(3))===n))`),'Calor deve usar apenas coordenadas públicas aproximadas');
