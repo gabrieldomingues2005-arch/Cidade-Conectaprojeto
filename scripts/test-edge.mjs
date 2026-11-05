@@ -29,13 +29,27 @@ test('edge rejects non-object JSON bodies',()=>{
   assert.match(source,/invalid_json_object/);
 });
 
-test('edge remains read-only and excludes direct private tables',()=>{
+test('edge limits writes to audited media moderation and excludes private citizen data',()=>{
   assert.doesNotMatch(source,/\.from\("occurrence_contacts"\)/);
-  assert.doesNotMatch(source,/\.from\("occurrence_private_locations"\)/);
-  assert.doesNotMatch(source,/\.insert\(/);
-  assert.doesNotMatch(source,/\.update\(/);
-  assert.doesNotMatch(source,/\.delete\(/);
+  assert.doesNotMatch(source,/\.from\("occurrence_private_location"\)/);
+  assert.match(source,/const MEDIA_WRITE_ROLES = new Set\(\["admin"\]\)/);
+  assert.match(source,/action === "publish_media"/);
+  assert.match(source,/action === "unpublish_media"/);
+  assert.match(source,/occurrence\.public_visible !== true \|\| occurrence\.moderation_status !== "approved"/);
+  assert.match(source,/\.from\("occurrence_public_media"\)\.upsert/);
+  assert.match(source,/\.from\("audit_log"\)\.insert/);
   assert.match(source,/readOnly: true/);
+  assert.doesNotMatch(source,/\.from\("occurrences"\)\.update/);
+  assert.doesNotMatch(source,/\.from\("occurrence_history"\)\.insert/);
+});
+
+
+test('public media publication copies from private bucket to dedicated public bucket',()=>{
+  assert.match(source,/PRIVATE_MEDIA_BUCKET = "occurrence-attachments"/);
+  assert.match(source,/PUBLIC_MEDIA_BUCKET = "occurrence-public-media"/);
+  assert.match(source,/\.from\(PRIVATE_MEDIA_BUCKET\)\.download/);
+  assert.match(source,/\.from\(PUBLIC_MEDIA_BUCKET\)\.upload/);
+  assert.match(source,/createSignedUrl\(String\(item\.storage_key\), 300\)/);
 });
 
 test('list projection stays minimal',()=>{

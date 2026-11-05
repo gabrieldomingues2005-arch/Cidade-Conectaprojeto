@@ -49,7 +49,7 @@ function createSource({fetch:request,storage,config={},onChange=()=>{},online=()
    try{
     const all=[];let complete=false,total=null;
     for(let offset=0;offset<5000;offset+=500){
-     const params=new URLSearchParams({select:'protocol,title,description,neighborhood_label,public_latitude,public_longitude,status,responsible_agency,public_visible,moderation_status,created_at,updated_at,resolved_at,categories(slug,name),occurrence_history(status,note,public_note,created_at)',public_visible:'eq.true',moderation_status:'eq.approved',order:'created_at.desc,protocol.desc',limit:'500',offset:String(offset)});
+     const params=new URLSearchParams({select:'protocol,title,description,neighborhood_label,public_latitude,public_longitude,status,responsible_agency,public_visible,moderation_status,created_at,updated_at,resolved_at,categories(slug,name),occurrence_history(status,note,public_note,created_at),occurrence_public_media(storage_key,mime_type,alt_text)',public_visible:'eq.true',moderation_status:'eq.approved',order:'created_at.desc,protocol.desc',limit:'500',offset:String(offset)});
      const res=await request(sb.url+'/rest/v1/occurrences?'+params,{headers:{apikey:sb.publishableKey,Accept:'application/json',Prefer:'count=exact'},cache:'no-store',signal:controller.signal});
      if(!res.ok)throw new Error('public_read_unavailable');const page=await res.json();if(!Array.isArray(page))throw new Error('invalid_public_data');
      const n=Number(res.headers?.get('content-range')?.split('/')[1]);if(Number.isFinite(n))total=n;
