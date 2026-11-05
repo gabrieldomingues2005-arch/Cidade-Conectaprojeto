@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "files": 19,
+  "project": "qzpofoxxrjunyayczcfu",
+  "staticJwtRoles": [
+    "anon"
+  ],
+  "failures": []
+}

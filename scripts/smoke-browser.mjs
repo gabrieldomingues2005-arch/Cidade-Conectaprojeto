@@ -203,7 +203,7 @@ try{
  assert.equal(await evaluate(`document.querySelector('#app').inert`),true);
  await capture('notificacoes-atualizacao-1366');
  await evaluate(`document.querySelector('[data-civic-read-all]').click()`);assert.equal(await evaluate(`CidadeConectaCitizen.state().unread`),0);
- await press('Escape','Escape');assert.equal(await evaluate('document.activeElement.id'),'notificationBtn');
+ await press('k','KeyK',2);assert.equal(await evaluate(`Boolean(document.querySelector('.civic-overlay'))`),false,'Busca deve substituir o painel de notificações');assert.equal(await evaluate(`document.querySelector('#commandPalette').classList.contains('hidden')`),false);await press('Escape','Escape');assert.equal(await evaluate('document.activeElement.id'),'notificationBtn');
  await evaluate(`location.hash='#/ocorrencia/CC-2026-09000'`);await evaluate(`window.dispatchEvent(new HashChangeEvent('hashchange'))`);
  await waitFor(`Boolean(document.querySelector('[data-community-feedback]'))`);
  await evaluate(`document.querySelector('[data-community-recurrence]').click()`);
@@ -251,7 +251,7 @@ try{
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
  await evaluate(`location.hash='#/minhas'`);await pause(80);
  await evaluate(`document.documentElement.style.fontSize='200%'`);
- await capture('pessoal-texto-200-390');const reflow=await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left< -1)}).map(e=>({tag:e.tagName,id:e.id,cls:e.className,text:e.textContent.slice(0,70)})).slice(0,20)})`);assert.ok(reflow.scroll<=reflow.width+1,'Texto 200%: overflow '+JSON.stringify(reflow));
+ await capture('pessoal-texto-200-390');const reflow=await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left< -1)}).map(e=>({tag:e.tagName,id:e.id,cls:e.className,text:e.textContent.slice(0,70)})).slice(0,20)})`);assert.ok(reflow.scroll<=reflow.width+1,'Texto 200%: overflow '+JSON.stringify(reflow));const navCuts=await evaluate(`[...document.querySelectorAll('.mobileActionsV51>a,.mobileActionsV51>button')].filter(el=>{const node=[...el.childNodes].find(n=>n.nodeType===3&&n.textContent.trim());if(!node)return false;const range=document.createRange();range.selectNodeContents(node);const text=range.getBoundingClientRect(),box=el.getBoundingClientRect();return text.left<box.left-1||text.right>box.right+1}).map(el=>el.textContent)`);assert.deepEqual(navCuts,[],'Texto 200%: rótulos da navegação não podem se sobrepor');
  await evaluate(`document.documentElement.style.fontSize=''`);
  results.push({scenario:'text-200-reflow-reduced-motion',status:'PASS'});
 

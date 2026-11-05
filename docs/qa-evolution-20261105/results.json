@@ -1,0 +1,617 @@
+[
+  {
+    "route": "#/",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/registrar",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/acompanhar",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/mapa",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/dashboard",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/rede-municipal",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/admin",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/minhas",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/bairro?nome=Centro",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/ocorrencia/CC-2026-00001",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/piracicaba",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/sobre",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/privacidade",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/agora",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/feed",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/resolvidas",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/comparar",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/dados-abertos",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/relatorios",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/transparencia",
+    "width": 320,
+    "status": "PASS"
+  },
+  {
+    "route": "#/",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/registrar",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/acompanhar",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/mapa",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/dashboard",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/rede-municipal",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/admin",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/minhas",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/bairro?nome=Centro",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/ocorrencia/CC-2026-00001",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/piracicaba",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/sobre",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/privacidade",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/agora",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/feed",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/resolvidas",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/comparar",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/dados-abertos",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/relatorios",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/transparencia",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "route": "#/",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/registrar",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/acompanhar",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/mapa",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/dashboard",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/rede-municipal",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/admin",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/minhas",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/bairro?nome=Centro",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/ocorrencia/CC-2026-00001",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/piracicaba",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/sobre",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/privacidade",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/agora",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/feed",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/resolvidas",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/comparar",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/dados-abertos",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/relatorios",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/transparencia",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "route": "#/",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/registrar",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/acompanhar",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/mapa",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/dashboard",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/rede-municipal",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/admin",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/minhas",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/bairro?nome=Centro",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/ocorrencia/CC-2026-00001",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/piracicaba",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/sobre",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/privacidade",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/agora",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/feed",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/resolvidas",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/comparar",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/dados-abertos",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/relatorios",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "route": "#/transparencia",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "unavailable",
+    "status": "PASS"
+  },
+  {
+    "scenario": "network",
+    "status": "PASS"
+  },
+  {
+    "scenario": "timeout",
+    "status": "PASS"
+  },
+  {
+    "scenario": "offline",
+    "status": "PASS"
+  },
+  {
+    "scenario": "401",
+    "status": "PASS"
+  },
+  {
+    "scenario": "403",
+    "status": "PASS"
+  },
+  {
+    "scenario": "empty",
+    "status": "PASS"
+  },
+  {
+    "scenario": "busca-teclado",
+    "status": "PASS"
+  },
+  {
+    "scenario": "formulario-previa-privacidade",
+    "status": "PASS"
+  },
+  {
+    "scenario": "admin-fila-filtros-320",
+    "status": "PASS"
+  },
+  {
+    "scenario": "admin-fila-filtros-390",
+    "status": "PASS"
+  },
+  {
+    "scenario": "admin-fila-filtros-1366",
+    "status": "PASS"
+  },
+  {
+    "scenario": "map-leaflet-stub",
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-follow-notifications-recurrence-feedback",
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-agora",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-pulso",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-dados",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-relatorio",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-feed",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-pessoal",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-comparacao",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-radar",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-resolucao",
+    "width": 390,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-agora",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-pulso",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-dados",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-relatorio",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-feed",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-pessoal",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-comparacao",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-radar",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-resolucao",
+    "width": 768,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-agora",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-pulso",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-dados",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-relatorio",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-feed",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-pessoal",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-comparacao",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-radar",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "civic-resolucao",
+    "width": 1366,
+    "status": "PASS"
+  },
+  {
+    "scenario": "public-export-button-allowlist",
+    "status": "PASS"
+  },
+  {
+    "scenario": "public-share-local-qr",
+    "status": "PASS"
+  },
+  {
+    "scenario": "map-heat-dates-nearby-privacy",
+    "status": "PASS"
+  },
+  {
+    "scenario": "text-200-reflow-reduced-motion",
+    "status": "PASS"
+  },
+  {
+    "scenario": "pwa-offline-shell-preferences-no-fake-send",
+    "status": "PASS"
+  },
+  {
+    "scenario": "performance-before-after",
+    "status": "PASS"
+  }
+]
