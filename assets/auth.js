@@ -6,6 +6,8 @@ const sb=cfg.supabase||{};
 const STORAGE_KEY='cidadeConectaAuthSessionV1';
 const ALLOWED_INTERNAL_ROLES=new Set(['triage','admin']);
 const REQUEST_TIMEOUT_MS=12000;
+const INTERNAL_FUNCTIONS=new Set(['admin-occurrences','admin-news','system-health']);
+const FORM_FUNCTIONS=new Set(['admin-resolution-media']);
 let refreshPromise=null;
 
 const state={
@@ -244,8 +246,9 @@ async function signOut(){
   emit();
 }
 
-async function invokeInternal(payload){
-  const request=async token=>fetchWithTimeout(`${sb.url}/functions/v1/admin-occurrences`,{
+async function invokeFunction(name,payload){
+  if(!INTERNAL_FUNCTIONS.has(name))throw new Error('Função interna não permitida.');
+  const request=async token=>fetchWithTimeout(`${sb.url}/functions/v1/${name}`,{
     method:'POST',
     headers:baseHeaders(token,{'Content-Type':'application/json'}),
     body:JSON.stringify(payload||{}),
@@ -253,34 +256,58 @@ async function invokeInternal(payload){
   });
   try{
     let token=await ensureToken();
-    if(!token){
-      const error=new Error('Sessão expirada. Entre novamente.');
-      error.status=401;
-      throw error;
-    }
+    if(!token){const error=new Error('Sessão expirada. Entre novamente.');error.status=401;throw error}
     let response=await request(token);
-    if(response.status===401){
-      const renewed=await refreshSession();
-      token=renewed.access_token;
-      response=await request(token);
-    }
+    if(response.status===401){const renewed=await refreshSession();token=renewed.access_token;response=await request(token)}
     return await parseResponse(response);
   }catch(error){
     state.lastError=String(error?.message||error);
-    state.user=null;
-    state.profile=null;
-    if(isTransientError(error)||Number(error?.status)===403&&error?.payload?.error!=='internal_access_denied'){
-      state.status='error';
-    }else if(Number(error?.status)===403&&error?.payload?.error==='internal_access_denied'){
-      state.status='denied';
-    }else{
+    const status=Number(error?.status);
+    const authorizationCritical=name==='admin-occurrences';
+    if(status===401){
       saveSession(null);
+      state.user=null;
+      state.profile=null;
       state.status='anonymous';
+      emit();
+    }else if(authorizationCritical){
+      if(status===403&&error?.payload?.error==='internal_access_denied'){
+        state.status='denied';
+      }else if(isTransientError(error)||status===403){
+        state.user=null;
+        state.profile=null;
+        state.status='error';
+      }else{
+        saveSession(null);
+        state.user=null;
+        state.profile=null;
+        state.status='anonymous';
+      }
+      emit();
     }
-    emit();
     throw error;
   }
 }
+async function invokeForm(name,formData){
+  if(!FORM_FUNCTIONS.has(name)||!(formData instanceof FormData))throw new Error('Envio interno não permitido.');
+  const request=async token=>fetchWithTimeout(`${sb.url}/functions/v1/${name}`,{
+    method:'POST',headers:baseHeaders(token),body:formData,cache:'no-store'
+  });
+  try{
+    let token=await ensureToken();
+    if(!token){const error=new Error('Sessão expirada. Entre novamente.');error.status=401;throw error}
+    let response=await request(token);
+    if(response.status===401){const renewed=await refreshSession();token=renewed.access_token;response=await request(token)}
+    return await parseResponse(response);
+  }catch(error){
+    state.lastError=String(error?.message||error);const status=Number(error?.status);
+    if(status===401){
+      saveSession(null);state.user=null;state.profile=null;state.status='anonymous';emit();
+    }
+    throw error;
+  }
+}
+async function invokeInternal(payload){return invokeFunction('admin-occurrences',payload)}
 
 const ready=init();
 
@@ -291,6 +318,8 @@ window.CidadeConectaAuth=Object.freeze({
   signIn,
   signOut,
   invokeInternal,
+  invokeFunction,
+  invokeForm,
   ensureToken,
   allowedRoles:Object.freeze(['triage','admin'])
 });

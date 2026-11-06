@@ -29,18 +29,22 @@ test('edge rejects non-object JSON bodies',()=>{
   assert.match(source,/invalid_json_object/);
 });
 
-test('edge limits writes to audited media moderation and excludes private citizen data',()=>{
+test('edge limits operational writes, audits changes and excludes private citizen data',()=>{
   assert.doesNotMatch(source,/\.from\("occurrence_contacts"\)/);
   assert.doesNotMatch(source,/\.from\("occurrence_private_location"\)/);
   assert.match(source,/const MEDIA_WRITE_ROLES = new Set\(\["admin"\]\)/);
-  assert.match(source,/action === "publish_media"/);
-  assert.match(source,/action === "unpublish_media"/);
-  assert.match(source,/occurrence\.public_visible !== true \|\| occurrence\.moderation_status !== "approved"/);
-  assert.match(source,/\.from\("occurrence_public_media"\)\.upsert/);
+  assert.match(source,/const OPERATION_ROLES = new Set\(\["triage", "admin"\]\)/);
+  assert.match(source,/action === "operate"/);
+  assert.match(source,/operation === "approve"/);
+  assert.match(source,/operation === "reject"/);
+  assert.match(source,/operation === "set_status"/);
+  assert.match(source,/operation === "reopen"/);
+  assert.match(source,/\.from\("occurrences"\)\.update/);
+  assert.match(source,/\.from\("occurrence_history"\)\.insert/);
   assert.match(source,/\.from\("audit_log"\)\.insert/);
-  assert.match(source,/readOnly: true/);
-  assert.doesNotMatch(source,/\.from\("occurrences"\)\.update/);
-  assert.doesNotMatch(source,/\.from\("occurrence_history"\)\.insert/);
+  assert.match(source,/service_prepare_municipal_outbox/);
+  assert.match(source,/official_adapter_not_configured/);
+  assert.doesNotMatch(source,/fetch\([^\n]*municip/i);
 });
 
 
