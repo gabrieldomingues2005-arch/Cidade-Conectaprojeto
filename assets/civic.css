@@ -299,3 +299,34 @@
 .homeNewsEditorialV80 h3 a{text-decoration:none;color:var(--cc6-text)}
 .homeNewsEditorialV80 p{color:var(--cc6-muted);line-height:1.6}
 @media(max-width:720px){.homeNewsEditorialV80{grid-template-columns:1fr}.homeNewsEditorialV80>img,.homeNewsEditorialFallbackV80{min-height:190px}.homeNewsEditorialV80>div:last-child{padding:18px}}
+
+
+/* Conta DEMO e painel pessoal fictício v8.1. */
+.civic-demo-login-card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin-top:20px;border:1px solid #e2bd55;background:linear-gradient(135deg,#fff9e8,#f7fbef)}
+.civic-demo-login-card h2{margin:.25rem 0 .5rem}
+.civic-demo-login-card p{max-width:760px;color:var(--cc6-muted)}
+.civic-demo-credentials{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.civic-demo-credentials>span{display:grid;gap:3px;padding:10px 12px;border:1px solid #e7d48f;border-radius:10px;background:#fffdf7;min-width:min(100%,260px)}
+.civic-demo-credentials small{font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#745814;font-weight:800}
+.civic-demo-credentials code{font-size:.8rem;overflow-wrap:anywhere;color:#3f3212}
+.civic-demo-personal-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin:24px 0;padding:28px;border-radius:var(--cc6-radius);background:linear-gradient(135deg,var(--cc6-brand),#0f7478);color:#fff;box-shadow:var(--cc6-shadow-soft)}
+.civic-demo-personal-hero .miniLabel,.civic-demo-personal-hero p{color:#e9ffff}
+.civic-demo-personal-hero h2{font-size:clamp(1.8rem,4vw,3rem);margin:.35rem 0}
+.civic-demo-personal-hero .btn{background:#fff;color:var(--cc6-brand);border-color:#fff}
+.civic-demo-weekly{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;margin:24px 0;padding:24px;border:1px solid var(--cc6-border);border-radius:var(--cc6-radius);background:linear-gradient(135deg,var(--cc6-surface),var(--cc6-soft))}
+.civic-demo-weekly h2{margin:.25rem 0 .5rem}
+.civic-demo-weekly p{color:var(--cc6-muted);max-width:760px}
+.civic-demo-weekly-stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.civic-demo-weekly-stats span{display:grid;min-width:110px;padding:12px;border-radius:12px;background:#fff;border:1px solid var(--cc6-border);font-size:.72rem;color:var(--cc6-muted)}
+.civic-demo-weekly-stats b{font-size:1.4rem;color:var(--cc6-brand)}
+.civic-demo-milestones{margin-top:24px}
+.civic-demo-milestone-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}
+.civic-demo-milestone-grid article{padding:16px;border:1px solid var(--cc6-border);border-radius:12px;background:var(--cc6-soft)}
+.civic-demo-milestone-grid b{display:block;margin-bottom:6px;color:var(--cc6-brand)}
+.civic-demo-milestone-grid p{font-size:.8125rem;color:var(--cc6-muted);margin:0}
+.civic-demo-record{border-left:4px solid #e2bd55}
+.civic-demo-ward{background:linear-gradient(135deg,var(--cc6-surface),#fffaf0)}
+.civic-personal-demo .civic-subnav{border-color:#e5cf7c}
+.civic-demo-reset-row{display:flex;justify-content:flex-end;margin-top:14px}
+@media(max-width:820px){.civic-demo-login-card,.civic-demo-personal-hero,.civic-demo-weekly{grid-template-columns:1fr}.civic-demo-weekly-stats{justify-content:flex-start}.civic-demo-milestone-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.civic-demo-login-card{padding:18px}.civic-demo-personal-hero{padding:22px}.civic-demo-milestone-grid{grid-template-columns:1fr}.civic-demo-credentials>span{min-width:100%}}
