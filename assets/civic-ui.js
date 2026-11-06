@@ -82,6 +82,15 @@ function publicRecord(protocol){return U.publicRecords().find(o=>o.protocol===pr
 function enhance(){
  const root=$('#app');if(!root)return;window.CidadeConectaCommunity?.enhance();
  for(const detail of root.querySelectorAll('.detailV52')){
+  if(detail.querySelector('.civic-before-after'))continue;
+  const protocol=detail.querySelector('.eyebrow')?.textContent?.trim(),o=publicRecord(protocol);
+  if(o?.status==='Resolvida'&&o.media?.url&&o.resolutionMedia?.url){
+    const block=document.createElement('section');block.className='civic-before-after';block.setAttribute('aria-label','Comparação antes e depois');
+    block.innerHTML='<div class="civic-news-section-head"><h2>Antes e depois</h2><span class="miniLabel">Imagens públicas moderadas</span></div><div class="civic-before-after-grid"><figure><img src="'+esc(o.media.url)+'" alt="'+esc(o.media.alt||'Imagem pública anterior à resolução')+'" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption><b>Antes</b><span>Registro inicial moderado</span></figcaption></figure><figure><img src="'+esc(o.resolutionMedia.url)+'" alt="'+esc(o.resolutionMedia.alt||'Imagem pública após a resolução')+'" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption><b>Depois</b><span>Resultado publicado</span></figcaption></figure></div><p class="small muted">As duas imagens foram moderadas e pertencem ao mesmo protocolo.</p>';
+    detail.append(block);
+  }
+
+ for(const detail of root.querySelectorAll('.detailV52')){
   if(detail.querySelector('.civic-follow-detail'))continue;const protocol=detail.querySelector('.eyebrow')?.textContent?.trim(),o=publicRecord(protocol);
   if(D.validProtocol(protocol)){C.recent('protocol',protocol);if(o){const box=document.createElement('div');box.className='civic-follow-detail';box.innerHTML=followButton(o)+'<span class="small muted">Acompanhe atualizações públicas neste aparelho.</span>';detail.querySelector('.detailActionsV52')?.append(box)}}
  }
@@ -119,6 +128,7 @@ document.addEventListener('keydown',e=>{if(!dialog)return;if(e.key==='Escape'){e
 window.addEventListener('cidadeconecta:citizen-state',notifyCounter);
 window.addEventListener('cidadeconecta:account-state',()=>{notifyCounter();if(isPersonal()&&!dialog)U.refresh()});
 window.addEventListener('cidadeconecta:public-data',e=>{if(e.detail.status==='loading'){updateCityBar();return}U.acceptPublic(e.detail.rows);C.reconcile(e.detail.rows,U.favoriteNames());updateCityBar();if(dialog||!$('#commandPalette')?.classList.contains('hidden'))return;if(['','bairro','minhas','meu-cidade-conecta',...routes.keys()].some(p=>(location.hash||'#/').split('?')[0]==='#/'+p)&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh()});
+window.addEventListener('cidadeconecta:news-data',e=>{if(e.detail.status==='loading')return;const p=(location.hash||'#/').split('?')[0];if(p==='#/noticias'&&!dialog&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh()});
 window.addEventListener('online',scheduleRefresh);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')scheduleRefresh()});
 window.addEventListener('load',init);setInterval(()=>{if(document.visibilityState==='visible'&&(C.state().following.length||U.favoriteNames().length))S.refresh()},90000);
 window.CidadeConectaCivic=Object.freeze({resolve:(p,q)=>p==='minhas'||p==='meu-cidade-conecta'?{html:myPage(q),title:'Meu Cidade Conecta'}:p==='conta'?{html:accountPage(q),title:'Minha conta'}:routes.get(p)?.(q)||null,register:(name,renderer)=>routes.set(name,renderer),enhance,sourceLabel,empty,badge,card,esc,format,meta,territory:()=>territory,network:()=>network,openDialog,closeDialog,followButton});
