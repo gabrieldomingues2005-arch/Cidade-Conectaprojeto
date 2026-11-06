@@ -270,22 +270,24 @@ Deno.serve(async (req: Request) => {
       responsible_agency: occurrence.responsible_agency,
       public_location: occurrence.public_location,
     };
-    const { data: queuedRows, error: queueError } = await admin.rpc("service_prepare_municipal_outbox",{
+    const configured = municipalAdapterConfigured();
+    const adapterKey = configured ? "official-http" : "unconfigured";
+    const { data: queuedRows, error: queueError } = await admin.rpc("service_prepare_municipal_outbox_v2",{
       p_occurrence_id: occurrence.id,
       p_action: dispatchAction,
       p_payload: safePayload,
       p_created_by: profile.id,
+      p_adapter_key: adapterKey,
     });
     const row = Array.isArray(queuedRows) ? queuedRows[0] : queuedRows;
-    if (queueError) return json(origin, 500, { error: "municipal_outbox_failed" });
+    if (queueError || !row?.id) return json(origin, 500, { error: "municipal_outbox_failed" });
     await admin.from("audit_log").insert({
       actor_id: profile.id,
       action: "municipal_dispatch_prepared",
       entity_type: "occurrence",
       entity_id: occurrence.id,
-      metadata: { protocol, outbox_id: row.id, adapter_key: "unconfigured" },
+      metadata: { protocol, outbox_id: row.id, adapter_key: adapterKey },
     });
-    const configured = municipalAdapterConfigured();
     return json(origin, 200, {
       configured,
       queued: configured,
