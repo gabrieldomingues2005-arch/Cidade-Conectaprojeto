@@ -30,6 +30,7 @@ jobs:
           node --check assets/auth.js
           node --check assets/supabase-bridge.js
           node --check assets/app.js
+          node --check assets/institutional-a11y-v85.js
           node --check assets/piracicaba.js
           node --check assets/piracicaba-data.js
           node --check assets/piracicaba-mapas.js
@@ -126,6 +127,7 @@ jobs:
           mkdir -p artifacts/claude-ui/assets artifacts/claude-ui/data artifacts/claude-ui/docs artifacts/claude-ui/scripts artifacts/claude-ui/screenshots
           cp index.html sw.js manifest.webmanifest favicon.svg README.md artifacts/claude-ui/
           cp assets/app.js assets/styles.css assets/design-v55.css assets/design-v56.css assets/design-system.css artifacts/claude-ui/assets/
+          cp assets/institutional-pira-v85.css assets/institutional-a11y-v85.js artifacts/claude-ui/assets/
           cp assets/site-enhancements.js assets/site-enhancements.css artifacts/claude-ui/assets/
           cp assets/civic*.js assets/civic.css artifacts/claude-ui/assets/
           cp -R assets/vendor assets/icons artifacts/claude-ui/assets/
