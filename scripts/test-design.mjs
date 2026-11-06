@@ -38,7 +38,7 @@ test('territorial summaries use the sanitized public view, preserving own privat
 test('home orienta primeiro acesso e separa público de demonstração',()=>{
  const html=read('index.html'),app=read('assets/app.js'),civic=read('assets/civic.css');
  assert.match(app,/O que você quer fazer\?/);
- assert.match(app,/Explorar a versão DEMO/);
+ assert.match(app,/Abrir apresentação DEMO com dados fictícios/);
  assert.match(app,/Público/);
  assert.match(app,/Demonstração/);
  assert.match(civic,/homeIntentGridV82/);
