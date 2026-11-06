@@ -6,6 +6,7 @@ const SERVICE_ROLE_KEY=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"";
 const ADAPTER_URL=(Deno.env.get("MUNICIPAL_ADAPTER_URL")??"").trim();
 const ADAPTER_TOKEN=(Deno.env.get("MUNICIPAL_ADAPTER_TOKEN")??"").trim();
 const ADAPTER_HOSTS=(Deno.env.get("MUNICIPAL_ADAPTER_HOSTS")??"").split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
+const MAX_BODY=4096;
 const ORIGINS=new Set(["https://gabrieldomingues2005-arch.github.io","https://cidconecta-nztptuci.manus.space"]);
 const allowedOrigin=(o:string)=>ORIGINS.has(o)||/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
 const cors=(o:string)=>({"Access-Control-Allow-Origin":allowedOrigin(o)?o:"https://gabrieldomingues2005-arch.github.io","Access-Control-Allow-Headers":"authorization,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS","Vary":"Origin"});
@@ -27,8 +28,9 @@ Deno.serve(async req=>{
   if(req.method!=="POST")return reply(origin,405,{error:"method_not_allowed"});
   if(origin&&!allowedOrigin(origin))return reply(origin,403,{error:"origin_not_allowed"});
   if(!SUPABASE_URL||!SERVICE_ROLE_KEY)return reply(origin,503,{error:"backend_not_configured"});
-  const adapter=adapterConfig();
-  if(!adapter)return reply(origin,503,{configured:false,sent:false,error:"official_adapter_not_configured"});
+  if(!(req.headers.get("content-type")??"").toLowerCase().includes("application/json"))return reply(origin,415,{error:"unsupported_media_type"});
+  const contentLength=Number(req.headers.get("content-length")??"0");
+  if(Number.isFinite(contentLength)&&contentLength>MAX_BODY)return reply(origin,413,{error:"request_too_large"});
 
   const token=(req.headers.get("authorization")??"").match(/^Bearer\s+(.+)$/i)?.[1]??"";
   if(!token)return reply(origin,401,{error:"authentication_required"});
@@ -38,6 +40,8 @@ Deno.serve(async req=>{
   const {data:profile,error:profileError}=await admin.from("users_profile").select("id,role").eq("auth_user_id",userData.user.id).maybeSingle();
   if(profileError)return reply(origin,503,{error:"profile_lookup_failed"});
   if(!profile||profile.role!=="admin")return reply(origin,403,{error:"admin_required"});
+  const adapter=adapterConfig();
+  if(!adapter)return reply(origin,503,{configured:false,sent:false,error:"official_adapter_not_configured"});
 
   let body:Record<string,unknown>;
   try{body=await req.json()}catch{return reply(origin,400,{error:"invalid_json"})}
