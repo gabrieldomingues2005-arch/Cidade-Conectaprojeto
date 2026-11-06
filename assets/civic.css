@@ -479,3 +479,26 @@
 @media(max-width:680px){.homePortalGatewayV83{padding-top:14px}.homePortalSearchBoxV83{padding:20px 16px}.homePortalSearchInputV83{grid-template-columns:auto minmax(0,1fr)}.homePortalSearchInputV83 button{grid-column:1/-1;width:100%}.homePublicServiceStripV83{grid-template-columns:1fr 1fr}.homePublicServiceStripV83>a{justify-content:flex-start;text-align:left}.cc-institutional-v83 .cityBandLinksV54{gap:12px}.cc-institutional-v83 .cityBandLinksV54 a:not(.cityOfficialShortcut){display:none}.cc-institutional-v83 .cityOfficialShortcut{border-left:0;padding-left:0}}
 @media(max-width:440px){.homePublicServiceStripV83{grid-template-columns:1fr}.homePublicServiceStripV83>a{border-right:0!important;border-bottom:1px solid #d2dee0!important}.homePublicServiceStripV83>a:last-child{border-bottom:0!important}}
 @media(prefers-reduced-motion:reduce){.homePortalSearchInputV83{transition:none}}
+
+
+/* V8.4 — canais oficiais e resiliência cartográfica. */
+.networkOfficialChannelsV84{margin:0 0 24px;padding:24px;border:1px solid #cfdfe2;border-radius:10px;background:linear-gradient(135deg,#f4f9f9,#fff)}
+.networkOfficialIntroV84{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:18px}
+.networkOfficialIntroV84 h2{margin:.25rem 0 .45rem;color:var(--cc83-navy,#0b3f55)}
+.networkOfficialIntroV84 p{margin:0;max-width:760px;color:var(--cc6-muted)}
+.networkIntegrationBadgeV84{display:inline-flex;align-items:center;min-height:32px;padding:6px 10px;border:1px solid #e0c56b;border-radius:999px;background:#fff7d6;color:#644d0e;font-size:.67rem;font-weight:850;white-space:nowrap}
+.networkOfficialGridV84{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.networkOfficialGridV84>a{display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:10px;min-height:96px;padding:14px;border:1px solid #d2dfe1;border-radius:8px;background:#fff;color:inherit;text-decoration:none}
+.networkOfficialGridV84>a:hover,.networkOfficialGridV84>a:focus-visible{border-color:#84aab1;background:#f2f8f8}
+.networkOfficialGridV84>a>span{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:#eaf5f7;color:var(--cc83-navy,#0b3f55)}
+.networkOfficialGridV84 .uiIcon{width:20px;height:20px}
+.networkOfficialGridV84 small,.networkOfficialGridV84 em{display:block;font-size:.67rem;color:var(--cc6-muted);font-style:normal}
+.networkOfficialGridV84 b{display:block;margin:2px 0;color:var(--cc83-navy,#0b3f55);font-size:.84rem}
+.networkOfficialGridV84>a>i{font-style:normal;font-weight:900;color:var(--cc83-blue,#146b83)}
+.networkIntegrationNoteV84{display:flex;align-items:flex-start;gap:8px;margin:16px 0 0;padding-top:14px;border-top:1px solid #d8e2e4;font-size:.74rem;color:#586e72;line-height:1.55}
+.networkIntegrationNoteV84 .uiIcon{width:18px;height:18px;flex:none;color:var(--cc83-green,#0a6761)}
+.cc-map-tiles-degraded{background-color:#edf3f3!important;background-image:linear-gradient(#dce7e8 1px,transparent 1px),linear-gradient(90deg,#dce7e8 1px,transparent 1px)!important;background-size:28px 28px!important}
+.ccMapTileFallbackV83{position:absolute;z-index:750;left:50%;top:12px;transform:translateX(-50%);display:grid;gap:2px;width:min(92%,420px);padding:9px 12px;border:1px solid #b7c9cc;border-radius:8px;background:rgba(255,255,255,.95);box-shadow:0 4px 14px rgba(11,63,85,.12);pointer-events:none;text-align:center}
+.ccMapTileFallbackV83 strong{font-size:.75rem;color:var(--cc83-navy,#0b3f55)}
+.ccMapTileFallbackV83 span{font-size:.68rem;color:#5d7074}
+@media(max-width:760px){.networkOfficialIntroV84{flex-direction:column}.networkOfficialGridV84{grid-template-columns:1fr}.networkIntegrationBadgeV84{white-space:normal}.networkOfficialChannelsV84{padding:18px}}
