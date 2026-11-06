@@ -435,7 +435,7 @@ function bindHome(){
  const portalSearch=$('#homePortalSearch'),portalInput=$('#homePortalQuery');
  const launchPortalSearch=value=>{openCommand();const input=$('#commandInput'),q=String(value||'').trim();if(input){input.value=q;renderCommand(q);setTimeout(()=>input.focus(),20)}};
  if(portalSearch)portalSearch.onsubmit=e=>{e.preventDefault();launchPortalSearch(portalInput?.value)};
- $('[data-home-query]').forEach(b=>b.onclick=()=>launchPortalSearch(b.dataset.homeQuery));
+ document.querySelectorAll('[data-home-query]').forEach(b=>b.onclick=()=>launchPortalSearch(b.dataset.homeQuery));
  const el=$('#homeMap');if(!el)return;if(!window.L){el.innerHTML='<div class="stateCardV57 homeMapFallbackV57"><span>'+iconSvg('map')+'</span><div><b>Mapa temporariamente indisponível</b><p>Você ainda pode explorar os registros pela lista e pelos indicadores.</p><a class="miniLink" href="#/mapa">Abrir área do mapa →</a></div></div>';return}
  const records=window.CidadeConectaData.realRows(publicMetricRecords()).filter(o=>Number.isFinite(o.lat)&&Number.isFinite(o.lng)).slice(0,20);
  currentMap=L.map(el,{zoomControl:false,attributionControl:true,scrollWheelZoom:false}).setView(PIRACICABA,12);
