@@ -6,6 +6,7 @@ const resolution=readFileSync('supabase/functions/admin-resolution-media/index.t
 const news=readFileSync('supabase/functions/admin-news/index.ts','utf8');
 const account=readFileSync('supabase/functions/citizen-account/index.ts','utf8');
 const health=readFileSync('supabase/functions/system-health/index.ts','utf8');
+const municipal=readFileSync('supabase/functions/municipal-dispatch/index.ts','utf8');
 
 test('foto de resolução exige admin, resolução pública e formato limitado',()=>{
  assert.match(resolution,/profile\.role!=="admin"/);
@@ -36,10 +37,27 @@ test('conta cidadã não aceita papéis internos e sincroniza somente protocolos
  assert.doesNotMatch(account,/occurrence_contacts|occurrence_private_location/);
 });
 
-test('saúde do sistema retorna somente agregados e integração municipal permanece desativada',()=>{
- assert.match(health,/configured:false/);
- assert.match(health,/adapter:"unconfigured"/);
+test('saúde do sistema retorna somente agregados e integração municipal depende de configuração server-side',()=>{
+ assert.match(health,/municipalAdapterConfigured/);
+ assert.match(health,/MUNICIPAL_ADAPTER_URL/);
+ assert.match(health,/adapter:municipalAdapterConfigured\(\)\?"official-http":"unconfigured"/);
  assert.match(health,/service_get_municipal_health/);
  assert.match(health,/service_record_health_event/);
  assert.doesNotMatch(health,/occurrence_contacts|occurrence_private_location|tracking_token/);
+});
+test('adaptador municipal é admin-only, HTTPS allowlisted e fail-closed',()=>{
+ assert.match(municipal,/profile\.role!=="admin"/);
+ assert.match(municipal,/official_adapter_not_configured/);
+ assert.match(municipal,/u\.protocol!=="https:"/);
+ assert.match(municipal,/ADAPTER_HOSTS\.includes/);
+ assert.match(municipal,/MAX_BODY=4096/);
+ assert.match(municipal,/service_get_municipal_dispatch/);
+ assert.match(municipal,/service_update_municipal_dispatch/);
+ assert.match(municipal,/municipal_dispatch_sent/);
+ assert.match(municipal,/redirect:"error"/);
+ assert.doesNotMatch(municipal,/occurrence_contacts|occurrence_private_location|tracking_token|exact_point|public_latitude|public_longitude/);
+});
+test('payload do adaptador municipal contém somente campos operacionais públicos',()=>{
+ for(const key of ['protocol','status','neighborhood','responsibleAgency','publicLocation'])assert.match(municipal,new RegExp(key));
+ for(const forbidden of ['email','phone','contact','trackingToken','latitude','longitude'])assert.ok(!new RegExp('payload\\s*=\\{[\\s\\S]{0,1200}'+forbidden,'i').test(municipal),forbidden);
 });
