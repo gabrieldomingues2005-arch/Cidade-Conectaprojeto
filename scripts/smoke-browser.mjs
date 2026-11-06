@@ -113,8 +113,8 @@ try{
  await send('Page.navigate',{url:base+'/index.html?qaView=demo-account#/conta'});
  await waitFor(`Boolean(document.querySelector('[data-account-demo-login]'))`);
  await evaluate(`document.querySelector('[data-account-demo-login]').click()`);
- await waitFor(`CidadeConectaAccount?.state().demo===true&&Boolean(document.querySelector('#demoAccountBar'))`);
- let demoState=await evaluate(`({email:CidadeConectaAccount.state().user?.email,unread:CidadeConectaAccount.state().unread,demo:CidadeConectaAccount.state().demo,text:document.querySelector('#app').textContent,bar:document.querySelector('#demoAccountBar')?.textContent})`);
+ await waitFor(`window.CidadeConectaAccount?.state?.().demo===true&&Boolean(document.querySelector('#demoAccountBar'))`);
+ let demoState=await evaluate(`({email:window.CidadeConectaAccount.state().user?.email,unread:window.CidadeConectaAccount.state().unread,demo:window.CidadeConectaAccount.state().demo,text:document.querySelector('#app').textContent,bar:document.querySelector('#demoAccountBar')?.textContent})`);
  assert.equal(demoState.demo,true);assert.equal(demoState.email,'gabriel.demo@cidadeconecta.local');assert.ok(demoState.unread>=4);assert.ok(demoState.bar.includes('Gabriel Demo'));
  await capture('conta-demo-390');
  await evaluate(`location.hash='#/minhas'`);
@@ -122,13 +122,13 @@ try{
  assert.ok((await evaluate(`document.querySelector('#app').textContent`)).includes('Recomendado para você'));
  assert.ok((await evaluate(`document.querySelector('#app').textContent`)).includes('Atividade recente'));
  await capture('meu-cidade-demo-390');
- await send('Page.reload');await waitFor(`CidadeConectaAccount?.state().demo===true&&Boolean(document.querySelector('.civic-demo-personal-hero'))`);
- assert.equal(await evaluate(`CidadeConectaAccount.state().user.email`),'gabriel.demo@cidadeconecta.local','conta DEMO deve sobreviver a F5');
- await evaluate(`CidadeConectaAccount.markAll()`);await waitFor(`CidadeConectaAccount.state().unread===0`);
- await evaluate(`CidadeConectaAccount.resetDemo()`);await waitFor(`CidadeConectaAccount.state().unread>=4`);
+ await send('Page.reload');await waitFor(`window.CidadeConectaAccount?.state?.().demo===true&&Boolean(document.querySelector('.civic-demo-personal-hero'))`);
+ assert.equal(await evaluate(`window.CidadeConectaAccount.state().user.email`),'gabriel.demo@cidadeconecta.local','conta DEMO deve sobreviver a F5');
+ await evaluate(`window.CidadeConectaAccount.markAll()`);await waitFor(`window.CidadeConectaAccount.state().unread===0`);
+ await evaluate(`window.CidadeConectaAccount.resetDemo()`);await waitFor(`window.CidadeConectaAccount.state().unread>=4`);
  assert.deepEqual(errors,[],'Conta DEMO: erro JS');
  results.push({scenario:'conta-demo-login-persistencia-reset',status:'PASS'});console.log('✓ conta DEMO login/persistência/reset');
- await evaluate(`CidadeConectaAccount.signOut()`);await pause(80);
+ await evaluate(`window.CidadeConectaAccount.signOut()`);await pause(80);
  for(scenario of ['unavailable','network','timeout','offline','401','403','empty']){
   await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:true});window.dispatchEvent(new Event('online'));window.__qaScenario=${JSON.stringify(scenario)};sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));location.hash='#/admin';`);
   if(scenario==='offline')await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:false});window.dispatchEvent(new Event('offline'))`);
