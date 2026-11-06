@@ -3,10 +3,10 @@
 'use strict';
 const cfg=window.CIDADE_CONECTA_CONFIG?.supabase||{},KEY='cidadeConectaCitizenAccountSessionV1',DEMO_KEY='cidadeConectaDemoCitizenSessionV1',DEMO_STATE_KEY='cidadeConectaDemoCitizenStateV1',TIMEOUT=12000;
 let refreshPromise=null;
-const state={status:'checking',session:null,user:null,profile:null,preferences:null,follows:[],neighborhoods:[],notifications:[],unread:0,error:'',pendingVerification:false,demo:false,weekly:null,milestones:[],created:[],saved:[],recent:[]};
+const state={status:'checking',session:null,user:null,profile:null,preferences:null,follows:[],neighborhoods:[],notifications:[],unread:0,error:'',pendingVerification:false,demo:false,weekly:null,milestones:[],activity:[],recommendations:[],created:[],saved:[],recent:[]};
 
 const emit=()=>window.dispatchEvent(new CustomEvent('cidadeconecta:account-state',{detail:snapshot()}));
-const snapshot=()=>({status:state.status,user:state.user?{id:state.user.id,email:state.user.email}:null,profile:state.profile?{...state.profile}:null,preferences:state.preferences?{...state.preferences}:null,follows:[...state.follows],neighborhoods:[...state.neighborhoods],notifications:state.notifications.map(x=>({...x})),unread:state.unread,error:state.error,pendingVerification:state.pendingVerification,demo:state.demo,weekly:state.weekly?{...state.weekly}:null,milestones:state.milestones.map(x=>({...x})),created:[...state.created],saved:[...state.saved],recent:state.recent.map(x=>({...x}))});
+const snapshot=()=>({status:state.status,user:state.user?{id:state.user.id,email:state.user.email}:null,profile:state.profile?{...state.profile}:null,preferences:state.preferences?{...state.preferences}:null,follows:[...state.follows],neighborhoods:[...state.neighborhoods],notifications:state.notifications.map(x=>({...x})),unread:state.unread,error:state.error,pendingVerification:state.pendingVerification,demo:state.demo,weekly:state.weekly?{...state.weekly}:null,milestones:state.milestones.map(x=>({...x})),activity:state.activity.map(x=>({...x})),recommendations:state.recommendations.map(x=>({...x})),created:[...state.created],saved:[...state.saved],recent:state.recent.map(x=>({...x}))});
 const configured=()=>Boolean(cfg.enabled&&cfg.projectRef==='qzpofoxxrjunyayczcfu'&&cfg.url==='https://qzpofoxxrjunyayczcfu.supabase.co'&&cfg.publishableKey);
 const demoAccount=()=>window.CidadeConectaDemo?.account||null;
 function saveSession(session){state.session=session||null;try{session?sessionStorage.setItem(KEY,JSON.stringify(session)):sessionStorage.removeItem(KEY)}catch{}}
@@ -16,7 +16,7 @@ function setDemoActive(on){try{on?sessionStorage.setItem(DEMO_KEY,'1'):sessionSt
 function readDemoState(){try{return JSON.parse(sessionStorage.getItem(DEMO_STATE_KEY)||'null')||{}}catch{return{}}}
 function writeDemoState(value){try{sessionStorage.setItem(DEMO_STATE_KEY,JSON.stringify(value))}catch{}}
 function clearDemoState(){try{sessionStorage.removeItem(DEMO_STATE_KEY);sessionStorage.removeItem(DEMO_KEY)}catch{}}
-function resetState(){Object.assign(state,{status:'anonymous',session:null,user:null,profile:null,preferences:null,follows:[],neighborhoods:[],notifications:[],unread:0,error:'',pendingVerification:false,demo:false,weekly:null,milestones:[],created:[],saved:[],recent:[]})}
+function resetState(){Object.assign(state,{status:'anonymous',session:null,user:null,profile:null,preferences:null,follows:[],neighborhoods:[],notifications:[],unread:0,error:'',pendingVerification:false,demo:false,weekly:null,milestones:[],activity:[],recommendations:[],created:[],saved:[],recent:[]})}
 function applyDemo(){
  const data=demoAccount();if(!data)return null;
  const local=readDemoState(),readIds=new Set(Array.isArray(local.readIds)?local.readIds:[]),preferences={...data.preferences,...(local.preferences||{})};
@@ -25,7 +25,7 @@ function applyDemo(){
  state.neighborhoods=Array.isArray(local.neighborhoods)?[...local.neighborhoods]:[...data.neighborhoods];
  state.notifications=data.notifications.map(n=>({...n,read_at:n.read_at||readIds.has(n.id)?(n.read_at||new Date().toISOString()):null}));
  state.unread=state.notifications.filter(n=>!n.read_at).length;state.status='authenticated';state.error='';state.pendingVerification=false;state.demo=true;
- state.weekly={...data.weekly};state.milestones=data.milestones.map(x=>({...x}));state.created=[...data.created];state.saved=[...data.saved];state.recent=data.recent.map(x=>({...x}));
+ state.weekly={...data.weekly};state.milestones=data.milestones.map(x=>({...x}));state.activity=(data.activity||[]).map(x=>({...x}));state.recommendations=(data.recommendations||[]).map(x=>({...x}));state.created=[...data.created];state.saved=[...data.saved];state.recent=data.recent.map(x=>({...x}));
  emit();return snapshot()
 }
 function persistDemo(){
@@ -40,7 +40,7 @@ async function auth(path,{method='GET',token=null,body=null}={}){return parse(aw
 async function refreshSession(){if(refreshPromise)return refreshPromise;refreshPromise=(async()=>{const s=state.session||readSession();if(!s?.refresh_token)throw Error('Sessão indisponível');const p=await auth('token?grant_type=refresh_token',{method:'POST',body:{refresh_token:s.refresh_token}}),n=normalize(p);if(!n)throw Error('Sessão inválida');saveSession(n);return n})();try{return await refreshPromise}finally{refreshPromise=null}}
 async function token(){let s=state.session||readSession();if(!s)return null;if(Number(s.expires_at||0)<=Math.floor(Date.now()/1000)+60)s=await refreshSession();else saveSession(s);return s.access_token}
 async function invoke(action,payload={}){if(state.demo)throw Error('A conta DEMO não envia alterações ao servidor.');let t=await token();if(!t)throw Error('Entre na sua conta para sincronizar.');let res=await fetchTimed(cfg.url+'/functions/v1/citizen-account',{method:'POST',headers:headers(t,{'Content-Type':'application/json'}),body:JSON.stringify({action,...payload})});if(res.status===401){const s=await refreshSession();t=s.access_token;res=await fetchTimed(cfg.url+'/functions/v1/citizen-account',{method:'POST',headers:headers(t,{'Content-Type':'application/json'}),body:JSON.stringify({action,...payload})})}return parse(res)}
-function applyProfile(data){state.demo=false;state.weekly=null;state.milestones=[];state.created=[];state.saved=[];state.recent=[];state.profile=data?.profile||null;state.preferences=data?.preferences||null;state.follows=(data?.follows||[]).map(x=>x.protocol).filter(Boolean);state.neighborhoods=(data?.neighborhoods||[]).map(x=>x.neighborhood_label).filter(Boolean);state.notifications=Array.isArray(data?.notifications)?data.notifications:[];state.unread=Number(data?.unread)||0;state.status='authenticated';state.error='';state.pendingVerification=false;emit();return snapshot()}
+function applyProfile(data){state.demo=false;state.weekly=null;state.milestones=[];state.activity=[];state.recommendations=[];state.created=[];state.saved=[];state.recent=[];state.profile=data?.profile||null;state.preferences=data?.preferences||null;state.follows=(data?.follows||[]).map(x=>x.protocol).filter(Boolean);state.neighborhoods=(data?.neighborhoods||[]).map(x=>x.neighborhood_label).filter(Boolean);state.notifications=Array.isArray(data?.notifications)?data.notifications:[];state.unread=Number(data?.unread)||0;state.status='authenticated';state.error='';state.pendingVerification=false;emit();return snapshot()}
 async function refreshProfile(){if(state.demo)return applyDemo()||snapshot();if(!state.session&&!readSession())return snapshot();try{return applyProfile(await invoke('profile'))}catch(e){state.error=String(e?.message||e);if(Number(e?.status)===401){saveSession(null);state.user=null;state.profile=null;state.status='anonymous'}else state.status='error';emit();return snapshot()}}
 async function syncLocal(){if(state.demo||state.status!=='authenticated')return snapshot();const C=window.CidadeConectaCitizen,U=window.CidadeConectaUI,protocols=C?.state?.().following||[],neighborhoods=U?.favoriteNames?.()||[];if(protocols.length||neighborhoods.length){await invoke('sync_local',{protocols,neighborhoods});await refreshProfile()}return snapshot()}
 async function init(){state.error='';if(demoActive()&&demoAccount()){saveSession(null);return applyDemo()}if(!configured()){state.status='unconfigured';emit();return snapshot()}const s=readSession();if(!s){state.status='anonymous';emit();return snapshot()}state.session=s;try{const t=await token(),u=await auth('user',{token:t});state.user=u?.user||u;await refreshProfile();await syncLocal()}catch(e){saveSession(null);state.user=null;state.profile=null;state.status='anonymous';state.error=String(e?.message||e);emit()}return snapshot()}
@@ -75,8 +75,12 @@ async function markAll(){
  if(state.demo){const now=new Date().toISOString();state.notifications=state.notifications.map(n=>({...n,read_at:n.read_at||now}));state.unread=0;persistDemo();emit();return{readAll:true}}
  const r=await invoke('mark_all_notifications');await refreshProfile();return r
 }
+function resetDemo(){
+ if(!state.demo)return snapshot();
+ clearDemoState();setDemoActive(true);return applyDemo()||snapshot()
+}
 function demoCredentials(){const d=demoAccount()?.credentials;return d?{email:d.email,password:d.password}:null}
 
 const ready=init();
-window.CidadeConectaAccount=Object.freeze({state:()=>snapshot(),ready,init,refresh:refreshProfile,signIn,signUp,signOut,follow,favorite,savePreferences,markNotification,markAll,syncLocal,invoke,demoCredentials});
+window.CidadeConectaAccount=Object.freeze({state:()=>snapshot(),ready,init,refresh:refreshProfile,signIn,signUp,signOut,follow,favorite,savePreferences,markNotification,markAll,syncLocal,invoke,demoCredentials,resetDemo});
 })();
