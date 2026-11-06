@@ -65,11 +65,14 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(app,/ccBreadcrumbV89/);
  assert.match(app,/O que significa cada status\?/);
  assert.match(app,/STATUS_HELP/);
+ assert.match(app,/resolutionSummaryV90/);
+ assert.match(app,/mapGuideV90/);
+ assert.match(app,/acompanhamento publicado/);
  assert.match(app,/Guia de serviços/);
  assert.match(civic,/--cc83-navy:#0b3f55/);
  assert.match(civic,/homePortalSearchBoxV83/);
  assert.match(html,/cc-institutional-pira-v85/);
- assert.match(html,/institutional-pira-v85\.css\?v=8\.9\.0/);
+ assert.match(html,/institutional-pira-v85\.css\?v=9\.0\.0/);
  assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.1/);
  assert.match(html,/civic-city-news\.js\?v=8\.7\.0/);
  assert.doesNotMatch(html,/logo-gov|marca-gov|bras[aã]o/i);
