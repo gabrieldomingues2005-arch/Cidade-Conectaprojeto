@@ -106,11 +106,22 @@ function updateDemoAccountBar(){
  if(!existing)anchor.parentNode?.insertBefore(bar,anchor);
 }
 function notifyCounter(){const b=$('#notificationBtn');if(!b)return;const a=A?.state?.(),unread=a?.status==='authenticated'?a.unread:C.state().unread;b.setAttribute('aria-label','Notificações'+(unread?', '+unread+' não lidas':', nenhuma não lida'));const n=b.querySelector('[data-notification-count]');if(n){n.textContent=String(unread);n.hidden=!unread}}
+function updateDataFreshness(){
+ const el=$('#homeDataFreshness');if(!el)return;
+ const s=S.state(),at=Number(s.lastSuccess)||0;
+ if(s.status==='loading'&&!at){el.textContent='Atualizando dados públicos…';return}
+ if(s.status==='offline'){el.textContent=at?'Offline · última leitura '+format(new Date(at).toISOString()):'Offline · sem leitura recente';return}
+ if(s.status==='cached'){el.textContent=at?'Dados em cache · última leitura '+format(new Date(at).toISOString()):'Dados em cache';return}
+ if(s.status==='error'){el.textContent=at?'Leitura temporariamente indisponível · última leitura '+format(new Date(at).toISOString()):'Leitura pública temporariamente indisponível';return}
+ if(at){el.textContent='Dados públicos atualizados · '+format(new Date(at).toISOString());return}
+ el.textContent='Leitura pública em preparação';
+}
 function updateCityBar(){
  const host=$('#cityUpdatesBar');if(!host)return;
  const s=S.state(),items=D.feed(s.rows,6);
  const ready=s.status==='live'||s.cached||s.lastSuccess>0||s.rows.length>0;
  host.hidden=false;
+ updateDataFreshness();
  if(!ready&&['idle','loading'].includes(s.status)){host.innerHTML='<div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong><span class="civic-updatebar-status">Carregando leitura pública…</span></div>';return}
  if(!items.length){host.innerHTML='<div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong><span class="civic-updatebar-status">'+(ready?'Ainda não há atualizações públicas reais para mostrar.':'Leitura pública indisponível no momento.')+'</span><a href="#/agora">Cidade Agora →</a></div>';return}
  host.innerHTML='<div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong><div class="civic-updatebar-list" role="list">'+items.map(x=>'<a role="listitem" href="#/ocorrencia/'+encodeURIComponent(x.protocol)+'"><span class="civic-updatebar-dot" aria-hidden="true"></span><span><b>'+esc(x.type==='resolved'?'Problema resolvido':x.type==='created'?'Novo registro':'Status atualizado')+'</b><small>'+esc(D.CATEGORIES[x.category]+' · '+x.bairro)+'</small></span></a>').join('')+'</div><a class="civic-updatebar-all" href="#/noticias">Abrir jornal →</a></div>';
@@ -140,7 +151,7 @@ function enhance(){
  if(location.hash.startsWith('#/registrar')){const name=new URLSearchParams(location.hash.split('?')[1]||'').get('bairro'),input=$('#bairro');if(name&&input&&!input.value&&D.allNeighborhoods(territory).includes(name)){input.value=name;input.dispatchEvent(new Event('input',{bubbles:true}))}}
 }
 async function init(){
- notifyCounter();updateDemoAccountBar();updateCityBar();await meta();enhance();const state=await S.refresh();C.reconcile(state.rows,U.favoriteNames());updateCityBar();updateDemoAccountBar();
+ notifyCounter();updateDemoAccountBar();updateCityBar();updateDataFreshness();await meta();enhance();const state=await S.refresh();C.reconcile(state.rows,U.favoriteNames());updateCityBar();updateDataFreshness();updateDemoAccountBar();
 }
 function scheduleRefresh(){if(refreshScheduled)return;refreshScheduled=true;setTimeout(()=>{refreshScheduled=false;if(document.visibilityState==='visible'&&navigator.onLine)S.refresh()},100)}
 document.addEventListener('click',e=>{
@@ -169,7 +180,7 @@ document.addEventListener('submit',async e=>{
 document.addEventListener('keydown',e=>{if(!dialog)return;if(e.key==='Escape'){e.preventDefault();closeDialog()}if(e.key==='Tab'){const list=[...dialog.el.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex="0"]')].filter(x=>x.getClientRects().length),first=list[0],last=list.at(-1);if(!list.length){e.preventDefault();dialog.el.querySelector('[role=dialog]').focus()}else if(e.shiftKey&&document.activeElement===first||!e.shiftKey&&document.activeElement===last){e.preventDefault();(e.shiftKey?last:first).focus()}}});
 window.addEventListener('cidadeconecta:citizen-state',notifyCounter);
 window.addEventListener('cidadeconecta:account-state',()=>{notifyCounter();updateDemoAccountBar();if(isPersonal()&&!dialog)U.refresh()});
-window.addEventListener('cidadeconecta:public-data',e=>{if(e.detail.status==='loading'){updateCityBar();return}U.acceptPublic(e.detail.rows);C.reconcile(e.detail.rows,U.favoriteNames());updateCityBar();if(dialog||!$('#commandPalette')?.classList.contains('hidden'))return;if(['','bairro','minhas','meu-cidade-conecta',...routes.keys()].some(p=>(location.hash||'#/').split('?')[0]==='#/'+p)&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh()});
+window.addEventListener('cidadeconecta:public-data',e=>{if(e.detail.status==='loading'){updateCityBar();updateDataFreshness();return}U.acceptPublic(e.detail.rows);C.reconcile(e.detail.rows,U.favoriteNames());updateCityBar();updateDataFreshness();if(dialog||!$('#commandPalette')?.classList.contains('hidden'))return;if(['','bairro','minhas','meu-cidade-conecta',...routes.keys()].some(p=>(location.hash||'#/').split('?')[0]==='#/'+p)&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh()});
 window.addEventListener('cidadeconecta:news-data',e=>{if(e.detail.status==='loading')return;const p=(location.hash||'#/').split('?')[0];if(['#/','#/noticias'].includes(p)&&!dialog&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh()});
 window.addEventListener('online',scheduleRefresh);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')scheduleRefresh()});
 window.addEventListener('load',init);setInterval(()=>{if(document.visibilityState==='visible'&&(C.state().following.length||U.favoriteNames().length))S.refresh()},90000);
