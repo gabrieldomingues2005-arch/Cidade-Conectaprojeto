@@ -22,7 +22,9 @@ test('editor de notícias é admin-only e só aceita capa de ocorrência públic
  assert.match(news,/cover\.public_visible!==true\|\|cover\.moderation_status!=="approved"/);
  assert.match(news,/status:"draft"/);
  assert.match(news,/news_published/);
- assert.doesNotMatch(news,/service_role/i);
+ assert.match(news,/Deno\.env\.get\("SUPABASE_SERVICE_ROLE_KEY"\)/);
+ assert.match(news,/createClient\(SUPABASE_URL,SERVICE_ROLE_KEY/);
+ assert.doesNotMatch(news,/reply\([^\n]*SERVICE_ROLE_KEY/);
 });
 
 test('conta cidadã não aceita papéis internos e sincroniza somente protocolos públicos',()=>{
