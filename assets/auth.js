@@ -263,19 +263,29 @@ async function invokeFunction(name,payload){
   }catch(error){
     state.lastError=String(error?.message||error);
     const status=Number(error?.status);
-    if(status===403&&error?.payload?.error==='internal_access_denied'){
-      state.status='denied';
-    }else if(isTransientError(error)||status===403){
-      state.user=null;
-      state.profile=null;
-      state.status='error';
-    }else{
+    const authorizationCritical=name==='admin-occurrences';
+    if(status===401){
       saveSession(null);
       state.user=null;
       state.profile=null;
       state.status='anonymous';
+      emit();
+    }else if(authorizationCritical){
+      if(status===403&&error?.payload?.error==='internal_access_denied'){
+        state.status='denied';
+      }else if(isTransientError(error)||status===403){
+        state.user=null;
+        state.profile=null;
+        state.status='error';
+      }else{
+        saveSession(null);
+        state.user=null;
+        state.profile=null;
+        state.status='anonymous';
+      }
+      emit();
     }
-    emit();throw error;
+    throw error;
   }
 }
 async function invokeForm(name,formData){
@@ -291,9 +301,10 @@ async function invokeForm(name,formData){
     return await parseResponse(response);
   }catch(error){
     state.lastError=String(error?.message||error);const status=Number(error?.status);
-    if(isTransientError(error)||status===403){state.user=null;state.profile=null;state.status=status===403&&error?.payload?.error==='internal_access_denied'?'denied':'error'}
-    else{saveSession(null);state.user=null;state.profile=null;state.status='anonymous'}
-    emit();throw error;
+    if(status===401){
+      saveSession(null);state.user=null;state.profile=null;state.status='anonymous';emit();
+    }
+    throw error;
   }
 }
 async function invokeInternal(payload){return invokeFunction('admin-occurrences',payload)}
