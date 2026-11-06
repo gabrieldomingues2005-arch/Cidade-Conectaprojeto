@@ -6,7 +6,7 @@ const sb=cfg.supabase||{};
 const STORAGE_KEY='cidadeConectaAuthSessionV1';
 const ALLOWED_INTERNAL_ROLES=new Set(['triage','admin']);
 const REQUEST_TIMEOUT_MS=12000;
-const INTERNAL_FUNCTIONS=new Set(['admin-occurrences','admin-news','system-health']);
+const INTERNAL_FUNCTIONS=new Set(['admin-occurrences','admin-news','system-health','municipal-dispatch']);
 const FORM_FUNCTIONS=new Set(['admin-resolution-media']);
 let refreshPromise=null;
 

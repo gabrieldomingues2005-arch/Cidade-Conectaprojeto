@@ -28,10 +28,10 @@ Usar a matriz SWOT como ferramenta de decisão para melhorar o Cidade Conecta se
 | Demonstração muito útil, mas pouco descoberta | Valor do produto fica escondido | **Corrigido v8.2:** link DEMO no aviso superior, Home e busca global |
 | Possível confusão entre registros públicos e demonstrativos | Perda de confiança | **Corrigido v8.2:** selo “Público” ou “Demonstração” nos registros recentes |
 | Atualidade dos dados não estava explícita na Home | Usuário pode interpretar cache como dado atual | **Corrigido v8.2:** indicador de atualização/cache/offline |
-| SPA por hash limita SEO profundo de páginas internas | Menor descoberta orgânica | Futuro: páginas estáticas/SSR para conteúdo editorial prioritário |
+| SPA por hash limita SEO profundo de páginas internas | Menor descoberta orgânica | **Mitigado v8.4:** páginas estáticas indexáveis, canonical, JSON-LD e sitemap para conteúdos prioritários |
 | Navegação principal possui muitas áreas | Sobrecarga cognitiva | Monitorar; priorizar busca global e atalhos por intenção antes de remover rotas |
-| Dependência de Leaflet/tiles/CDNs externos | Mapa degradado quando serviço externo falha | Fallback já existe; futuro: avaliar hospedagem local do Leaflet |
-| Integração municipal oficial ainda não configurada | Fluxo não fecha em sistemas externos | Outbox segura existe; ativar somente com endpoint oficial |
+| Dependência de Leaflet/tiles/CDNs externos | Mapa degradado quando serviço externo falha | **Mitigado v8.4:** UNPKG → jsDelivr → fallback vetorial/lista; hospedagem local completa permanece opcional |
+| Integração municipal oficial ainda não configurada | Fluxo não fecha em sistemas externos | **Preparado v8.4:** adaptador HTTPS allowlisted, Admin-only e fail-closed; ativar somente com endpoint/token oficiais |
 
 ## Oportunidades
 

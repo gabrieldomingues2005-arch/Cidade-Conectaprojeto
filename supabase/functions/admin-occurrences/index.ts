@@ -15,6 +15,9 @@ const OCCURRENCE_STATUSES = new Set(["Recebida", "Em análise", "Encaminhada", "
 const MAX_BODY_BYTES = 16_384;
 const PRIVATE_MEDIA_BUCKET = "occurrence-attachments";
 const PUBLIC_MEDIA_BUCKET = "occurrence-public-media";
+const MUNICIPAL_ADAPTER_URL = (Deno.env.get("MUNICIPAL_ADAPTER_URL") ?? "").trim();
+const MUNICIPAL_ADAPTER_TOKEN = (Deno.env.get("MUNICIPAL_ADAPTER_TOKEN") ?? "").trim();
+const MUNICIPAL_ADAPTER_HOSTS = (Deno.env.get("MUNICIPAL_ADAPTER_HOSTS") ?? "").split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
 const IMAGE_MIMES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 function isAllowedOrigin(origin: string): boolean {
@@ -48,6 +51,15 @@ function clean(value: unknown, max = 120): string {
 }
 function validProtocol(value: string): boolean {
   return /^CC-\d{4}-\d{5}$/.test(value);
+}
+function municipalAdapterConfigured(): boolean {
+  if (!MUNICIPAL_ADAPTER_URL || !MUNICIPAL_ADAPTER_TOKEN || !MUNICIPAL_ADAPTER_HOSTS.length) return false;
+  try {
+    const url = new URL(MUNICIPAL_ADAPTER_URL);
+    return url.protocol === "https:" && MUNICIPAL_ADAPTER_HOSTS.includes(url.hostname.toLowerCase());
+  } catch {
+    return false;
+  }
 }
 function validUuid(value: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
@@ -115,7 +127,7 @@ Deno.serve(async (req: Request) => {
       if (search && ![row.protocol,row.title,row.neighborhood_label,row.responsible_agency].map(v=>String(v??"").toLowerCase()).join(" ").includes(search)) return false;
       return true;
     });
-    return json(origin, 200, { occurrences: rows, total: rows.length, role: profile.role, readOnly: false, operations: OPERATION_ROLES.has(String(profile.role)), mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)), municipalAdapterConfigured: false });
+    return json(origin, 200, { occurrences: rows, total: rows.length, role: profile.role, readOnly: false, operations: OPERATION_ROLES.has(String(profile.role)), mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)), municipalAdapterConfigured: municipalAdapterConfigured() });
   }
 
   const protocol = clean(body.protocol, 32).toUpperCase();
@@ -160,7 +172,7 @@ Deno.serve(async (req: Request) => {
       readOnly: false,
       operations: OPERATION_ROLES.has(String(profile.role)),
       mediaModeration: MEDIA_WRITE_ROLES.has(String(profile.role)),
-      municipalAdapterConfigured: false,
+      municipalAdapterConfigured: municipalAdapterConfigured(),
     });
   }
 
@@ -258,22 +270,30 @@ Deno.serve(async (req: Request) => {
       responsible_agency: occurrence.responsible_agency,
       public_location: occurrence.public_location,
     };
-    const { data: queuedRows, error: queueError } = await admin.rpc("service_prepare_municipal_outbox",{
+    const configured = municipalAdapterConfigured();
+    const adapterKey = configured ? "official-http" : "unconfigured";
+    const { data: queuedRows, error: queueError } = await admin.rpc("service_prepare_municipal_outbox_v2",{
       p_occurrence_id: occurrence.id,
       p_action: dispatchAction,
       p_payload: safePayload,
       p_created_by: profile.id,
+      p_adapter_key: adapterKey,
     });
     const row = Array.isArray(queuedRows) ? queuedRows[0] : queuedRows;
-    if (queueError) return json(origin, 500, { error: "municipal_outbox_failed" });
+    if (queueError || !row?.id) return json(origin, 500, { error: "municipal_outbox_failed" });
     await admin.from("audit_log").insert({
       actor_id: profile.id,
       action: "municipal_dispatch_prepared",
       entity_type: "occurrence",
       entity_id: occurrence.id,
-      metadata: { protocol, outbox_id: row.id, adapter_key: "unconfigured" },
+      metadata: { protocol, outbox_id: row.id, adapter_key: adapterKey },
     });
-    return json(origin, 200, { configured: false, queued: false, reason: "official_adapter_not_configured", outbox: row });
+    return json(origin, 200, {
+      configured,
+      queued: configured,
+      reason: configured ? "dispatch_prepared_requires_explicit_send" : "official_adapter_not_configured",
+      outbox: row,
+    });
   }
 
   if (action === "publish_media") {

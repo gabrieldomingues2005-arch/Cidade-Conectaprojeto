@@ -1,12 +1,15 @@
 {
   "metadata": {
     "title": "Rede municipal de referência — Cidade Conecta Piracicaba",
-    "lastVerified": "2026-09-24",
+    "lastVerified": "2026-11-05",
     "status": "informational-reference",
     "disclaimer": "Mapeamento informativo do protótipo acadêmico. Não representa integração, despacho, protocolo ou roteamento oficial da Prefeitura de Piracicaba.",
     "officialDirectoryUrl": "https://transparencia.piracicaba.sp.gov.br/secretarias/",
     "officialServicesUrl": "https://piracicaba.sp.gov.br/carta-de-servicos/",
-    "official156Url": "https://sempapel.pmp.sp.gov.br/156/"
+    "official156Url": "https://sistemas.pmp.sp.gov.br/smg/SIP156/blank_inicial/",
+    "officialPortalUrl": "https://piracicaba.sp.gov.br/",
+    "integrationStatus": "not-configured",
+    "integrationNote": "Não foi localizada documentação pública de API de escrita para integração automática. O Cidade Conecta mantém o despacho externo desativado até existir endpoint oficial e autorização."
   },
   "flow": [
     {
@@ -312,5 +315,32 @@
     "Fundação Municipal de Ensino – FUMEP",
     "Instituto de Previdência e Assistência Social dos Funcionários Municipais de Piracicaba – IPASP",
     "Serviço Municipal de Água e Esgoto – SEMAE"
+  ],
+  "officialChannels": [
+    {
+      "id": "sip156",
+      "name": "Serviço de Informações à População – SIP 156",
+      "kind": "solicitações e reclamações",
+      "url": "https://sistemas.pmp.sp.gov.br/smg/SIP156/blank_inicial/",
+      "phone": "156",
+      "availability": "Online 24h; telefone em horário informado pela Carta de Serviços",
+      "source": "Carta de Serviços da Prefeitura de Piracicaba"
+    },
+    {
+      "id": "carta-servicos",
+      "name": "Carta de Serviços",
+      "kind": "orientações e serviços municipais",
+      "url": "https://piracicaba.sp.gov.br/carta-de-servicos/",
+      "availability": "Portal oficial",
+      "source": "Portal do Município de Piracicaba"
+    },
+    {
+      "id": "portal",
+      "name": "Portal do Município de Piracicaba",
+      "kind": "notícias, serviços e consultas",
+      "url": "https://piracicaba.sp.gov.br/",
+      "availability": "Portal oficial",
+      "source": "Prefeitura Municipal de Piracicaba"
+    }
   ]
 }

@@ -51,3 +51,14 @@ test('navegação anuncia mudança de rota para tecnologia assistiva',()=>{
  assert.match(html,/aria-live="polite"/);
  assert.match(app,/routeAnnouncer/);
 });
+
+test('estética institucional preserva identidade própria e aviso independente',()=>{
+ const html=read('index.html'),app=read('assets/app.js'),civic=read('assets/civic.css');
+ assert.match(html,/cc-institutional-v83/);
+ assert.match(html,/Protótipo acadêmico independente/);
+ assert.match(app,/O que você procura\?/);
+ assert.match(app,/Serviços e informações da cidade/);
+ assert.match(civic,/--cc83-navy:#0b3f55/);
+ assert.match(civic,/homePortalSearchBoxV83/);
+ assert.doesNotMatch(html,/logo-gov|marca-gov|bras[aã]o/i);
+});

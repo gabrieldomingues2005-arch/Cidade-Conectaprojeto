@@ -3,10 +3,14 @@ import { createClient } from "npm:@supabase/supabase-js@2.117.3";
 
 const SUPABASE_URL=Deno.env.get("SUPABASE_URL")??"";
 const SERVICE_ROLE_KEY=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"";
+const MUNICIPAL_ADAPTER_URL=(Deno.env.get("MUNICIPAL_ADAPTER_URL")??"").trim();
+const MUNICIPAL_ADAPTER_TOKEN=(Deno.env.get("MUNICIPAL_ADAPTER_TOKEN")??"").trim();
+const MUNICIPAL_ADAPTER_HOSTS=(Deno.env.get("MUNICIPAL_ADAPTER_HOSTS")??"").split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
 const ORIGINS=new Set(["https://gabrieldomingues2005-arch.github.io","https://cidconecta-nztptuci.manus.space"]);
 const allowedOrigin=(o:string)=>ORIGINS.has(o)||/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
 const cors=(o:string)=>({"Access-Control-Allow-Origin":allowedOrigin(o)?o:"https://gabrieldomingues2005-arch.github.io","Access-Control-Allow-Headers":"authorization,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS","Vary":"Origin"});
 const reply=(o:string,s:number,b:Record<string,unknown>)=>new Response(JSON.stringify(b),{status:s,headers:{...cors(o),"Content-Type":"application/json","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}});
+const municipalAdapterConfigured=()=>{if(!MUNICIPAL_ADAPTER_URL||!MUNICIPAL_ADAPTER_TOKEN||!MUNICIPAL_ADAPTER_HOSTS.length)return false;try{const u=new URL(MUNICIPAL_ADAPTER_URL);return u.protocol==="https:"&&MUNICIPAL_ADAPTER_HOSTS.includes(u.hostname.toLowerCase())}catch{return false}};
 
 Deno.serve(async req=>{
   const origin=req.headers.get("origin")??"";
@@ -42,10 +46,10 @@ Deno.serve(async req=>{
     database:{reachable:!occurrences.error,total:occurrences.count??occurrenceRows.length,pendingModeration:occurrenceRows.filter((x:any)=>x.moderation_status==="pending").length,resolved:occurrenceRows.filter((x:any)=>x.status==="Resolvida").length},
     news:{reachable:!news.error,drafts:newsRows.filter((x:any)=>x.status==="draft").length,published:newsRows.filter((x:any)=>x.status==="published").length},
     notifications:{reachable:!notifications.error,total:notifications.count??notificationRows.length,unreadInSample:notificationRows.filter((x:any)=>!x.read_at).length},
-    municipalIntegration:{configured:false,adapter:"unconfigured",queued:municipalCounts.pending||0,failed:municipalCounts.failed||0,disabled:municipalCounts.disabled||0},
+    municipalIntegration:{configured:municipalAdapterConfigured(),adapter:municipalAdapterConfigured()?"official-http":"unconfigured",queued:municipalCounts.pending||0,failed:municipalCounts.failed||0,disabled:municipalCounts.disabled||0},
     storage:{reachable:!buckets.error,requiredBuckets:["occurrence-attachments","occurrence-public-media"],present:(buckets.data??[]).filter((b:any)=>["occurrence-attachments","occurrence-public-media"].includes(b.id)).map((b:any)=>b.id)},
     edge:{reachable:true,function:"system-health"},
   };
-  await admin.rpc("service_record_health_event",{p_component:"system-health",p_status:status,p_latency_ms:latency,p_metadata:{database:!occurrences.error,news:!news.error,notifications:!notifications.error,storage:!buckets.error,municipal_adapter:"unconfigured"}});
+  await admin.rpc("service_record_health_event",{p_component:"system-health",p_status:status,p_latency_ms:latency,p_metadata:{database:!occurrences.error,news:!news.error,notifications:!notifications.error,storage:!buckets.error,municipal_adapter:municipalAdapterConfigured()?"official-http":"unconfigured"}});
   return reply(origin,status==="ok"?200:207,snapshot);
 });

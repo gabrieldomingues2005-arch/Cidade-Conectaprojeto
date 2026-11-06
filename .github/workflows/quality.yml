@@ -34,6 +34,7 @@ jobs:
           node --check assets/piracicaba-data.js
           node --check assets/piracicaba-mapas.js
           node --check assets/privacy-geo.js
+          node --check assets/map-resilience.js
           node --check assets/site-enhancements.js
           node --check sw.js
           node --check scripts/validate-project.mjs
@@ -61,13 +62,15 @@ jobs:
           node --check scripts/test-civic-store.mjs
           node --check scripts/test-civic-account.mjs
           node --check scripts/test-operational-edges.mjs
+          node --check scripts/test-map-resilience.mjs
+          node --check scripts/test-seo.mjs
           node --check scripts/validate-recovery.mjs
 
       - name: Validar smoke test de UI
         run: bash -n scripts/smoke-ui.sh
 
       - name: Testar autenticação, Edge e Service Worker
-        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-design.mjs scripts/test-civic-data.mjs scripts/test-civic-store.mjs scripts/test-civic-account.mjs scripts/test-civic-pages.mjs scripts/test-community.mjs scripts/test-operational-edges.mjs scripts/test-pwa-assets.mjs
+        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-design.mjs scripts/test-civic-data.mjs scripts/test-civic-store.mjs scripts/test-civic-account.mjs scripts/test-civic-pages.mjs scripts/test-community.mjs scripts/test-operational-edges.mjs scripts/test-map-resilience.mjs scripts/test-seo.mjs scripts/test-pwa-assets.mjs
 
       - name: Verificar privacidade do cliente
         run: node scripts/qa-client-privacy.mjs
@@ -127,7 +130,7 @@ jobs:
           cp assets/civic*.js assets/civic.css artifacts/claude-ui/assets/
           cp -R assets/vendor assets/icons artifacts/claude-ui/assets/
           cp assets/piracicaba.js assets/piracicaba.css assets/piracicaba-data.js artifacts/claude-ui/assets/
-          cp assets/piracicaba-mapas.js assets/piracicaba-mapas.css assets/privacy-geo.js artifacts/claude-ui/assets/
+          cp assets/piracicaba-mapas.js assets/piracicaba-mapas.css assets/privacy-geo.js assets/map-resilience.js assets/seo-landing.css artifacts/claude-ui/assets/
           cp assets/supabase-bridge.js assets/auth.js assets/brand-mark-v51.svg artifacts/claude-ui/assets/
           cp data/piracicaba.json data/municipal-network.json artifacts/claude-ui/data/
           cp docs/UI-UX-V57.md docs/MAP-UX-V571.md docs/CLAUDE-UI-HANDOFF.md artifacts/claude-ui/docs/
