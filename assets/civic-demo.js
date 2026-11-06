@@ -19,10 +19,57 @@ const rows=[
  {protocol:'DEMO-2026-00012',title:'Reparo de sinalização segue em andamento',description:'Exemplo fictício de atualização ainda aberta.',category:'sinalizacao',bairro:'Morumbi',status:'Em andamento',agency:'Trânsito · DEMO',created:iso(6),updated:iso(0,4),lat:-22.741,lng:-47.624,cloudOrigin:true,moderationStatus:'approved',public:true,demoImage:image('sinalizacao','Ilustração fictícia de sinalização viária para demonstração'),history:[{status:'Recebida',date:iso(6),note:'Registro fictício.'},{status:'Encaminhada',date:iso(4),note:'Encaminhamento fictício.'},{status:'Em andamento',date:iso(0,4),note:'Manutenção fictícia em andamento.'}]}
 ];
 const profile={
- id:'demo-ana-costa',name:'Ana Costa',handle:'@ana.demo',initials:'AC',role:'Moradora fictícia · Perfil de demonstração',
- bio:'Perfil totalmente fictício criado para apresentar como o Cidade Conecta pode organizar participação, acompanhamento de bairros, notícias e histórico de ocorrências.',
- neighborhoods:['Centro','Vila Rezende','Paulista'],since:'2026',following:8,reports:5,resolved:3,
- badges:['Perfil DEMO','Participação fictícia','Dados não reais']
+ id:'demo-gabriel-cidade',name:'Gabriel Demo',handle:'@gabriel.demo',initials:'GD',role:'Morador fictício · Conta de demonstração',
+ bio:'Perfil totalmente fictício criado para apresentar a experiência completa do Cidade Conecta: acompanhamento, bairros favoritos, notificações, histórico e jornal.',
+ neighborhoods:['Centro','Vila Rezende','Paulista','Piracicamirim'],since:'2026',following:7,reports:5,resolved:4,
+ badges:['Conta DEMO','Participação fictícia','Dados não reais','Apresentação do produto']
+};
+const account={
+ credentials:{email:'gabriel.demo@cidadeconecta.local',password:'CidadeConecta2026!'},
+ profile:{id:'demo-gabriel-cidade',name:'Gabriel Demo',role:'citizen',created_at:iso(62)},
+ preferences:{display_name:'Gabriel Demo',sync_enabled:false,notify_occurrences:true,notify_neighborhoods:true,digest_frequency:'weekly',updated_at:iso(0,1)},
+ follows:['DEMO-2026-00001','DEMO-2026-00002','DEMO-2026-00003','DEMO-2026-00004','DEMO-2026-00005','DEMO-2026-00008','DEMO-2026-00012'],
+ neighborhoods:['Centro','Vila Rezende','Paulista','Piracicamirim'],
+ created:['DEMO-2026-00001','DEMO-2026-00003','DEMO-2026-00005','DEMO-2026-00008','DEMO-2026-00010'],
+ saved:['DEMO-2026-00002','DEMO-2026-00004','DEMO-2026-00007','DEMO-2026-00011'],
+ recent:[
+  {kind:'protocol',value:'DEMO-2026-00012',at:Date.parse(iso(0,2))},
+  {kind:'bairro',value:'Centro',at:Date.parse(iso(0,4))},
+  {kind:'protocol',value:'DEMO-2026-00001',at:Date.parse(iso(1,1))},
+  {kind:'bairro',value:'Vila Rezende',at:Date.parse(iso(1,3))}
+ ],
+ notifications:[
+  {id:'demo-notice-01',type:'occurrence_update',protocol:'DEMO-2026-00012',neighborhood_label:'Morumbi',title:'Ocorrência atualizada',body:'Reparo de sinalização segue em andamento · nova atualização fictícia publicada.',created_at:iso(0,4),read_at:null},
+  {id:'demo-notice-02',type:'neighborhood_update',protocol:'DEMO-2026-00010',neighborhood_label:'Centro',title:'Atualização no bairro',body:'Trecho de calçada entrou em análise no Centro.',created_at:iso(0,3),read_at:null},
+  {id:'demo-notice-03',type:'occurrence_update',protocol:'DEMO-2026-00008',neighborhood_label:'Jardim Monumento',title:'Ocorrência encaminhada',body:'Vazamento fictício foi encaminhado para avaliação.',created_at:iso(0,2),read_at:null},
+  {id:'demo-notice-04',type:'occurrence_resolved',protocol:'DEMO-2026-00001',neighborhood_label:'Vila Rezende',title:'Problema resolvido',body:'Iluminação restaurada em praça de bairro.',created_at:iso(1),read_at:iso(0,5)},
+  {id:'demo-notice-05',type:'occurrence_resolved',protocol:'DEMO-2026-00002',neighborhood_label:'Centro',title:'Problema resolvido',body:'Reparo demonstrativo em via foi concluído.',created_at:iso(2),read_at:iso(1,2)},
+  {id:'demo-notice-06',type:'neighborhood_update',protocol:'DEMO-2026-00004',neighborhood_label:'Paulista',title:'Resultado no bairro',body:'Sinalização fictícia de travessia foi atualizada.',created_at:iso(3),read_at:iso(2,3)},
+  {id:'demo-notice-07',type:'occurrence_update',protocol:'DEMO-2026-00003',neighborhood_label:'Santa Terezinha',title:'Atendimento iniciado',body:'Coleta de resíduos fictícia entrou em atendimento.',created_at:iso(1,2),read_at:iso(0,6)},
+  {id:'demo-notice-08',type:'system',protocol:null,neighborhood_label:null,title:'Resumo semanal disponível',body:'Seu resumo DEMO reúne bairros acompanhados, resoluções e atualizações recentes.',created_at:iso(0,1),read_at:null}
+ ],
+ weekly:{
+  period:'Últimos 7 dias',updates:8,resolved:3,newInNeighborhoods:4,followedActive:4,
+  headline:'Sua semana fictícia teve 8 atualizações e 3 resoluções.',
+  message:'Centro e Vila Rezende concentraram as principais movimentações do perfil DEMO nesta edição.'
+ },
+ milestones:[
+  {label:'5 registros fictícios criados',detail:'Exemplos em iluminação, resíduos, drenagem, água e acessibilidade.'},
+  {label:'4 bairros acompanhados',detail:'Centro, Vila Rezende, Paulista e Piracicamirim.'},
+  {label:'4 resoluções acompanhadas',detail:'Históricos completos disponíveis no jornal DEMO.'}
+ ],
+ activity:[
+  {date:iso(0,1),type:'Resumo',title:'Resumo semanal gerado',detail:'8 atualizações fictícias organizadas para o perfil.'},
+  {date:iso(0,3),type:'Bairro',title:'Centro recebeu nova atualização',detail:'Trecho de calçada entrou em análise.'},
+  {date:iso(0,4),type:'Acompanhamento',title:'Sinalização segue em atendimento',detail:'O protocolo DEMO-2026-00012 recebeu nova movimentação.'},
+  {date:iso(1),type:'Resolução',title:'Iluminação marcada como resolvida',detail:'A ocorrência da Vila Rezende foi concluída na demonstração.'},
+  {date:iso(2),type:'Resolução',title:'Reparo viário concluído',detail:'A ocorrência fictícia do Centro foi resolvida.'}
+ ],
+ recommendations:[
+  {title:'Revisar ocorrências ainda abertas',detail:'Há registros fictícios em análise, encaminhados e em andamento.',href:'#/minhas?tab=acompanhando',action:'Ver acompanhamentos'},
+  {title:'Acompanhar o Centro',detail:'Seu bairro favorito tem atualizações recentes na demonstração.',href:'#/noticias?demo=1&bairro=Centro',action:'Abrir notícias'},
+  {title:'Conhecer os resultados',detail:'Veja os casos resolvidos e como aparecem no jornal cívico.',href:'#/noticias?demo=1&tipo=resolvidas',action:'Ver resolvidos'}
+ ]
 };
 function feed(input=rows,limit=60){
  const items=[];
@@ -36,5 +83,5 @@ function filter(params){
  const q=params instanceof URLSearchParams?params:new URLSearchParams(params||'');
  return rows.filter(o=>(!q.get('category')||o.category===q.get('category'))&&(!q.get('bairro')||o.bairro===q.get('bairro'))&&(!q.get('status')||o.status===q.get('status')));
 }
-window.CidadeConectaDemo=Object.freeze({profile,rows,feed,filter});
+window.CidadeConectaDemo=Object.freeze({profile,account,rows,feed,filter});
 })();
