@@ -19,3 +19,5 @@ test('PWA cacheia o módulo local de resiliência',()=>{
  assert.match(sw,/\.\/assets\/map-resilience\.js/);
  assert.match(sw,/\.\/assets\/map-resilience\.js\?v=1\.0\.0/);
 });
+
+test('wrapper tolera tile layer parcial sem addTo',()=>{assert.match(source,/typeof layer\.addTo===\'function\'/);assert.match(source,/originalAdd\?originalAdd\(m\):layer/);});
