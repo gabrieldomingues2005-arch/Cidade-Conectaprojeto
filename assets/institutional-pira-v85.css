@@ -566,3 +566,25 @@ html {scroll-padding-block:calc(var(--cc-sticky-top,0px) + .5rem) calc(var(--cc-
  .cc-institutional-pira-v85 :focus-visible {outline-color:Highlight}
 }
 .networkAgencyCardV54[hidden] {display:none}
+
+
+/* DEMO 8.6 — perfil preenchido + fotografias reais licenciadas */
+.civic-demo-photo-credit{display:block;margin-top:.35rem;font-size:.72rem;line-height:1.35;color:inherit;opacity:.86}
+.civic-demo-photo-credit b{font-weight:800}
+.civic-demo-photo-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.civic-demo-stories{margin-block:var(--cc6-space-6)}
+.civic-demo-story-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--cc6-space-4)}
+.civic-demo-story{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--cc6-line);border-radius:var(--cc6-radius-lg);background:var(--cc6-surface);box-shadow:var(--cc6-shadow-1)}
+.civic-demo-story>.civic-news-cover{margin:0;border-radius:0;min-height:180px}
+.civic-demo-story>div{display:grid;gap:.45rem;padding:var(--cc6-space-4)}
+.civic-demo-story h3{font-size:1.08rem;line-height:1.25;margin:0}
+.civic-demo-story p{margin:0;color:var(--cc6-text-muted)}
+.civic-demo-account-stats .civic-mini-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin-block:1rem}
+.civic-demo-account-stats .civic-mini-metrics span{display:grid;padding:.75rem;border-radius:var(--cc6-radius-md);background:var(--cc6-surface-soft)}
+.civic-demo-account-stats .civic-mini-metrics b{font-size:1.45rem;color:var(--cc6-brand)}
+.civic-demo-photo-sources{display:grid;gap:.5rem;margin-top:1rem}
+.civic-demo-photo-sources a{display:flex;justify-content:space-between;gap:1rem;padding:.65rem .75rem;border:1px solid var(--cc6-line);border-radius:var(--cc6-radius-md);text-decoration:none}
+.civic-demo-photo-sources a:hover{text-decoration:none;border-color:var(--cc6-brand)}
+.civic-demo-photo-sources span{font-size:.78rem;color:var(--cc6-text-muted)}
+@media(max-width:1050px){.civic-demo-story-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.civic-demo-story-grid{grid-template-columns:1fr}.civic-demo-story>.civic-news-cover{min-height:210px}.civic-demo-photo-sources a{align-items:flex-start;flex-direction:column;gap:.15rem}}
