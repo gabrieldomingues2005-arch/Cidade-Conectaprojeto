@@ -89,7 +89,7 @@ function enhance(){
     block.innerHTML='<div class="civic-news-section-head"><h2>Antes e depois</h2><span class="miniLabel">Imagens públicas moderadas</span></div><div class="civic-before-after-grid"><figure><img src="'+esc(o.media.url)+'" alt="'+esc(o.media.alt||'Imagem pública anterior à resolução')+'" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption><b>Antes</b><span>Registro inicial moderado</span></figcaption></figure><figure><img src="'+esc(o.resolutionMedia.url)+'" alt="'+esc(o.resolutionMedia.alt||'Imagem pública após a resolução')+'" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption><b>Depois</b><span>Resultado publicado</span></figcaption></figure></div><p class="small muted">As duas imagens foram moderadas e pertencem ao mesmo protocolo.</p>';
     detail.append(block);
   }
-
+ }
  for(const detail of root.querySelectorAll('.detailV52')){
   if(detail.querySelector('.civic-follow-detail'))continue;const protocol=detail.querySelector('.eyebrow')?.textContent?.trim(),o=publicRecord(protocol);
   if(D.validProtocol(protocol)){C.recent('protocol',protocol);if(o){const box=document.createElement('div');box.className='civic-follow-detail';box.innerHTML=followButton(o)+'<span class="small muted">Acompanhe atualizações públicas neste aparelho.</span>';detail.querySelector('.detailActionsV52')?.append(box)}}
