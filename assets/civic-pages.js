@@ -30,6 +30,17 @@ function newsVisual(category,label='',media=null){
 }
 function newsHeadline(x){return x.type==='resolved'?'Problema resolvido em '+x.bairro:x.type==='created'?'Novo registro público em '+x.bairro:D.CATEGORIES[x.category]+' em '+x.bairro+' mudou para '+x.status}
 function newsType(x){return x.type==='resolved'?'resolvidas':x.type==='created'?'novos':'atualizacoes'}
+function cityNewsSection(){
+ const City=window.CidadeConectaCityNews;if(!City)return '';
+ const agenda=City.agenda||[],gallery=City.gallery||[];
+ const photo=(item,cls='')=>`<figure class="civic-city-photo ${cls}"><img src="${e(item.image.url)}" alt="${e(item.image.alt||item.title||'Piracicaba')}" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption><b>${e(item.title||item.image.alt||'Piracicaba')}</b>${item.subtitle?`<span>${e(item.subtitle)}</span>`:''}<small>Foto: <a href="${e(item.image.source)}" target="_blank" rel="noopener noreferrer">${e(item.image.credit)}</a> · ${e(item.image.license)}</small></figcaption></figure>`;
+ return `<section class="civic-city-news" aria-labelledby="cityAgendaTitle">
+  <div class="civic-news-section-head civic-city-news-head"><div><span class="miniLabel">Agenda real da cidade</span><h2 id="cityAgendaTitle">Acontece em Piracicaba</h2><p>Eventos e atividades locais reunidos de fontes públicas. Confirme programação, inscrições e alterações no link de origem.</p></div><a class="btn secondary smallBtn" href="${e(City.agendaSource)}" target="_blank" rel="noopener noreferrer">Ver agenda de origem ↗</a></div>
+  <div class="civic-city-agenda-grid">${agenda.map(item=>`<article class="civic-city-agenda-card">${photo(item,'civic-city-agenda-photo')}<div class="civic-city-agenda-copy"><div class="civic-city-date"><b>${e(item.dateLabel)}</b><span>${e(item.time)}</span></div><span class="miniLabel">${e(item.category)}</span><h3>${e(item.title)}</h3><p>${e(item.summary)}</p><div class="civic-city-agenda-meta"><span>${e(item.place)}</span><small>Fonte: ${e(item.sourceLabel)}</small></div><a class="miniLink" href="${e(item.url)}" target="_blank" rel="noopener noreferrer">Ver informações na fonte →</a></div></article>`).join('')}</div>
+  <div class="civic-news-section-head civic-city-gallery-head"><div><span class="miniLabel">Piracicaba em imagens</span><h2>Uma cidade que também conta histórias pela paisagem</h2><p>Fotografias reais da cidade com crédito e licença aberta, usadas para dar contexto visual ao jornal.</p></div><span class="miniLabel">${e(City.updatedLabel)}</span></div>
+  <div class="civic-city-gallery">${gallery.map(item=>photo(item,'civic-city-gallery-photo')).join('')}</div>
+ </section>`;
+}
 function mediaCredit(media){
  if(!media?.real)return '';
  return `<small class="civic-demo-photo-credit"><b>Foto real ilustrativa</b> · não representa a ocorrência fictícia. <a href="${e(media.source)}" target="_blank" rel="noopener noreferrer">${e(media.credit)}</a> · ${e(media.license)}</small>`;
@@ -96,6 +107,7 @@ function news(q){
  ${profile}
  ${editorialHtml}
  ${demoStoriesHtml}
+ ${cityNewsSection()}
  <nav class="civic-news-tabs" aria-label="Seções do jornal">${tab('todas','Destaques')}${tab('novos','Novos registros')}${tab('atualizacoes','Atualizações')}${tab('resolvidas','Resolvidos')}</nav>
  <div class="civic-news-rule" aria-hidden="true"></div>
  <section class="civic-news-grid" aria-label="Destaques do noticiário">${leadHtml}<aside class="civic-news-brief"><span class="miniLabel">${demo?'Números fictícios':'Cidade em números'}</span><div><b>${n(m.today)}</b><span>novos hoje</span></div><div><b>${n(m.open)}</b><span>em aberto</span></div><div><b>${n(m.resolved)}</b><span>resolvidos no recorte</span></div>${demo?'<a class="miniLink" href="#/perfil-demo">Conhecer o perfil DEMO →</a>':'<a class="miniLink" href="#/dashboard">Abrir Pulso da Cidade →</a>'}</aside></section>
