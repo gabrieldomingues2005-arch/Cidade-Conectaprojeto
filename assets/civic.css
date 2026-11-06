@@ -403,3 +403,79 @@
 .recentSourceV82 .isPublic{background:var(--cc6-success-bg);color:var(--cc6-success)}
 .recentSourceV82 .isDemo{background:#fff3c6;color:#72550c}
 .recentSourceV82 small{color:var(--cc6-muted);font-size:.68rem}
+
+
+/* V8.3 — estética institucional inspirada em portais públicos brasileiros,
+   preservando identidade própria e o aviso de projeto acadêmico independente. */
+.cc-institutional-v83{
+ --cc83-navy:#0b3f55;
+ --cc83-blue:#146b83;
+ --cc83-blue-soft:#eaf5f7;
+ --cc83-green:#0a6761;
+ --cc83-lime:#bfe650;
+ --cc83-cream:#fbfaf4;
+ --cc83-line:#d8e2e4;
+ --cc83-ink:#183236;
+}
+.cc-institutional-v83 .top{background:#fff;border-top:4px solid var(--cc83-navy);border-bottom:1px solid var(--cc83-line);box-shadow:0 2px 12px rgba(10,63,85,.06)}
+.cc-institutional-v83 .topin{min-height:76px}
+.cc-institutional-v83 .brandAsset{filter:saturate(.9)}
+.cc-institutional-v83 .brandWord{letter-spacing:-.02em;color:var(--cc83-navy)}
+.cc-institutional-v83 .brandWord small{font-size:.68rem;letter-spacing:.02em;color:#536b70;font-weight:650}
+.cc-institutional-v83 .nav a{font-size:.78rem;font-weight:760;border-radius:5px;min-height:42px;padding:0 10px;color:#294b51}
+.cc-institutional-v83 .nav a:hover,.cc-institutional-v83 .nav a:focus-visible{background:#eef6f7;color:var(--cc83-navy)}
+.cc-institutional-v83 .nav a.active{background:transparent;color:var(--cc83-navy);box-shadow:inset 0 -3px 0 var(--cc83-lime)}
+.cc-institutional-v83 .commandTriggerV53{border-color:#bfd0d3;background:#fff}
+.cc-institutional-v83 .cityBand{background:var(--cc83-navy);color:#fff;border:0}
+.cc-institutional-v83 .cityBandIn{min-height:42px}
+.cc-institutional-v83 .cityPlace{font-weight:750;letter-spacing:.01em}
+.cc-institutional-v83 .cityBandLinksV54 a{color:#edfafa;text-decoration:none;font-size:.72rem}
+.cc-institutional-v83 .cityBandLinksV54 a:hover,.cc-institutional-v83 .cityBandLinksV54 a:focus-visible{text-decoration:underline;text-underline-offset:4px}
+.cc-institutional-v83 .cityOfficialShortcut{padding-left:12px;border-left:1px solid #ffffff55;font-weight:800}
+.cc-institutional-v83 .demo{background:#fff7d7;border-bottom:1px solid #e6ce7a;color:#503f11}
+.cc-institutional-v83 .heroV53{background:linear-gradient(180deg,#f4f9f9 0%,#fbfaf4 100%)}
+.cc-institutional-v83 .heroCopy .eyebrow,.cc-institutional-v83 .homeInstitutionalKickerV83{color:var(--cc83-green);font-weight:850;letter-spacing:.065em;text-transform:uppercase}
+.cc-institutional-v83 .heroCopy h1{color:var(--cc83-navy);letter-spacing:-.045em}
+.cc-institutional-v83 .heroCopy h1 span{color:var(--cc83-green)}
+.cc-institutional-v83 .btn.primary{background:var(--cc83-navy);border-color:var(--cc83-navy)}
+.cc-institutional-v83 .btn.primary:hover,.cc-institutional-v83 .btn.primary:focus-visible{background:#082f40;border-color:#082f40}
+.cc-institutional-v83 .btn.secondary{border-color:#92adb2;color:var(--cc83-navy);background:#fff}
+.cc-institutional-v83 .heroPanelLive{border-top:4px solid var(--cc83-lime);background:#fff}
+.homePortalGatewayV83{padding:24px 0 8px;background:var(--cc83-cream,#fbfaf4)}
+.homePortalGatewayV83>.wrap{display:grid;gap:14px}
+.homePortalSearchBoxV83{display:grid;gap:16px;padding:26px 28px;border:1px solid #cfdcde;border-radius:10px;background:#fff;box-shadow:0 8px 24px rgba(11,63,85,.06)}
+.homePortalSearchBoxV83 h2{margin:.18rem 0 .25rem;font-size:clamp(1.55rem,3vw,2.25rem);color:var(--cc83-navy,#0b3f55)}
+.homePortalSearchBoxV83 p{margin:0;color:#5c7074}
+.homeInstitutionalKickerV83{font-size:.68rem}
+.homePortalSearchInputV83{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;border:2px solid #88aeb5;border-radius:7px;padding:5px 5px 5px 14px;background:#fff;transition:border-color .16s ease,box-shadow .16s ease}
+.homePortalSearchInputV83:focus-within{border-color:var(--cc83-blue,#146b83);box-shadow:0 0 0 3px rgba(20,107,131,.14)}
+.homePortalSearchInputV83>span{display:grid;place-items:center;color:var(--cc83-blue,#146b83)}
+.homePortalSearchInputV83 .uiIcon{width:22px;height:22px}
+.homePortalSearchInputV83 input{min-width:0;width:100%;min-height:48px;border:0!important;outline:0!important;box-shadow:none!important;background:transparent;font-size:1rem}
+.homePortalSearchInputV83 button{min-height:46px;padding:0 20px;border:0;border-radius:5px;background:var(--cc83-navy,#0b3f55);color:#fff;font:inherit;font-weight:800;cursor:pointer}
+.homePortalSearchInputV83 button:hover,.homePortalSearchInputV83 button:focus-visible{background:#082f40;outline:3px solid rgba(20,107,131,.18);outline-offset:2px}
+.homePortalPopularV83{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.homePortalPopularV83>span{font-size:.7rem;font-weight:800;color:#63777b}
+.homePortalPopularV83 button{min-height:34px;padding:5px 10px;border:1px solid #c8d7d9;border-radius:999px;background:#f8fbfb;color:#284c52;font:inherit;font-size:.7rem;font-weight:700;cursor:pointer}
+.homePortalPopularV83 button:hover,.homePortalPopularV83 button:focus-visible{border-color:#7fa7ae;background:#eaf5f7;color:var(--cc83-navy,#0b3f55)}
+.homePublicServiceStripV83{display:grid;grid-template-columns:1.1fr repeat(4,minmax(0,1fr));align-items:stretch;border:1px solid #d2dee0;border-radius:9px;background:#fff;overflow:hidden}
+.homePublicServiceStripV83>div{padding:14px 16px;background:#eef6f7;border-right:1px solid #d2dee0}
+.homePublicServiceStripV83>div b{display:block;margin-top:3px;color:var(--cc83-navy,#0b3f55)}
+.homePublicServiceStripV83>a{display:flex;align-items:center;gap:8px;justify-content:center;padding:14px 12px;border-right:1px solid #d2dee0;color:#254a50;text-decoration:none;font-size:.76rem;font-weight:780;text-align:center}
+.homePublicServiceStripV83>a:last-child{border-right:0}
+.homePublicServiceStripV83>a:hover,.homePublicServiceStripV83>a:focus-visible{background:#f2f8f8;color:var(--cc83-navy,#0b3f55)}
+.homePublicServiceStripV83 .uiIcon{width:18px;height:18px;flex:none}
+.cc-institutional-v83 .homeIntentV82{background:#fff}
+.cc-institutional-v83 .homeIntentGridV82>a{border-radius:8px;box-shadow:none;border-color:#d3dfe1}
+.cc-institutional-v83 .homeIntentGridV82>a:hover,.cc-institutional-v83 .homeIntentGridV82>a:focus-visible{box-shadow:0 8px 18px rgba(11,63,85,.08);border-color:#8fb0b6}
+.cc-institutional-v83 .homeIntentDemoV82{background:#fffaf0!important}
+.cc-institutional-v83 .titleRow h2,.cc-institutional-v83 .pageHero h1,.cc-institutional-v83 .civic-public h1{letter-spacing:-.025em;color:var(--cc83-navy)}
+.cc-institutional-v83 .card{border-color:#d5e0e2}
+.cc-institutional-v83 footer{background:#0b3445;color:#e9f5f6}
+.cc-institutional-v83 footer a{color:#d8f5f4}
+.cc-institutional-v83 footer .version{color:#aac5c9}
+.cc-institutional-v83 .mobileActions{border-top-color:#bfd0d3}
+@media(max-width:1100px){.homePublicServiceStripV83{grid-template-columns:1fr 1fr 1fr}.homePublicServiceStripV83>div{grid-column:1/-1;border-right:0;border-bottom:1px solid #d2dee0}.homePublicServiceStripV83>a{border-bottom:1px solid #d2dee0}.homePublicServiceStripV83>a:nth-last-child(-n+2){border-bottom:0}}
+@media(max-width:680px){.homePortalGatewayV83{padding-top:14px}.homePortalSearchBoxV83{padding:20px 16px}.homePortalSearchInputV83{grid-template-columns:auto minmax(0,1fr)}.homePortalSearchInputV83 button{grid-column:1/-1;width:100%}.homePublicServiceStripV83{grid-template-columns:1fr 1fr}.homePublicServiceStripV83>a{justify-content:flex-start;text-align:left}.cc-institutional-v83 .cityBandLinksV54{gap:12px}.cc-institutional-v83 .cityBandLinksV54 a:not(.cityOfficialShortcut){display:none}.cc-institutional-v83 .cityOfficialShortcut{border-left:0;padding-left:0}}
+@media(max-width:440px){.homePublicServiceStripV83{grid-template-columns:1fr}.homePublicServiceStripV83>a{border-right:0!important;border-bottom:1px solid #d2dee0!important}.homePublicServiceStripV83>a:last-child{border-bottom:0!important}}
+@media(prefers-reduced-motion:reduce){.homePortalSearchInputV83{transition:none}}
