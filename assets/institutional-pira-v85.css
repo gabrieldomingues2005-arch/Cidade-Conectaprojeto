@@ -1,0 +1,460 @@
+/* Cidade Conecta · Institutional Piracicaba v8.5
+ * Camada visual incremental: linguagem de portal público sem simular identidade oficial. */
+:root{
+  --ccp-public-blue:#0b4f6c;
+  --ccp-public-blue-2:#0b5f78;
+  --ccp-civic-green:#0f6b59;
+  --ccp-river:#2f7f95;
+  --ccp-sand:#f6f4ec;
+  --ccp-paper:#fbfcfa;
+  --ccp-line:#c9d8d4;
+  --ccp-ink:#123c42;
+  --ccp-muted:#50686c;
+  --ccp-highlight:#d9f16b;
+}
+.cc-product.cc-institutional-pira-v85{
+  --cc6-brand:#07383a;
+  --cc6-brand-hover:#0b4b4d;
+  --cc6-accent:#d9f16b;
+  --cc6-accent-soft:#f1f8cf;
+  --cc6-accent-ink:#234416;
+  --cc6-bg:#f6f7f4;
+  --cc6-soft:#edf3f1;
+  --cc6-warm:#f6f4ec;
+  --cc6-ink:var(--ccp-ink);
+  --cc6-muted:var(--ccp-muted);
+  --cc6-border:var(--ccp-line);
+  --cc6-focus:#0b5f78;
+  background:
+    linear-gradient(180deg,#f8faf7 0,#f5f7f3 38rem,#f6f7f4 100%);
+}
+
+/* Barra utilitária: referência a portais públicos, sem brasão ou marca oficial. */
+.cc-public-utility-v85{
+  background:#062f31;
+  color:#edf7f3;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  font-size:.75rem;
+}
+.cc-public-utility-v85 .wrap{
+  min-height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.cc-public-utility-brand-v85{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+  font-weight:700;
+  letter-spacing:.015em;
+}
+.cc-public-utility-brand-v85::before{
+  content:"";
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ccp-highlight);
+  box-shadow:0 0 0 3px rgba(217,241,107,.14);
+}
+.cc-public-utility-brand-v85 small{font-weight:500;color:#bad0ca}
+.cc-public-utility-actions-v85{display:flex;align-items:center;gap:2px}
+.cc-public-utility-actions-v85 button,
+.cc-public-utility-actions-v85 a{
+  min-height:34px;
+  border:0;
+  border-left:1px solid rgba(255,255,255,.12);
+  background:transparent;
+  color:#f4fbf8;
+  padding:7px 11px;
+  font:inherit;
+  font-weight:650;
+  text-decoration:none;
+  cursor:pointer;
+}
+.cc-public-utility-actions-v85 button:hover,
+.cc-public-utility-actions-v85 button:focus-visible,
+.cc-public-utility-actions-v85 a:hover,
+.cc-public-utility-actions-v85 a:focus-visible{background:rgba(255,255,255,.1)}
+.cc-public-utility-actions-v85 [aria-pressed="true"]{background:#f2f7e6;color:#143d3f}
+
+/* Cabeçalho institucional */
+.cc-institutional-pira-v85 .top{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(255,255,255,.98);
+  border-bottom:1px solid #c8d7d3;
+  box-shadow:0 4px 14px rgba(7,56,58,.055);
+  backdrop-filter:saturate(130%) blur(10px);
+}
+.cc-institutional-pira-v85 .topin{min-height:78px}
+.cc-institutional-pira-v85 .brand{
+  padding-right:18px;
+  border-right:1px solid var(--cc6-border);
+}
+.cc-institutional-pira-v85 .brandAsset{width:42px;height:42px}
+.cc-institutional-pira-v85 .brandWord{
+  color:#07383a;
+  font-size:1.04rem;
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-.015em;
+}
+.cc-institutional-pira-v85 .brandWord small{
+  color:#5a7071;
+  font-size:.68rem;
+  font-weight:650;
+  margin-top:5px;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+}
+.cc-institutional-pira-v85 #nav a{
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  padding:10px 10px;
+  border-radius:7px;
+  color:#244d51;
+  font-weight:680;
+  text-decoration:none;
+}
+.cc-institutional-pira-v85 #nav a:hover{background:#edf3f1;color:#07383a}
+.cc-institutional-pira-v85 #nav a.active{
+  color:#07383a;
+  background:#eaf2ef;
+  box-shadow:inset 0 -3px 0 #0f6b59;
+}
+.cc-institutional-pira-v85 #nav a[data-route=registrar]{
+  background:#0b5f62;
+  color:white;
+  border-radius:8px;
+  padding-inline:14px;
+}
+.cc-institutional-pira-v85 #nav a[data-route=registrar]:hover{background:#073f42}
+.cc-institutional-pira-v85 #nav a[data-route=registrar].active{box-shadow:inset 0 -3px 0 var(--ccp-highlight)}
+
+.cc-institutional-pira-v85 .cityBand{
+  background:#edf4f2;
+  border-bottom:1px solid #cfddd9;
+}
+.cc-institutional-pira-v85 .cityBandIn{min-height:40px}
+.cc-institutional-pira-v85 .cityPlace{
+  color:#173f43;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  font-weight:800;
+}
+.cc-institutional-pira-v85 .cityBandLinksV54 a{color:#315a5e;font-weight:650}
+.cc-institutional-pira-v85 .cityOfficialShortcut{
+  padding-left:14px;
+  border-left:1px solid #bdceca;
+  color:#0b4f6c!important;
+}
+.cc-institutional-pira-v85 .demo{
+  background:#fffdf5;
+  border-bottom:1px solid #e6dfc8;
+}
+.cc-institutional-pira-v85 .demo .wrap{min-height:38px;display:flex;align-items:center;gap:8px}
+.cc-institutional-pira-v85 .demoMark{color:#98731b}
+
+/* Home hero: mais serviço público, menos landing page SaaS. */
+.cc-institutional-pira-v85 .heroV53{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  padding:64px 0 70px;
+  background:
+    radial-gradient(circle at 72% 14%,rgba(84,151,151,.24),transparent 26rem),
+    linear-gradient(135deg,#062f31 0%,#073f43 48%,#0a5054 100%);
+  border-bottom:0;
+}
+.cc-institutional-pira-v85 .heroV53::before{
+  content:"";
+  display:block;
+  position:absolute;
+  z-index:-1;
+  width:65vw;
+  height:240px;
+  right:-12vw;
+  bottom:-115px;
+  border:2px solid rgba(219,241,107,.24);
+  border-radius:50%;
+  transform:rotate(-7deg);
+}
+.cc-institutional-pira-v85 .heroV53::after{
+  content:"";
+  display:block;
+  position:absolute;
+  z-index:-1;
+  inset:auto -8% -115px 34%;
+  height:205px;
+  border-radius:50% 45% 0 0;
+  background:linear-gradient(180deg,rgba(65,137,145,.14),rgba(13,88,92,.05));
+  transform:rotate(2deg);
+}
+.cc-institutional-pira-v85 .heroV53 .heroGrid{
+  grid-template-columns:minmax(0,1fr) minmax(420px,.88fr);
+  gap:56px;
+}
+.cc-institutional-pira-v85 .heroV53 .eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:#e8f8b8;
+  font-size:.76rem;
+  letter-spacing:.14em;
+}
+.cc-institutional-pira-v85 .heroV53 .eyebrow::before{
+  content:"";
+  width:20px;height:2px;background:var(--ccp-highlight);
+}
+.cc-institutional-pira-v85 .heroV53 h1{
+  max-width:13ch;
+  font-size:clamp(2.7rem,5vw,4.55rem);
+  line-height:1.01;
+  letter-spacing:-.052em;
+  margin-top:16px;
+}
+.cc-institutional-pira-v85 .heroV53 h1 span{
+  display:block;
+  color:#dff280;
+}
+.cc-institutional-pira-v85 .heroV53 .lead{max-width:56ch;color:#d6e4df}
+.cc-institutional-pira-v85 .heroV53 .actions .primary{
+  background:#e5f48f;
+  border-color:#e5f48f;
+  color:#173e29;
+}
+.cc-institutional-pira-v85 .heroV53 .actions .primary:hover{background:#f0f8bf}
+.cc-institutional-pira-v85 .heroV53 .actions .secondary{
+  border-color:#91aaa5;
+  color:#f7fbf9;
+  background:rgba(255,255,255,.035);
+}
+.cc-institutional-pira-v85 .heroV53 .quickSearch{
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 12px 34px rgba(0,0,0,.12);
+}
+.cc-institutional-pira-v85 .heroTrust{
+  padding-top:4px;
+  border-top:1px solid rgba(255,255,255,.13);
+}
+.cc-institutional-pira-v85 .heroPanelLive{
+  border:1px solid rgba(255,255,255,.24);
+  box-shadow:0 20px 55px rgba(1,32,34,.24);
+}
+.cc-institutional-pira-v85 .heroPanelHead .miniLabel{
+  color:#537074;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+/* Busca central no estilo catálogo de serviços públicos. */
+.cc-institutional-pira-v85 .homePortalGatewayV83{
+  margin-top:-1px;
+  padding:34px 0 8px;
+  background:#f9faf7;
+  border-bottom:1px solid var(--cc6-border);
+}
+.cc-institutional-pira-v85 .homePortalSearchBoxV83{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #bdceca;
+  border-top:5px solid #0b5f62;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 8px 25px rgba(7,56,58,.065);
+}
+.cc-institutional-pira-v85 .homePortalSearchBoxV83::after{
+  content:"PIRACICABA";
+  position:absolute;
+  right:24px;
+  top:18px;
+  color:#0b5f62;
+  opacity:.08;
+  font-size:clamp(2.5rem,6vw,5.4rem);
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-.06em;
+  pointer-events:none;
+}
+.cc-institutional-pira-v85 .homeInstitutionalKickerV83{
+  color:#0b5f62;
+  text-transform:uppercase;
+  font-weight:800;
+  letter-spacing:.105em;
+}
+.cc-institutional-pira-v85 .homePortalSearchBoxV83 h2{
+  font-size:clamp(1.85rem,3vw,2.75rem);
+  color:#113e42;
+}
+.cc-institutional-pira-v85 .homePortalSearchInputV83{
+  border:2px solid #657f7b;
+  border-radius:9px;
+  background:#fff;
+}
+.cc-institutional-pira-v85 .homePortalSearchInputV83:focus-within{
+  border-color:#0b5f78;
+  box-shadow:0 0 0 4px rgba(11,95,120,.12);
+}
+.cc-institutional-pira-v85 .homePortalSearchInputV83 button{
+  background:#0b5f62;
+  color:#fff;
+  border:0;
+  font-weight:750;
+}
+.cc-institutional-pira-v85 .homePortalPopularV83 button{
+  border-color:#c3d2ce;
+  background:#f5f8f6;
+  color:#2f5558;
+}
+.cc-institutional-pira-v85 .homePublicServiceStripV83{
+  margin-top:18px;
+  border:1px solid #d0dcda;
+  border-radius:10px;
+  background:#fff;
+  overflow:hidden;
+}
+.cc-institutional-pira-v85 .homePublicServiceStripV83>div{
+  background:#edf4f2;
+  border-right:1px solid #d0dcda;
+}
+.cc-institutional-pira-v85 .homePublicServiceStripV83>a{
+  border-left:1px solid #e0e8e5;
+  color:#15474c;
+  font-weight:700;
+}
+.cc-institutional-pira-v85 .homePublicServiceStripV83>a:hover{background:#f1f6f4}
+
+/* Atalhos e conteúdo */
+.cc-institutional-pira-v85 .homeIntentV82{background:#fff}
+.cc-institutional-pira-v85 .homeIntentGridV82>a{
+  border:1px solid #cad8d4;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:none;
+}
+.cc-institutional-pira-v85 .homeIntentGridV82>a:hover{
+  border-color:#0f6b59;
+  box-shadow:0 7px 24px rgba(7,56,58,.08);
+}
+.cc-institutional-pira-v85 .homeIntentGridV82>a>span{
+  background:#e9f3ef;
+  color:#0b5f62;
+}
+.cc-institutional-pira-v85 .civicBentoSectionV53{
+  background:linear-gradient(180deg,#f4f7f4,#f7f8f5);
+  border-block:1px solid #d7e1de;
+}
+.cc-institutional-pira-v85 .bentoCellV53,
+.cc-institutional-pira-v85 .homeNewsCard,
+.cc-institutional-pira-v85 .civic-resolved-item{
+  border-radius:10px;
+  box-shadow:none;
+}
+.cc-institutional-pira-v85 .homeNewsSection{
+  background:#fff;
+  border-top:1px solid #d7e1de;
+}
+.cc-institutional-pira-v85 .homeNewsCopy h3,
+.cc-institutional-pira-v85 .civic-news-lead h2,
+.cc-institutional-pira-v85 .civic-news-list h3{
+  font-family:Georgia,"Times New Roman",serif;
+}
+.cc-institutional-pira-v85 .civic-news-masthead{
+  border-radius:10px;
+  border-top-color:#0b5f62;
+  background:
+    linear-gradient(135deg,#fff 0,#f5f7f2 100%);
+}
+.cc-institutional-pira-v85 .civic-news-kicker{color:#0b5f62}
+.cc-institutional-pira-v85 .civic-resolved-hero{
+  border-radius:10px;
+  border-left:5px solid #197048;
+  background:linear-gradient(100deg,#f4faf6,#fff);
+}
+.cc-institutional-pira-v85 .civic-resolved-seal{background:#197048}
+
+/* Páginas internas e rodapé */
+.cc-institutional-pira-v85 .pageHead{
+  background:
+    linear-gradient(90deg,#f4f7f4 0,#fff 70%);
+  border-bottom:1px solid #cfdcd8;
+}
+.cc-institutional-pira-v85 .pageHead .eyebrow{color:#0b5f62;text-transform:uppercase}
+.cc-institutional-pira-v85 footer{
+  position:relative;
+  background:#062f31;
+  border-top:6px solid #d9f16b;
+}
+.cc-institutional-pira-v85 footer::before{
+  content:"Cidade Conecta · participação cidadã em Piracicaba";
+  display:block;
+  padding:12px max(24px,calc((100vw - var(--cc6-content))/2));
+  background:#0a4548;
+  color:#e7f1ed;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.cc-institutional-pira-v85 .footBrand{color:#fff}
+.cc-institutional-pira-v85 .foot b{color:#f1f7f4}
+.cc-institutional-pira-v85 .foot a{color:#e5eeea}
+
+/* Alto contraste manual */
+.cc-product.cc-high-contrast-v85{
+  --cc6-bg:#fff;
+  --cc6-surface:#fff;
+  --cc6-soft:#f2f2f2;
+  --cc6-warm:#fff;
+  --cc6-ink:#000;
+  --cc6-muted:#202020;
+  --cc6-border:#222;
+  --cc6-border-strong:#000;
+  --cc6-brand:#003b3d;
+  --cc6-accent:#f4ff4e;
+}
+.cc-product.cc-high-contrast-v85 :where(.card,.row,input,select,textarea,.btn){border-width:2px!important}
+.cc-product.cc-high-contrast-v85 .heroV53{background:#002f31!important}
+.cc-product.cc-high-contrast-v85 a{text-decoration-thickness:2px}
+
+/* Responsivo */
+@media(max-width:1199px){
+  .cc-institutional-pira-v85 .brand{border-right:0;padding-right:0}
+  .cc-institutional-pira-v85 #nav.open a[data-route=registrar]{color:#fff}
+}
+@media(max-width:900px){
+  .cc-public-utility-brand-v85 small{display:none}
+  .cc-institutional-pira-v85 .heroV53 .heroGrid{grid-template-columns:1fr;gap:34px}
+  .cc-institutional-pira-v85 .heroV53 h1{max-width:16ch}
+}
+@media(max-width:760px){
+  .cc-public-utility-v85 .wrap{width:calc(100% - 24px);min-height:34px}
+  .cc-public-utility-brand-v85{font-size:.69rem}
+  .cc-public-utility-actions-v85 a{display:none}
+  .cc-public-utility-actions-v85 button{padding-inline:9px}
+  .cc-institutional-pira-v85 .top{top:0}
+  .cc-institutional-pira-v85 .topin{min-height:66px}
+  .cc-institutional-pira-v85 .heroV53{padding:42px 0 46px}
+  .cc-institutional-pira-v85 .heroV53 h1{font-size:clamp(2.35rem,11vw,3.25rem)}
+  .cc-institutional-pira-v85 .heroV53 .lead{font-size:1rem}
+  .cc-institutional-pira-v85 .heroV53 .actions{display:grid;grid-template-columns:1fr}
+  .cc-institutional-pira-v85 .heroV53 .actions .btn{justify-content:center}
+  .cc-institutional-pira-v85 .heroV53 .quickSearch{flex-wrap:wrap}
+  .cc-institutional-pira-v85 .heroV53 .quickSearch input{flex-basis:calc(100% - 38px)}
+  .cc-institutional-pira-v85 .heroV53 .quickSearch .btn{width:100%}
+  .cc-institutional-pira-v85 .homePortalGatewayV83{padding-top:24px}
+  .cc-institutional-pira-v85 .homePortalSearchBoxV83::after{display:none}
+}
+@media(max-width:480px){
+  .cc-public-utility-brand-v85 span{display:none}
+  .cc-public-utility-brand-v85::after{content:"Cidade Conecta";font-weight:800}
+  .cc-public-utility-actions-v85 button[data-a11y="reset"]{display:none}
+  .cc-institutional-pira-v85 .heroPanelLive{padding:12px}
+  .cc-institutional-pira-v85 .heroStatsV51 .heroMetric{padding-inline:8px}
+}
+@media print{
+  .cc-public-utility-v85{display:none!important}
+}

@@ -56,9 +56,12 @@ test('estética institucional preserva identidade própria e aviso independente'
  const html=read('index.html'),app=read('assets/app.js'),civic=read('assets/civic.css');
  assert.match(html,/cc-institutional-v83/);
  assert.match(html,/Protótipo acadêmico independente/);
- assert.match(app,/O que você procura\?/);
+ assert.match(app,/Como podemos ajudar\?/);
  assert.match(app,/Serviços e informações da cidade/);
  assert.match(civic,/--cc83-navy:#0b3f55/);
  assert.match(civic,/homePortalSearchBoxV83/);
+ assert.match(html,/cc-institutional-pira-v85/);
+ assert.match(html,/institutional-pira-v85\.css\?v=8\.5\.0/);
+ assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.0/);
  assert.doesNotMatch(html,/logo-gov|marca-gov|bras[aã]o/i);
 });
