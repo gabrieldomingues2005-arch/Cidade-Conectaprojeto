@@ -57,6 +57,18 @@ const account={
   {label:'5 registros fictícios criados',detail:'Exemplos em iluminação, resíduos, drenagem, água e acessibilidade.'},
   {label:'4 bairros acompanhados',detail:'Centro, Vila Rezende, Paulista e Piracicamirim.'},
   {label:'4 resoluções acompanhadas',detail:'Históricos completos disponíveis no jornal DEMO.'}
+ ],
+ activity:[
+  {date:iso(0,1),type:'Resumo',title:'Resumo semanal gerado',detail:'8 atualizações fictícias organizadas para o perfil.'},
+  {date:iso(0,3),type:'Bairro',title:'Centro recebeu nova atualização',detail:'Trecho de calçada entrou em análise.'},
+  {date:iso(0,4),type:'Acompanhamento',title:'Sinalização segue em atendimento',detail:'O protocolo DEMO-2026-00012 recebeu nova movimentação.'},
+  {date:iso(1),type:'Resolução',title:'Iluminação marcada como resolvida',detail:'A ocorrência da Vila Rezende foi concluída na demonstração.'},
+  {date:iso(2),type:'Resolução',title:'Reparo viário concluído',detail:'A ocorrência fictícia do Centro foi resolvida.'}
+ ],
+ recommendations:[
+  {title:'Revisar ocorrências ainda abertas',detail:'Há registros fictícios em análise, encaminhados e em andamento.',href:'#/minhas?tab=acompanhando',action:'Ver acompanhamentos'},
+  {title:'Acompanhar o Centro',detail:'Seu bairro favorito tem atualizações recentes na demonstração.',href:'#/noticias?demo=1&bairro=Centro',action:'Abrir notícias'},
+  {title:'Conhecer os resultados',detail:'Veja os casos resolvidos e como aparecem no jornal cívico.',href:'#/noticias?demo=1&tipo=resolvidas',action:'Ver resolvidos'}
  ]
 };
 function feed(input=rows,limit=60){
