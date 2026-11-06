@@ -228,3 +228,65 @@
 .civic-demo-activity p{font-size:.8125rem;color:var(--cc6-muted);margin:0}
 @media(max-width:760px){.civic-demo-profile-head{grid-template-columns:auto 1fr}.civic-demo-profile-head>.btn{grid-column:1/-1}.civic-demo-profile-grid,.civic-demo-activity{grid-template-columns:1fr}.civic-demo-entry,.civic-demo-exit{align-items:flex-start;flex-direction:column}}
 @media(max-width:520px){.civic-demo-profile-strip{grid-template-columns:1fr}.civic-demo-profile-head{grid-template-columns:1fr}.civic-demo-avatar-large{width:76px;height:76px}.civic-demo-source,.civic-demo-hero-alert{flex-direction:column}}
+
+
+/* Conta cidadã sincronizada. */
+.civic-account-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.civic-account-grid>form,.civic-account-grid>.card{display:grid;align-content:start;gap:14px}
+.civic-account-grid label{display:grid;gap:6px;font-weight:700;font-size:.8125rem}
+.civic-account-grid input,.civic-account-grid select{min-height:46px;width:100%}
+.civic-account-head{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:18px}
+.civic-account-notifications{margin-top:18px}
+@media(max-width:760px){.civic-account-grid{grid-template-columns:1fr}.civic-account-head{align-items:flex-start;flex-direction:column}}
+
+/* Admin operacional v8. */
+.adminOperationsV80,.adminResolutionV80,.adminIntegrationV80{margin:24px 0;padding:22px;border:1px solid var(--cc6-border);border-radius:var(--cc6-radius-sm);background:var(--cc6-soft)}
+.adminOperationGridV80{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.adminOperationGridV80 label{display:grid;gap:6px;font-size:.75rem;font-weight:800}
+.adminOperationGridV80 input,.adminOperationGridV80 select,.adminOperationGridV80 textarea{width:100%}
+.adminOpWideV80{grid-column:1/-1}
+.adminOperationActionsV80{margin-top:16px}
+.btn.danger{background:#8d2727;color:#fff;border-color:#8d2727}
+.btn.danger:hover,.btn.danger:focus-visible{background:#742020}
+.adminResolutionPreviewV80{margin:16px 0;border:1px solid var(--cc6-border);border-radius:12px;overflow:hidden;background:var(--cc6-surface)}
+.adminResolutionPreviewV80 img{display:block;width:100%;max-height:420px;object-fit:cover}
+.adminResolutionPreviewV80 figcaption{padding:10px 14px;font-size:.75rem;color:var(--cc6-muted)}
+.adminResolutionFormV80{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-top:14px}
+.adminResolutionFormV80 label{display:grid;gap:6px;font-size:.75rem;font-weight:800}
+.adminIntegrationRowV80{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--cc6-border)}
+.adminIntegrationRowV80 span,.adminIntegrationRowV80 small{color:var(--cc6-muted);font-size:.75rem}
+.adminNewsManagerV80,.adminHealthV80{margin-top:22px}
+.adminNewsGridV80{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:22px}
+#adminNewsForm{display:grid;gap:12px}
+#adminNewsForm label{display:grid;gap:6px;font-size:.75rem;font-weight:800}
+#adminNewsForm input,#adminNewsForm textarea{width:100%}
+.adminNewsMetaV80{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.adminNewsListV80{display:grid;gap:10px}
+.adminNewsListV80 article{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:14px;border:1px solid var(--cc6-border);border-radius:12px;background:var(--cc6-soft)}
+.adminNewsListV80 h3{margin:.25rem 0}
+.adminHealthGridV80{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.adminHealthGridV80>div{padding:15px;border:1px solid var(--cc6-border);border-radius:12px;background:var(--cc6-soft)}
+.adminHealthGridV80 span,.adminHealthGridV80 small{display:block;font-size:.75rem;color:var(--cc6-muted)}
+.adminHealthGridV80 b{display:block;font-size:1.15rem;margin:.3rem 0}
+@media(max-width:900px){.adminNewsGridV80{grid-template-columns:1fr}.adminHealthGridV80{grid-template-columns:1fr 1fr}.adminResolutionFormV80{grid-template-columns:1fr}}
+@media(max-width:620px){.adminOperationGridV80,.adminNewsMetaV80,.adminHealthGridV80{grid-template-columns:1fr}.adminOpWideV80{grid-column:auto}.adminNewsListV80 article{flex-direction:column}.adminIntegrationRowV80{grid-template-columns:1fr}}
+
+/* Editorial + comparação real de resolução. */
+.civic-editorial-section{margin:32px 0 40px}
+.civic-editorial-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.75fr);gap:24px}
+.civic-editorial-feature{display:grid;gap:18px}
+.civic-editorial-feature h2{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.7rem,3vw,2.8rem);line-height:1.06;margin:.3rem 0}
+.civic-editorial-feature h2 a{text-decoration:none;color:var(--cc6-text)}
+.civic-editorial-briefs{display:grid;align-content:start;border-top:2px solid var(--cc6-text)}
+.civic-editorial-briefs article{padding:14px 0;border-bottom:1px solid var(--cc6-border)}
+.civic-editorial-briefs h3{font-family:Georgia,'Times New Roman',serif;margin:.3rem 0}
+.civic-editorial-briefs p{font-size:.8125rem;color:var(--cc6-muted)}
+.civic-editorial-body{max-width:760px;margin:30px auto;font-size:1.05rem;line-height:1.8}
+.civic-before-after{margin:30px 0;padding:20px;border:1px solid var(--cc6-border);border-radius:var(--cc6-radius);background:var(--cc6-surface)}
+.civic-before-after-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.civic-before-after figure{margin:0;border:1px solid var(--cc6-border);border-radius:12px;overflow:hidden;background:var(--cc6-soft)}
+.civic-before-after img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
+.civic-before-after figcaption{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:10px 12px}
+.civic-before-after figcaption b{font-size:.8125rem}
+.civic-before-after figcaption span{font-size:.7rem;color:var(--cc6-muted)}
+@media(max-width:820px){.civic-editorial-grid{grid-template-columns:1fr}.civic-before-after-grid{grid-template-columns:1fr}}
