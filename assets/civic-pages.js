@@ -105,17 +105,17 @@ function news(q){
 
  const body=`${demo?'<div class="civic-demo-hero-alert"><b>APRESENTAÇÃO FICTÍCIA</b><span>Todos os fatos, protocolos e números desta versão são fictícios. Algumas fotografias são reais, licenciadas e usadas somente como ilustração, sem relação com os acontecimentos simulados.</span></div>':''}
  ${profile}
- ${editorialHtml}
- ${demoStoriesHtml}
- ${cityNewsSection()}
+ <aside class="civic-news-core-note"><div><span class="miniLabel">Núcleo do projeto</span><b>Primeiro, acompanhe o que aconteceu com os problemas urbanos.</b><p>O jornal organiza registros, mudanças de status e resoluções. Agenda e conteúdo da cidade aparecem depois como complemento editorial.</p></div><div class="civic-news-core-actions"><a href="#/registrar">Registrar problema</a><a href="#/mapa">Ver mapa</a><a href="#/resolvidas">Ver resolvidos</a></div></aside>
  <nav class="civic-news-tabs" aria-label="Seções do jornal">${tab('todas','Destaques')}${tab('novos','Novos registros')}${tab('atualizacoes','Atualizações')}${tab('resolvidas','Resolvidos')}</nav>
  <div class="civic-news-rule" aria-hidden="true"></div>
  <section class="civic-news-grid" aria-label="Destaques do noticiário">${leadHtml}<aside class="civic-news-brief"><span class="miniLabel">${demo?'Números fictícios':'Cidade em números'}</span><div><b>${n(m.today)}</b><span>novos hoje</span></div><div><b>${n(m.open)}</b><span>em aberto</span></div><div><b>${n(m.resolved)}</b><span>resolvidos no recorte</span></div>${demo?'<a class="miniLink" href="#/perfil-demo">Conhecer o perfil DEMO →</a>':'<a class="miniLink" href="#/dashboard">Abrir Pulso da Cidade →</a>'}</aside></section>
  <section class="civic-news-section"><div class="civic-news-section-head"><h2>Últimas da cidade</h2>${demo?'<a href="#/perfil-demo">Perfil da demonstração →</a>':'<a href="#/feed">Ver feed completo →</a>'}</div>${latestHtml}</section>
  <section class="civic-news-split"><div><div class="civic-news-section-head"><h2>Resolvidos</h2>${demo?'<a href="#/noticias?demo=1&tipo=resolvidas">Filtrar resolvidos →</a>':'<a href="#/resolvidas">Ver todos →</a>'}</div>${resolvedHtml}</div><aside class="civic-news-sidebar"><section><h2>Bairros em pauta</h2>${bars(m.bairros.slice(0,6),'Bairros com registros')}</section><section><h2>Temas em pauta</h2>${bars(m.categories.slice(0,6),'Categorias com registros',true)}</section></aside></section>
+ ${demo?demoStoriesHtml:editorialHtml}
+ ${demo?'':cityNewsSection()}
  <aside class="civic-news-note"><strong>${demo?'Sobre esta demonstração':'Sobre este jornal'}</strong><p>${demo?'Conteúdo propositalmente fictício e isolado da base real. Fotografias reais aparecem apenas como ambientação visual, com crédito e licença; elas não documentam nem comprovam as ocorrências simuladas.':'Quando existe uma imagem pública moderada, ela é exibida e identificada como tal. Na ausência de foto aprovada, usamos uma capa editorial ilustrada por categoria. O noticiário usa apenas ocorrências públicas, aprovadas e seus históricos; não é um veículo oficial da Prefeitura e não publica dados privados.'}</p></aside>
  ${demo?'<div class="civic-demo-exit"><a class="btn primary" href="#/noticias">Sair da demonstração e abrir notícias reais</a></div>':'<div class="civic-demo-entry"><div><span class="miniLabel">Quer apresentar o projeto com conteúdo completo?</span><h3>Abra a edição fictícia de demonstração</h3><p class="muted">Perfil, imagens e várias notícias sem misturar nada com a base real.</p></div><a class="btn secondary" href="#/noticias?demo=1">Ver modo DEMO</a></div>'}`;
- return shell(demo?'Edição fictícia':'Noticiário cívico',demo?'Notícias · DEMO':'Notícias',demo?'Jornal fictício completo para apresentação do produto.':'Acompanhe em formato de jornal as principais atualizações públicas registradas no Cidade Conecta.',body,q,{filter:!demo,demo:Boolean(demo),heading})
+ return shell(demo?'Edição fictícia':'Noticiário cívico',demo?'Notícias · DEMO':'Notícias',demo?'Jornal fictício completo para apresentar a jornada de ocorrências do produto.':'Acompanhe registros, mudanças de status, resoluções e, em segundo plano, informações locais de Piracicaba.',body,q,{filter:!demo,demo:Boolean(demo),heading})
 }
 function demoProfile(q){
  const Demo=window.CidadeConectaDemo;if(!Demo)return shell('Demonstração','Perfil DEMO','Conteúdo demonstrativo indisponível.',V.empty('Demonstração indisponível','O pacote fictício não foi carregado.'),q,{demo:true});
@@ -144,11 +144,11 @@ function reports(q){const rows=filtered(q),m=D.metrics(rows),title=q.get('bairro
 function demoCenter(q){
  const Demo=window.CidadeConectaDemo,a=Demo?.account,p=Demo?.profile,rows=Demo?.rows||[],m=Demo?.metrics(rows)||{resolved:0};
  const steps=[
-  ['1','Entrar na conta fictícia','Abra a conta DEMO com credenciais prontas e veja preferências, notificações e resumo semanal.','#/conta'],
-  ['2','Mostrar o painel pessoal','Apresente ocorrências criadas, acompanhamentos, bairros, atividade e recomendações.','#/minhas'],
-  ['3','Abrir o jornal moderno','Mostre manchetes, filtros, matérias fictícias, imagens e problemas resolvidos.','#/noticias?demo=1'],
-  ['4','Abrir o perfil público','Mostre identidade fictícia, atividade, bairros e indicadores pessoais sem dados reais.','#/perfil-demo'],
-  ['5','Explicar transparência','Finalize mostrando o que é público, privado e como a plataforma protege dados.','#/transparencia']
+  ['1','Mostrar o registro','Comece explicando como o cidadão registra um problema urbano e recebe um protocolo.','#/registrar'],
+  ['2','Mostrar o acompanhamento','Apresente protocolo, histórico e etapas publicadas do atendimento.','#/acompanhar'],
+  ['3','Abrir o mapa e resultados','Mostre ocorrências no território e depois problemas que chegaram ao status resolvido.','#/mapa'],
+  ['4','Mostrar a conta DEMO','Apresente ocorrências criadas, acompanhamentos, bairros, notificações e perfil fictício.','#/minhas'],
+  ['5','Encerrar com jornal e transparência','Use o jornal como complemento visual e finalize explicando privacidade e dados públicos.','#/noticias?demo=1']
  ];
  const body=`<section class="civic-demo-presentation-hero"><div><span class="civic-demo-stamp">MODO APRESENTAÇÃO</span><span class="miniLabel">Cidade Conecta Piracicaba</span><h2>Uma demonstração guiada do produto</h2><p>Use este roteiro para apresentar a experiência completa sem depender de dados pessoais ou de ocorrências reais. Tudo que estiver marcado como DEMO é fictício e isolado.</p><div class="actions"><a class="btn primary" href="#/conta">Começar pela conta DEMO</a><a class="btn secondary" href="#/noticias?demo=1">Abrir jornal DEMO</a></div></div><div class="civic-demo-presentation-score"><span>Conteúdo fictício</span><b>${rows.length}</b><small>ocorrências demonstrativas</small><b>${m.resolved}</b><small>resolvidas</small><b>${a?.notifications?.length||0}</b><small>notificações</small></div></section>
  <section class="civic-demo-tour"><div class="civic-news-section-head"><div><span class="miniLabel">Roteiro sugerido</span><h2>Apresente em cinco etapas</h2></div></div><div class="civic-demo-tour-grid">${steps.map(([n,t,d,h])=>`<article><span>${n}</span><h3>${e(t)}</h3><p>${e(d)}</p><a class="miniLink" href="${h}">Abrir etapa →</a></article>`).join('')}</div></section>
