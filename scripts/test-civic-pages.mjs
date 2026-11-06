@@ -19,3 +19,40 @@ test('comparação valida nomes e limita a três territórios',()=>{const{render
 test('links compartilhados removem token, e-mail, texto livre e posição atual',()=>{const{context,territory}=setup();const url=context.CidadeConectaShareFactory.createUrl('https://cidade.invalid','/app/','#/mapa?q=pessoa%40example.invalid&token=SECRET&lat=-22.123456&lng=-47.123456&bairro=Centro&region=1&status=Resolvida&heat=1',territory);assert.equal(url,'https://cidade.invalid/app/#/mapa?bairro=Centro&region=1&status=Resolvida&heat=1')});
 test('link de ocorrência aceita somente protocolo válido e nunca o código privado',()=>{const{context,territory}=setup();const f=context.CidadeConectaShareFactory.createUrl;assert.equal(f('https://cidade.invalid','/','#/ocorrencia/CC-2026-09001?trackingKey=SECRET',territory),'https://cidade.invalid/#/ocorrencia/CC-2026-09001');assert.equal(f('https://cidade.invalid','/','#/admin?access_token=SECRET',territory),'https://cidade.invalid/#/')});
 test('indisponibilidade sem leitura válida não aparece como zero confirmado',()=>{const{context,renderers}=setup();context.CidadeConectaPublicSource.state=()=>({rows:[],status:'error',lastSuccess:0,complete:false,cached:false});const html=renderers.get('dados-abertos')(new URLSearchParams()).html;assert.match(html,/data-civic-export="csv" disabled/);assert.ok(renderers.get('dashboard')(new URLSearchParams()).html.includes('Aguardando uma leitura pública válida'));context.CidadeConectaPublicSource.state=()=>({rows:[],status:'live',lastSuccess:Date.now(),complete:true,cached:false});assert.ok(!renderers.get('dados-abertos')(new URLSearchParams()).html.includes('data-civic-export="csv" disabled'))});
+
+test('jornal abre com um título e respeita recorte de notícias sem resultados', () => {
+ const {renderers}=setup([row]);
+ const html=renderers.get('noticias')(new URLSearchParams('tipo=resolvidas')).html;
+ assert.equal((html.match(/<h1>/g)||[]).length,1);
+ assert.match(html,/<time datetime="\d{4}-\d{2}-\d{2}">/);
+ assert.match(html,/Sem manchete no momento/);
+ assert.ok(!html.includes(row.title));
+});
+
+test('resolvidas exibe uma foto aprovada sem criar uma comparação fictícia', () => {
+ const media={storage_key:'CC-2026-09001/123e4567-e89b-12d3-a456-426614174000.webp',mime_type:'image/webp',alt_text:'Registro moderado'};
+ const resolved={...row,status:'Resolvida',resolved:'2026-10-21T12:00:00Z',occurrence_public_media:media};
+ const {renderers}=setup([resolved]);
+ const html=renderers.get('resolvidas')(new URLSearchParams()).html;
+ assert.match(html,/Imagem pública da ocorrência/);
+ assert.match(html,/data-civic-public-photo/);
+ assert.match(html,/<b>Registro<\/b>/);
+ assert.ok(!html.includes('Antes e depois'));
+});
+
+test('métricas DEMO contam a própria base e permanecem fora da projeção pública', () => {
+ const {context,D}=setup();
+ const demo=context.CidadeConectaDemo;
+ const counts=demo.metrics();
+ assert.ok(counts.resolved>0);
+ assert.equal(counts.resolved+counts.open,demo.rows.length);
+ assert.equal(D.realRows(demo.rows).length,0);
+});
+
+test('transparência usa somente registros aprovados e mostra período observado', () => {
+ const {renderers}=setup([row,{...row,protocol:'CC-2026-09002',moderationStatus:'pending'},{...row,protocol:'CC-2026-09003',cloudOrigin:false}]);
+ const html=renderers.get('transparencia')(new URLSearchParams()).html;
+ assert.match(html,/<b>1<\/b><span>Registros aprovados<\/span>/);
+ assert.match(html,/<b>1<\/b><span>Em andamento<\/span>/);
+ assert.match(html,/Período de criação dos registros/);
+});

@@ -83,5 +83,16 @@ function filter(params){
  const q=params instanceof URLSearchParams?params:new URLSearchParams(params||'');
  return rows.filter(o=>(!q.get('category')||o.category===q.get('category'))&&(!q.get('bairro')||o.bairro===q.get('bairro'))&&(!q.get('status')||o.status===q.get('status')));
 }
-window.CidadeConectaDemo=Object.freeze({profile,account,rows,feed,filter});
+function metrics(input=rows,now=Date.now()){
+ const D=window.CidadeConectaData;
+ const calendar=new Intl.DateTimeFormat('sv-SE',{dateStyle:'short',timeZone:'America/Sao_Paulo'});
+ const today=calendar.format(now);
+ const resolved=input.filter(o=>o.status==='Resolvida').length;
+ return {
+  resolved,open:input.length-resolved,
+  today:input.filter(o=>D.time(o.created)!==null&&D.time(o.created)<=now&&calendar.format(new Date(o.created))===today).length,
+  categories:D.rank(input,'category'),bairros:D.rank(input,'bairro')
+ };
+}
+window.CidadeConectaDemo=Object.freeze({profile,account,rows,feed,filter,metrics});
 })();
