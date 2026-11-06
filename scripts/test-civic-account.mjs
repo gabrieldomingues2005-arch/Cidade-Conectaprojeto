@@ -34,3 +34,10 @@ test('operações DEMO não chamam a Edge Function cidadã',()=>{
  assert.match(source,/if\(state\.demo\)\{const list=new Set\(state\.follows\)/);
  assert.match(source,/if\(state\.demo\)\{state\.notifications=/);
 });
+
+test('script DEMO carrega antes da conta para restaurar sessão fictícia após F5',()=>{
+ const html=readFileSync('index.html','utf8');
+ const demo=html.indexOf('assets/civic-demo.js');
+ const account=html.indexOf('assets/civic-account.js');
+ assert.ok(demo>=0&&account>demo,'civic-demo.js precisa carregar antes de civic-account.js');
+});
