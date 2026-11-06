@@ -76,7 +76,7 @@ try{
  `});
  const capture=async name=>{const metrics=await send('Page.getLayoutMetrics');const size=metrics.cssContentSize||metrics.contentSize||{width:1366,height:900};const image=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:true,clip:{x:0,y:0,width:Math.ceil(size.width),height:Math.min(Math.ceil(size.height),5000),scale:1}});await writeFile(path.join(output,name+'.png'),Buffer.from(image.data,'base64'))};
  const waitFor=async expression=>{for(let n=0;n<150;n++){if(await evaluate(expression))return;await pause(100)}throw new Error(`Condição não atendida: ${expression}`)};
- const routes=[['home','#/','#homeSearch'],['registrar','#/registrar','#occForm'],['acompanhar','#/acompanhar','#followForm'],['mapa','#/mapa','#publicMap'],['dashboard','#/dashboard','.dashboardKpisV51'],['rede','#/rede-municipal','#municipalNetworkRoot'],['admin','#/admin','#adminLoginForm'],['minhas','#/minhas','.mineSummaryV50'],['bairro','#/bairro?nome=Centro','.neighborhoodHeroV55'],['ocorrencia','#/ocorrencia/CC-2026-00001','.detailV52'],['piracicaba','#/piracicaba','.geoMunicipal'],['sobre','#/sobre','#app .grid2'],['privacidade','#/privacidade','#app .grid2'],...['agora','noticias','feed','resolvidas','comparar','dados-abertos','relatorios','transparencia'].map(n=>[n,'#/'+n,'#civicPublicPage'])];
+ const routes=[['home','#/','#homeSearch'],['registrar','#/registrar','#occForm'],['acompanhar','#/acompanhar','#followForm'],['mapa','#/mapa','#publicMap'],['dashboard','#/dashboard','.dashboardKpisV51'],['rede','#/rede-municipal','#municipalNetworkRoot'],['admin','#/admin','#adminLoginForm'],['minhas','#/minhas','.mineSummaryV50'],['conta','#/conta','[data-account-login]'],['bairro','#/bairro?nome=Centro','.neighborhoodHeroV55'],['ocorrencia','#/ocorrencia/CC-2026-00001','.detailV52'],['piracicaba','#/piracicaba','.geoMunicipal'],['sobre','#/sobre','#app .grid2'],['privacidade','#/privacidade','#app .grid2'],...['agora','noticias','feed','resolvidas','comparar','dados-abertos','relatorios','transparencia'].map(n=>[n,'#/'+n,'#civicPublicPage'])];
  for(const width of [320,390,768,1366]){
   await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
   for(const [name,hash,selector] of routes){
@@ -107,6 +107,28 @@ try{
    results.push({route:hash,width,status:'PASS'});console.log(`✓ ${name} ${width}`);
   }
  }
+ // Conta DEMO: login fictício, painel completo, persistência em F5 e reset sem rede.
+ errors.length=0;scenario='demo-account';
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+ await send('Page.navigate',{url:base+'/index.html?qaView=demo-account#/conta'});
+ await waitFor(`Boolean(document.querySelector('[data-account-demo-login]'))`);
+ await evaluate(`document.querySelector('[data-account-demo-login]').click()`);
+ await waitFor(`CidadeConectaAccount?.state().demo===true&&Boolean(document.querySelector('#demoAccountBar'))`);
+ let demoState=await evaluate(`({email:CidadeConectaAccount.state().user?.email,unread:CidadeConectaAccount.state().unread,demo:CidadeConectaAccount.state().demo,text:document.querySelector('#app').textContent,bar:document.querySelector('#demoAccountBar')?.textContent})`);
+ assert.equal(demoState.demo,true);assert.equal(demoState.email,'gabriel.demo@cidadeconecta.local');assert.ok(demoState.unread>=4);assert.ok(demoState.bar.includes('Gabriel Demo'));
+ await capture('conta-demo-390');
+ await evaluate(`location.hash='#/minhas'`);
+ await waitFor(`Boolean(document.querySelector('.civic-demo-personal-hero'))`);
+ assert.ok((await evaluate(`document.querySelector('#app').textContent`)).includes('Recomendado para você'));
+ assert.ok((await evaluate(`document.querySelector('#app').textContent`)).includes('Atividade recente'));
+ await capture('meu-cidade-demo-390');
+ await send('Page.reload');await waitFor(`CidadeConectaAccount?.state().demo===true&&Boolean(document.querySelector('.civic-demo-personal-hero'))`);
+ assert.equal(await evaluate(`CidadeConectaAccount.state().user.email`),'gabriel.demo@cidadeconecta.local','conta DEMO deve sobreviver a F5');
+ await evaluate(`CidadeConectaAccount.markAll()`);await waitFor(`CidadeConectaAccount.state().unread===0`);
+ await evaluate(`CidadeConectaAccount.resetDemo()`);await waitFor(`CidadeConectaAccount.state().unread>=4`);
+ assert.deepEqual(errors,[],'Conta DEMO: erro JS');
+ results.push({scenario:'conta-demo-login-persistencia-reset',status:'PASS'});console.log('✓ conta DEMO login/persistência/reset');
+ await evaluate(`CidadeConectaAccount.signOut()`);await pause(80);
  for(scenario of ['unavailable','network','timeout','offline','401','403','empty']){
   await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:true});window.dispatchEvent(new Event('online'));window.__qaScenario=${JSON.stringify(scenario)};sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));location.hash='#/admin';`);
   if(scenario==='offline')await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:false});window.dispatchEvent(new Event('offline'))`);
