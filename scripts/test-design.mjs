@@ -34,3 +34,20 @@ test('territorial summaries use the sanitized public view, preserving own privat
   if(file.includes('mapas'))assert.equal(c.readOccurrences(false)[0].protocol,'owner');
  }
 });
+
+test('home orienta primeiro acesso e separa público de demonstração',()=>{
+ const html=read('index.html'),app=read('assets/app.js'),civic=read('assets/civic.css');
+ assert.match(app,/O que você quer fazer\?/);
+ assert.match(app,/Explorar a versão DEMO/);
+ assert.match(app,/Público/);
+ assert.match(app,/Demonstração/);
+ assert.match(civic,/homeIntentGridV82/);
+ assert.match(civic,/recentSourceV82/);
+ assert.match(html,/Ver apresentação DEMO/);
+});
+test('navegação anuncia mudança de rota para tecnologia assistiva',()=>{
+ const html=read('index.html'),app=read('assets/app.js');
+ assert.match(html,/id="routeAnnouncer"/);
+ assert.match(html,/aria-live="polite"/);
+ assert.match(app,/routeAnnouncer/);
+});
