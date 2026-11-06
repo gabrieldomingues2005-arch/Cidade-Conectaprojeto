@@ -14,7 +14,7 @@ const PUBLIC_MEDIA_ORIGIN='https://qzpofoxxrjunyayczcfu.supabase.co/storage/v1/o
 function mediaFrom(value){
  const raw=Array.isArray(value)?value[0]:value;if(!raw||typeof raw!=='object')return null;
  const key=clean(raw.storage_key??raw.storageKey,220),mime=clean(raw.mime_type??raw.mime,40),alt=publicText(raw.alt_text??raw.alt,180);
- if(!/^CC-\d{4}-\d{5}\/[0-9a-f-]{36}\.(jpg|png|webp)$/i.test(key))return null;
+ if(!/^CC-\d{4}-\d{5}\/(?:resolution\/)?[0-9a-f-]{36}\.(jpg|png|webp)$/i.test(key))return null;
  if(!['image/jpeg','image/png','image/webp'].includes(mime))return null;
  return{storageKey:key,mime,alt,url:PUBLIC_MEDIA_ORIGIN+key.split('/').map(encodeURIComponent).join('/')};
 }
@@ -22,7 +22,7 @@ function project(o){
  if(!o||!validProtocol(o.protocol))return null;
  const history=(Array.isArray(o.history)?o.history:[]).filter(h=>h&&h.public_note!==false).map(h=>({status:clean(Array.isArray(h)?h[0]:h.status,30),date:clean(Array.isArray(h)?h[1]:h.created_at||h.date,40),note:publicText(Array.isArray(h)?h[2]:h.note,500)})).filter(h=>STATUSES.includes(h.status)&&time(h.date)!==null);
  const category=o.category||o.category_slug||o.categories?.slug||'outros';
- return {protocol:String(o.protocol),title:publicText(o.title,100),description:publicText(o.description,700),category:Object.hasOwn(CATEGORIES,category)?category:'outros',bairro:publicText(o.bairro??o.neighborhood_label,90),status:STATUSES.includes(o.status)?o.status:'Recebida',agency:publicText(o.agency??o.responsible_agency,150),created:clean(o.created??o.created_at,40),updated:clean(o.updated??o.updated_at,40),resolved:clean(o.resolved??o.resolved_at,40),lat:coord(o.public_latitude??o.lat,90),lng:coord(o.public_longitude??o.lng,180),history,media:mediaFrom(o.media??o.occurrence_public_media),public:o.public!==false&&o.public_visible!==false,cloudOrigin:o.cloudOrigin===true,moderationStatus:clean(o.moderationStatus??o.moderation_status,20)};
+ return {protocol:String(o.protocol),title:publicText(o.title,100),description:publicText(o.description,700),category:Object.hasOwn(CATEGORIES,category)?category:'outros',bairro:publicText(o.bairro??o.neighborhood_label,90),status:STATUSES.includes(o.status)?o.status:'Recebida',agency:publicText(o.agency??o.responsible_agency,150),created:clean(o.created??o.created_at,40),updated:clean(o.updated??o.updated_at,40),resolved:clean(o.resolved??o.resolved_at,40),lat:coord(o.public_latitude??o.lat,90),lng:coord(o.public_longitude??o.lng,180),history,media:mediaFrom(o.media??o.occurrence_public_media),resolutionMedia:mediaFrom(o.resolutionMedia??o.occurrence_resolution_media),public:o.public!==false&&o.public_visible!==false,cloudOrigin:o.cloudOrigin===true,moderationStatus:clean(o.moderationStatus??o.moderation_status,20)};
 }
 function publicRows(rows){return(rows||[]).map(project).filter(o=>o&&o.public&&(!o.cloudOrigin||o.moderationStatus==='approved'))}
 const realRows=rows=>publicRows(rows).filter(o=>o.cloudOrigin&&o.moderationStatus==='approved');
