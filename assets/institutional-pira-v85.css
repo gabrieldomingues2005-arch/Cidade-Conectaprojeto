@@ -653,3 +653,27 @@ html {scroll-padding-block:calc(var(--cc-sticky-top,0px) + .5rem) calc(var(--cc-
 .cc-public-utility-brand-v85 span{letter-spacing:.01em}
 @media(max-width:900px){.homeJourneyHeadV88{align-items:flex-start;flex-direction:column}.homeJourneyStepsV88{grid-template-columns:1fr 1fr}.homeJourneyStepsV88>i{display:none}.civic-news-core-note{align-items:flex-start;flex-direction:column}.civic-news-core-actions{justify-content:flex-start}}
 @media(max-width:620px){.homeDemoSecondaryV88{align-items:flex-start;flex-direction:column}.homeJourneyStepsV88{grid-template-columns:1fr}.civic-city-news{padding:1rem}.civic-news-core-actions{display:grid;width:100%}.civic-news-core-actions a{justify-content:center}}
+
+
+/* Acabamento de produto 8.9 — orientação, status e estados vazios */
+.ccBreadcrumbV89{display:flex;align-items:center;gap:.45rem;margin-bottom:.7rem;font-size:.76rem;color:#5d7772}
+.ccBreadcrumbV89 a{color:#315e61;text-decoration:none;font-weight:700}
+.ccBreadcrumbV89 a:hover{text-decoration:underline;text-underline-offset:3px}
+.ccBreadcrumbV89 span[aria-current="page"]{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:min(58ch,70vw)}
+.homeStatusGuideV89{padding:clamp(2.4rem,5vw,4rem) 0;background:#f5f8f6;border-bottom:1px solid #d7e1de}
+.homeStatusGuideHeadV89{display:flex;justify-content:space-between;align-items:end;gap:2rem;margin-bottom:1.2rem}
+.homeStatusGuideHeadV89>div{max-width:760px}
+.homeStatusGuideHeadV89 h2{margin:.3rem 0 .35rem;font-size:clamp(1.55rem,2.8vw,2.3rem);color:#113e42}
+.homeStatusGuideHeadV89 p{margin:0;color:var(--cc6-text-muted)}
+.homeStatusGuideGridV89{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.7rem}
+.homeStatusGuideGridV89 article{position:relative;display:grid;align-content:start;gap:.6rem;min-height:175px;padding:1rem;border:1px solid #cad8d4;border-radius:10px;background:#fff}
+.homeStatusGuideGridV89 article .badge{width:fit-content}
+.homeStatusGuideGridV89 article p{margin:0;font-size:.84rem;line-height:1.5;color:var(--cc6-text-muted)}
+.homeStatusNumberV89{position:absolute;right:.8rem;top:.7rem;color:#a2b6b0;font-size:.72rem;font-weight:850;letter-spacing:.1em}
+.statusLegendItemV89{display:inline-flex;align-items:center}
+.homeEmptyActionV89{display:grid;justify-items:start;gap:.65rem;padding:1.4rem!important}
+.homeEmptyActionV89 h3,.homeEmptyActionV89 p{margin:0}
+.homeEmptyActionV89 .actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.25rem}
+.civic-empty-actions{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem}
+@media(max-width:1050px){.homeStatusGuideGridV89{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.homeStatusGuideHeadV89{align-items:flex-start;flex-direction:column;gap:.7rem}.homeStatusGuideGridV89{grid-template-columns:1fr}.homeStatusGuideGridV89 article{min-height:auto}.ccBreadcrumbV89 span[aria-current="page"]{max-width:52vw}}
