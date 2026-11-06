@@ -122,11 +122,11 @@ function updateCityBar(){
  const ready=state.status==='live'||state.cached||state.lastSuccess>0;
  const loading=['idle','loading'].includes(state.status);
  const status=loading?'Carregando leitura pública…':ready?'Ainda não há atualizações nesta leitura.':'Leitura pública indisponível no momento.';
- const link='<a class="civic-updatebar-all" href="#/noticias">Abrir jornal →</a>';
+ const link='<a class="civic-updatebar-all" href="#/agora">Ver acompanhamento →</a>';
  const preview=items.length?'<div class="civic-updatebar-list">'+items.map(x=>'<a href="#/noticias?protocolo='+encodeURIComponent(x.protocol)+'"><span class="civic-updatebar-dot" aria-hidden="true"></span><span><b>'+esc(x.type==='resolved'?'Problema resolvido':x.type==='created'?'Novo registro':'Status atualizado')+'</b><small>'+esc([D.CATEGORIES[x.category],x.bairro].filter(Boolean).join(' · '))+'</small></span></a>').join('')+'</div>':'<span class="civic-updatebar-status">'+status+'</span>';
  host.hidden=false;
  updateDataFreshness();
- const html='<div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong>'+link+preview+'</div>';
+ const html='<div class="wrap civic-updatebar-inner"><strong>Atualizações de ocorrências</strong>'+link+preview+'</div>';
  if(host.dataset.content===html)return;
  const active=host.contains(document.activeElement)?document.activeElement.getAttribute('href'):null;
  host.innerHTML=html;
