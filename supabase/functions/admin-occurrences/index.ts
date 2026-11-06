@@ -132,7 +132,7 @@ Deno.serve(async (req: Request) => {
       admin.from("occurrence_attachments").select("id,mime_type,file_size_bytes,public_visible,moderation_status,created_at,storage_key").eq("occurrence_id", occurrence.id).order("created_at", { ascending: true }),
       admin.from("occurrence_public_media").select("protocol,storage_key,mime_type,alt_text,published_at,updated_at").eq("protocol", protocol).maybeSingle(),
       admin.from("occurrence_resolution_media").select("protocol,storage_key,mime_type,alt_text,published_at,updated_at").eq("protocol", protocol).maybeSingle(),
-      admin.schema("private").from("municipal_integration_outbox").select("id,status,adapter_key,action,attempt_count,last_error,created_at,updated_at").eq("occurrence_id", occurrence.id).order("created_at", { ascending: false }).limit(5),
+      admin.rpc("service_get_municipal_outbox",{p_occurrence_id:occurrence.id}),
     ]);
     if (historyError) return json(origin, 500, { error: "occurrence_history_failed" });
     if (attachmentError || publicMediaError || resolutionMediaError || integrationError) return json(origin, 500, { error: "occurrence_media_lookup_failed" });
@@ -258,14 +258,13 @@ Deno.serve(async (req: Request) => {
       responsible_agency: occurrence.responsible_agency,
       public_location: occurrence.public_location,
     };
-    const { data: row, error: queueError } = await admin.schema("private").from("municipal_integration_outbox").insert({
-      occurrence_id: occurrence.id,
-      action: dispatchAction,
-      adapter_key: "unconfigured",
-      payload: safePayload,
-      status: "disabled",
-      created_by: profile.id,
-    }).select("id,status,adapter_key,created_at").single();
+    const { data: queuedRows, error: queueError } = await admin.rpc("service_prepare_municipal_outbox",{
+      p_occurrence_id: occurrence.id,
+      p_action: dispatchAction,
+      p_payload: safePayload,
+      p_created_by: profile.id,
+    });
+    const row = Array.isArray(queuedRows) ? queuedRows[0] : queuedRows;
     if (queueError) return json(origin, 500, { error: "municipal_outbox_failed" });
     await admin.from("audit_log").insert({
       actor_id: profile.id,
