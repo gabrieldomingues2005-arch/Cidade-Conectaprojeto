@@ -78,8 +78,7 @@ Deno.serve(async req=>{
       redirect:"error",
     });
     if(!response.ok){
-      const detail=(await response.text().catch(()=>"" )).replace(/[\u0000-\u001f\u007f]/g," ").slice(0,240);
-      await admin.rpc("service_update_municipal_dispatch",{p_id:outboxId,p_status:"failed",p_last_error:`HTTP ${response.status}${detail?": "+detail:""}`});
+      await admin.rpc("service_update_municipal_dispatch",{p_id:outboxId,p_status:"failed",p_last_error:`HTTP ${response.status}`});
       await admin.from("audit_log").insert({actor_id:profile.id,action:"municipal_dispatch_failed",entity_type:"municipal_dispatch",entity_id:outboxId,metadata:{status:response.status,host:adapter.hostname}});
       return reply(origin,502,{configured:true,sent:false,error:"official_adapter_rejected",status:response.status});
     }
