@@ -74,7 +74,7 @@ try{
   return json(503,{message:'Serviço temporariamente indisponível'});
  };
  `});
- const capture=async name=>{const metrics=await send('Page.getLayoutMetrics');const size=metrics.cssContentSize||metrics.contentSize||{width:1366,height:900};const image=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:true,clip:{x:0,y:0,width:Math.ceil(size.width),height:Math.min(Math.ceil(size.height),5000),scale:1}});await writeFile(path.join(output,name+'.png'),Buffer.from(image.data,'base64'))};
+ const capture=async name=>{const metrics=await send('Page.getLayoutMetrics');const size=metrics.cssContentSize||metrics.contentSize||{width:1366,height:900};const width=await evaluate('innerWidth');const image=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:true,clip:{x:0,y:0,width,height:Math.min(Math.ceil(size.height),5000),scale:1}});await writeFile(path.join(output,name+'.png'),Buffer.from(image.data,'base64'))};
  const waitFor=async expression=>{for(let n=0;n<150;n++){if(await evaluate(expression))return;await pause(100)}throw new Error(`Condição não atendida: ${expression}`)};
  const routes=[['home','#/','#homeSearch'],['registrar','#/registrar','#occForm'],['acompanhar','#/acompanhar','#followForm'],['mapa','#/mapa','#publicMap'],['dashboard','#/dashboard','.dashboardKpisV51'],['rede','#/rede-municipal','#municipalNetworkRoot'],['admin','#/admin','#adminLoginForm'],['minhas','#/minhas','.mineSummaryV50'],['conta','#/conta','[data-account-login]'],['demonstracao','#/demonstracao','#civicPublicPage'],['bairro','#/bairro?nome=Centro','.neighborhoodHeroV55'],['ocorrencia','#/ocorrencia/CC-2026-00001','.detailV52'],['piracicaba','#/piracicaba','.geoMunicipal'],['sobre','#/sobre','#app .grid2'],['privacidade','#/privacidade','#app .grid2'],...['agora','noticias','feed','resolvidas','comparar','dados-abertos','relatorios','transparencia'].map(n=>[n,'#/'+n,'#civicPublicPage'])];
  for(const width of [320,390,768,1366]){
@@ -291,6 +291,49 @@ try{
  await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
  await send('Network.setBypassServiceWorker',{bypass:true});await send('Network.setCacheDisabled',{cacheDisabled:true});
  results.push({scenario:'pwa-offline-shell-preferences-no-fake-send',status:'PASS'});
+
+ // Fluxos da camada institucional e regressões observadas na v8.5.
+ scenario='institutional-entry-a11y';
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+ await send('Page.navigate',{url:base+'/index.html?qaCivic=1#/'});
+ await waitFor("document.querySelector('.home-map-cover')&&CidadeConectaPublicSource.state().status==='live'&&document.querySelector('#piraContext')");
+ assert.ok(await evaluate("document.querySelector('#homePortalSearch').compareDocumentPosition(document.querySelector('#piraContext'))&Node.DOCUMENT_POSITION_FOLLOWING"));
+ assert.ok(await evaluate("!document.querySelector('#homeMap .leaflet-tile-pane')"));
+ assert.ok(await evaluate("getComputedStyle(document.querySelector('.hero h1')).color.split(',').slice(0,3).map(x=>Number(x.replace(/[^0-9]/g,''))).every(n=>n>=230)"),'Título da Home precisa ter contraste no fundo escuro');
+ await evaluate("document.querySelector('.skip').focus();document.querySelector('.skip').click()");
+ assert.equal(await evaluate("location.hash"),'#/');
+ assert.equal(await evaluate("document.activeElement.id"),'app');
+ await evaluate("document.querySelector('#mobileMore').click()");
+ assert.equal(await evaluate("document.querySelector('#mobileMore').getAttribute('aria-expanded')"),'true');
+ assert.ok(await evaluate("document.activeElement.matches('#nav a')"));
+ await press('Escape','Escape');
+ assert.equal(await evaluate("document.activeElement.id"),'mobileMore');
+ await evaluate(`document.querySelector('[data-a11y="increase"]').click();document.querySelector('[data-a11y="increase"]').click();document.querySelector('[data-a11y="contrast"]').click()`);
+ assert.equal(await evaluate("document.documentElement.style.fontSize"),'125%');
+ assert.ok(await evaluate("document.body.classList.contains('cc-high-contrast-v85')"));
+ assert.ok(await evaluate("document.documentElement.scrollWidth<=innerWidth+1"),'Home 390 com texto ampliado e contraste');
+ await capture('home-acessibilidade-390');
+ await send('Page.reload');
+ await waitFor("document.querySelector('.home-map-cover')&&document.body.classList.contains('cc-high-contrast-v85')&&document.documentElement.style.fontSize==='125%'");
+ await evaluate(`document.querySelector('[data-a11y="reset"]').click()`);
+ assert.equal(await evaluate("document.documentElement.style.fontSize"),'100%');
+ await evaluate("document.querySelector('#homeMapLoad').click()");
+ await waitFor("Boolean(document.querySelector('#homeMap .homeMapFallbackV57'))");
+ results.push({scenario:'institutional-entry-keyboard-contrast-map-fallback',status:'PASS'});
+ scenario='institutional-services';
+ await evaluate("location.hash='#/rede-municipal?cat=alagamentos'");
+ await waitFor("document.querySelector('[data-network-category=alagamentos]')?.getAttribute('aria-pressed')==='true'");
+ assert.ok(await evaluate("document.querySelector('.network-citizen-actions a[href=\"#/registrar/alagamentos\"]')!==null"));
+ await evaluate("document.querySelector('#networkSearch').value='assunto inexistente QA';document.querySelector('#networkSearch').dispatchEvent(new Event('input',{bubbles:true}))");
+ assert.ok(await evaluate("document.querySelector('#networkDirectoryStatus').textContent.includes('Nenhuma área encontrada')"));
+ assert.ok(await evaluate("[...document.querySelectorAll('[data-network-agency]')].every(card=>getComputedStyle(card).display==='none')"));
+ await evaluate("document.querySelector('#networkSearch').value='alagamento';document.querySelector('#networkSearch').dispatchEvent(new Event('input',{bubbles:true}))");
+ assert.ok(await evaluate("document.querySelector('[data-network-agency]:not([hidden])')"));
+ await evaluate("location.hash='#/transparencia'");
+ await waitFor("Boolean(document.querySelector('#transparencyOverview'))");
+ assert.ok(await evaluate("document.querySelector('.civic-transparency-overview').textContent.includes('40')"));
+ assert.deepEqual(errors,[]);
+ results.push({scenario:'institutional-services-search-and-public-transparency',status:'PASS'});
 
  // Comparação de desempenho em laboratório: mesmo navegador/servidor e rede externa bloqueada.
  await send('Performance.enable');const performanceSamples=[];

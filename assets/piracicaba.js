@@ -141,8 +141,8 @@ function enhance(data,network){
   const r=route();
   if(r==='piracicaba'){geographyPage(data);return}
   if(r===''){
-    const hero=app.querySelector('.hero');
-    if(hero&&!document.querySelector('#piraContext'))hero.insertAdjacentElement('afterend',homeSection(data));
+    const anchor=app.querySelector('[data-home-territory-anchor]')||app.querySelector('.hero');
+    if(anchor&&!document.querySelector('#piraContext'))anchor.insertAdjacentElement('afterend',homeSection(data));
   }
   if(r==='registrar')addRegisterAdvisor(data,network);
   if(r==='dashboard')addDashboardTerritory(data);

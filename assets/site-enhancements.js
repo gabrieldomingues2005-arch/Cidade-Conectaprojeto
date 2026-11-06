@@ -87,9 +87,6 @@ function addCopySiteLink(){
   };
   footer.lastElementChild?.appendChild(b);
 }
-function keyboardShortcuts(e){
-  if(e.key==='Escape'&&$('#nav')?.classList.contains('open')){$('#nav').classList.remove('open');$('#menu')?.setAttribute('aria-expanded','false');$('#menu')?.setAttribute('aria-label','Abrir menu');$('#menu')?.focus()}
-}
 function enhancePage(){
   ensureStatus();
   paintStatus();
@@ -102,7 +99,6 @@ function enhancePage(){
 window.addEventListener('online',paintStatus);
 window.addEventListener('offline',paintStatus);
 window.addEventListener('cidadeconecta:supabase-status',()=>{paintStatus();document.querySelector('#techStatusCard')?.remove();setTimeout(addTechnicalCard,0)});
-window.addEventListener('keydown',keyboardShortcuts);
 window.addEventListener('hashchange',()=>setTimeout(enhancePage,30));
 window.addEventListener('DOMContentLoaded',()=>{
   const app=$('#app');

@@ -118,19 +118,27 @@ function updateDataFreshness(){
 }
 function updateCityBar(){
  const host=$('#cityUpdatesBar');if(!host)return;
- const s=S.state(),items=D.feed(s.rows,6);
- const ready=s.status==='live'||s.cached||s.lastSuccess>0||s.rows.length>0;
+ const state=S.state(),items=D.feed(state.rows,6);
+ const ready=state.status==='live'||state.cached||state.lastSuccess>0;
+ const loading=['idle','loading'].includes(state.status);
+ const status=loading?'Carregando leitura pública…':ready?'Ainda não há atualizações nesta leitura.':'Leitura pública indisponível no momento.';
+ const link='<a class="civic-updatebar-all" href="#/noticias">Abrir jornal →</a>';
+ const preview=items.length?'<div class="civic-updatebar-list">'+items.map(x=>'<a href="#/noticias?protocolo='+encodeURIComponent(x.protocol)+'"><span class="civic-updatebar-dot" aria-hidden="true"></span><span><b>'+esc(x.type==='resolved'?'Problema resolvido':x.type==='created'?'Novo registro':'Status atualizado')+'</b><small>'+esc([D.CATEGORIES[x.category],x.bairro].filter(Boolean).join(' · '))+'</small></span></a>').join('')+'</div>':'<span class="civic-updatebar-status">'+status+'</span>';
  host.hidden=false;
  updateDataFreshness();
- if(!ready&&['idle','loading'].includes(s.status)){host.innerHTML='<div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong><span class="civic-updatebar-status">Carregando leitura pública…</span></div>';return}
- if(!items.length){host.innerHTML='<div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong><span class="civic-updatebar-status">'+(ready?'Ainda não há atualizações públicas reais para mostrar.':'Leitura pública indisponível no momento.')+'</span><a href="#/agora">Cidade Agora →</a></div>';return}
- host.innerHTML='<div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong><div class="civic-updatebar-list" role="list">'+items.map(x=>'<a role="listitem" href="#/ocorrencia/'+encodeURIComponent(x.protocol)+'"><span class="civic-updatebar-dot" aria-hidden="true"></span><span><b>'+esc(x.type==='resolved'?'Problema resolvido':x.type==='created'?'Novo registro':'Status atualizado')+'</b><small>'+esc(D.CATEGORIES[x.category]+' · '+x.bairro)+'</small></span></a>').join('')+'</div><a class="civic-updatebar-all" href="#/noticias">Abrir jornal →</a></div>';
+ const html='<div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong>'+link+preview+'</div>';
+ if(host.dataset.content===html)return;
+ const active=host.contains(document.activeElement)?document.activeElement.getAttribute('href'):null;
+ host.innerHTML=html;
+ host.dataset.content=html;
+ if(active)(host.querySelector('a[href="'+CSS.escape(active)+'"]')||host.querySelector('.civic-updatebar-all')).focus({preventScroll:true});
 }
 function repaintNotices(){notifyCounter();if(dialog&&dialog.el.querySelector('.civic-notice-tools')){const active=document.activeElement?.dataset?.civicRead;dialog.el.querySelector('.civic-dialog-body').innerHTML=noticeList();const target=active?dialog.el.querySelector('[data-civic-read-all]'):null;(target&&!target.disabled?target:dialog.el.querySelector('[data-civic-close]')).focus()}}
 function isPersonal(){return['minhas','meu-cidade-conecta','conta'].includes(location.hash.replace(/^#\/?/,'').split(/[/?]/)[0])}
 function refreshPersonal(){if(!isPersonal())return;U.refresh();$('#myCityContent')?.focus({preventScroll:true})}
 function publicRecord(protocol){return U.publicRecords().find(o=>o.protocol===protocol)||S.state().rows.find(o=>o.protocol===protocol)}
 function enhance(){
+ updateDataFreshness();
  const root=$('#app');if(!root)return;window.CidadeConectaCommunity?.enhance();
  for(const detail of root.querySelectorAll('.detailV52')){
   if(detail.querySelector('.civic-before-after'))continue;
@@ -180,8 +188,8 @@ document.addEventListener('submit',async e=>{
 document.addEventListener('keydown',e=>{if(!dialog)return;if(e.key==='Escape'){e.preventDefault();closeDialog()}if(e.key==='Tab'){const list=[...dialog.el.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex="0"]')].filter(x=>x.getClientRects().length),first=list[0],last=list.at(-1);if(!list.length){e.preventDefault();dialog.el.querySelector('[role=dialog]').focus()}else if(e.shiftKey&&document.activeElement===first||!e.shiftKey&&document.activeElement===last){e.preventDefault();(e.shiftKey?last:first).focus()}}});
 window.addEventListener('cidadeconecta:citizen-state',notifyCounter);
 window.addEventListener('cidadeconecta:account-state',()=>{notifyCounter();updateDemoAccountBar();if(isPersonal()&&!dialog)U.refresh()});
-window.addEventListener('cidadeconecta:public-data',e=>{if(e.detail.status==='loading'){updateCityBar();updateDataFreshness();return}U.acceptPublic(e.detail.rows);C.reconcile(e.detail.rows,U.favoriteNames());updateCityBar();updateDataFreshness();if(dialog||!$('#commandPalette')?.classList.contains('hidden'))return;if(['','bairro','minhas','meu-cidade-conecta',...routes.keys()].some(p=>(location.hash||'#/').split('?')[0]==='#/'+p)&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh()});
-window.addEventListener('cidadeconecta:news-data',e=>{if(e.detail.status==='loading')return;const p=(location.hash||'#/').split('?')[0];if(['#/','#/noticias'].includes(p)&&!dialog&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh()});
+window.addEventListener('cidadeconecta:public-data',e=>{if(e.detail.status==='loading'){updateCityBar();updateDataFreshness();return}U.acceptPublic(e.detail.rows);C.reconcile(e.detail.rows,U.favoriteNames());updateCityBar();updateDataFreshness();if(dialog||!$('#commandPalette')?.classList.contains('hidden'))return;if(['','bairro','minhas','meu-cidade-conecta',...routes.keys()].some(p=>(location.hash||'#/').split('?')[0]==='#/'+p)&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh({preservePosition:true})});
+window.addEventListener('cidadeconecta:news-data',e=>{if(e.detail.status==='loading')return;const p=(location.hash||'#/').split('?')[0];if(['#/','#/noticias'].includes(p)&&!dialog&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))U.refresh({preservePosition:true})});
 window.addEventListener('online',scheduleRefresh);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')scheduleRefresh()});
 window.addEventListener('load',init);setInterval(()=>{if(document.visibilityState==='visible'&&(C.state().following.length||U.favoriteNames().length))S.refresh()},90000);
 window.CidadeConectaCivic=Object.freeze({resolve:(p,q)=>p==='minhas'||p==='meu-cidade-conecta'?{html:myPage(q),title:'Meu Cidade Conecta'}:p==='conta'?{html:accountPage(q),title:'Minha conta'}:routes.get(p)?.(q)||null,register:(name,renderer)=>routes.set(name,renderer),enhance,sourceLabel,empty,badge,card,esc,format,meta,territory:()=>territory,network:()=>network,openDialog,closeDialog,followButton});

@@ -458,3 +458,107 @@
 @media print{
   .cc-public-utility-v85{display:none!important}
 }
+
+/* Ações e contexto territorial da entrada de serviços. */
+.cc-institutional-pira-v85 .heroV53 {padding-block:var(--cc6-space-10)}
+.cc-institutional-pira-v85 .heroV53 .heroCopy h1 {max-width:none;font-size:clamp(2rem,4.1vw,3.6rem)!important;color:var(--cc6-inverse)}
+.cc-institutional-pira-v85 .heroV53 .heroGrid {align-items:start;gap:clamp(1.25rem,4vw,3rem)}
+.cc-institutional-pira-v85 .homeHeroSearch {margin-block:var(--cc6-space-4);padding:var(--cc6-space-4);gap:var(--cc6-space-3)}
+.cc-institutional-pira-v85 .homeHeroSearch::after {display:none}
+.cc-institutional-pira-v85 .homeHeroSearch h2 {font-size:clamp(1.4rem,2.4vw,1.85rem)}
+.cc-institutional-pira-v85 .homePortalSearchInputV83 button,
+.cc-institutional-pira-v85 .homePortalPopularV83 button {min-height:44px}
+.cc-institutional-pira-v85 .homePublicServiceStripV83 {margin-block:0 var(--cc6-space-4)}
+.cc-institutional-pira-v85 .homePortalGatewayV83 {padding-block:var(--cc6-space-4) 0}
+.home-protocol-lookup {margin-block:var(--cc6-space-2);color:var(--cc6-inverse)}
+.home-protocol-lookup summary {width:fit-content;min-height:44px;padding-block:.6rem;cursor:pointer}
+.home-protocol-lookup .quickSearch {margin-top:var(--cc6-space-2)}
+.home-map-cover {
+ display:grid;align-items:end;justify-items:start;min-height:inherit;height:100%;
+ padding:var(--cc6-space-4);background:#e4efe7 url('piracicaba-rio.svg') center/cover no-repeat;
+}
+.home-map-cover .btn {background:var(--cc6-surface);color:var(--cc6-brand)}
+.homeMapFallbackV57 {margin:var(--cc6-space-3)}
+.flowSectionV51 .statusStepper {margin-top:var(--cc6-space-6)}
+
+.cc-institutional-pira-v85 .civic-news-masthead h1 {
+ font:700 clamp(2rem,5vw,4.45rem)/1.05 Georgia,'Times New Roman',serif;
+ letter-spacing:-.032em;margin:.16em 0;color:var(--cc6-brand);
+}
+.cc-institutional-pira-v85 .civic-news-shell {padding-top:var(--cc6-space-4)}
+.civic-news-empty-lead .civic-news-cover {background:var(--cc6-soft)}
+.civic-news-empty-lead .civic-news-cover svg {color:var(--cc6-brand)}
+.civic-news-tabs {max-width:100%}
+.civic-demo-profile-strip>div,.civic-demo-profile-head>div,
+.civic-demo-presentation-hero>div,.civic-demo-entry>div {min-width:0;overflow-wrap:anywhere}
+.cc-institutional-pira-v85 .civic-demo-presentation-hero h2,
+.cc-institutional-pira-v85 .civic-demo-personal-hero h2 {color:#fff}
+.cc-institutional-pira-v85 .civic-demo-presentation-hero,
+.cc-institutional-pira-v85 .civic-demo-personal-hero {--cc6-focus:#d9f16b}
+.civic-news-cover figcaption {overflow-wrap:anywhere}
+.civic-before-after-grid.is-single {grid-template-columns:minmax(0,1fr)}
+.civic-media-unavailable {padding:var(--cc6-space-4);background:var(--cc6-soft);color:var(--cc6-muted)}
+.civic-resolved-meta {
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr));gap:1px;
+ background:var(--cc6-border);
+}
+.civic-resolved-meta>span,.civic-resolved-meta>span+span {background:var(--cc6-surface);border:0}
+.network-citizen-actions {display:flex;flex-wrap:wrap;gap:var(--cc6-space-3);margin-top:var(--cc6-space-4)}
+.network-citizen-actions .btn {white-space:normal}
+.network-directory-status {margin:var(--cc6-space-3) 0;color:var(--cc6-muted)}
+.mapLegendInline {flex-wrap:wrap}
+.mapLegendInline .receivedDot {background:#516b75}
+.map-a11y-note {margin:0;color:var(--cc6-muted);font-size:var(--cc6-text-xs)}
+
+html {scroll-padding-block:calc(var(--cc-sticky-top,0px) + .5rem) calc(var(--cc-sticky-bottom,0px) + .5rem)}
+.cc-public-utility-actions-v85 button {min-height:44px;min-width:44px}
+.cc-public-utility-actions-v85 :focus-visible,.heroV53 :focus-visible {outline-color:var(--ccp-highlight)}
+.homeHeroSearch :focus-visible {outline-color:var(--cc6-focus)}
+.cc-product.cc-high-contrast-v85 {
+ --cc6-text:#000;--cc6-focus:#143fc1;--cc6-inverse:#fff;
+}
+.cc-high-contrast-v85 .civic-source,.cc-high-contrast-v85 .badge,
+.cc-high-contrast-v85 .mapToolBtnV58,.cc-high-contrast-v85 .networkCategoryTabsV54 button {
+ border:2px solid currentColor;
+}
+@media(min-width:1200px){
+ .cc-institutional-pira-v85 .topin {gap:var(--cc6-space-3)}
+ .cc-institutional-pira-v85 #nav,.cc-institutional-pira-v85 #nav.open {flex-wrap:wrap;row-gap:0}
+ .cc-institutional-pira-v85 #nav a {padding-inline:.45rem}
+}
+@media(max-width:760px){
+ .cc-institutional-pira-v85 .heroV53 {padding-block:var(--cc6-space-6)}
+ .cc-institutional-pira-v85 .heroV53 .heroCopy h1 {font-size:clamp(1.95rem,8.4vw,3rem)!important;margin-block:var(--cc6-space-2) var(--cc6-space-3)}
+ .cc-institutional-pira-v85 .heroV53 .actions {gap:var(--cc6-space-2)}
+ .cc-institutional-pira-v85 .homePortalSearchInputV83 {grid-template-columns:auto minmax(0,1fr) auto}
+ .cc-institutional-pira-v85 .homePortalSearchInputV83 button {grid-column:auto;width:auto;padding-inline:var(--cc6-space-2)}
+ .cc-institutional-pira-v85 .homePortalPopularV83 {gap:var(--cc6-space-2)}
+ .cc-institutional-pira-v85 .homePortalPopularV83 span {flex-basis:100%}
+ .cc-institutional-pira-v85 .demo .wrap {flex-wrap:nowrap;align-items:baseline}
+ .cc-institutional-pira-v85 .demoTourLinkV82 {display:none}
+ .civic-updatebar-inner {gap:0 var(--cc6-space-2);align-items:center}
+ .civic-updatebar-inner>strong {width:auto}
+ .civic-updatebar-all {margin-inline-start:auto}
+ .civic-updatebar-status {flex-basis:100%}
+ .civic-updatebar-list {flex-basis:100%}
+ .civic-news-tabs {flex-wrap:wrap;overflow:visible}
+ .civic-news-tabs a {white-space:normal}
+ .civic-demo-profile-strip .btn,.civic-news-lead .btn {white-space:normal;max-width:100%}
+}
+@media(max-width:480px){
+ .cc-public-utility-v85 .wrap {flex-wrap:wrap;gap:0}
+ .cc-public-utility-brand-v85 {display:none}
+ .cc-public-utility-actions-v85 {width:100%;justify-content:space-between;flex-wrap:wrap}
+ .cc-public-utility-actions-v85 button[data-a11y="reset"] {display:inline-flex;align-items:center}
+ .cc-public-utility-actions-v85 button {padding-inline:var(--cc6-space-2)}
+}
+@media(max-width:360px){
+ .civic-updatebar-inner>strong {font-size:var(--cc6-text-xs)}
+ .cc-institutional-pira-v85 .brand {flex-basis:8rem;min-width:min(100%,8rem)}
+ .cc-institutional-pira-v85 .mobileActionsV51 {grid-template-columns:repeat(auto-fit,minmax(min(100%,3.25rem),1fr))!important;padding-inline:8px}
+}
+@media(forced-colors:active){
+ .cc-public-utility-actions-v85 [aria-pressed="true"],.civic-news-tabs a[aria-current] {border:2px solid Highlight}
+ .cc-institutional-pira-v85 :focus-visible {outline-color:Highlight}
+}
+.networkAgencyCardV54[hidden] {display:none}
