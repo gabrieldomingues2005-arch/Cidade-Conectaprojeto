@@ -102,7 +102,7 @@ function updateDemoAccountBar(){
  if(a?.status!=='authenticated'||!a.demo){existing?.remove();return}
  const anchor=$('#cityUpdatesBar')||document.querySelector('main')||document.body;
  const bar=existing||document.createElement('div');bar.id='demoAccountBar';bar.className='civic-demo-accountbar';bar.setAttribute('role','status');
- bar.innerHTML='<div class="wrap"><div><span class="civic-demo-chip">DEMO</span><b>Gabriel Demo está conectado</b><span>Ambiente fictício isolado da base oficial.</span></div><nav aria-label="Atalhos da conta DEMO"><a href="#/minhas">Meu painel</a><a href="#/noticias?demo=1">Jornal DEMO</a><button type="button" data-account-demo-reset>Resetar</button></nav></div>';
+ bar.innerHTML='<div class="wrap"><div><span class="civic-demo-chip">DEMO</span><b>Gabriel Demo está conectado</b><span>Ambiente fictício isolado da base oficial.</span></div><nav aria-label="Atalhos da conta DEMO"><a href="#/demonstracao">Apresentação</a><a href="#/minhas">Meu painel</a><a href="#/noticias?demo=1">Jornal DEMO</a><button type="button" data-account-demo-reset>Resetar</button></nav></div>';
  if(!existing)anchor.parentNode?.insertBefore(bar,anchor);
 }
 function notifyCounter(){const b=$('#notificationBtn');if(!b)return;const a=A?.state?.(),unread=a?.status==='authenticated'?a.unread:C.state().unread;b.setAttribute('aria-label','Notificações'+(unread?', '+unread+' não lidas':', nenhuma não lida'));const n=b.querySelector('[data-notification-count]');if(n){n.textContent=String(unread);n.hidden=!unread}}
