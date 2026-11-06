@@ -5,7 +5,7 @@ function install(){
   const L=window.L;if(!L?.tileLayer||L.tileLayer.__cidadeConectaWrapped)return false;
   const original=L.tileLayer.bind(L);
   function wrapped(url,options={}){
-    const layer=original(url,options),originalAdd=layer.addTo.bind(layer);
+    const layer=original(url,options),originalAdd=typeof layer.addTo==='function'?layer.addTo.bind(layer):null;
     let map=null,failures=0,notice=null,degraded=false;
     const ensureNotice=()=>{
       if(!map||notice)return;
@@ -17,7 +17,7 @@ function install(){
       notice.innerHTML='<strong>Mapa-base indisponível</strong><span>Os pontos, filtros e camadas do Cidade Conecta continuam disponíveis.</span>';
       container.appendChild(notice);
     };
-    layer.addTo=m=>{map=m;return originalAdd(m)};
+    layer.addTo=m=>{map=m;return originalAdd?originalAdd(m):layer};
     layer.on('tileerror',()=>{
       failures++;
       if(failures>=8&&!degraded&&map){
