@@ -262,9 +262,19 @@ async function invokeFunction(name,payload){
     return await parseResponse(response);
   }catch(error){
     state.lastError=String(error?.message||error);
-    if(Number(error?.status)===401){saveSession(null);state.user=null;state.profile=null;state.status='anonymous'}
-    else if(Number(error?.status)===403&&error?.payload?.error==='internal_access_denied')state.status='denied';
-    else if(isTransientError(error))state.status='error';
+    const status=Number(error?.status);
+    if(status===403&&error?.payload?.error==='internal_access_denied'){
+      state.status='denied';
+    }else if(isTransientError(error)||status===403){
+      state.user=null;
+      state.profile=null;
+      state.status='error';
+    }else{
+      saveSession(null);
+      state.user=null;
+      state.profile=null;
+      state.status='anonymous';
+    }
     emit();throw error;
   }
 }
@@ -273,11 +283,18 @@ async function invokeForm(name,formData){
   const request=async token=>fetchWithTimeout(`${sb.url}/functions/v1/${name}`,{
     method:'POST',headers:baseHeaders(token),body:formData,cache:'no-store'
   });
-  let token=await ensureToken();
-  if(!token){const error=new Error('Sessão expirada. Entre novamente.');error.status=401;throw error}
-  let response=await request(token);
-  if(response.status===401){const renewed=await refreshSession();token=renewed.access_token;response=await request(token)}
-  return parseResponse(response);
+  try{
+    let token=await ensureToken();
+    if(!token){const error=new Error('Sessão expirada. Entre novamente.');error.status=401;throw error}
+    let response=await request(token);
+    if(response.status===401){const renewed=await refreshSession();token=renewed.access_token;response=await request(token)}
+    return await parseResponse(response);
+  }catch(error){
+    state.lastError=String(error?.message||error);const status=Number(error?.status);
+    if(isTransientError(error)||status===403){state.user=null;state.profile=null;state.status=status===403&&error?.payload?.error==='internal_access_denied'?'denied':'error'}
+    else{saveSession(null);state.user=null;state.profile=null;state.status='anonymous'}
+    emit();throw error;
+  }
 }
 async function invokeInternal(payload){return invokeFunction('admin-occurrences',payload)}
 
