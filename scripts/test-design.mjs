@@ -62,6 +62,7 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(civic,/homePortalSearchBoxV83/);
  assert.match(html,/cc-institutional-pira-v85/);
  assert.match(html,/institutional-pira-v85\.css\?v=8\.7\.0/);
- assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.1/);\n assert.match(html,/civic-city-news\.js\?v=8\.7\.0/);
+ assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.1/);
+ assert.match(html,/civic-city-news\.js\?v=8\.7\.0/);
  assert.doesNotMatch(html,/logo-gov|marca-gov|bras[aã]o/i);
 });
