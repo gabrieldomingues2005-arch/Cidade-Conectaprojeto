@@ -130,8 +130,8 @@ jobs:
           cp assets/institutional-pira-v85.css assets/institutional-a11y-v85.js artifacts/claude-ui/assets/
           cp assets/site-enhancements.js assets/site-enhancements.css artifacts/claude-ui/assets/
           cp assets/civic*.js assets/civic.css artifacts/claude-ui/assets/
-          cp -R assets/vendor assets/icons artifacts/claude-ui/assets/
-          cp assets/piracicaba.js assets/piracicaba.css assets/piracicaba-data.js artifacts/claude-ui/assets/
+          cp -R assets/vendor assets/icons assets/demo-news artifacts/claude-ui/assets/
+          cp assets/piracicaba.js assets/piracicaba.css assets/piracicaba-data.js assets/piracicaba-rio.svg artifacts/claude-ui/assets/
           cp assets/piracicaba-mapas.js assets/piracicaba-mapas.css assets/privacy-geo.js assets/map-resilience.js assets/seo-landing.css artifacts/claude-ui/assets/
           cp assets/supabase-bridge.js assets/auth.js assets/brand-mark-v51.svg artifacts/claude-ui/assets/
           cp data/piracicaba.json data/municipal-network.json artifacts/claude-ui/data/

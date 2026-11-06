@@ -179,10 +179,10 @@ function mapMarkerIcon(status='draft'){
 }
 function statusLegend(){return `<div class="statusLegend">${STATUSES.map(s=>badge(s)).join('')}</div>`}
 function statusStepper(current){
- const active=Math.max(0,STATUSES.indexOf(current));
+ const active=STATUSES.indexOf(current);
  return `<ol class="statusStepper" aria-label="Etapas do protocolo">${STATUSES.map((s,i)=>`<li class="${i<active?'done':i===active?'current':''}" ${i===active?'aria-current="step"':''}><span class="statusDot">${i<active?'✓':i+1}</span><b>${esc(s)}</b></li>`).join('')}</ol>`
 }
-function recentRows(limit=5){return [...publicMetricRecords()].sort((a,b)=>new Date(b.created)-new Date(a.created)).slice(0,limit).map(o=>`<div class="row"><div><div class="recentSourceV82"><span class="${o.cloudOrigin?'isPublic':'isDemo'}">${o.cloudOrigin?'Público':'Demonstração'}</span><small>${esc(o.protocol)}</small></div><h3>${esc(o.title)}</h3><div class="small muted">${catIcon(o.category)} ${cat(o.category)[2]} · ${esc(o.bairro)}</div></div><div>${badge(o.status)}</div><div class="small muted">${fmt(o.created)}</div><a class="btn soft smallBtn" href="#/ocorrencia/${encodeURIComponent(o.protocol)}">Abrir</a></div>`).join('')}
+function recentRows(rows,limit=5){return [...rows].sort((a,b)=>new Date(b.created)-new Date(a.created)).slice(0,limit).map(o=>`<div class="row"><div><div class="recentSourceV82"><span class="${o.cloudOrigin?'isPublic':'isDemo'}">${o.cloudOrigin?'Público':'Demonstração'}</span><small>${esc(o.protocol)}</small></div><h3>${esc(o.title)}</h3><div class="small muted">${catIcon(o.category)} ${cat(o.category)[2]} · ${esc(o.bairro)}</div></div><div>${badge(o.status)}</div><div class="small muted">${fmt(o.created)}</div><a class="btn soft smallBtn" href="#/ocorrencia/${encodeURIComponent(o.protocol)}">Abrir</a></div>`).join('')}
 function homeNews(){
  const rows=window.CidadeConectaData.realRows(publicMetricRecords()),items=window.CidadeConectaData.feed(rows,3),editorial=window.CidadeConectaNewsSource?.state?.().posts||[],featured=editorial.find(x=>x.featured)||editorial[0]||null;
  const editorialHtml=featured?'<article class="homeNewsEditorialV80">'+(featured.cover?.url?'<img src="'+esc(featured.cover.url)+'" alt="'+esc(featured.cover.alt||('Imagem pública moderada da matéria '+featured.title))+'" loading="lazy" decoding="async" referrerpolicy="no-referrer">':'<div class="homeNewsEditorialFallbackV80">'+iconSvg('chart')+'</div>')+'<div><span class="miniLabel">Matéria editorial</span><h3><a href="#/noticias?materia='+encodeURIComponent(featured.slug)+'">'+esc(featured.title)+'</a></h3><p>'+esc(featured.summary||'Atualização editorial do Cidade Conecta.')+'</p><a class="miniLink" href="#/noticias?materia='+encodeURIComponent(featured.slug)+'">Ler matéria completa →</a></div></article>':'';
@@ -192,34 +192,36 @@ function homeNews(){
 }
 function home(){
  const m=metrics(),records=window.CidadeConectaData.realRows(publicMetricRecords()),mapped=records.filter(o=>Number.isFinite(o.lat)&&Number.isFinite(o.lng)).length,ins=homeInsights(),open=Math.max(0,m.total-m.resolved);
+ const snapshot=window.CidadeConectaPublicSource?.state(),hasRead=snapshot?.status==='live'||snapshot?.lastSuccess>0;
+ const metric=n=>hasRead?n:'—';
  return '<section class="hero heroV53"><div class="wrap heroGrid">'+
- '<div class="heroCopy"><div class="eyebrow">Participação cidadã · Piracicaba</div><h1>Piracicaba mais conectada com você. <span>Participe. Acompanhe. Veja resultados.</span></h1><p class="lead">Registre situações da cidade, acompanhe cada protocolo e consulte informações por bairro, categoria e status com privacidade e transparência.</p>'+
- '<div class="actions"><a class="btn primary" href="#/registrar">'+iconSvg('plus')+' Registrar um problema</a><a class="btn secondary" href="#/mapa">'+iconSvg('map')+' Ver mapa da cidade</a></div>'+
- '<form id="homeSearch" class="quickSearch quickSearchV51"><span class="searchGlyph">'+iconSvg('search')+'</span><input id="homeProtocol" placeholder="Consultar protocolo, ex.: CC-2026-00001" aria-label="Protocolo"><button class="btn soft">Consultar</button></form>'+
+ '<div class="heroCopy"><div class="eyebrow">Participação cidadã · Piracicaba</div><h1>Piracicaba mais conectada com você. </h1><p class="lead">Registre um problema urbano, acompanhe o protocolo e consulte os dados públicos de Piracicaba.</p>'+
+ '<section class="homePortalSearchBoxV83 homeHeroSearch" aria-labelledby="homePortalSearchTitle"><div><span class="homeInstitutionalKickerV83">Guia de serviços</span><h2 id="homePortalSearchTitle">Como podemos ajudar?</h2><p>Procure um problema, bairro, serviço ou protocolo.</p></div><form id="homePortalSearch" role="search"><label class="srOnlyV82" for="homePortalQuery">Buscar no Cidade Conecta</label><div class="homePortalSearchInputV83"><span>'+iconSvg('search')+'</span><input id="homePortalQuery" type="search" autocomplete="off" placeholder="Iluminação, Centro ou protocolo"><button type="submit">Buscar</button></div></form><div class="homePortalPopularV83" aria-label="Buscas rápidas"><span>Buscas rápidas</span><button type="button" data-home-query="iluminação">Iluminação</button><button type="button" data-home-query="buraco">Vias e buracos</button><button type="button" data-home-query="alagamento">Alagamentos</button><button type="button" data-home-query="Centro">Centro</button><button type="button" data-home-query="protocolo">Protocolo</button></div></section>'+
+ '<div class="actions"><a class="btn primary" href="#/registrar">'+iconSvg('plus')+' Registrar um problema</a><a class="btn secondary" href="#/acompanhar">'+iconSvg('search')+' Consultar protocolo</a><a class="btn secondary" href="#/mapa">'+iconSvg('map')+' Ver mapa da cidade</a></div>'+
+ '<details class="home-protocol-lookup"><summary>Já tem o número em mãos?</summary><form id="homeSearch" class="quickSearch quickSearchV51"><span class="searchGlyph">'+iconSvg('search')+'</span><input id="homeProtocol" placeholder="Consultar protocolo, ex.: CC-2026-00001" aria-label="Protocolo"><button class="btn soft">Consultar</button></form></details>'+
  '<div class="heroTrust"><span>'+iconSvg('shield')+' contato privado</span><span>'+iconSvg('route')+' acompanhamento por etapas</span><span>Projeto acadêmico independente</span></div></div>'+
- '<aside class="heroPanel heroPanelLive spotlightV53"><div class="heroPanelHead"><div><span class="miniLabel">Piracicaba em foco</span><b>Ocorrências no território</b><small id="homeDataFreshness" class="homeDataFreshness">Atualizando dados públicos…</small></div><a href="#/mapa" class="miniLink">Mapa completo →</a></div><div id="homeMap" class="heroLiveMap" aria-label="Prévia do mapa de ocorrências"></div>'+
- '<div class="heroStats heroStatsV51"><div class="heroMetric"><span>Registros</span><b>'+m.total+'</b></div><div class="heroMetric"><span>Em acompanhamento</span><b>'+m.active+'</b></div><div class="heroMetric"><span>Mapeados</span><b>'+mapped+'</b></div></div></aside></div></section>'+
- '<section class="homePortalGatewayV83" aria-labelledby="homePortalSearchTitle"><div class="wrap"><div class="homePortalSearchBoxV83"><div><span class="homeInstitutionalKickerV83">Serviços e informações da cidade</span><h2 id="homePortalSearchTitle">Como podemos ajudar?</h2><p>Busque por problema, bairro, serviço, protocolo ou conteúdo do Cidade Conecta.</p></div><form id="homePortalSearch" role="search"><label class="srOnlyV82" for="homePortalQuery">Buscar no Cidade Conecta</label><div class="homePortalSearchInputV83"><span>'+iconSvg('search')+'</span><input id="homePortalQuery" type="search" autocomplete="off" placeholder="Ex.: iluminação, buraco, Centro, protocolo..."><button type="submit">Buscar</button></div></form><div class="homePortalPopularV83" aria-label="Buscas rápidas"><span>Mais procurados:</span><button type="button" data-home-query="iluminação">Iluminação</button><button type="button" data-home-query="buraco">Vias e buracos</button><button type="button" data-home-query="alagamento">Alagamentos</button><button type="button" data-home-query="Centro">Centro</button><button type="button" data-home-query="protocolo">Protocolo</button></div></div>'+
- '<div class="homePublicServiceStripV83"><div><span class="miniLabel">Para o cidadão</span><b>Acessos diretos</b></div><a href="#/registrar">'+iconSvg('plus')+' Registrar ocorrência</a><a href="#/acompanhar">'+iconSvg('search')+' Consultar protocolo</a><a href="#/rede-municipal">'+iconSvg('layers')+' Onde resolver?</a><a href="#/transparencia">'+iconSvg('shield')+' Transparência</a></div></div></section>'+
+ '<aside class="heroPanel heroPanelLive spotlightV53"><div class="heroPanelHead"><div><span class="miniLabel">Piracicaba em foco</span><b>Ocorrências no território</b><small id="homeDataFreshness" class="homeDataFreshness">Atualizando dados públicos…</small></div><a href="#/mapa" class="miniLink">Mapa completo →</a></div><div id="homeMap" class="heroLiveMap" aria-label="Prévia do mapa de ocorrências"><div class="home-map-cover"><button type="button" class="btn secondary" id="homeMapLoad">Carregar prévia do mapa</button></div></div>'+
+ '<div class="heroStats heroStatsV51"><div class="heroMetric"><span>Registros</span><b>'+metric(m.total)+'</b></div><div class="heroMetric"><span>Em acompanhamento</span><b>'+metric(m.active)+'</b></div><div class="heroMetric"><span>Mapeados</span><b>'+metric(mapped)+'</b></div></div></aside></div></section>'+
+ '<section class="homePortalGatewayV83" aria-label="Acessos aos serviços"><div class="wrap"><div class="homePublicServiceStripV83"><div><span class="miniLabel">Para o cidadão</span><b>Acessos diretos</b></div><a href="#/rede-municipal">'+iconSvg('layers')+' Onde resolver?</a><a href="#/resolvidas">'+iconSvg('route')+' Problemas resolvidos</a><a href="#/noticias">'+iconSvg('list')+' Notícias da cidade</a><a href="#/transparencia">'+iconSvg('shield')+' Transparência</a></div></div></section>'+
  '<section class="homeIntentV82" aria-labelledby="homeIntentTitle"><div class="wrap"><div class="homeIntentHeadV82"><div><span class="miniLabel">Comece por aqui</span><h2 id="homeIntentTitle">O que você quer fazer?</h2></div><a class="miniLink" href="#/demonstracao">Ver apresentação guiada →</a></div><div class="homeIntentGridV82">'+
  '<a href="#/registrar"><span>'+iconSvg('plus')+'</span><div><b>Registrar um problema</b><small>Envie um relato urbano em poucos passos.</small></div><i>→</i></a>'+
  '<a href="#/acompanhar"><span>'+iconSvg('search')+'</span><div><b>Acompanhar um protocolo</b><small>Consulte andamento e histórico do registro.</small></div><i>→</i></a>'+
  '<a href="#/bairro"><span>'+iconSvg('map')+'</span><div><b>Entender meu bairro</b><small>Veja radar, categorias e atualizações locais.</small></div><i>→</i></a>'+
  '<a class="homeIntentDemoV82" href="#/demonstracao"><span>'+iconSvg('chart')+'</span><div><b>Explorar a versão DEMO</b><small>Conta fictícia, jornal e roteiro de apresentação.</small></div><i>→</i></a>'+
  '</div></div></section>'+
- '<section class="section civicBentoSectionV53"><div class="wrap"><div class="titleRow titleRowCompactV53"><div><div class="eyebrow">Leitura da comunidade</div><h2>Uma leitura rápida antes de abrir o painel</h2></div><button type="button" class="commandInlineV53" data-command-open>'+iconSvg('command')+' Buscar tudo <kbd>Ctrl K</kbd></button></div>'+
+ '<section class="section civicBentoSectionV53"><div class="wrap"><div class="titleRow titleRowCompactV53"><div><div class="eyebrow">Registros públicos aprovados</div><h2>Piracicaba em números</h2></div><button type="button" class="commandInlineV53" data-command-open>'+iconSvg('command')+' Buscar tudo <kbd>Ctrl K</kbd></button></div>'+
  '<div class="civicBentoV53">'+
- '<article class="bentoCellV53 bentoOpenV53 spotlightV53"><div class="bentoTopV53"><span class="bentoIconV53">'+iconSvg('route')+'</span><span class="miniLabel">Ocorrências abertas</span></div><strong>'+open+'</strong><p>'+m.active+' já estão em alguma etapa de acompanhamento.</p><div class="bentoProgressV53"><i style="width:'+(m.total?Math.round(open/m.total*100):0)+'%"></i></div><a href="#/mapa">Ver no mapa '+iconSvg('arrow')+'</a></article>'+
- '<article class="bentoCellV53 spotlightV53"><div class="bentoTopV53"><span class="bentoIconV53">'+catIcon(ins.topCat.id)+'</span><span class="miniLabel">Categoria mais frequente</span></div><strong class="bentoLabelV53">'+esc(ins.topCat.label)+'</strong><p>'+ins.topCat.count+' registro(s) no conjunto visível.</p><a href="#/registrar/'+encodeURIComponent(ins.topCat.id)+'">Registrar nessa categoria '+iconSvg('arrow')+'</a></article>'+
- '<article class="bentoCellV53 spotlightV53"><div class="bentoTopV53"><span class="bentoIconV53">'+iconSvg('map')+'</span><span class="miniLabel">Bairro mais representado</span></div><strong class="bentoLabelV53">'+esc(ins.topHood.name)+'</strong><p>'+ins.topHood.count+' registro(s) públicos/demonstrativos.</p><a href="'+(ins.topHood.count?'#/bairro?nome='+encodeURIComponent(ins.topHood.name):'#/bairro')+'">Abrir radar do bairro '+iconSvg('arrow')+'</a></article>'+
+ '<article class="bentoCellV53 bentoOpenV53 spotlightV53"><div class="bentoTopV53"><span class="bentoIconV53">'+iconSvg('route')+'</span><span class="miniLabel">Ocorrências abertas</span></div><strong>'+metric(open)+'</strong><p>'+ (hasRead?m.active+' em análise, encaminhados ou em andamento.':'Aguardando a leitura pública.')+'</p><a href="#/mapa">Ver no mapa '+iconSvg('arrow')+'</a></article>'+
+ '<article class="bentoCellV53 spotlightV53"><div class="bentoTopV53"><span class="bentoIconV53">'+catIcon(ins.topCat.id)+'</span><span class="miniLabel">Categoria mais frequente</span></div><strong class="bentoLabelV53">'+esc(ins.topCat.label)+'</strong><p>'+(hasRead?ins.topCat.count+' registro(s) neste recorte.':'Aguardando a leitura pública.')+'</p><a href="#/registrar/'+encodeURIComponent(ins.topCat.id)+'">Registrar nessa categoria '+iconSvg('arrow')+'</a></article>'+
+ '<article class="bentoCellV53 spotlightV53"><div class="bentoTopV53"><span class="bentoIconV53">'+iconSvg('map')+'</span><span class="miniLabel">Bairro mais representado</span></div><strong class="bentoLabelV53">'+esc(ins.topHood.name)+'</strong><p>'+(hasRead?ins.topHood.count+' registro(s) públicos.':'Aguardando a leitura pública.')+'</p><a href="'+(ins.topHood.count?'#/bairro?nome='+encodeURIComponent(ins.topHood.name):'#/bairro')+'">Abrir radar do bairro '+iconSvg('arrow')+'</a></article>'+
  '<article class="bentoCellV53 bentoTrustV53 spotlightV53"><div class="bentoTopV53"><span class="bentoIconV53">'+iconSvg('shield')+'</span><span class="miniLabel">Privacidade por desenho</span></div><strong class="bentoLabelV53">Público no necessário. Privado no sensível.</strong><p>Contato, token e localização exata ficam separados do mapa público.</p><a href="#/privacidade">Entender proteção '+iconSvg('arrow')+'</a></article>'+
  '</div></div></section>'+
-  '<section class="section municipalPulseV54"><div class="wrap"><div class="municipalPulseHeadV54"><div><div class="eyebrow">Quem cuida do quê?</div><h2>Da categoria para a área pública de referência</h2><p class="muted">Uma leitura informativa das competências e serviços publicados pela Prefeitura — sem simular despacho oficial.</p></div><a class="btn secondary" href="#/rede-municipal">Ver rede municipal '+iconSvg('arrow')+'</a></div><div class="municipalPulseGridV54">'+
+  '<section class="section municipalPulseV54" data-home-territory-anchor><div class="wrap"><div class="municipalPulseHeadV54"><div><div class="eyebrow">Quem cuida do quê?</div><h2>Da categoria para a área pública de referência</h2><p class="muted">Uma leitura informativa das competências e serviços publicados pela Prefeitura — sem simular despacho oficial.</p></div><a class="btn secondary" href="#/rede-municipal">Ver rede municipal '+iconSvg('arrow')+'</a></div><div class="municipalPulseGridV54">'+
  [['vias','Vias'],['agua','Água'],['sinalizacao','Sinalização'],['alagamentos','Drenagem'],['residuos','Resíduos'],['acessibilidade','Acessibilidade']].map(x=>{const r=routingReference(x[0]);return '<a href="#/rede-municipal?cat='+x[0]+'" class="municipalPulseItemV54 spotlightV53"><span>'+catIcon(x[0])+'</span><div><b>'+esc(x[1])+'</b><small>'+esc(r.agencyLabel)+'</small></div><i>'+iconSvg('arrow')+'</i></a>'}).join('')+
  '</div></div></section>'+'<section class="section sectionSoft"><div class="wrap"><div class="titleRow"><div><div class="eyebrow">Comece pelo problema</div><h2>Escolha a categoria e vá direto ao registro</h2><p class="muted">A categoria já prepara o formulário e mantém a navegação curta.</p></div></div><div class="categoryGridV51">'+CATEGORIES.map(c=>'<a class="categoryTileV51" href="#/registrar/'+encodeURIComponent(c[0])+'"><span class="categoryIcon">'+catIcon(c[0])+'</span><span class="categoryCopy"><b>'+esc(c[2])+'</b><small>Registrar agora</small></span><span class="categoryArrow">→</span></a>').join('')+'</div></div></section>'+
- '<section class="section flowSectionV51"><div class="wrap"><div class="titleRow"><div><div class="eyebrow">Fluxo transparente</div><h2>Do relato ao acompanhamento, sem ruído</h2></div></div><div class="flowGridV51"><article><span>01</span><div><b>Descreva</b><p>Categoria, contexto e localização aproximada.</p></div></article><article><span>02</span><div><b>Receba o protocolo</b><p>O backend gera um identificador real do projeto.</p></div></article><article><span>03</span><div><b>Acompanhe</b><p>Status, histórico e mapa ficam no mesmo lugar.</p></div></article></div></div></section>'+
+ '<section class="section flowSectionV51"><div class="wrap"><div class="titleRow"><div><div class="eyebrow">Fluxo transparente</div><h2>Como o acompanhamento funciona</h2></div></div><div class="flowGridV51"><article><span>01</span><div><b>Descreva</b><p>Categoria, contexto e localização aproximada.</p></div></article><article><span>02</span><div><b>Receba o protocolo</b><p>Use o número para consultar seu registro.</p></div></article><article><span>03</span><div><b>Acompanhe</b><p>Status, histórico e mapa ficam no mesmo lugar.</p></div></article></div>'+statusStepper(null)+'</div></section>'+
  homeNews()+
- '<section class="section"><div class="wrap"><div class="titleRow"><div><div class="eyebrow">Agora na cidade</div><h2>Ocorrências recentes</h2><p class="muted">Registros demonstrativos e ocorrências públicas aprovadas.</p></div><a class="btn secondary" href="#/mapa">'+iconSvg('map')+' Ver todas</a></div><div class="list occurrenceListV51">'+recentRows(5)+'</div></div></section>'
+ '<section class="section"><div class="wrap"><div class="titleRow"><div><div class="eyebrow">Agora na cidade</div><h2>Ocorrências públicas recentes</h2><p class="muted">Registros aprovados para consulta.</p></div><a class="btn secondary" href="#/mapa">'+iconSvg('map')+' Ver todas</a></div><div class="list occurrenceListV51">'+(records.length?recentRows(records):'<p class="empty">'+(hasRead?'Nenhum registro publicado nesta leitura.':'Consulta pública indisponível por enquanto.')+'</p>')+'</div></div></section>'
 }
 
 function register(defaultCategory=''){
@@ -316,7 +318,7 @@ function bindNeighborhood(query=new URLSearchParams()){
  if(ms.length===1)currentMap.setView(ms[0].getLatLng(),15);else currentMap.fitBounds(L.featureGroup(ms).getBounds().pad(.25),{maxZoom:15});setTimeout(()=>currentMap.invalidateSize(),80)
 }
 function municipalNetworkPage(){
- return pageHead('Onde resolver?','Encontre a área pública de referência','Escolha o tipo de problema para entender quais áreas e serviços públicos têm relação com o tema. Referência informativa, sem despacho oficial.')+
+ return pageHead('Serviços e orientação','Onde resolver?','Escolha o tipo de problema para entender quais áreas e serviços públicos têm relação com o tema. Referência informativa, sem despacho oficial.')+
  '<section class="section municipalNetworkV54"><div class="wrap"><div id="municipalNetworkRoot" class="networkLoadingV54" aria-busy="true"><div class="card"><span class="miniLabel">Carregando referência</span><h2>Organizando a rede municipal…</h2><div class="skeletonStackV56" aria-hidden="true"><span class="skeletonV56"></span><span class="skeletonV56"></span><span class="skeletonV56"></span></div><p class="muted">Consultando a base de referência versionada no projeto.</p></div></div></div></section>'
 }
 function agencyGlyph(id){const icons={'administracao-governo':'route','obras':'vias','agricultura-meio-ambiente':'areas','seguranca-transito':'sinalizacao','semae':'agua','cidadania':'shield'};return iconSvg(icons[id]||'layers')}
@@ -333,14 +335,48 @@ function renderMunicipalNetwork(data,initialCategory=''){
  const root=$('#municipalNetworkRoot');if(!root)return;root.classList.remove('networkLoadingV54');root.removeAttribute('aria-busy');const categories=Object.keys(data.routing||{});
  const channels=Array.isArray(data.officialChannels)?data.officialChannels:[];
  root.innerHTML='<section class="networkOfficialChannelsV84" aria-labelledby="officialChannelsTitle"><div class="networkOfficialIntroV84"><div><span class="miniLabel">Canais oficiais verificados</span><h2 id="officialChannelsTitle">Quando precisar falar com a Prefeitura</h2><p>O Cidade Conecta organiza e orienta. O atendimento municipal continua nos canais oficiais publicados pela Prefeitura de Piracicaba.</p></div><span class="networkIntegrationBadgeV84">Integração automática não ativada</span></div><div class="networkOfficialGridV84">'+channels.map(ch=>'<a href="'+esc(ch.url)+'" target="_blank" rel="noopener noreferrer"><span>'+iconSvg(ch.id==='sip156'?'route':ch.id==='portal'?'layers':'list')+'</span><div><small>'+esc(ch.kind||'Canal oficial')+'</small><b>'+esc(ch.name)+'</b><em>'+esc(ch.phone?ch.phone+' · '+ch.availability:ch.availability||'')+'</em></div><i>↗</i></a>').join('')+'</div><p class="networkIntegrationNoteV84">'+iconSvg('shield')+' '+esc(data.metadata?.integrationNote||'Sem integração automática configurada.')+'</p></section>'+
- '<div class="networkChooserV54 networkChooserFirstV57"><div class="networkChooserHeadV54"><div><span class="miniLabel">Comece pelo problema</span><h2>Selecione o tipo de problema</h2></div><input id="networkSearch" type="search" placeholder="Buscar secretaria, setor ou serviço" aria-label="Buscar na rede municipal"></div><div class="networkCategoryTabsV54">'+categories.map(c=>'<button type="button" data-network-category="'+esc(c)+'">'+catIcon(c)+'<span>'+esc(data.routing[c].label)+'</span></button>').join('')+'</div><div id="networkFlowSlot"></div></div>'+
+ '<div class="networkChooserV54 networkChooserFirstV57"><div class="networkChooserHeadV54"><div><span class="miniLabel">Comece pelo problema</span><h2>Selecione o tipo de problema</h2></div><input id="networkSearch" type="search" placeholder="Buscar assunto, secretaria ou serviço" aria-label="Buscar na rede municipal"></div><div class="networkCategoryTabsV54">'+categories.map(c=>'<button type="button" data-network-category="'+esc(c)+'" aria-pressed="false" aria-controls="networkFlowSlot">'+catIcon(c)+'<span>'+esc(data.routing[c].label)+'</span></button>').join('')+'</div><div id="networkFlowSlot" aria-live="polite"></div></div>'+
  '<details class="networkIntroV54 networkHowV57"><summary>Como funciona esta referência</summary><div class="networkScaleV54">'+(data.flow||[]).map((x,i)=>'<div><span>'+String(i+1).padStart(2,'0')+'</span><b>'+esc(x.label)+'</b><small>'+esc(x.description)+'</small></div>').join('<i>→</i>')+'</div><div class="networkDisclaimerV54">'+iconSvg('shield')+' <span>'+esc(data.metadata?.disclaimer||'Referência informativa do protótipo.')+'</span></div></details>'+
- '<div class="titleRow networkDirectoryTitleV54"><div><div class="eyebrow">Diretório relacionado ao MVP</div><h2>Áreas municipais com relação direta às categorias atuais</h2><p class="muted">Contatos e setores abaixo vêm de páginas oficiais consultadas em '+esc(data.metadata?.lastVerified||'2026')+'.</p></div><a class="btn secondary" href="'+esc(data.metadata?.officialDirectoryUrl||'#')+'" target="_blank" rel="noopener noreferrer">Diretório oficial ↗</a></div>'+
- '<div id="networkAgencyGrid" class="networkAgencyGridV54">'+(data.agencies||[]).map(a=>'<article class="networkAgencyCardV54 spotlightV53" data-network-agency data-search="'+esc(normText([a.name,a.shortName,...(a.sectors||[])].join(' ')))+'"><div class="networkAgencyHeadV54"><span>'+agencyGlyph(a.id)+'</span><div><small>'+esc(a.type)+'</small><h3>'+esc(a.shortName)+'</h3></div></div><p>'+esc(a.name)+'</p><div class="networkSectorListV54">'+(a.sectors||[]).map(s=>'<span>'+esc(s)+'</span>').join('')+'</div><div class="networkContactV54"><span>'+esc(a.phone||'')+'</span><span>'+esc(a.email||'')+'</span></div><div class="networkAgencyActionsV54"><a href="'+esc(a.officialUrl)+'" target="_blank" rel="noopener noreferrer">Página oficial ↗</a><a href="'+esc(a.servicesUrl)+'" target="_blank" rel="noopener noreferrer">Serviços ↗</a></div></article>').join('')+'</div>'+
+ '<div class="titleRow networkDirectoryTitleV54"><div><div class="eyebrow">Diretório de serviços</div><h2>Secretarias e serviços por assunto</h2><p class="muted">Contatos e setores abaixo vêm de páginas oficiais consultadas em '+esc(data.metadata?.lastVerified||'2026')+'.</p></div><a class="btn secondary" href="'+esc(data.metadata?.officialDirectoryUrl||'#')+'" target="_blank" rel="noopener noreferrer">Diretório oficial ↗</a></div>'+
+ '<p id="networkDirectoryStatus" class="network-directory-status" role="status"></p><div id="networkAgencyGrid" class="networkAgencyGridV54">'+(data.agencies||[]).map(a=>'<article class="networkAgencyCardV54 spotlightV53" data-network-agency data-agency="'+esc(a.id)+'" data-search="'+esc(normText([a.name,a.shortName,...(a.sectors||[])].join(' ')))+'"><div class="networkAgencyHeadV54"><span>'+agencyGlyph(a.id)+'</span><div><small>'+esc(a.type)+'</small><h3>'+esc(a.shortName)+'</h3></div></div><p>'+esc(a.name)+'</p><div class="networkSectorListV54">'+(a.sectors||[]).map(s=>'<span>'+esc(s)+'</span>').join('')+'</div><div class="networkContactV54"><span>'+esc(a.phone||'')+'</span><span>'+esc(a.email||'')+'</span></div><div class="networkAgencyActionsV54"><a href="'+esc(a.officialUrl)+'" target="_blank" rel="noopener noreferrer">Página oficial ↗</a><a href="'+esc(a.servicesUrl)+'" target="_blank" rel="noopener noreferrer">Serviços ↗</a></div></article>').join('')+'</div>'+
  '<div class="card networkStructureV54"><div><span class="miniLabel">Estrutura oficial consultada</span><h2>Secretarias e outros órgãos publicados pelo Município</h2><p class="muted">Esta lista contextualiza a administração municipal; o Cidade Conecta detalha somente as áreas relacionadas às categorias do MVP.</p></div><div class="networkStructureTagsV54">'+(data.officialStructure||[]).map(x=>'<span>'+esc(x)+'</span>').join('')+'</div></div>';
- const selected=categories.includes(initialCategory)?initialCategory:categories[0];function choose(cat){$$('[data-network-category]').forEach(b=>b.classList.toggle('active',b.dataset.networkCategory===cat));$('#networkFlowSlot').innerHTML=networkFlowHtml(data,cat)}
- $$('[data-network-category]').forEach(b=>b.onclick=()=>{choose(b.dataset.networkCategory);history.replaceState(null,'','#/rede-municipal?cat='+encodeURIComponent(b.dataset.networkCategory))});
- $('#networkSearch')?.addEventListener('input',e=>{const q=normText(e.target.value);$$('[data-network-agency]').forEach(card=>card.classList.toggle('hidden',Boolean(q)&&!card.dataset.search.includes(q)))});choose(selected);bindSpotlights()
+ const categoryButtons=$$('[data-network-category]'),agencyCards=$$('[data-network-agency]');
+ const selected=categories.includes(initialCategory)?initialCategory:categories[0];
+ function choose(category){
+  for(const button of categoryButtons){
+   const active=button.dataset.networkCategory===category;
+   button.classList.toggle('active',active);
+   button.setAttribute('aria-pressed',String(active));
+  }
+  const official=channels.find(channel=>channel.id==='sip156')?.url||data.metadata?.official156Url;
+  $('#networkFlowSlot').innerHTML=networkFlowHtml(data,category)+
+   '<div class="network-citizen-actions"><a class="btn primary" href="#/registrar/'+encodeURIComponent(category)+'">Registrar no Cidade Conecta</a>'+
+   (official?'<a class="btn secondary" href="'+esc(official)+'" target="_blank" rel="noopener noreferrer">Abrir SIP 156 oficial ↗</a>':'')+'</div>';
+ }
+ function search(value=''){
+  const q=normText(value),matchesAgency=new Set();
+  if(q)for(const category of categories){
+   const item=data.routing[category];
+   if(!normText([item.label,...(item.sectors||[])].join(' ')).includes(q))continue;
+   for(const id of [...(item.primaryAgencyIds||[]),...(item.relatedAgencyIds||[])])matchesAgency.add(id);
+  }
+  let matches=0;
+  for(const card of agencyCards){
+   const visible=!q||card.dataset.search.includes(q)||matchesAgency.has(card.dataset.agency);
+   card.hidden=!visible;
+   if(visible)matches++;
+  }
+  $('#networkDirectoryStatus').textContent=matches?matches+(matches===1?' área municipal encontrada':' áreas municipais encontradas'):'Nenhuma área encontrada. Tente outro assunto ou use as categorias acima.';
+ }
+ for(const button of categoryButtons)button.onclick=()=>{
+  const category=button.dataset.networkCategory;
+  choose(category);
+  history.replaceState(null,'','#/rede-municipal?cat='+encodeURIComponent(category));
+ };
+ $('#networkSearch')?.addEventListener('input',event=>search(event.target.value));
+ choose(selected);
+ search();
+ bindSpotlights();
 }
 async function bindMunicipalNetwork(query=new URLSearchParams()){const root=$('#municipalNetworkRoot');if(!root)return;try{const data=await loadMunicipalNetwork();renderMunicipalNetwork(data,query.get('cat')||'')}catch{root.classList.remove('networkLoadingV54');root.removeAttribute('aria-busy');root.innerHTML='<div class="card empty"><h2>Referência municipal indisponível</h2><p class="muted">A página principal continua funcionando. Tente novamente mais tarde ou use o diretório oficial da Prefeitura.</p></div>'}}
 function mine(){
@@ -388,9 +424,42 @@ function adminCloudDetail(o,capabilities={}){
  return '<article class="card adminReadOnlyV57"><div class="titleRow"><div><span class="miniLabel">Visão interna segura</span><h2>'+esc(o.protocol)+'</h2><p class="muted">'+esc(category)+' · '+esc(o.neighborhood_label||'Bairro não informado')+'</p></div>'+badge(o.status)+'</div><h3>'+esc(o.title)+'</h3><p>'+esc(o.description||'')+'</p><div class="adminMetaGridV57"><div><small>Área/setor</small><b>'+esc(o.responsible_agency||'A definir')+'</b></div><div><small>Moderação</small><b>'+esc(o.moderation_status||'—')+'</b></div><div><small>Território</small><b>'+esc(o.territory_resolution_status||'—')+'</b></div><div><small>Atualizado</small><b>'+esc(fmt(o.updated_at||o.created_at))+'</b></div></div>'+op+media+resolution+integrationHtml+'<h3>Histórico</h3><div class="timeline">'+(history.length?history.map(h=>'<div><span></span><p><b>'+esc(h.status||'Atualização')+'</b><small>'+esc(fmt(h.created_at))+'</small><br>'+esc(h.note||'')+(h.public_note?' <em>· público</em>':'')+'</p></div>').join(''):'<p class="muted">Sem histórico disponível.</p>')+'</div></article>'
 }
 function notFound(){return `${pageHead('404','Página não encontrada','O endereço informado não existe neste protótipo.')}<section class="section"><div class="wrap"><div class="card empty"><a class="btn primary" href="#/">Voltar ao início</a></div></div></section>`}
-function findProtocol(p){const v=decodeURIComponent(String(p||'')).trim().toUpperCase();return db.occurrences.find(o=>String(o.protocol).toUpperCase()===v)}
-function route(){destroyMaps();const raw=location.hash.replace(/^#\/?/,'');const [pathPart,queryPart='']=raw.split('?');const parts=pathPart.split('/').filter(Boolean),p=parts[0]||'',query=new URLSearchParams(queryPart);const labels={'':'Início','registrar':'Registrar ocorrência','acompanhar':'Acompanhar protocolo','mapa':'Mapa','dashboard':'Indicadores','minhas':'Meu Cidade Conecta','conta':'Minha conta','demonstracao':'Central DEMO','sobre':'Sobre','privacidade':'Privacidade','admin':'Admin','ocorrencia':'Ocorrência','rede-municipal':'Rede municipal','bairro':'Radar do bairro'};document.body.classList.toggle('adminRouteV57',p==='admin');document.title=(labels[p]||'Cidade Conecta')+' · Cidade Conecta Piracicaba';const civic=window.CidadeConectaCivic?.resolve(p,query,parts);if(civic?.title)document.title=civic.title+' · Cidade Conecta Piracicaba';let html=civic?civic.html:p===''?home():p==='registrar'?register(parts[1]||''):p==='acompanhar'?follow():p==='mapa'?mapPage():p==='dashboard'?dashboard():p==='minhas'?mine():p==='bairro'?neighborhoodPage(query.get('nome')||''):p==='rede-municipal'?municipalNetworkPage():p==='sobre'?about():p==='privacidade'?privacy():p==='admin'?admin():p==='ocorrencia'&&parts[1]?occurrence(parts[1]):notFound();$('#app').innerHTML=html;setActive(p);if(!civic)bind(p,parts,query);else{bindGlobalPageActions();civic.bind?.()}window.CidadeConectaCivic?.enhance();window.scrollTo({top:0,behavior:'instant'});$('#app').focus({preventScroll:true});const announcer=$('#routeAnnouncer');if(announcer)announcer.textContent=(civic?.title||labels[p]||'Cidade Conecta')+' carregado'}
-function setActive(p){document.querySelectorAll('#nav a').forEach(a=>{const v=a.dataset.route||'',active=v===p;a.classList.toggle('active',active);active?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});const direct=new Set(['','registrar','mapa','acompanhar']);document.querySelectorAll('[data-mobile-route]').forEach(a=>{const v=a.dataset.mobileRoute,active=v==='more'?!direct.has(p):v===p;a.classList.toggle('active',active);active?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});const more=$('#mobileMore');if(more&&!more.dataset.bound){more.dataset.bound='1';more.onclick=()=>{const nav=$('#nav'),open=!nav?.classList.contains('open');nav?.classList.toggle('open',open);$('#menu')?.setAttribute('aria-expanded',String(open));$('#menu')?.setAttribute('aria-label',open?'Fechar menu':'Abrir menu')}}$('#nav')?.classList.remove('open');$('#menu')?.setAttribute('aria-expanded','false');$('#menu')?.setAttribute('aria-label','Abrir menu')}
+function findProtocol(p){let v;try{v=decodeURIComponent(String(p||'')).trim().toUpperCase()}catch{return null}return db.occurrences.find(o=>String(o.protocol).toUpperCase()===v)}
+function route({preservePosition=false}={}){
+ const app=$('#app'),y=window.scrollY,active=preservePosition&&app.contains(document.activeElement)?document.activeElement:null;
+ const focusSelector=active?.id?'#'+CSS.escape(active.id):active?.matches('a[href]')?'a[href="'+CSS.escape(active.getAttribute('href'))+'"]':active?.hasAttribute('data-civic-refresh')?'[data-civic-refresh]':null;
+ destroyMaps();const raw=location.hash.replace(/^#\/?/,'');const [pathPart,queryPart='']=raw.split('?');const parts=pathPart.split('/').filter(Boolean),p=parts[0]||'',query=new URLSearchParams(queryPart);const labels={'':'Início','registrar':'Registrar ocorrência','acompanhar':'Acompanhar protocolo','mapa':'Mapa','dashboard':'Indicadores','minhas':'Meu Cidade Conecta','conta':'Minha conta','demonstracao':'Central DEMO','sobre':'Sobre','privacidade':'Privacidade','admin':'Admin','ocorrencia':'Ocorrência','rede-municipal':'Rede municipal','bairro':'Radar do bairro'};document.body.classList.toggle('adminRouteV57',p==='admin');document.title=(labels[p]||'Cidade Conecta')+' · Cidade Conecta Piracicaba';const civic=window.CidadeConectaCivic?.resolve(p,query,parts);if(civic?.title)document.title=civic.title+' · Cidade Conecta Piracicaba';let html=civic?civic.html:p===''?home():p==='registrar'?register(parts[1]||''):p==='acompanhar'?follow():p==='mapa'?mapPage():p==='dashboard'?dashboard():p==='minhas'?mine():p==='bairro'?neighborhoodPage(query.get('nome')||''):p==='rede-municipal'?municipalNetworkPage():p==='sobre'?about():p==='privacidade'?privacy():p==='admin'?admin():p==='ocorrencia'&&parts[1]?occurrence(parts[1]):notFound();app.innerHTML=html;if(!preservePosition)setActive(p);if(!civic)bind(p,parts,query);else{bindGlobalPageActions();civic.bind?.()}window.CidadeConectaCivic?.enhance();window.scrollTo({top:preservePosition?y:0,behavior:'instant'});if(preservePosition){if(active)(focusSelector?app.querySelector(focusSelector)||app:app).focus({preventScroll:true});return}app.focus({preventScroll:true});const announcer=$('#routeAnnouncer');if(announcer)announcer.textContent=(civic?.title||labels[p]||'Cidade Conecta')+' carregado'}
+let menuOpener=null;
+function setMenuOpen(open){
+ $('#nav')?.classList.toggle('open',open);
+ for(const [selector,label] of [['#menu','menu'],['#mobileMore','mais opções']]){
+  const button=$(selector);
+  button?.setAttribute('aria-expanded',String(open));
+  button?.setAttribute('aria-label',(open?'Fechar ':'Abrir ')+label);
+ }
+}
+function toggleMenu(event){
+ const open=!$('#nav')?.classList.contains('open');
+ setMenuOpen(open);
+ if(open){
+  menuOpener=event.currentTarget;
+  ($('#nav a[aria-current="page"]')||$('#nav a'))?.focus({preventScroll:true});
+ }
+}
+function setActive(p){
+ for(const link of $$('#nav a')){
+  const active=(link.dataset.route||'')===p;
+  link.classList.toggle('active',active);
+  if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
+ }
+ const direct=new Set(['','registrar','mapa','acompanhar']);
+ for(const link of $$('[data-mobile-route]')){
+  const key=link.dataset.mobileRoute,active=key==='more'?!direct.has(p):key===p;
+  link.classList.toggle('active',active);
+  if(active&&key!=='more')link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
+ }
+ setMenuOpen(false);
+}
 function bind(p,parts,query){bindGlobalPageActions();if(p==='')bindHome();if(p==='registrar')bindRegister(parts[1]||'');if(p==='acompanhar')bindFollow();if(p==='mapa')bindMap(query);if(p==='bairro')bindNeighborhood(query);if(p==='rede-municipal')bindMunicipalNetwork(query);if(p==='admin')bindAdmin();if(p==='ocorrencia'&&parts[1])bindOccurrenceCloud(parts[1])}
 function commandCatalog(){
  const base=[
@@ -427,8 +496,10 @@ function setupCommandPalette(){
 function bindSpotlights(){if(!matchMedia('(pointer:fine)').matches)return;$$('.spotlightV53').forEach(el=>{if(el.dataset.spotlightBound)return;el.dataset.spotlightBound='1';el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px')})})}
 function bindGlobalPageActions(){bindSpotlights();document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copyProtocol(b.dataset.copy));document.querySelectorAll('[data-share]').forEach(b=>b.onclick=()=>shareOccurrence(b.dataset.share));document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>{const saved=toggleSaved(b.dataset.save);b.classList.toggle('soft',saved);b.classList.toggle('secondary',!saved);b.innerHTML=iconSvg('bookmark')+' '+(saved?'Salvo':'Salvar protocolo');toast(saved?'Protocolo salvo neste navegador.':'Protocolo removido dos salvos.')});window.CidadeConectaCivic?.enhance()}
 async function bindOccurrenceCloud(protocol){
- const normalized=String(protocol||'').trim().toUpperCase();let o=findProtocol(normalized);if(o)setTimeout(()=>initDetailMap(o),0);
- try{const api=cloudApi();if(api?.health&&!api.state?.connected)await api.health();if(!api?.state?.connected||!api?.trackOccurrence)return;const remote=await fetchCloudOccurrence(normalized,trackingKeyFor(normalized));if(!remote)return;if(o?.localOwner){remote.localOwner=true;remote.privateData=o.privateData||{}}o=remote;const idx=db.occurrences.findIndex(x=>String(x.protocol).toUpperCase()===normalized);if(idx>=0&&db.occurrences[idx].localOwner){db.occurrences[idx]=o;window.CidadeConectaLocalDB=db;saveDB()}if(location.hash.replace(/^#\/?/,'').split('/')[0]!=='ocorrencia')return;$('#app').innerHTML=`${pageHead('Ocorrência',esc(o.protocol),'Acompanhamento seguro do registro no Cidade Conecta.')}<section class="section"><div class="wrap">${detail(o)}</div></section>`;bindGlobalPageActions();setTimeout(()=>initDetailMap(o),0)}catch(error){console.warn('Falha ao atualizar ocorrência pelo backend:',String(error?.message||error))}
+ const normalized=String(protocol||'').trim().toUpperCase(),requestHash=location.hash;
+ if(!window.CidadeConectaData.validProtocol(normalized))return;
+ let o=findProtocol(normalized);if(o)setTimeout(()=>initDetailMap(o),0);
+ try{const api=cloudApi();if(api?.health&&!api.state?.connected)await api.health();if(!api?.state?.connected||!api?.trackOccurrence)return;const remote=await fetchCloudOccurrence(normalized,trackingKeyFor(normalized));if(!remote)return;if(o?.localOwner){remote.localOwner=true;remote.privateData=o.privateData||{}}o=remote;const idx=db.occurrences.findIndex(x=>String(x.protocol).toUpperCase()===normalized);if(idx>=0&&db.occurrences[idx].localOwner){db.occurrences[idx]=o;window.CidadeConectaLocalDB=db;saveDB()}if(location.hash!==requestHash)return;$('#app').innerHTML=`${pageHead('Ocorrência',esc(o.protocol),'Acompanhamento seguro do registro no Cidade Conecta.')}<section class="section"><div class="wrap">${detail(o)}</div></section>`;bindGlobalPageActions();setTimeout(()=>initDetailMap(o),0)}catch(error){console.warn('Falha ao atualizar ocorrência pelo backend:',String(error?.message||error))}
 }
 function bindHome(){
  const f=$('#homeSearch');if(f)f.onsubmit=e=>{e.preventDefault();const p=$('#homeProtocol').value.trim();if(p)location.hash='#/ocorrencia/'+encodeURIComponent(p)};
@@ -436,14 +507,20 @@ function bindHome(){
  const launchPortalSearch=value=>{openCommand();const input=$('#commandInput'),q=String(value||'').trim();if(input){input.value=q;renderCommand(q);setTimeout(()=>input.focus(),20)}};
  if(portalSearch)portalSearch.onsubmit=e=>{e.preventDefault();launchPortalSearch(portalInput?.value)};
  document.querySelectorAll('[data-home-query]').forEach(b=>b.onclick=()=>launchPortalSearch(b.dataset.homeQuery));
- const el=$('#homeMap');if(!el)return;if(!window.L){el.innerHTML='<div class="stateCardV57 homeMapFallbackV57"><span>'+iconSvg('map')+'</span><div><b>Mapa temporariamente indisponível</b><p>Você ainda pode explorar os registros pela lista e pelos indicadores.</p><a class="miniLink" href="#/mapa">Abrir área do mapa →</a></div></div>';return}
+ const button=$('#homeMapLoad');if(button)button.onclick=()=>loadHomeMap(button);
+}
+function loadHomeMap(button){
+ const el=$('#homeMap');if(!el||currentMap)return;if(!window.L){el.innerHTML='<div class="stateCardV57 homeMapFallbackV57"><span>'+iconSvg('map')+'</span><div><b>Mapa temporariamente indisponível</b><p>Você ainda pode explorar os registros pela lista e pelos indicadores.</p><a class="miniLink" href="#/mapa">Abrir área do mapa →</a></div></div>';return}
+ const restoreFocus=document.activeElement===button;
+ el.replaceChildren();if(restoreFocus){el.tabIndex=-1;el.focus({preventScroll:true})}
  const records=window.CidadeConectaData.realRows(publicMetricRecords()).filter(o=>Number.isFinite(o.lat)&&Number.isFinite(o.lng)).slice(0,20);
  currentMap=L.map(el,{zoomControl:false,attributionControl:true,scrollWheelZoom:false}).setView(PIRACICABA,12);
  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap'}).addTo(currentMap);
  const markers=[];records.forEach(o=>{const marker=L.marker([o.lat,o.lng],{icon:mapMarkerIcon(o.status),title:o.title,alt:'Ocorrência: '+o.title}).addTo(currentMap).bindTooltip(esc(o.title),{direction:'top'});marker.on('click',()=>location.hash='#/ocorrencia/'+encodeURIComponent(o.protocol));markers.push(marker)});
  if(markers.length)currentMap.fitBounds(L.featureGroup(markers).getBounds().pad(.28),{maxZoom:13});
- fetch(IBGE_BOUNDARY_URL,{headers:{Accept:'application/vnd.geo+json'}}).then(r=>r.ok?r.json():Promise.reject()).then(geo=>L.geoJSON(geo,{style:{color:'#13706e',weight:2,opacity:.7,fillColor:'#bff054',fillOpacity:.02,dashArray:'6 7'}}).addTo(currentMap)).catch(()=>{});
- setTimeout(()=>currentMap?.invalidateSize(),100)
+ const map=currentMap;
+ fetch(IBGE_BOUNDARY_URL,{headers:{Accept:'application/vnd.geo+json'}}).then(r=>r.ok?r.json():Promise.reject()).then(geo=>{if(currentMap===map)L.geoJSON(geo,{style:{color:'#13706e',weight:2,opacity:.7,fillColor:'#bff054',fillOpacity:.02,dashArray:'6 7'}}).addTo(map)}).catch(()=>{});
+ setTimeout(()=>{if(currentMap===map)map.invalidateSize()},100)
 }
 
 function bindRegister(){
@@ -504,8 +581,8 @@ function bindMap(query=new URLSearchParams()){
   toolbar.innerHTML='<button type="button" id="mapOpenFiltersV58" class="mapToolBtnV58 mapToolFiltersV58">'+iconSvg('filter')+'<span>Filtros</span><em id="mapToolBadgeV58" hidden>0</em></button><button type="button" id="mapLocate" class="mapToolBtnV58">'+iconSvg('locate')+'<span>Perto de mim</span></button><button type="button" id="mapFit" class="mapToolBtnV58"><span>Ver todos</span></button><button type="button" id="mapShare" class="mapToolBtnV58">'+iconSvg('copy')+'<span>Copiar visão</span></button>';
   const results=document.createElement('div');results.id='mapResults';results.className='mapResultsV50';results.setAttribute('role','region');results.setAttribute('aria-label','Lista de ocorrências');
   const canvas=document.createElement('div');canvas.className='mapCanvasV50 mapCanvasV53 mapCanvasV55 mapCanvasV58';
-  const head=document.createElement('div');head.className='mapCanvasHead mapCanvasHeadV53';head.innerHTML='<div><span class="miniLabel">Mapa comunitário</span><b>Piracicaba · SP</b><div id="mapMiniStats" class="mapMiniStatsV53"></div></div><div class="mapHeadActionsV53"><div class="mapLegendInline"><span><i class="legendDot analysisDot"></i>Triagem</span><span><i class="legendDot progressDot"></i>Andamento</span><span><i class="legendDot resolvedDot"></i>Resolvida</span></div><button type="button" id="mapFocus" class="mapIconBtnV53" aria-label="Abrir mapa em modo foco" title="Modo foco">'+iconSvg('expand')+'</button></div>';
-  const context=document.createElement('div');context.className='mapContextV50 mapContextV53';context.innerHTML='<span>'+iconSvg('layers')+' OpenStreetMap + limite municipal IBGE</span><span id="mapDistanceHint">Os pontos públicos usam localização aproximada.</span>';
+  const head=document.createElement('div');head.className='mapCanvasHead mapCanvasHeadV53';head.innerHTML='<div><span class="miniLabel">Mapa comunitário</span><b>Piracicaba · SP</b><div id="mapMiniStats" class="mapMiniStatsV53"></div></div><div class="mapHeadActionsV53"><div class="mapLegendInline" role="group" aria-label="Legenda dos marcadores"><span><i class="legendDot receivedDot" aria-hidden="true"></i>Recebida</span><span><i class="legendDot analysisDot" aria-hidden="true"></i>Análise ou encaminhada</span><span><i class="legendDot progressDot" aria-hidden="true"></i>Em andamento</span><span><i class="legendDot resolvedDot" aria-hidden="true"></i>Resolvida</span></div><button type="button" id="mapFocus" class="mapIconBtnV53" aria-label="Abrir mapa em modo foco" title="Modo foco">'+iconSvg('expand')+'</button></div>';
+  const context=document.createElement('div');context.className='mapContextV50 mapContextV53';context.innerHTML='<span>'+iconSvg('layers')+' OpenStreetMap + limite municipal IBGE</span><span id="mapDistanceHint">Localização aproximada. Use a aba Lista para ler os registros sem interagir com o mapa.</span>';
   const stage=document.createElement('div');stage.className='mapStageV58';const note=document.createElement('div');note.id='mapNoteV58';note.className='mapNoteV58';note.setAttribute('role','status');note.hidden=true;stage.append(mapEl,note);
   const filterBar=document.createElement('div');filterBar.className='mapFilterBarV58';
   card.insertBefore(shell,filters);filterBar.append(filters,quick);side.append(filterBar,regionsPane,results);context.append(behavior);canvas.append(head,toolbar,stage,context);shell.append(side,canvas)
@@ -531,12 +608,18 @@ function bindMap(query=new URLSearchParams()){
 
  function clusterGroups(arr){const zoom=currentMap.getZoom(),enabled=$('#mapCluster')?.checked!==false;if(!enabled||zoom>=14)return arr.map(o=>[o]);const cell=zoom<=10?.09:zoom===11?.055:zoom===12?.032:.018,map=new Map();for(const o of arr){const key=Math.round(o.lat/cell)+':'+Math.round(o.lng/cell),g=map.get(key)||[];g.push(o);map.set(key,g)}return[...map.values()]}
  function clusterIcon(group){const open=group.filter(o=>o.status!=='Resolvida').length,size=group.length>=10?54:group.length>=5?50:46;return L.divIcon({className:'ccClusterWrapV55',html:'<span class="ccClusterV55"><b>'+group.length+'</b><small>'+open+' aberta'+(open===1?'':'s')+'</small></span>',iconSize:[size,size],iconAnchor:[size/2,size/2]})}
+ function publicMapReadPending(){
+  const snapshot=window.CidadeConectaPublicSource?.state();
+  return snapshot&&snapshot.status!=='live'&&!snapshot.lastSuccess?snapshot.status:'';
+ }
  function updateSummary(arr){
   const chips=$('#mapActiveChips');if(chips)chips.innerHTML=['mapCat','mapStatus','mapRegion','mapAgency','mapBairro','mapFrom','mapTo','mapLayer'].filter(id=>$('#'+id)?.value).map(id=>'<button type="button" data-map-remove="'+id+'">'+esc($('#'+id).selectedOptions?.[0]?.textContent||$('#'+id).value)+' <span aria-hidden="true">×</span><span class="srOnly"> Remover filtro</span></button>').join('');
   const active=arr.filter(o=>o.status!=='Resolvida').length,hoods=new Set(arr.map(o=>o.bairro).filter(Boolean)).size,n=activeValues().filter(Boolean).length,hidden=[$('#mapCat').value,$('#mapRegion')?.value,$('#mapAgency')?.value].filter(Boolean).length;
-  const text=arr.length+(arr.length===1?' ocorrência':' ocorrências')+' · '+(n?n+(n===1?' filtro ativo':' filtros ativos'):'sem filtros'),label=$('#mapActiveFilters');
+  const readPending=publicMapReadPending();
+  const readMessage=['idle','loading'].includes(readPending)?'Consultando a base pública':'Leitura pública indisponível';
+  const text=(readPending&&!arr.length?readMessage:arr.length+(arr.length===1?' ocorrência':' ocorrências'))+' · '+(n?n+(n===1?' filtro ativo':' filtros ativos'):'sem filtros'),label=$('#mapActiveFilters');
   if(label&&label.textContent!==text)label.textContent=text;
-  const mini=$('#mapMiniStats');if(mini)mini.innerHTML='<span><b>'+arr.length+'</b> visíveis</span><span><b>'+active+'</b> abertas</span><span><b>'+hoods+'</b> bairros</span>';
+  const mini=$('#mapMiniStats');if(mini)mini.innerHTML=readPending&&!arr.length?'<span>'+readMessage+'</span>':'<span><b>'+arr.length+'</b> visíveis</span><span><b>'+active+'</b> abertas</span><span><b>'+hoods+'</b> bairros</span>';
   const clear=$('#mapClear');if(clear)clear.hidden=!n;
   [['mapFilterBadge',hidden],['mapToolBadgeV58',n]].forEach(([id,v])=>{const b=$('#'+id);if(b){b.hidden=!v;b.textContent=String(v)}})
  }
@@ -560,11 +643,14 @@ function bindMap(query=new URLSearchParams()){
  }
  function renderResults(arr,groups){
   const count=$('#mapResultCount'),out=$('#mapResults'),region=$('#mapRegion')?.value;
-  if(count)count.textContent=String(arr.length);
+  if(count)count.textContent=publicMapReadPending()&&!arr.length?'—':String(arr.length);
   updateSummary(arr);syncControls(arr);
   if(!out)return;
   if(!arr.length){
-   if(region&&territoryState==='loading')out.innerHTML=emptyCard('layers','Carregando regiões…','O filtro de região é aplicado assim que a base territorial carregar.',false);
+   const readPending=publicMapReadPending();
+   if(readPending&&['idle','loading'].includes(readPending))out.innerHTML=emptyCard('map','Consultando ocorrências públicas','A lista aparece depois que a leitura terminar.',false);
+   else if(readPending)out.innerHTML=emptyCard('map','Leitura pública indisponível','Os filtros e a leitura territorial continuam disponíveis. Atualize a página quando a conexão voltar.',false);
+   else if(region&&territoryState==='loading')out.innerHTML=emptyCard('layers','Carregando regiões…','O filtro de região é aplicado assim que a base territorial carregar.',false);
    else if(region&&territoryState==='error')out.innerHTML=emptyCard('layers','Filtro por região indisponível','Não foi possível carregar a base territorial agora. Limpe os filtros para ver as ocorrências.');
    else if(!activeValues().some(Boolean))out.innerHTML=emptyCard('map','Ainda não há ocorrências públicas','Quando houver registros públicos aprovados, eles aparecem aqui e no mapa.',false);
    else out.innerHTML=emptyCard('search','Nenhuma ocorrência com estes filtros','Experimente remover um filtro ou pesquisar outro bairro.');
@@ -727,7 +813,22 @@ async function copyProtocol(p){try{await navigator.clipboard.writeText(p);toast(
 async function shareOccurrence(p){if(window.CidadeConectaShare)return window.CidadeConectaShare.open(p);const url=`${location.origin}${location.pathname}#/ocorrencia/${encodeURIComponent(p)}`;try{if(navigator.share)await navigator.share({title:`Cidade Conecta · ${p}`,text:'Acompanhe esta ocorrência no Cidade Conecta.',url});else{await navigator.clipboard.writeText(url);toast('Link copiado.')}}catch{}}
 function setupInstall(){window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;$$('.installBtn').forEach(b=>b.classList.remove('hidden'))});$$('.installBtn').forEach(b=>b.onclick=async()=>{if(!deferredInstall)return toast('A instalação ainda não está disponível neste navegador.');deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;b.classList.add('hidden')})}
 function setupConnectivity(){const notice=$('#offlineNoticeV56');if(!notice)return;const update=()=>{notice.hidden=navigator.onLine};window.addEventListener('online',update);window.addEventListener('offline',update);update()}
-function boot(){document.addEventListener('click',e=>{if($('#nav')?.classList.contains('open')&&!e.target.closest('#nav,#menu,#mobileMore')){$('#nav').classList.remove('open');$('#menu').setAttribute('aria-expanded','false');$('#menu').setAttribute('aria-label','Abrir menu')}});$('#menu').onclick=()=>{const open=$('#nav').classList.toggle('open');$('#menu').setAttribute('aria-expanded',String(open));$('#menu').setAttribute('aria-label',open?'Fechar menu':'Abrir menu')};window.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#nav').classList.contains('open')){$('#nav').classList.remove('open');$('#menu').setAttribute('aria-expanded','false');$('#menu').setAttribute('aria-label','Abrir menu');$('#menu').focus()}});window.addEventListener('hashchange',route);setupInstall();setupConnectivity();setupCommandPalette();route();if(!window.CidadeConectaPublicSource)syncPublicCloudOccurrences().then(count=>{if(!count)return;const p=location.hash.replace(/^#\/?/,'').split('/')[0];if(['','mapa','dashboard'].includes(p))route()});if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+function boot(){
+ $('.skip')?.addEventListener('click',event=>{
+  event.preventDefault();
+  const app=$('#app');app.focus({preventScroll:true});app.scrollIntoView({block:'start',behavior:'instant'});
+ });
+ document.addEventListener('click',event=>{
+  if($('#nav')?.classList.contains('open')&&!event.target.closest('#nav,#menu,#mobileMore'))setMenuOpen(false);
+ });
+ for(const selector of ['#menu','#mobileMore'])$(selector)?.addEventListener('click',toggleMenu);
+ window.addEventListener('keydown',event=>{
+  if(event.key==='Escape'&&$('#nav')?.classList.contains('open')){
+   setMenuOpen(false);
+   menuOpener?.focus({preventScroll:true});
+  }
+ });
+ window.addEventListener('hashchange',route);setupInstall();setupConnectivity();setupCommandPalette();route();if(!window.CidadeConectaPublicSource)syncPublicCloudOccurrences().then(count=>{if(!count)return;const p=location.hash.replace(/^#\/?/,'').split('/')[0];if(['','mapa','dashboard'].includes(p))route()});if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{})}
 window.CidadeConectaUI=Object.freeze({esc,toast,icon:iconSvg,pageHead,refresh:route,publicRecords:()=>window.CidadeConectaPublicRecords(),ownRecords:()=>db.occurrences.filter(o=>o.localOwner).map(publicExportOccurrence).filter(Boolean),savedProtocols:bookmarks,favoriteNames:savedNeighborhoods,toggleFavorite:toggleNeighborhood,hasAccount:()=>window.CidadeConectaAccount?.state?.().status==='authenticated',loadNetwork:loadMunicipalNetwork,closeSearch:closeCommand,acceptPublic:acceptPublicSnapshot,trackingKey:trackingKeyFor});
 window.addEventListener('load',boot);
 })();

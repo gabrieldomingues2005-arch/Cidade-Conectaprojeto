@@ -22,8 +22,6 @@
   <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="preconnect" href="https://tile.openstreetmap.org">
-  <link rel="preconnect" href="https://servicodados.ibge.gov.br">
   <link rel="preconnect" href="https://qzpofoxxrjunyayczcfu.supabase.co">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'">
   <link rel="stylesheet" href="assets/styles.css?v=5.5.0">
@@ -34,7 +32,7 @@
   <link rel="stylesheet" href="assets/design-v56.css?v=5.7.1-ui4">
   <link rel="stylesheet" href="assets/design-system.css?v=6.0.1">
   <link rel="stylesheet" href="assets/civic.css?v=8.4.0">
-  <link rel="stylesheet" href="assets/institutional-pira-v85.css?v=8.5.0">
+  <link rel="stylesheet" href="assets/institutional-pira-v85.css?v=8.5.1">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -103,7 +101,7 @@
   </div>
 
   <section id="cityUpdatesBar" class="civic-updatebar" aria-label="Atualizações públicas da cidade" aria-live="polite">
-    <div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong><span class="civic-updatebar-status">Carregando leitura pública…</span></div>
+    <div class="wrap civic-updatebar-inner"><strong>Atualizações da cidade</strong><span class="civic-updatebar-status">Carregando leitura pública…</span><a class="civic-updatebar-all" href="#/noticias">Abrir jornal →</a></div>
   </section>
 
   <div class="wrap">
@@ -116,13 +114,13 @@
   <div id="routeAnnouncer" class="srOnlyV82" aria-live="polite" aria-atomic="true"></div>
   <main id="app" tabindex="-1"></main>
 
-  <div class="mobileActions mobileActionsV51" aria-label="Atalhos principais">
+  <nav class="mobileActions mobileActionsV51" aria-label="Atalhos principais">
     <a href="#/" data-mobile-route=""><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5M9 20v-6h6v6"/></svg></span>Início</a>
     <a href="#/registrar" data-mobile-route="registrar"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Registrar</a>
     <a href="#/mapa" data-mobile-route="mapa"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"/><path d="M9 3v15m6-12v15"/></svg></span>Mapa</a>
     <a href="#/acompanhar" data-mobile-route="acompanhar"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></span>Protocolo</a>
-    <button id="mobileMore" type="button" data-mobile-route="more" aria-label="Abrir mais opções"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></span>Mais</button>
-  </div>
+    <button id="mobileMore" type="button" data-mobile-route="more" aria-controls="nav" aria-expanded="false" aria-label="Abrir mais opções"><span class="mobileNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></span>Mais</button>
+  </nav>
 
   <footer>
     <div class="wrap foot">
@@ -183,20 +181,20 @@
   <script src="assets/supabase-bridge.js?v=5.5.0" defer></script>
   <script src="assets/civic-data.js?v=8.0.0" defer></script>
   <script src="assets/civic-store.js?v=8.0.0" defer></script>
-  <script src="assets/civic-demo.js?v=8.1.0" defer></script>
+  <script src="assets/civic-demo.js?v=8.5.1" defer></script>
   <script src="assets/civic-account.js?v=8.1.0" defer></script>
   <script src="assets/civic-news-store.js?v=8.0.0" defer></script>
-  <script src="assets/app.js?v=8.5.0" defer></script>
-  <script src="assets/piracicaba.js?v=7.0.0-7" defer></script>
+  <script src="assets/app.js?v=8.5.1" defer></script>
+  <script src="assets/piracicaba.js?v=8.5.1" defer></script>
   <script src="assets/piracicaba-mapas.js?v=7.0.0-7" defer></script>
   <script src="assets/privacy-geo.js?v=5.5.0" defer></script>
-  <script src="assets/site-enhancements.js?v=6.0.1" defer></script>
-  <script src="assets/civic-ui.js?v=8.2.0" defer></script>
+  <script src="assets/site-enhancements.js?v=8.5.1" defer></script>
+  <script src="assets/civic-ui.js?v=8.5.1" defer></script>
   <script src="assets/civic-admin.js?v=7.0.0-7" defer></script>
   <script src="assets/civic-community.js?v=7.0.0-7" defer></script>
   <script src="assets/civic-share.js?v=7.0.0-7" defer></script>
-  <script src="assets/civic-pages.js?v=8.1.1" defer></script>
+  <script src="assets/civic-pages.js?v=8.5.1" defer></script>
   <script src="assets/civic-pwa.js?v=7.0.0-7" defer></script>
-  <script src="assets/institutional-a11y-v85.js?v=8.5.0" defer></script>
+  <script src="assets/institutional-a11y-v85.js?v=8.5.1" defer></script>
 </body>
 </html>
