@@ -1,7 +1,16 @@
 (()=>{
 'use strict';
+const DIRECT=Object.freeze({
+ 'Rio_Piracicaba_2.jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Rio_Piracicaba_2.jpg/1280px-Rio_Piracicaba_2.jpg',
+ 'Engenho_Central_-_Piracicaba.jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Engenho_Central_-_Piracicaba.jpg/1280px-Engenho_Central_-_Piracicaba.jpg',
+ 'Parque_da_Rua_do_Porto,_Piracicaba_-_SP,_Brazil_-_panoramio.jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Parque_da_Rua_do_Porto%2C_Piracicaba_-_SP%2C_Brazil_-_panoramio.jpg/1280px-Parque_da_Rua_do_Porto%2C_Piracicaba_-_SP%2C_Brazil_-_panoramio.jpg',
+ 'Piracicaba_(2).jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Piracicaba_%282%29.jpg/1280px-Piracicaba_%282%29.jpg',
+ 'Pessoas_praticando_atividades_físicas_em_Piracicaba_SP.jpg':'https://upload.wikimedia.org/wikipedia/commons/4/40/Pessoas_praticando_atividades_f%C3%ADsicas_em_Piracicaba_SP.jpg',
+ 'Frente_de_rajada_em_Piracicaba_2.jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Frente_de_rajada_em_Piracicaba_2.jpg/1280px-Frente_de_rajada_em_Piracicaba_2.jpg',
+ 'Catedral_de_Piracicaba.jpg':'https://upload.wikimedia.org/wikipedia/commons/e/e7/Catedral_de_Piracicaba.jpg'
+});
 const commons=(file,credit,license,source)=>Object.freeze({
- url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(file)+'?width=1280',
+ url:DIRECT[file],
  alt:source,
  credit,license,
  source:'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(file).replaceAll('%2F','/')
