@@ -1,28 +1,23 @@
 (()=>{
 'use strict';
-const DIRECT=Object.freeze({
- 'Rio_Piracicaba_2.jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Rio_Piracicaba_2.jpg/1280px-Rio_Piracicaba_2.jpg',
- 'Engenho_Central_-_Piracicaba.jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Engenho_Central_-_Piracicaba.jpg/1280px-Engenho_Central_-_Piracicaba.jpg',
- 'Parque_da_Rua_do_Porto,_Piracicaba_-_SP,_Brazil_-_panoramio.jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Parque_da_Rua_do_Porto%2C_Piracicaba_-_SP%2C_Brazil_-_panoramio.jpg/1280px-Parque_da_Rua_do_Porto%2C_Piracicaba_-_SP%2C_Brazil_-_panoramio.jpg',
- 'Piracicaba_(2).jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Piracicaba_%282%29.jpg/1280px-Piracicaba_%282%29.jpg',
- 'Pessoas_praticando_atividades_físicas_em_Piracicaba_SP.jpg':'https://upload.wikimedia.org/wikipedia/commons/4/40/Pessoas_praticando_atividades_f%C3%ADsicas_em_Piracicaba_SP.jpg',
- 'Frente_de_rajada_em_Piracicaba_2.jpg':'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Frente_de_rajada_em_Piracicaba_2.jpg/1280px-Frente_de_rajada_em_Piracicaba_2.jpg',
- 'Catedral_de_Piracicaba.jpg':'https://upload.wikimedia.org/wikipedia/commons/e/e7/Catedral_de_Piracicaba.jpg'
-});
-const commons=(file,credit,license,source)=>Object.freeze({
- url:DIRECT[file],
- alt:source,
- credit,license,
- source:'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(file).replaceAll('%2F','/')
+const licenses={
+ 'CC BY-SA 4.0':'https://creativecommons.org/licenses/by-sa/4.0/',
+ 'CC BY-SA 2.0':'https://creativecommons.org/licenses/by-sa/2.0/',
+ 'CC BY 3.0':'https://creativecommons.org/licenses/by/3.0/',
+ 'CC BY 2.0':'https://creativecommons.org/licenses/by/2.0/',
+ 'CC0 1.0':'https://creativecommons.org/publicdomain/zero/1.0/'
+};
+const commons=(key,file,credit,license,alt)=>Object.freeze({
+ url:'assets/city-photos/'+key+'.webp',alt,credit,license,licenseUrl:licenses[license],
+ source:'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(file)
 });
 const photos=Object.freeze({
- rio:commons('Rio_Piracicaba_2.jpg','José Luiz Ribeiro','CC BY-SA 4.0','Rio Piracicaba'),
- engenho:commons('Engenho_Central_-_Piracicaba.jpg','Leonardo Salvato','CC BY-SA 4.0','Engenho Central de Piracicaba'),
- porto:commons('Parque_da_Rua_do_Porto,_Piracicaba_-_SP,_Brazil_-_panoramio.jpg','Jose Roberto V. Mora','CC BY 3.0','Parque e região da Rua do Porto'),
- cidade:commons('Piracicaba_(2).jpg','Ana Paula Hirama','CC BY-SA 2.0','Vista urbana de Piracicaba'),
- atividade:commons('Pessoas_praticando_atividades_físicas_em_Piracicaba_SP.jpg','Marina Almeida','CC BY 2.0','Vida urbana e atividade física em Piracicaba'),
- tempestade:commons('Frente_de_rajada_em_Piracicaba_2.jpg','Erik dos Santos','CC0 1.0','Paisagem urbana de Piracicaba sob frente de rajada'),
- catedral:commons('Catedral_de_Piracicaba.jpg','Lepeduarte','CC BY-SA 4.0','Catedral em Piracicaba')
+ rio:commons('rio','Rio_Piracicaba_2.jpg','José Luiz Ribeiro','CC BY-SA 4.0','Rio Piracicaba'),
+ engenho:commons('engenho','Engenho_Central_-_Piracicaba.jpg','Leonardo Salvato','CC BY-SA 4.0','Engenho Central de Piracicaba'),
+ porto:commons('porto','Parque_da_Rua_do_Porto,_Piracicaba_-_SP,_Brazil_-_panoramio.jpg','Jose Roberto V. Mora…','CC BY 3.0','Parque e região da Rua do Porto'),
+ cidade:commons('cidade','Piracicaba_(2).jpg','Ana Paula Hirama','CC BY-SA 2.0','Vista urbana de Piracicaba'),
+ atividade:commons('atividade','Pessoas_praticando_atividades_físicas_em_Piracicaba_SP.jpg','Marina Almeida','CC BY 2.0','Vida urbana e atividade física em Piracicaba'),
+ tempestade:commons('tempestade','Frente_de_rajada_em_Piracicaba_2.jpg','Erik dos Santos','CC0 1.0','Árvore caída após tempestade em Piracicaba')
 });
 const agenda=Object.freeze([
  Object.freeze({
@@ -65,11 +60,11 @@ const gallery=Object.freeze([
  Object.freeze({title:'Rio Piracicaba',subtitle:'Paisagem e identidade da cidade',image:photos.rio}),
  Object.freeze({title:'Engenho Central',subtitle:'Patrimônio histórico e espaço cultural',image:photos.engenho}),
  Object.freeze({title:'Rua do Porto',subtitle:'Turismo, gastronomia e memória ribeirinha',image:photos.porto}),
- Object.freeze({title:'Centro de Piracicaba',subtitle:'Arquitetura e vida urbana',image:photos.catedral})
+ Object.freeze({title:'Vista de Piracicaba',subtitle:'Paisagem urbana',image:photos.cidade})
 ]);
 window.CidadeConectaCityNews=Object.freeze({
  updatedAt:'2026-11-06',
- updatedLabel:'Recorte verificado em 06/11/2026',
+ updatedLabel:'Informações reunidas em 06/11/2026',
  agendaSource:'https://parquetecnologico.piracicaba.sp.gov.br/agendacolaborativa',
  tourismSource:'https://turismopiracicaba.com.br/',
  photos,agenda,gallery
