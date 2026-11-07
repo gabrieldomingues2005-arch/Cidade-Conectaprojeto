@@ -80,11 +80,11 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(html,/cc-institutional-pira-v85/);
  assert.match(html,/institutional-pira-v85\.css\?v=9\.2\.1/);
  assert.match(html,/civic\.css\?v=9\.4\.0/);
- assert.match(html,/app\.js\?v=9\.4\.0/);
- assert.match(html,/civic-pages\.js\?v=9\.3\.2/);
+ assert.match(html,/app\.js\?v=9\.5\.0/);
+ assert.match(html,/civic-pages\.js\?v=9\.5\.0/);
  assert.match(html,/civic-demo\.js\?v=9\.3\.0/);
  assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.1/);
- assert.match(html,/civic-ui\.js\?v=9\.2\.0/);
+ assert.match(html,/civic-ui\.js\?v=9\.5\.0/);
  assert.match(html,/civic-city-news\.js\?v=9\.3\.0/);
  assert.doesNotMatch(html,/logo-gov|marca-gov|bras[aã]o/i);
 });
@@ -96,3 +96,5 @@ test('fotos licenciadas usam URLs diretas',()=>{const city=readFileSync('assets/
 test('fallback local preserva categoria',()=>{const pages=readFileSync('assets/civic-pages.js','utf8'),css=readFileSync('assets/civic.css','utf8');assert.match(pages,/civic-news-cover-real civic-news-cover--/);assert.match(css,/demo-news\/iluminacao\.svg/);assert.match(css,/demo-news\/vias\.svg/);});
 
 test('Home autenticada troca visão pública por acompanhamentos pessoais',()=>{const app=readFileSync('assets/app.js','utf8'),civic=readFileSync('assets/civic.css','utf8');assert.match(app,/function accountHomeContext/);assert.match(app,/Meus acompanhamentos/);assert.match(app,/data-personal-map="1"/);assert.match(app,/Setores acompanhados/);assert.match(app,/Minhas ocorrências/);assert.match(app,/cidadeconecta:account-state/);assert.match(civic,/homeAccountQuickV94/);assert.match(civic,/homePersonalPopupV94/);});
+
+test('linguagem cidadã evita jargão nas telas principais',()=>{const app=readFileSync('assets/app.js','utf8'),ui=readFileSync('assets/civic-ui.js','utf8');assert.match(app,/Quem pode ajudar\?/);assert.match(app,/Pode aparecer no site/);assert.match(app,/Fica privado/);assert.match(app,/Quem pode cuidar/);assert.match(app,/Setor relacionado/);assert.doesNotMatch(app,/Da categoria para a área pública de referência/);assert.doesNotMatch(ui,/Atualizando leitura pública/);assert.match(ui,/Atualizando informações/);});

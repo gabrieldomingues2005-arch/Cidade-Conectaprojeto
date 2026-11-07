@@ -13,7 +13,7 @@ function meta(){
  metadataPromise=Promise.allSettled([fetch('data/piracicaba.json').then(r=>{if(!r.ok)throw Error();return r.json()}),U.loadNetwork()]).then(([a,b])=>{if(a.status==='fulfilled')territory=a.value;if(b.status==='fulfilled')network=b.value;return{territory,network}});
  return metadataPromise;
 }
-function sourceLabel(){const s=S.state();return `<div class="civic-source" role="status">${['idle','loading'].includes(s.status)?'Atualizando leitura pública…':s.cached?'Conteúdo público em cache':s.status==='live'?'Dados públicos publicados':s.status==='unconfigured'?'Sem leitura online neste ambiente':'Leitura pública indisponível'}${s.lastSuccess?' · consulta '+esc(format(new Date(s.lastSuccess).toISOString())):''}${s.status==='live'&&!s.complete?' · conjunto parcial':''}</div>`}
+function sourceLabel(){const s=S.state();return `<div class="civic-source" role="status">${['idle','loading'].includes(s.status)?'Atualizando informações…':s.cached?'Últimas informações salvas':s.status==='live'?'Informações atualizadas':s.status==='unconfigured'?'Sem conexão com os dados agora':'Informações indisponíveis no momento'}${s.lastSuccess?' · consulta '+esc(format(new Date(s.lastSuccess).toISOString())):''}${s.status==='live'&&!s.complete?' · informações parciais':''}</div>`}
 function empty(title,text,action=''){return `<div class="empty civic-empty"><h2>${esc(title)}</h2><p class="muted">${esc(text)}</p>${action}</div>`}
 function badge(s){return `<span class="badge ${s==='Resolvida'?'resolved':s==='Em andamento'?'progress':s==='Em análise'?'analysis':s==='Encaminhada'?'forwarded':'received'}">${esc(s)}</span>`}
 function followButton(o){return `<button type="button" class="btn ${C.isFollowing(o.protocol)?'soft':'secondary'} smallBtn" data-civic-follow="${esc(o.protocol)}" aria-pressed="${C.isFollowing(o.protocol)}">${C.isFollowing(o.protocol)?'Seguindo':'Seguir ocorrência'}</button>`}
@@ -22,7 +22,7 @@ function card(o,{follow=true}={}){
  return `<article class="civic-record"><div class="civic-record-icon">${U.icon(p.category)}</div><div class="civic-record-body"><span class="miniLabel">${esc(p.protocol)}${p.cloudOrigin?'':' · demonstração'}</span><h3><a href="${urlFor(p.protocol)}">${esc(p.title||'Registro sem leitura pública atual')}</a></h3><p>${esc(D.CATEGORIES[p.category])} · ${esc(p.bairro||'Bairro não informado')}</p><small class="muted">Última atualização: ${esc(format(new Date(D.lastUpdate(p)||Date.now()).toISOString()))}</small></div><div class="civic-record-actions">${badge(p.status)}${follow&&p.public&&(!p.cloudOrigin||p.moderationStatus==='approved')?followButton(p):''}</div></article>`;
 }
 function lookup(protocol){return S.state().rows.find(o=>o.protocol===protocol)||U.publicRecords().find(o=>o.protocol===protocol)||U.ownRecords().find(o=>o.protocol===protocol)}
-function privatePlaceholder(p){return `<article class="civic-record"><div class="civic-record-body"><span class="miniLabel">${esc(p)}</span><h3>Sem leitura pública atual</h3><p class="muted">O protocolo permanece na sua lista. Dados privados não são usados para preencher esta área.</p><a class="miniLink" href="${urlFor(p)}">Consultar protocolo →</a></div><button class="btn secondary smallBtn" data-civic-follow="${esc(p)}" aria-pressed="true">Deixar de seguir</button></article>`}
+function privatePlaceholder(p){return `<article class="civic-record"><div class="civic-record-body"><span class="miniLabel">${esc(p)}</span><h3>Sem informações disponíveis agora</h3><p class="muted">O protocolo permanece na sua lista. Seus dados privados não aparecem aqui.</p><a class="miniLink" href="${urlFor(p)}">Consultar protocolo →</a></div><button class="btn secondary smallBtn" data-civic-follow="${esc(p)}" aria-pressed="true">Deixar de seguir</button></article>`}
 function demoNotificationHref(n){return n?.protocol?'#/noticias?demo=1&protocolo='+encodeURIComponent(n.protocol):'#/minhas?tab=atualizacoes'}
 function demoRecordCard(o,label='Ocorrência fictícia'){
  if(!o)return'';
@@ -30,7 +30,7 @@ function demoRecordCard(o,label='Ocorrência fictícia'){
 }
 function demoWardCard(name,rows){
  const local=rows.filter(o=>D.norm(o.bairro)===D.norm(name)),resolved=local.filter(o=>o.status==='Resolvida').length,open=local.length-resolved;
- return `<article class="card civic-ward civic-demo-ward"><span class="miniLabel">Bairro acompanhado · DEMO</span><h2>${esc(name)}</h2><div class="civic-mini-metrics"><span><b>${open}</b> abertas</span><span><b>${resolved}</b> resolvidas</span></div><p class="small muted">${local.length?local.length+' registro(s) fictício(s) associado(s) ao bairro.':'Sem ocorrência fictícia neste recorte.'}</p><a class="btn secondary smallBtn" href="#/noticias?demo=1&bairro=${encodeURIComponent(name)}">Abrir notícias do bairro</a></article>`
+ return `<article class="card civic-ward civic-demo-ward"><span class="miniLabel">Bairro acompanhado · DEMO</span><h2>${esc(name)}</h2><div class="civic-mini-metrics"><span><b>${open}</b> abertas</span><span><b>${resolved}</b> resolvidas</span></div><p class="small muted">${local.length?local.length+' registro(s) fictício(s) associado(s) ao bairro.':'Nenhuma ocorrência fictícia deste bairro nesta lista.'}</p><a class="btn secondary smallBtn" href="#/noticias?demo=1&bairro=${encodeURIComponent(name)}">Abrir notícias do bairro</a></article>`
 }
 function demoMyPage(q,a){
  const Demo=window.CidadeConectaDemo,rows=Demo?.rows||[],tabs={visao:'Visão geral',criados:'Minhas ocorrências',salvos:'Salvos',acompanhando:'Acompanhando',bairros:'Meus bairros',atualizacoes:'Atualizações'},tab=Object.hasOwn(tabs,q.get('tab'))?q.get('tab'):'visao';
@@ -40,7 +40,7 @@ function demoMyPage(q,a){
  <div class="civic-kpis mineSummaryV50"><div><b>${created.length}</b><span>Criadas</span></div><div><b>${followed.length}</b><span>Acompanhando</span></div><div><b>${followed.filter(o=>o.status==='Resolvida').length}</b><span>Resolvidas</span></div><div><b>${a.neighborhoods.length}</b><span>Meus bairros</span></div></div>
  <section class="civic-demo-weekly"><div><span class="miniLabel">${esc(weekly.period||'Resumo')}</span><h2>${esc(weekly.headline||'Resumo fictício da sua cidade')}</h2><p>${esc(weekly.message||'Dados de demonstração.')}</p></div><div class="civic-demo-weekly-stats"><span><b>${weekly.updates||0}</b> atualizações</span><span><b>${weekly.resolved||0}</b> resoluções</span><span><b>${weekly.newInNeighborhoods||0}</b> novos nos bairros</span></div></section>
  <div class="civic-shortcuts"><a href="#/noticias?demo=1">${U.icon('list')} Jornal DEMO</a><a href="#/perfil-demo">${U.icon('bookmark')} Perfil público fictício</a><button type="button" data-civic-notifications>${U.icon('clock')} Notificações (${a.unread})</button><a href="#/conta">${U.icon('search')} Configurar conta DEMO</a></div>
- <div class="titleRow"><div><h2>Acompanhando agora</h2><p class="muted">Um recorte das ocorrências fictícias seguidas por este perfil.</p></div><a class="miniLink" href="#/minhas?tab=acompanhando">Ver todas →</a></div><div class="civic-records">${followed.slice(0,4).map(o=>demoRecordCard(o,'Acompanhada')).join('')}</div>
+ <div class="titleRow"><div><h2>Acompanhando agora</h2><p class="muted">Alguns dos problemas fictícios acompanhados por este perfil.</p></div><a class="miniLink" href="#/minhas?tab=acompanhando">Ver todas →</a></div><div class="civic-records">${followed.slice(0,4).map(o=>demoRecordCard(o,'Acompanhada')).join('')}</div>
  <section class="civic-demo-insights-grid"><article class="card civic-demo-activity"><span class="miniLabel">Atividade recente</span><h2>O que aconteceu na sua conta</h2><div class="civic-demo-timeline">${activity.map(x=>`<div><time>${esc(format(x.date))}</time><span>${esc(x.type)}</span><b>${esc(x.title)}</b><p>${esc(x.detail)}</p></div>`).join('')}</div></article><article class="card civic-demo-recommendations"><span class="miniLabel">Próximos passos</span><h2>Recomendado para você</h2>${recommendations.map(x=>`<a href="${esc(x.href)}"><div><b>${esc(x.title)}</b><p>${esc(x.detail)}</p></div><span>${esc(x.action)} →</span></a>`).join('')}</article></section>
  <section class="card civic-demo-milestones"><span class="miniLabel">Marcos da demonstração</span><h2>Como esse perfil usa a plataforma</h2><div class="civic-demo-milestone-grid">${milestones.map(x=>`<article><b>${esc(x.label)}</b><p>${esc(x.detail)}</p></article>`).join('')}</div></section>`;
  if(tab==='criados')body=created.length?'<div class="civic-records">'+created.map(o=>demoRecordCard(o,'Criada pelo perfil DEMO')).join('')+'</div>':empty('Nenhuma ocorrência fictícia','O perfil DEMO ainda não possui registros.');
@@ -109,19 +109,19 @@ function notifyCounter(){const b=$('#notificationBtn');if(!b)return;const a=A?.s
 function updateDataFreshness(){
  const el=$('#homeDataFreshness');if(!el)return;
  const s=S.state(),at=Number(s.lastSuccess)||0;
- if(s.status==='loading'&&!at){el.textContent='Atualizando dados públicos…';return}
+ if(s.status==='loading'&&!at){el.textContent='Atualizando informações…';return}
  if(s.status==='offline'){el.textContent=at?'Offline · última leitura '+format(new Date(at).toISOString()):'Offline · sem leitura recente';return}
  if(s.status==='cached'){el.textContent=at?'Dados em cache · última leitura '+format(new Date(at).toISOString()):'Dados em cache';return}
- if(s.status==='error'){el.textContent=at?'Leitura temporariamente indisponível · última leitura '+format(new Date(at).toISOString()):'Leitura pública temporariamente indisponível';return}
+ if(s.status==='error'){el.textContent=at?'Leitura temporariamente indisponível · última leitura '+format(new Date(at).toISOString()):'Informações temporariamente indisponíveis';return}
  if(at){el.textContent='Dados públicos atualizados · '+format(new Date(at).toISOString());return}
- el.textContent='Leitura pública em preparação';
+ el.textContent='Preparando informações';
 }
 function updateCityBar(){
  const host=$('#cityUpdatesBar');if(!host)return;
  const state=S.state(),items=D.feed(state.rows,6);
  const ready=state.status==='live'||state.cached||state.lastSuccess>0;
  const loading=['idle','loading'].includes(state.status);
- const status=loading?'Carregando leitura pública…':ready?'Ainda não há atualizações nesta leitura.':'Leitura pública indisponível no momento.';
+ const status=loading?'Carregando leitura pública…':ready?'Ainda não há atualizações nesta leitura.':'Informações indisponíveis no momento no momento.';
  const link='<a class="civic-updatebar-all" href="#/agora">Ver acompanhamento →</a>';
  const preview=items.length?'<div class="civic-updatebar-list">'+items.map(x=>'<a href="#/noticias?protocolo='+encodeURIComponent(x.protocol)+'"><span class="civic-updatebar-dot" aria-hidden="true"></span><span><b>'+esc(x.type==='resolved'?'Problema resolvido':x.type==='created'?'Novo registro':'Status atualizado')+'</b><small>'+esc([D.CATEGORIES[x.category],x.bairro].filter(Boolean).join(' · '))+'</small></span></a>').join('')+'</div>':'<span class="civic-updatebar-status">'+status+'</span>';
  host.hidden=false;
@@ -155,7 +155,7 @@ function enhance(){
  }
  const wardName=new URLSearchParams(location.hash.split('?')[1]||'').get('nome');
  if(location.hash.startsWith('#/bairro')&&wardName&&D.allNeighborhoods(territory).includes(wardName))C.recent('bairro',wardName);
- if(location.hash.startsWith('#/bairro')&&!root.querySelector('#civicWardSummary')&&wardName){const host=root.querySelector('.neighborhoodRecentV55')?.parentElement||root.querySelector('.neighborhoodHeroV55')?.parentElement;if(host){const box=document.createElement('section');box.id='civicWardSummary';box.className='card';box.innerHTML='<span class="miniLabel">Leitura pública real</span><h2>Atualizações do bairro</h2>'+wardCard(wardName);host.append(box)}}
+ if(location.hash.startsWith('#/bairro')&&!root.querySelector('#civicWardSummary')&&wardName){const host=root.querySelector('.neighborhoodRecentV55')?.parentElement||root.querySelector('.neighborhoodHeroV55')?.parentElement;if(host){const box=document.createElement('section');box.id='civicWardSummary';box.className='card';box.innerHTML='<span class="miniLabel">Informações do bairro</span><h2>Atualizações do bairro</h2>'+wardCard(wardName);host.append(box)}}
  if(location.hash.startsWith('#/registrar')){const name=new URLSearchParams(location.hash.split('?')[1]||'').get('bairro'),input=$('#bairro');if(name&&input&&!input.value&&D.allNeighborhoods(territory).includes(name)){input.value=name;input.dispatchEvent(new Event('input',{bubbles:true}))}}
 }
 async function init(){
