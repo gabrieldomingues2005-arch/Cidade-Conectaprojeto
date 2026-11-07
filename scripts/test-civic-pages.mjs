@@ -62,3 +62,5 @@ test('Jornal integra agenda real de Piracicaba sem misturar com ocorrências',()
 test('Navegação pública prioriza acompanhamento e vazios oferecem próximo passo',()=>{const{renderers}=setup([]);const html=renderers.get('agora')(new URLSearchParams()).html;assert.ok(html.indexOf('Problemas Resolvidos')<html.indexOf('Notícias'));assert.ok(html.includes('Ainda não há atualizações públicas neste recorte'));assert.ok(html.includes('#/registrar'));assert.ok(html.includes('#/mapa'));});
 
 test('fotos externas da cidade possuem fallback visual',()=>{const{renderers}=setup([]);const html=renderers.get('noticias')(new URLSearchParams()).html;assert.ok(html.includes('data-civic-city-photo'));assert.ok(html.includes('civic-city-photo-fallback'));});
+
+test('fallback visual não exibe mensagem de imagem indisponível',()=>{const{renderers}=setup([]);const html=renderers.get('noticias')(new URLSearchParams()).html;assert.ok(html.includes('Visual de apoio do Cidade Conecta'));assert.ok(!html.includes('Imagem externa temporariamente indisponível'));});
