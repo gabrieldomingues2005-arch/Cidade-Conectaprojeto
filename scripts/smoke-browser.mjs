@@ -102,7 +102,7 @@ try{
     await pause(80);await capture('mapa-regioes-390');
     await evaluate(`document.querySelector('[data-map-pane="map"]')?.click()`);await pause(80);
    }
-   assert.equal(data.width,width);assert.ok(data.scroll<=width+1,`${name} ${width}: overflow ${data.scroll}`);assert.ok(!data.text.includes('Página não encontrada'));assert.deepEqual(data.unlabelled,[],`${name}: campos sem label`);assert.deepEqual(errors,[],`${name}: erro JS`);
+   assert.equal(data.width,width);assert.ok(data.scroll<=width+1,`${name} ${width}: overflow ${data.scroll}`);assert.ok(!data.text.includes('Página não encontrada'));assert.ok(!data.text.includes("+iconSvg("),`${name} ${width}: concatenação literal exposta na UI`);assert.deepEqual(data.unlabelled,[],`${name}: campos sem label`);assert.deepEqual(errors,[],`${name}: erro JS`);
    // Menu abre, é anunciado e fecha por Escape.
    const visible=await evaluate(`getComputedStyle(document.querySelector('#menu')).display!=='none'`);
    if(visible){await evaluate(`document.querySelector('#menu').click()`);assert.equal(await evaluate(`document.querySelector('#menu').getAttribute('aria-expanded')`),'true');await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});assert.equal(await evaluate(`document.querySelector('#menu').getAttribute('aria-expanded')`),'false')}
