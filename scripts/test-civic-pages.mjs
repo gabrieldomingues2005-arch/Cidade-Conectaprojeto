@@ -64,3 +64,5 @@ test('Navegação pública prioriza acompanhamento e vazios oferecem próximo pa
 test('fotos externas da cidade possuem fallback visual',()=>{const{renderers}=setup([]);const html=renderers.get('noticias')(new URLSearchParams()).html;assert.ok(html.includes('data-civic-city-photo'));assert.ok(html.includes('civic-city-photo-fallback'));});
 
 test('fallback visual não exibe mensagem de imagem indisponível',()=>{const{renderers}=setup([]);const html=renderers.get('noticias')(new URLSearchParams()).html;assert.ok(html.includes('Visual de apoio do Cidade Conecta'));assert.ok(!html.includes('Imagem externa temporariamente indisponível'));});
+
+test('fallback troca crédito real por aviso de visual local',()=>{const{renderers}=setup([]);const real=renderers.get('noticias')(new URLSearchParams()).html,demo=renderers.get('noticias')(new URLSearchParams('demo=1')).html;assert.ok(real.includes('civic-city-photo-credit'));assert.ok(real.includes('civic-city-photo-fallback-note'));assert.ok(demo.includes('civic-demo-fallback-credit'));});
