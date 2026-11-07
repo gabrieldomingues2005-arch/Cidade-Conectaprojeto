@@ -174,12 +174,7 @@ function bind(q){
   if(image.complete&&image.naturalWidth===0)unavailable();else image.addEventListener('error',unavailable,{once:true});
  });
   document.querySelectorAll('img[data-civic-public-photo]').forEach(image=>{
-  const unavailable=()=>{
-   const message=document.createElement('p');
-   message.className='civic-media-unavailable';
-   message.textContent='Imagem temporariamente indisponível.';
-   image.replaceWith(message);
-  };
+  const unavailable=()=>{const figure=image.closest('.civic-news-cover');if(figure)figure.classList.add('is-fallback');image.hidden=true};
   if(image.complete&&image.naturalWidth===0)unavailable();
   else image.addEventListener('error',unavailable,{once:true});
  });
