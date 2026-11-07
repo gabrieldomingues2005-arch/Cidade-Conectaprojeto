@@ -72,8 +72,8 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(app,/followPromiseV91/);
  assert.match(app,/Mapa interativo indisponível/);
  assert.doesNotMatch(app,/mapGuideV90[^\n]*\\+iconSvg/);
- assert.match(app,/Referência informativa; não implica encaminhamento oficial/);
- assert.match(app,/acompanhamento publicado/);
+ assert.match(app,/Esta informação serve apenas para orientar/);
+ assert.match(app,/O registro está sendo analisado/);
  assert.match(app,/Guia de serviços/);
  assert.match(civic,/--cc83-navy:#0b3f55/);
  assert.match(civic,/homePortalSearchBoxV83/);
