@@ -529,3 +529,11 @@
 .civic-news-cover-real.is-fallback.civic-news-cover--acessibilidade{background-image:url('demo-news/acessibilidade.svg')}
 .civic-news-cover-real.is-fallback.civic-news-cover--areas{background-image:url('demo-news/areas.svg')}
 .civic-news-cover-real.is-fallback.civic-news-cover--outros{background-image:url('piracicaba-rio.svg')}
+
+
+/* Coerência de créditos no fallback 9.3.2 */
+.civic-city-photo-fallback-note,.civic-demo-fallback-credit{display:none}
+.civic-city-photo.is-fallback .civic-city-photo-credit{display:none}
+.civic-city-photo.is-fallback .civic-city-photo-fallback-note{display:block}
+.civic-news-cover-real.is-fallback .civic-demo-photo-credit{display:none}
+.civic-news-cover-real.is-fallback .civic-demo-fallback-credit{display:block}
