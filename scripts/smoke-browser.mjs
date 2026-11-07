@@ -123,6 +123,12 @@ try{
  let demoState=await evaluate(`({email:window.CidadeConectaAccount.state().user?.email,unread:window.CidadeConectaAccount.state().unread,demo:window.CidadeConectaAccount.state().demo,text:document.querySelector('#app').textContent,bar:document.querySelector('#demoAccountBar')?.textContent})`);
  assert.equal(demoState.demo,true);assert.equal(demoState.email,'gabriel.demo@cidadeconecta.local');assert.ok(demoState.unread>=4);assert.ok(demoState.bar.includes('Gabriel Demo'));
  await capture('conta-demo-390');
+ await evaluate(`location.hash='#/'`);
+ await waitFor(`window.CidadeConectaAccount?.state?.().demo===true&&Boolean(document.querySelector('[data-personal-home="1"]'))`);
+ await waitFor(`Boolean(document.querySelector('#homeMap .leaflet-marker-icon'))||Boolean(document.querySelector('#homeMap .homeMapFallbackV57'))`);
+ const personalHome=await evaluate(`({text:document.querySelector('#app').textContent,personal:!!document.querySelector('[data-personal-home="1"]'),map:!!document.querySelector('[data-personal-map="1"]'),markers:document.querySelectorAll('#homeMap .leaflet-marker-icon').length})`);
+ assert.equal(personalHome.personal,true);assert.equal(personalHome.map,true);assert.ok(personalHome.text.includes('Meus acompanhamentos'));assert.ok(personalHome.text.includes('Setores acompanhados'));assert.ok(personalHome.text.includes('Minhas ocorrências'));assert.ok(personalHome.text.includes('Acompanhando'));
+ await capture('home-conta-demo-390');
  await evaluate(`location.hash='#/minhas'`);
  await waitFor(`Boolean(document.querySelector('.civic-demo-personal-hero'))`);
  assert.ok((await evaluate(`document.querySelector('#app').textContent`)).includes('Recomendado para você'));
