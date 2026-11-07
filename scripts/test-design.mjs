@@ -79,19 +79,29 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(civic,/homePortalSearchBoxV83/);
  assert.match(html,/cc-institutional-pira-v85/);
  assert.match(html,/institutional-pira-v85\.css\?v=9\.2\.1/);
- assert.match(html,/civic\.css\?v=9\.4\.0/);
+ assert.match(html,/civic\.css\?v=9\.6\.1/);
  assert.match(html,/app\.js\?v=9\.6\.0/);
- assert.match(html,/civic-pages\.js\?v=9\.6\.0/);
- assert.match(html,/civic-demo\.js\?v=9\.3\.0/);
+ assert.match(html,/civic-pages\.js\?v=9\.6\.1/);
+ assert.match(html,/civic-demo\.js\?v=9\.6\.1/);
  assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.1/);
- assert.match(html,/civic-ui\.js\?v=9\.6\.0/);
- assert.match(html,/civic-city-news\.js\?v=9\.3\.0/);
+ assert.match(html,/civic-ui\.js\?v=9\.6\.1/);
+ assert.match(html,/civic-city-news\.js\?v=9\.6\.1/);
  assert.doesNotMatch(html,/logo-gov|marca-gov|bras[aã]o/i);
 });
 
 test('barra superior mantém foco em acompanhamento',()=>{const ui=readFileSync('assets/civic-ui.js','utf8');assert.match(ui,/Atualizações de ocorrências/);assert.match(ui,/Ver acompanhamento/);assert.doesNotMatch(ui,/Atualizações da cidade/);});
 
-test('fotos licenciadas usam URLs diretas',()=>{const city=readFileSync('assets/civic-city-news.js','utf8'),demo=readFileSync('assets/civic-demo.js','utf8');assert.doesNotMatch(city,/Special:Redirect\/file/);assert.doesNotMatch(demo,/Special:Redirect\/file/);assert.match(city,/upload\.wikimedia\.org/);assert.match(demo,/upload\.wikimedia\.org/);});
+test('fotos licenciadas são servidas pelo jornal com crédito e licença',()=>{
+ const window={};vm.runInNewContext(read('assets/civic-city-news.js'),{window});
+ for(const photo of Object.values(window.CidadeConectaCityNews.photos)){
+  assert.match(photo.url,/^assets\/city-photos\/[a-z]+\.webp$/);
+  assert.match(readFileSync(photo.url).subarray(0,16).toString('ascii'),/^RIFF....WEBP/s);
+  assert.match(photo.source,/^https:\/\/commons\.wikimedia\.org/);
+  assert.match(photo.licenseUrl,/^https:\/\/creativecommons\.org/);
+  assert.ok(photo.credit);
+ }
+ assert.match(read('assets/civic-demo.js'),/CidadeConectaCityNews\.photos/);
+});
 
 test('fallback local preserva categoria',()=>{const pages=readFileSync('assets/civic-pages.js','utf8'),css=readFileSync('assets/civic.css','utf8');assert.match(pages,/civic-news-cover-real civic-news-cover--/);assert.match(css,/demo-news\/iluminacao\.svg/);assert.match(css,/demo-news\/vias\.svg/);});
 
