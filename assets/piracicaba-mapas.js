@@ -1,7 +1,6 @@
 (()=>{
 'use strict';
 const DATA_URL='data/piracicaba.json';
-const STORAGE_KEY='cidadeConecta2026v3';
 const IBGE_BOUNDARY='https://servicodados.ibge.gov.br/api/v3/malhas/municipios/3538709?formato=application/vnd.geo%2Bjson&qualidade=minima';
 const OFFICIAL_REGIONS_PDF='https://piracicaba.sp.gov.br/wp-content/uploads/2024/12/MAPA-DAS-REGIOES-ADMINISTRATIVAS-FINAL.pdf';
 const OFFICIAL_MAPS='https://piracicaba.sp.gov.br/servicos/mapas-do-municipio/';
@@ -18,7 +17,10 @@ async function data(){
   if(dataCache)return dataCache;
   try{const r=await fetch(DATA_URL,{cache:'no-cache'});if(!r.ok)return null;dataCache=await r.json();return dataCache}catch{return null}
 }
-function readOccurrences(publicOnly=false){if(publicOnly&&window.CidadeConectaPublicRecords)return window.CidadeConectaPublicRecords();const live=window.CidadeConectaLocalDB;if(Array.isArray(live?.occurrences))return live.occurrences;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d?.occurrences)?d.occurrences:[]}catch{return[]}}
+function readOccurrences(publicOnly=false){
+  const rows=window.CidadeConectaPublicRecords?.()||[];
+  return publicOnly?rows:[...(window.CidadeConectaUI?.ownRecords?.()||[]),...rows]
+}
 function allNeighborhoods(d){
   const names=[];
   for(const r of d?.administrativeRegions||[])for(const b of r.neighborhoods||[])names.push(b,b.replace(/^Parte do /i,''));
@@ -180,7 +182,7 @@ function renderDashboardRates(d){
   app.appendChild(section);
 }
 function renderMapTerritory(d){
-  if(route()!=='mapa'||document.querySelector('#mapTerritorySummary'))return;
+  if(route()!=='mapa'||document.querySelector('#mapTerritorySummary,[data-account-map]'))return;
   const card=document.querySelector('#publicMap')?.closest('.card');if(!card)return;
   const stats=regionStats(d),known=stats.reduce((s,x)=>s+x.count,0),total=readOccurrences(true).length;
   const box=document.createElement('div');box.id='mapTerritorySummary';box.className='mapTerritorySummary';

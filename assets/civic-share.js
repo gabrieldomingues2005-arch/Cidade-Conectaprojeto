@@ -2,7 +2,7 @@
 ((root)=>{
 'use strict';
 const D=root.CidadeConectaData;
-const routes=new Set(['','mapa','bairro','dashboard','agora','feed','resolvidas','comparar','dados-abertos','relatorios','transparencia','rede-municipal','piracicaba','sobre','privacidade']);
+const routes=new Set(['','mapa','bairro','dashboard','agora','feed','noticias','resolvidas','comparar','dados-abertos','relatorios','transparencia','rede-municipal','piracicaba','sobre','privacidade']);
 function createUrl(origin,path,hash,territory,protocol){
  const raw=String(hash||'#/').replace(/^#\/?/,''),[p='',search='']=raw.split('?'),parts=p.split('/');
  if(D.validProtocol(protocol))return origin+path+'#/ocorrencia/'+protocol;
@@ -10,8 +10,11 @@ function createUrl(origin,path,hash,territory,protocol){
  const route=routes.has(p)?p:'',q=new URLSearchParams(search),out=new URLSearchParams(),names=D.allNeighborhoods(territory);
  for(const [key,value]of q){
   const ok=(['bairro','nome','hood'].includes(key)&&names.includes(value))||(['category','cat'].includes(key)&&Object.hasOwn(D.CATEGORIES,value))||(key==='status'&&D.STATUSES.includes(value))||(key==='region'&&/^[1-9]$/.test(value))||(key==='agency'&&/^[a-z-]{2,60}$/.test(value))||(['from','to'].includes(key)&&/^\d{4}-\d\d-\d\d$/.test(value))||(key==='days'&&['7','30','90'].includes(value))||(key==='layer'&&['open','resolved'].includes(value))||(['heat','open'].includes(key)&&value==='1')||(key==='cluster'&&value==='0');
+  if(route==='noticias'&&(key==='materia'&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)||key==='protocolo'&&D.validProtocol(value)))out.set(key,value);
   if(ok){if(key==='hood'){if(out.getAll(key).length<3)out.append(key,value)}else out.set(key,value)}
  }
+ if(route==='mapa')out.set('visao','cidade');
+ if(route==='noticias')out.set('edicao','cidade');
  return origin+path+'#/'+route+(out.size?'?'+out:'');
 }
 root.CidadeConectaShareFactory=Object.freeze({createUrl});

@@ -29,7 +29,7 @@ test('internal table has column semantics, mobile labels and escaped data',()=>{
 });
 test('territorial summaries use the sanitized public view, preserving own private record lookup',()=>{
  for(const [file,end] of [['assets/piracicaba.js','function findRegion('],['assets/piracicaba-mapas.js','function allNeighborhoods(']]){
-  const source=read(file),start=source.indexOf('function readOccurrences('),c={window:{CidadeConectaPublicRecords:()=>[],CidadeConectaLocalDB:{occurrences:[{protocol:'owner'}]}},localStorage:{getItem:()=>null},STORAGE_KEY:'test'};
+  const source=read(file),start=source.indexOf('function readOccurrences('),c={window:{CidadeConectaPublicRecords:()=>[],CidadeConectaUI:{ownRecords:()=>[{protocol:'owner'}]}},localStorage:{getItem:()=>null},STORAGE_KEY:'test'};
   vm.runInNewContext(source.slice(start,source.indexOf(end,start)),c);assert.equal(c.readOccurrences(true).length,0);
   if(file.includes('mapas'))assert.equal(c.readOccurrences(false)[0].protocol,'owner');
  }
@@ -69,7 +69,8 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(app,/mapGuideV90/);
  assert.match(app,/registerTrustV91/);
  assert.match(app,/afterSubmitV91/);
- assert.match(app,/followPromiseV91/);
+ assert.match(app,/Digite seu protocolo/);
+ assert.match(app,/id="followResult"[^>]+aria-live="polite"/);
  assert.match(app,/Mapa interativo indisponível/);
  assert.doesNotMatch(app,/mapGuideV90[^\n]*\\+iconSvg/);
  assert.match(app,/Esta informação serve apenas para orientar/);
@@ -79,12 +80,12 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(civic,/homePortalSearchBoxV83/);
  assert.match(html,/cc-institutional-pira-v85/);
  assert.match(html,/institutional-pira-v85\.css\?v=9\.2\.1/);
- assert.match(html,/civic\.css\?v=9\.6\.1/);
- assert.match(html,/app\.js\?v=9\.6\.0/);
- assert.match(html,/civic-pages\.js\?v=9\.6\.1/);
+ assert.match(html,/civic\.css\?v=9\.6\.2/);
+ assert.match(html,/app\.js\?v=9\.6\.2/);
+ assert.match(html,/civic-pages\.js\?v=9\.6\.2/);
  assert.match(html,/civic-demo\.js\?v=9\.6\.1/);
  assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.1/);
- assert.match(html,/civic-ui\.js\?v=9\.6\.1/);
+ assert.match(html,/civic-ui\.js\?v=9\.6\.2/);
  assert.match(html,/civic-city-news\.js\?v=9\.6\.1/);
  assert.doesNotMatch(html,/logo-gov|marca-gov|bras[aã]o/i);
 });
@@ -105,7 +106,7 @@ test('fotos licenciadas são servidas pelo jornal com crédito e licença',()=>{
 
 test('fallback local preserva categoria',()=>{const pages=readFileSync('assets/civic-pages.js','utf8'),css=readFileSync('assets/civic.css','utf8');assert.match(pages,/civic-news-cover-real civic-news-cover--/);assert.match(css,/demo-news\/iluminacao\.svg/);assert.match(css,/demo-news\/vias\.svg/);});
 
-test('Home autenticada troca visão pública por acompanhamentos pessoais',()=>{const app=readFileSync('assets/app.js','utf8'),civic=readFileSync('assets/civic.css','utf8');assert.match(app,/function accountHomeContext/);assert.match(app,/Meus acompanhamentos/);assert.match(app,/data-personal-map="1"/);assert.match(app,/Setores acompanhados/);assert.match(app,/Minhas ocorrências/);assert.match(app,/cidadeconecta:account-state/);assert.match(civic,/homeAccountQuickV94/);assert.match(civic,/homePersonalPopupV94/);});
+test('Home autenticada troca visão pública por acompanhamentos pessoais',()=>{const app=readFileSync('assets/app.js','utf8'),civic=readFileSync('assets/civic.css','utf8');assert.match(app,/function accountHomeContext/);assert.match(app,/Meus acompanhamentos/);assert.match(app,/data-personal-map="1"/);assert.match(app,/Setores acompanhados/);assert.match(app,/Minhas ocorrências/);assert.match(read('assets/civic-ui.js'),/cidadeconecta:account-state/);assert.match(civic,/homeAccountQuickV94/);assert.match(civic,/homePersonalPopupV94/);});
 
 test('linguagem cidadã evita jargão nas telas principais',()=>{const app=readFileSync('assets/app.js','utf8'),ui=readFileSync('assets/civic-ui.js','utf8');assert.match(app,/Quem pode ajudar\?/);assert.match(app,/Pode aparecer no site/);assert.match(app,/Fica privado/);assert.match(app,/Quem pode cuidar/);assert.match(app,/Setor relacionado/);assert.doesNotMatch(app,/Da categoria para a área pública de referência/);assert.doesNotMatch(ui,/Atualizando leitura pública/);assert.match(ui,/Atualizando informações/);});
 

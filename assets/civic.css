@@ -583,3 +583,4 @@
 .civic-personal-update-list a{display:grid;gap:.2rem;min-width:0;min-height:44px;padding:.55rem 0;overflow-wrap:anywhere;color:var(--cc6-brand)}
 .civic-personal-update-list small{color:var(--cc6-muted)}
 .civic-personal-update-list .badge{margin-bottom:.35rem}
+.mapSectionV53>.wrap>.civic-subnav{margin-bottom:.75rem}

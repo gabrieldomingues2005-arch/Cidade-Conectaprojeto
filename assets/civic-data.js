@@ -30,10 +30,11 @@ function remote(o){return project({...o,cloudOrigin:true,history:o.occurrence_hi
 function lastUpdate(o){return Math.max(...[o.created,o.updated,...(o.history||[]).map(h=>h.date??h[1])].map(time).filter(x=>x!==null),0)}
 function regionsFor(name,territory){const key=norm(name);return(territory?.administrativeRegions||[]).filter(r=>(r.neighborhoods||[]).some(n=>norm(n.replace(/^Parte do /i,''))===key)).map(r=>Number(r.id))}
 function allNeighborhoods(t){return[...new Set([...(t?.administrativeRegions||[]).flatMap(r=>(r.neighborhoods||[]).map(n=>n.replace(/^Parte do /i,''))),...(t?.ruralAndIsolatedUrbanNuclei||[])])].sort((a,b)=>a.localeCompare(b,'pt-BR'))}
-function filter(rows,f={},territory){
+function matchesFilters(f={},territory){
  const q=norm(f.q),from=f.from?time(f.from+'T00:00:00-03:00'):null,to=f.to?time(f.to+'T23:59:59.999-03:00'):null;
- return publicRows(rows).filter(o=>(!q||norm([o.protocol,o.title,o.bairro,o.agency,CATEGORIES[o.category]].join(' ')).includes(q))&&(!f.category||o.category===f.category)&&(!f.status||o.status===f.status)&&(!f.bairro||norm(o.bairro)===norm(f.bairro))&&(!f.region||regionsFor(o.bairro,territory).includes(Number(f.region)))&&(!f.agency||o.agency===f.agency)&&(!f.open||o.status!=='Resolvida')&&(!f.resolved||o.status==='Resolvida')&&(from===null||(time(o.created)!==null&&time(o.created)>=from))&&(to===null||(time(o.created)!==null&&time(o.created)<=to)));
+ return o=>(!q||norm([o.protocol,o.title,o.bairro,o.agency,CATEGORIES[o.category]].join(' ')).includes(q))&&(!f.category||o.category===f.category)&&(!f.status||o.status===f.status)&&(!f.bairro||norm(o.bairro)===norm(f.bairro))&&(!f.region||regionsFor(o.bairro,territory).includes(Number(f.region)))&&(!f.agency||o.agency===f.agency)&&(!f.open||o.status!=='Resolvida')&&(!f.resolved||o.status==='Resolvida')&&(from===null||(time(o.created)!==null&&time(o.created)>=from))&&(to===null||(time(o.created)!==null&&time(o.created)<=to));
 }
+function filter(rows,f,territory){return publicRows(rows).filter(matchesFilters(f,territory))}
 function rank(rows,key){const map=new Map();for(const o of rows){const k=o[key];if(k)map.set(k,(map.get(k)||0)+1)}return[...map].map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label,'pt-BR'))}
 function metrics(rows,now=Date.now()){
  const a=publicRows(rows),resolved=a.filter(o=>o.status==='Resolvida').length;
@@ -91,5 +92,5 @@ function csv(rows){
 function quality(rows,now=Date.now()){
  const a=publicRows(rows);return a.map(o=>{const issues=[];if(!o.bairro)issues.push('Bairro ausente');if(o.category==='outros')issues.push('Revisar categoria');if(o.lat===null||o.lng===null)issues.push('Sem ponto público');if(!o.title||!o.description)issues.push('Informação incompleta');if(time(o.created)===null||time(o.created)>now)issues.push('Data inconsistente');if(o.status!=='Resolvida'&&lastUpdate(o)&&now-lastUpdate(o)>30*DAY)issues.push('Sem atualização há mais de 30 dias');const duplicates=a.filter(x=>x.protocol!==o.protocol&&x.category===o.category&&norm(x.bairro)===norm(o.bairro)&&norm(x.title)===norm(o.title)).map(x=>x.protocol);if(duplicates.length)issues.push('Possível duplicidade');return{protocol:o.protocol,issues,duplicates,attention:issues.length}});
 }
-root.CidadeConectaData=Object.freeze({DAY,STATUSES,CATEGORIES,norm,time,validProtocol,publicText,project,remote,publicRows,realRows,lastUpdate,regionsFor,allNeighborhoods,filter,rank,metrics,compare,median,observedTimes,feed,distance,similar,heatCells,exportRows,csv,quality});
+root.CidadeConectaData=Object.freeze({DAY,STATUSES,CATEGORIES,norm,time,validProtocol,publicText,project,remote,publicRows,realRows,lastUpdate,regionsFor,allNeighborhoods,filter,matchesFilters,rank,metrics,compare,median,observedTimes,feed,distance,similar,heatCells,exportRows,csv,quality});
 })(typeof window!=='undefined'?window:globalThis);
