@@ -24,15 +24,15 @@ const agenda=Object.freeze([
   id:'rock-vendas-2026',date:'2026-11-11',dateLabel:'11 e 12 NOV',time:'8h às 12h',title:'2º Rock Vendas',
   category:'Capacitação e negócios',place:'Instituto Pecege · Santa Rosa',
   summary:'Formação presencial com metodologia gamificada sobre perfis de clientes, comunicação, negociação e estratégias comerciais.',
-  url:'https://parquetecnologico.piracicaba.sp.gov.br/events/2-rock-vendas-1',
-  sourceLabel:'Agenda do Parque Tecnológico de Piracicaba',image:photos.atividade
+  url:'https://www.rockensina.com.br/mais/curso-presencial-vendas/',
+  sourceLabel:'Rock Ensina',image:photos.atividade
  }),
  Object.freeze({
   id:'expo-rh-2026',date:'2026-11-11',dateLabel:'11 NOV',time:'8h às 18h',title:'Expo Gestão & RH Piracicaba 2026',
   category:'Gestão, pessoas e conexões',place:'Instituto Pecege · Piracicaba',
   summary:'Encontro divulgado pela agenda colaborativa do ecossistema local para profissionais, líderes e empresas ampliarem conexões e trocarem experiências.',
-  url:'https://parquetecnologico.piracicaba.sp.gov.br/events/expo-gestao-rh-piracicaba-2026',
-  sourceLabel:'Parque Tecnológico de Piracicaba',image:photos.cidade
+  url:'https://www.linka.la/event/6fb9bee3-e911-43f2-ad44-e529cf08aeac',
+  sourceLabel:'Página do evento no Linka',image:photos.cidade
  }),
  Object.freeze({
   id:'piracicaba-transformacao-2026',date:'2026-11-25',dateLabel:'25 NOV',time:'14h às 17h',title:'Piracicaba em Transformação',

@@ -105,7 +105,8 @@ test('cards da agenda apontam para a publicação específica de cada fonte',()=
  const {context,renderers}=setup();
  const city=context.CidadeConectaCityNews;
  const cards=Object.fromEntries(city.agenda.map(item=>[item.id,item.url]));
- assert.equal(cards['expo-rh-2026'],'https://parquetecnologico.piracicaba.sp.gov.br/events/expo-gestao-rh-piracicaba-2026');
+ assert.equal(cards['expo-rh-2026'],'https://www.linka.la/event/6fb9bee3-e911-43f2-ad44-e529cf08aeac');
+ assert.equal(cards['rock-vendas-2026'],'https://www.rockensina.com.br/mais/curso-presencial-vendas/');
  assert.equal(cards['piracicaba-transformacao-2026'],'https://conecta-sp.anamid.com.br/');
  assert.equal(cards['arena-nd-2026'],'https://faculdade.pecege.com/blog/arena-nd-2026');
  const html=renderers.get('noticias')(new URLSearchParams()).html;

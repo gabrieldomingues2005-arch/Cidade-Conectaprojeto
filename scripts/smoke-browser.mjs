@@ -218,6 +218,11 @@ try{
   assert.deepEqual(local,{own:[protocol],saved:[protocol],key:'qa-key-'+owner,other:null,wards:[owner==='a'?'Centro':'Paulista']});
  };
  await loginCitizen('a');await assertScope('a','CC-2026-09881');
+ await evaluate(`location.hash='#/mapa?visao=meus&cat=iluminacao'`);
+ await waitFor(`Boolean(document.querySelector('[data-account-map]'))`);
+ await send('Page.reload');
+ await waitFor(`Boolean(document.querySelector('[data-account-map]'))&&document.querySelector('#mapCat')?.value==='iluminacao'`);
+ assert.match(await evaluate(`location.hash`),/visao=meus/);
  await evaluate(`location.hash='#/minhas?tab=acompanhando'`);
  await waitFor(`document.querySelector('#myCityContent')?.textContent.includes('CC-2026-09001')`);
  await evaluate(`location.hash='#/registrar'`);
@@ -438,6 +443,7 @@ try{
  await waitFor("document.querySelector('[data-network-category=alagamentos]')?.getAttribute('aria-pressed')==='true'");
  assert.equal(await evaluate(`document.querySelector('.network-citizen-actions a[href^="https:"]').href`),'https://sempapel.pmp.sp.gov.br/156/');
  assert.equal(await evaluate(`document.querySelector('.piraFooter a[href*="/156/"]').href`),'https://sempapel.pmp.sp.gov.br/156/');
+ assert.equal(await evaluate(`document.querySelector('.network-citizen-actions a[href="tel:156"]').textContent`),'Ligar 156');
  await evaluate(`document.querySelector('[data-network-category=agua]').click()`);
  assert.equal(await evaluate(`document.querySelector('.network-citizen-actions a[href^="https:"]').href`),'https://piracicaba.sp.gov.br/servicos/atendimento/');
  await evaluate(`document.querySelector('[data-network-category=alagamentos]').click()`);
