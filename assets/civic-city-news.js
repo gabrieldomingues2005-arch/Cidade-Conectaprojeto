@@ -28,25 +28,25 @@ const agenda=Object.freeze([
   sourceLabel:'Agenda do Parque Tecnológico de Piracicaba',image:photos.atividade
  }),
  Object.freeze({
-  id:'expo-rh-2026',date:'2026-11-11',dateLabel:'11 NOV',time:'Agenda do evento',title:'Expo Gestão & RH Piracicaba 2026',
+  id:'expo-rh-2026',date:'2026-11-11',dateLabel:'11 NOV',time:'8h às 18h',title:'Expo Gestão & RH Piracicaba 2026',
   category:'Gestão, pessoas e conexões',place:'Instituto Pecege · Piracicaba',
   summary:'Encontro divulgado pela agenda colaborativa do ecossistema local para profissionais, líderes e empresas ampliarem conexões e trocarem experiências.',
-  url:'https://parquetecnologico.piracicaba.sp.gov.br/agendacolaborativa',
-  sourceLabel:'Agenda colaborativa do Parque Tecnológico',image:photos.cidade
+  url:'https://parquetecnologico.piracicaba.sp.gov.br/events/expo-gestao-rh-piracicaba-2026',
+  sourceLabel:'Parque Tecnológico de Piracicaba',image:photos.cidade
  }),
  Object.freeze({
   id:'piracicaba-transformacao-2026',date:'2026-11-25',dateLabel:'25 NOV',time:'14h às 17h',title:'Piracicaba em Transformação',
   category:'Inovação e transformação digital',place:'ACIPI · Centro',
   summary:'O Conecta SP – Piracicaba reúne atores do ecossistema para discutir desafios dos negócios e soluções digitais para empresas da região.',
-  url:'https://parquetecnologico.piracicaba.sp.gov.br/events/piracicaba-em-transformacao-anamid',
-  sourceLabel:'Parque Tecnológico de Piracicaba',image:photos.engenho
+  url:'https://conecta-sp.anamid.com.br/',
+  sourceLabel:'AnaMid',image:photos.engenho
  }),
  Object.freeze({
-  id:'arena-nd-2026',date:'2026-11-26',dateLabel:'26 NOV',time:'13h30 às 17h30',title:'Arena ND 2026',
+  id:'arena-nd-2026',date:'2026-11-26',dateLabel:'26 NOV',time:'A partir das 13h30',title:'Arena ND 2026',
   category:'Tecnologia, marketing e empreendedorismo',place:'Instituto Pecege · Santa Rosa',
   summary:'Encontro sobre ideias, pessoas e experiências que estão transformando negócios, com conteúdo sobre tecnologia, marketing, estratégia e conexões.',
-  url:'https://parquetecnologico.piracicaba.sp.gov.br/events/arena-nd-2026',
-  sourceLabel:'Parque Tecnológico de Piracicaba',image:photos.rio
+  url:'https://faculdade.pecege.com/blog/arena-nd-2026',
+  sourceLabel:'Faculdade Pecege',image:photos.rio
  }),
  Object.freeze({
   id:'feira-rua-porto',date:'recorrente',dateLabel:'FINS DE SEMANA',time:'10h às 17h',title:'Feira de Artesanato da Rua do Porto',
@@ -63,8 +63,8 @@ const gallery=Object.freeze([
  Object.freeze({title:'Vista de Piracicaba',subtitle:'Paisagem urbana',image:photos.cidade})
 ]);
 window.CidadeConectaCityNews=Object.freeze({
- updatedAt:'2026-11-06',
- updatedLabel:'Informações reunidas em 06/11/2026',
+ updatedAt:'2026-11-07',
+ updatedLabel:'Links conferidos em 07/11/2026',
  agendaSource:'https://parquetecnologico.piracicaba.sp.gov.br/agendacolaborativa',
  tourismSource:'https://turismopiracicaba.com.br/',
  photos,agenda,gallery

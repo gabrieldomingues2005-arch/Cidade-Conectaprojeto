@@ -81,12 +81,12 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(html,/cc-institutional-pira-v85/);
  assert.match(html,/institutional-pira-v85\.css\?v=9\.2\.1/);
  assert.match(html,/civic\.css\?v=9\.6\.2/);
- assert.match(html,/app\.js\?v=9\.6\.2/);
- assert.match(html,/civic-pages\.js\?v=9\.6\.2/);
+ assert.match(html,/app\.js\?v=9\.6\.3/);
+ assert.match(html,/civic-pages\.js\?v=9\.6\.3/);
  assert.match(html,/civic-demo\.js\?v=9\.6\.1/);
  assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.1/);
- assert.match(html,/civic-ui\.js\?v=9\.6\.2/);
- assert.match(html,/civic-city-news\.js\?v=9\.6\.1/);
+ assert.match(html,/civic-ui\.js\?v=9\.6\.3/);
+ assert.match(html,/civic-city-news\.js\?v=9\.6\.3/);
  assert.doesNotMatch(html,/logo-gov|marca-gov|bras[aã]o/i);
 });
 

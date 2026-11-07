@@ -7,7 +7,7 @@ const STORAGE_KEY='cidadeConecta2026v3';
 const official={
   prefeitura:'https://piracicaba.sp.gov.br/',
   atendimento:'https://sempapel.pmp.sp.gov.br/156/',
-  geo:'https://geo.piracicaba.sp.gov.br/',
+  geo:'https://piracicaba.geopixel.com.br/geopixelcidades3/',
   mapas:'https://piracicaba.sp.gov.br/servicos/mapas-do-municipio/',
   ibge:'https://www.ibge.gov.br/cidades-e-estados/sp/piracicaba.html'
 };

@@ -100,3 +100,14 @@ test('links de mapa e jornal abrem a edição pública',()=>{
  assert.equal(share(...base,'#/noticias?demo=1&protocolo=DEMO-2026-00001',territory),'https://cidade.invalid/app/#/noticias?edicao=cidade');
  assert.equal(share(...base,'#/noticias?materia=cidade-em-foco',territory),'https://cidade.invalid/app/#/noticias?materia=cidade-em-foco&edicao=cidade');
 });
+
+test('cards da agenda apontam para a publicação específica de cada fonte',()=>{
+ const {context,renderers}=setup();
+ const city=context.CidadeConectaCityNews;
+ const cards=Object.fromEntries(city.agenda.map(item=>[item.id,item.url]));
+ assert.equal(cards['expo-rh-2026'],'https://parquetecnologico.piracicaba.sp.gov.br/events/expo-gestao-rh-piracicaba-2026');
+ assert.equal(cards['piracicaba-transformacao-2026'],'https://conecta-sp.anamid.com.br/');
+ assert.equal(cards['arena-nd-2026'],'https://faculdade.pecege.com/blog/arena-nd-2026');
+ const html=renderers.get('noticias')(new URLSearchParams()).html;
+ for(const url of Object.values(cards))assert.ok(html.includes('href="'+url+'" aria-label="Ver na fonte:'));
+});
