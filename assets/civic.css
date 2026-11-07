@@ -516,3 +516,16 @@
 .civic-news-cover-real.is-fallback{background:#e7f0ed url('piracicaba-rio.svg') center/cover no-repeat}
 .civic-news-cover-real.is-fallback::before{content:"Visual de apoio · Cidade Conecta";position:absolute;left:12px;top:12px;z-index:1;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.9);color:var(--cc6-brand);font-size:.6875rem;font-weight:800;letter-spacing:.03em}
 .civic-news-cover-real.is-fallback::after{background:linear-gradient(180deg,rgba(3,47,49,.04),rgba(3,47,49,.2))}
+
+
+/* Fall-back local por categoria 9.3.1 */
+.civic-news-cover-real.is-fallback{background-size:cover;background-position:center}
+.civic-news-cover-real.is-fallback.civic-news-cover--iluminacao{background-image:url('demo-news/iluminacao.svg')}
+.civic-news-cover-real.is-fallback.civic-news-cover--vias{background-image:url('demo-news/vias.svg')}
+.civic-news-cover-real.is-fallback.civic-news-cover--residuos{background-image:url('demo-news/residuos.svg')}
+.civic-news-cover-real.is-fallback.civic-news-cover--agua{background-image:url('demo-news/agua.svg')}
+.civic-news-cover-real.is-fallback.civic-news-cover--alagamentos{background-image:url('demo-news/alagamentos.svg')}
+.civic-news-cover-real.is-fallback.civic-news-cover--sinalizacao{background-image:url('demo-news/sinalizacao.svg')}
+.civic-news-cover-real.is-fallback.civic-news-cover--acessibilidade{background-image:url('demo-news/acessibilidade.svg')}
+.civic-news-cover-real.is-fallback.civic-news-cover--areas{background-image:url('demo-news/areas.svg')}
+.civic-news-cover-real.is-fallback.civic-news-cover--outros{background-image:url('piracicaba-rio.svg')}
