@@ -3,9 +3,9 @@
 'use strict';
 const D=root.CidadeConectaData,KEY='cidadeConectaCitizenV1',CACHE='cidadeConectaPublicCacheV1',MAX_AGE=86400000;
 const copy=v=>JSON.parse(JSON.stringify(v));
-function createStore(storage,onChange=()=>{},clock=()=>Date.now()){
+function createStore(storage,onChange=()=>{},clock=()=>Date.now(),keyName=KEY){
  let persistent=Boolean(storage),memory={following:[],recent:[],notices:[],snapshots:{},wardSince:{}};
- function load(){try{const raw=JSON.parse(storage?.getItem(KEY)||'null');if(raw&&typeof raw==='object')for(const key of Object.keys(memory))if(Object.hasOwn(raw,key))memory[key]=raw[key]}catch{persistent=false}}
+ function load(){try{const raw=JSON.parse(storage?.getItem(keyName)||'null');if(raw&&typeof raw==='object')for(const key of Object.keys(memory))if(Object.hasOwn(raw,key))memory[key]=raw[key]}catch{persistent=false}}
  function safe(){
   memory.following=[...new Set((Array.isArray(memory.following)?memory.following:[]).filter(D.validProtocol))].slice(0,80);
   memory.recent=(Array.isArray(memory.recent)?memory.recent:[]).filter(x=>x&&((x.kind==='protocol'&&D.validProtocol(x.value))||(x.kind==='bairro'&&typeof x.value==='string'&&x.value.length<=90&&!/[@<>\d]/.test(x.value)))).slice(0,15).map(x=>({kind:x.kind,value:x.value,at:Number(x.at)||0}));
@@ -15,7 +15,7 @@ function createStore(storage,onChange=()=>{},clock=()=>Date.now()){
   memory.snapshots=Object.fromEntries(Object.entries(memory.snapshots).filter(([p,x])=>D.validProtocol(p)&&x&&D.STATUSES.includes(x.status)).slice(0,1000).map(([p,x])=>[p,{status:x.status,stamp:Number(x.stamp)||0}]));
   memory.wardSince=Object.fromEntries(Object.entries(memory.wardSince).filter(([w,n])=>w.length<=90&&Number.isFinite(Number(n))).map(([w,n])=>[w,Number(n)]));
  }
- function save(){safe();try{storage?.setItem(KEY,JSON.stringify(memory))}catch{persistent=false}onChange(state())}
+ function save(){safe();try{storage?.setItem(keyName,JSON.stringify(memory))}catch{persistent=false}onChange(state())}
  function state(){safe();return{...copy(memory),persistent,unread:memory.notices.filter(x=>!x.read).length}}
  load();safe();
  function follow(protocol,row){if(!D.validProtocol(protocol))return false;const has=memory.following.includes(protocol);memory.following=has?memory.following.filter(x=>x!==protocol):[protocol,...memory.following].slice(0,80);if(!has&&row){const o=D.project(row);if(o)memory.snapshots[protocol]={stamp:D.lastUpdate(o),status:o.status}}save();return!has}
@@ -68,6 +68,12 @@ root.CidadeConectaCitizenFactory=Object.freeze({createStore,createSource});
 if(typeof document==='undefined')return;
 let storage;try{storage=root.localStorage}catch{}
 const event=(name,detail)=>root.dispatchEvent(new CustomEvent(name,{detail}));
-root.CidadeConectaCitizen=createStore(storage,s=>event('cidadeconecta:citizen-state',s));
+const notify=s=>event('cidadeconecta:citizen-state',s),visitor=createStore(storage,notify),stores=new Map([['',visitor]]);
+function activeStore(){
+ const scope=root.CidadeConectaAccount?.scope?.()||'';
+ if(!stores.has(scope))stores.set(scope,createStore(scope.startsWith('account:')?storage:null,notify,undefined,KEY+':'+scope));
+ return stores.get(scope)
+}
+root.CidadeConectaCitizen=Object.freeze({visitorState:visitor.state,...Object.fromEntries(Object.keys(visitor).map(method=>[method,(...args)=>activeStore()[method](...args)]))});
 root.CidadeConectaPublicSource=createSource({fetch:root.fetch.bind(root),storage,config:root.CIDADE_CONECTA_CONFIG,onChange:s=>event('cidadeconecta:public-data',s),online:()=>root.navigator.onLine});
 })(typeof window!=='undefined'?window:globalThis);

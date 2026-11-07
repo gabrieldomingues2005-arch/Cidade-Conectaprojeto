@@ -24,7 +24,21 @@ try{
  const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.exception?.description||'Falha de avaliação');return r.result.value};
  // Fixtures existem apenas no browser de QA: nenhuma chamada externa sai do teste.
  await send('Page.addScriptToEvaluateOnNewDocument',{source:`
- window.__qaScenario=location.search.includes('qaCivic=1')?'qa-public':'unavailable';
+ window.__qaScenario=location.search.includes('qaAccount=1')?'qa-account':location.search.includes('qaCivic=1')?'qa-public':'unavailable';
+ if(window.__qaScenario==='qa-account'){
+  window.__qaCitizenCalls=[];
+  const records=['visitante','a','b'].map((owner,i)=>({
+   protocol:'CC-2026-0988'+i,title:'Registro privado QA '+owner,category:'vias',bairro:'Centro',
+   created:'2026-11-02T12:00:00Z',status:'Recebida',localOwner:true,cloudOrigin:true,public:false,moderationStatus:'pending',
+   ownerScope:i?'account:qa-user-'+owner:'',privateData:{trackingKey:'qa-key-'+owner},history:[]
+  }));
+  localStorage.setItem('cidadeConecta2026v3',JSON.stringify({occurrences:records}));
+  for(const o of records){
+   const scope=o.ownerScope?':'+o.ownerScope:'';
+   localStorage.setItem('cidadeConectaSavedProtocolsV1'+scope,JSON.stringify([o.protocol]));
+   localStorage.setItem('cidadeConectaDraftV4'+scope,JSON.stringify({title:o.title}));
+  }
+ }
  if(location.search.includes('qaPerf=1')&&navigator.serviceWorker)navigator.serviceWorker.register=async()=>{throw Error('Worker registration excluded from lab navigation timing')};
  if(location.search.includes('qaLeaflet=1')){
   window.__leafletQA={fit:0,fly:0,popup:0,invalidates:0,heatCoordinates:[]};
@@ -51,11 +65,22 @@ try{
   if(mode==='network'||mode==='offline')throw new TypeError('Rede indisponível (QA)');
   if(mode==='timeout')return new Promise((resolve,reject)=>options.signal?.addEventListener('abort',()=>reject(Object.assign(new Error('Timeout QA'),{name:'AbortError'}))));
   const json=(status,payload)=>Promise.resolve(new Response(JSON.stringify(payload),{status,headers:{'Content-Type':'application/json'}}));
-  if(mode==='qa-public'&&url.pathname.includes('/rest/v1/occurrences')){
+  if(['qa-public','qa-account'].includes(mode)&&url.pathname.includes('/rest/v1/occurrences')){
    const rows=Array.from({length:40},(_,i)=>{const created=new Date(Date.now()-(i<20?10:40)*86400000-i*60000).toISOString(),updated=i===0&&window.__qaUpdated?new Date().toISOString():new Date(Date.parse(created)+86400000).toISOString(),status=i===0?(window.__qaUpdated?'Resolvida':'Em andamento'):i%4===0?'Resolvida':'Recebida';return{protocol:'CC-2026-'+String(9000+i).padStart(5,'0'),title:'QA iluminação pública '+i,description:'Relato público fictício para QA do navegador.',neighborhood_label:i%2?'Paulista':'Centro',status,public_visible:true,moderation_status:'approved',public_latitude:-22.725123-i*.0001,public_longitude:-47.649456-i*.0001,responsible_agency:'Referência de QA',created_at:created,updated_at:updated,resolved_at:status==='Resolvida'?updated:null,categories:{slug:'iluminacao',name:'Iluminação'},occurrence_history:[{status:'Recebida',note:'Nota pública de QA',public_note:true,created_at:created},{status,note:'Atualização pública de QA',public_note:true,created_at:updated},{status:'Recebida',note:'PRIVATE_NOTE_QA',public_note:false,created_at:updated}],email:'PRIVATE_EMAIL_QA',exact_address:'PRIVATE_ADDRESS_QA',trackingKey:'PRIVATE_TOKEN_QA',auth_user_id:'PRIVATE_AUTH_QA'}});
    return new Response(JSON.stringify(rows),{status:200,headers:{'Content-Type':'application/json','Content-Range':'0-39/40'}});
   }
   if(mode==='qa-public'&&url.pathname.includes('/functions/v1/community-actions')){const b=JSON.parse(options.body||'{}');window.__qaCommunity=window.__qaCommunity||{};if(b.action==='recurrence')window.__qaCommunity[b.protocol]=true;return json(200,{protocol:b.protocol,registered:!!window.__qaCommunity[b.protocol],recurrenceCount:window.__qaCommunity[b.protocol]?7:6,canGiveFeedback:true,feedbackSaved:b.action==='feedback',myResolution:b.resolution||null,satisfaction:null})}
+  if(mode==='qa-account'&&url.pathname.includes('/functions/v1/citizen-account')){
+   const owner=options.headers.Authorization.endsWith('-a')?'a':'b',action=JSON.parse(options.body).action;
+   window.__qaCitizenCalls.push(action);
+   return json(200,{profile:{name:'Cidadão QA '+owner},follows:[{protocol:'CC-2026-090'+(owner==='a'?'01':'02')}],neighborhoods:[{neighborhood_label:owner==='a'?'Centro':'Paulista'}],notifications:[],unread:0});
+  }
+  if(mode==='qa-account'&&url.pathname.includes('/auth/v1/')){
+   if(url.pathname.endsWith('/logout'))return json(200,{});
+   const owner=url.pathname.endsWith('/user')?options.headers.Authorization.slice(-1):JSON.parse(options.body).email[0];
+   const user={id:'qa-user-'+owner,email:owner+'@example.invalid'};
+   return json(200,url.pathname.endsWith('/user')?user:{user,access_token:'qa-access-'+owner,refresh_token:'qa-refresh-'+owner,expires_at:Math.floor(Date.now()/1000)+3600});
+  }
   if(url.pathname.includes('/auth/v1/')){
    if(mode==='unavailable')return json(503,{message:'Serviço temporariamente indisponível'});
    if(mode==='401')return json(401,{message:'Sessão inválida'});
@@ -87,7 +112,7 @@ try{
     assert.ok(await evaluate(`Boolean(document.querySelector('.registerTrustV91'))&&document.querySelector('#app').textContent.includes('O que acontece com o registro?')`),'registrar: resumo de privacidade/fluxo ausente');
    }
    if(name==='acompanhar'){
-    assert.ok(await evaluate(`Boolean(document.querySelector('.followPromiseV91'))&&document.querySelector('#app').textContent.includes('Uma consulta, três respostas')`),'acompanhar: orientação de consulta ausente');
+    assert.ok(await evaluate(`Boolean(document.querySelector('.followGuideV60 a[href="#/minhas?tab=criados"]'))&&document.querySelector('#protocolInput').getAttribute('aria-describedby')==='protocolHelp'`),'acompanhar: orientação de consulta ausente');
    }
    if(name==='mapa'){
     if(width===390)await evaluate(`document.querySelector('[data-map-pane="list"]')?.click()`);
@@ -140,7 +165,82 @@ try{
  await evaluate(`window.CidadeConectaAccount.resetDemo()`);await waitFor(`window.CidadeConectaAccount.state().unread>=4`);
  assert.deepEqual(errors,[],'Conta DEMO: erro JS');
  results.push({scenario:'conta-demo-login-persistencia-reset',status:'PASS'});console.log('✓ conta DEMO login/persistência/reset');
- await evaluate(`window.CidadeConectaAccount.signOut()`);await pause(80);
+ await evaluate(`location.hash='#/noticias'`);
+ await waitFor(`document.querySelector('#app h1')?.textContent==='Notícias da Cidade'&&Boolean(document.querySelector('.civic-demo-hero-alert'))&&Boolean(document.querySelector('.civic-personal-updates'))`);
+ const demoPhoto=`document.querySelector('.civic-news-lead img')`;
+ await evaluate(`${demoPhoto}.scrollIntoView()`);
+ await waitFor(`${demoPhoto}.complete&&${demoPhoto}.naturalWidth>0`);
+ assert.ok(await evaluate(`${demoPhoto}.getAttribute('src').startsWith('assets/city-photos/')`));
+ assert.ok(await evaluate(`document.querySelector('.civic-city-gallery img')!==null`));
+ for(const width of [390,768,1366]){
+  await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
+  assert.ok(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`),'Jornal DEMO: overflow em '+width);
+  await capture('noticias-conta-demo-'+width);
+ }
+ results.push({scenario:'jornal-normal-demo-imagens-responsivas',status:'PASS'});
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+ await evaluate(`location.hash='#/mapa'`);
+ await waitFor(`Boolean(document.querySelector('[data-account-map]'))&&document.querySelector('#mapResults').textContent.includes('DEMO-2026-')`);
+ await evaluate(`document.querySelector('[data-map-pane=list]').click()`);
+ await capture('mapa-conta-demo-390');
+ await evaluate(`document.querySelector('[aria-label="Ocorrências no mapa"] a[href="#/mapa?visao=cidade"]').click()`);
+ await waitFor(`location.hash.includes('visao=cidade')&&!document.querySelector('[data-account-map]')`);
+ assert.doesNotMatch(await evaluate(`document.querySelector('#mapResults').textContent`),/DEMO-2026-/);
+ await evaluate(`location.hash='#/acompanhar'`);
+ await waitFor(`document.querySelector('.followRecentV52')?.textContent.includes('DEMO-2026-')`);
+ const demoProtocol=await evaluate(`window.CidadeConectaAccount.state().created[0]`);
+ await evaluate(`document.querySelector('#protocolInput').value=${JSON.stringify(demoProtocol.toLowerCase())};document.querySelector('#followForm').requestSubmit()`);
+ await waitFor(`Boolean(document.querySelector('[data-demo-save]'))`);
+ const savedBefore=await evaluate(`window.CidadeConectaAccount.state().saved.includes(${JSON.stringify(demoProtocol)})`);
+ await evaluate(`document.querySelector('[data-demo-save]').click()`);
+ await evaluate(`location.hash='#/minhas?tab=salvos'`);
+ await waitFor(`document.querySelector('.civic-subnav [aria-current="page"]')?.textContent==='Salvos'`);
+ assert.equal(await evaluate(`document.querySelector('#myCityContent').textContent.includes(${JSON.stringify(demoProtocol)})`),!savedBefore);
+ await evaluate(`location.hash='#/registrar'`);
+ await waitFor(`document.querySelector('#app').textContent.includes('Saia da demonstração')`);
+ assert.equal(await evaluate(`document.querySelector('#occForm')!==null`),false);
+ await evaluate(`location.hash='#/noticias'`);
+ await waitFor(`Boolean(document.querySelector('.civic-demo-hero-alert'))`);
+ await evaluate(`window.CidadeConectaAccount.signOut()`);
+ await waitFor(`!document.querySelector('.civic-demo-hero-alert,.civic-personal-updates')`);
+ assert.ok(await evaluate(`document.querySelector('.civic-city-gallery img')!==null`));
+ assert.deepEqual(errors,[],'Navegação DEMO: erro JS');
+ results.push({scenario:'demo-mapa-consulta-salvos-e-saida',status:'PASS'});
+ console.log('✓ sessão DEMO no mapa, protocolos, salvos e jornal com fotos locais');
+
+ errors.length=0;scenario='civic-account-scope';
+ await send('Page.navigate',{url:base+'/index.html?qaAccount=1#/conta'});
+ await waitFor(`Boolean(document.querySelector('[data-account-login]'))`);
+ const loginCitizen=owner=>evaluate(`window.CidadeConectaAccount.signIn(${JSON.stringify(owner+'@example.invalid')},'qa-password')`);
+ const assertScope=async (owner,protocol)=>{
+  const local=await evaluate(`({own:CidadeConectaUI.ownRecords().map(o=>o.protocol),saved:CidadeConectaUI.savedProtocols(),key:CidadeConectaUI.trackingKey(${JSON.stringify(protocol)}),other:CidadeConectaUI.trackingKey('CC-2026-09880'),wards:CidadeConectaUI.favoriteNames()})`);
+  assert.deepEqual(local,{own:[protocol],saved:[protocol],key:'qa-key-'+owner,other:null,wards:[owner==='a'?'Centro':'Paulista']});
+ };
+ await loginCitizen('a');await assertScope('a','CC-2026-09881');
+ await evaluate(`location.hash='#/minhas?tab=acompanhando'`);
+ await waitFor(`document.querySelector('#myCityContent')?.textContent.includes('CC-2026-09001')`);
+ await evaluate(`location.hash='#/registrar'`);
+ await waitFor(`Boolean(document.querySelector('#restoreDraft'))`);
+ await evaluate(`document.querySelector('#restoreDraft').click()`);
+ assert.equal(await evaluate(`document.querySelector('#title').value`),'Registro privado QA a');
+ await evaluate(`window.CidadeConectaAccount.signOut()`);
+ await loginCitizen('b');await assertScope('b','CC-2026-09882');
+ assert.equal(await evaluate(`CidadeConectaUI.trackingKey('CC-2026-09881')`),null);
+ await evaluate(`location.hash='#/ocorrencia/CC-2026-09881'`);
+ await waitFor(`document.querySelector('#app').textContent.includes('Não encontramos este protocolo')`);
+ assert.doesNotMatch(await evaluate(`document.querySelector('#app').textContent`),/Registro privado QA a/);
+ await evaluate(`location.hash='#/noticias'`);
+ await waitFor(`Boolean(document.querySelector('.civic-personal-updates'))`);
+ assert.doesNotMatch(await evaluate(`document.querySelector('#app').textContent`),/DEMO-2026-|Registro privado QA/);
+ assert.deepEqual(await evaluate(`window.__qaCitizenCalls`),['profile','profile'],'Importação de visitante só deve ocorrer por ação explícita');
+ await evaluate(`window.CidadeConectaAccount.signOut()`);
+ assert.deepEqual(await evaluate(`CidadeConectaUI.ownRecords().map(o=>o.protocol)`),['CC-2026-09880']);
+ assert.deepEqual(errors,[],'Isolamento de contas: erro JS');
+ results.push({scenario:'contas-reais-simuladas-separacao-de-protocolos-e-rascunhos',status:'PASS'});
+ console.log('✓ contas distintas e itens locais isolados');
+ await evaluate(`for(const key of Object.keys(localStorage))if(/^(cidadeConecta2026v3|cidadeConectaSavedProtocolsV1|cidadeConectaDraftV4|cidadeConectaPublicCacheV1)/.test(key))localStorage.removeItem(key)`);
+ await send('Page.navigate',{url:base+'/index.html?qaView=demo-account#/conta'});
+ await waitFor(`Boolean(document.querySelector('[data-account-demo-login]'))`);
  for(scenario of ['unavailable','network','timeout','offline','401','403','empty']){
   await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:true});window.dispatchEvent(new Event('online'));window.__qaScenario=${JSON.stringify(scenario)};sessionStorage.setItem('cidadeConectaAuthSessionV1',JSON.stringify({access_token:'qa-access',refresh_token:'qa-refresh',expires_at:Math.floor(Date.now()/1000)+3600}));location.hash='#/admin';`);
   if(scenario==='offline')await evaluate(`Object.defineProperty(navigator,'onLine',{configurable:true,value:false});window.dispatchEvent(new Event('offline'))`);
@@ -299,7 +399,7 @@ try{
  await evaluate(`location.hash='#/registrar'`);await waitFor(`Boolean(document.querySelector('#occForm'))`);
  await evaluate(`document.querySelector('[data-category-choice="iluminacao"]').click();for(const[id,value]of Object.entries({bairro:'Centro',title:'QA offline controlado',description:'Este formulário não pode ser enviado quando o navegador está offline.'})){const x=document.getElementById(id);x.value=value;x.dispatchEvent(new Event('input',{bubbles:true}))}document.querySelector('#agree').checked=true;document.querySelector('#occForm').requestSubmit()`);
  await waitFor(`document.querySelector('#toast')?.textContent.includes('Nada foi enviado')`);
- assert.equal(await evaluate(`CidadeConectaLocalDB.occurrences.filter(o=>o.localOwner).length`),0,'Offline não pode inventar um envio ou protocolo');
+ assert.equal(await evaluate(`JSON.parse(localStorage.getItem('cidadeConecta2026v3')||'{"occurrences":[]}').occurrences.filter(o=>o.localOwner).length`),0,'Offline não pode inventar um envio ou protocolo');
  await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
  await send('Network.setBypassServiceWorker',{bypass:true});await send('Network.setCacheDisabled',{cacheDisabled:true});
  results.push({scenario:'pwa-offline-shell-preferences-no-fake-send',status:'PASS'});
