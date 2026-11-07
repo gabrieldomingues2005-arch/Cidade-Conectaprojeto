@@ -502,3 +502,12 @@
 .ccMapTileFallbackV83 strong{font-size:.75rem;color:var(--cc83-navy,#0b3f55)}
 .ccMapTileFallbackV83 span{font-size:.68rem;color:#5d7074}
 @media(max-width:760px){.networkOfficialIntroV84{flex-direction:column}.networkOfficialGridV84{grid-template-columns:1fr}.networkIntegrationBadgeV84{white-space:normal}.networkOfficialChannelsV84{padding:18px}}
+
+
+/* Correção de zoom 200% 9.3 */
+@media(max-width:560px){
+ .civic-updatebar-inner>strong,.civic-updatebar-all{width:100%;max-width:100%;margin-left:0;overflow-wrap:anywhere}
+ .civic-updatebar-list{width:100%;max-width:100%}
+ .civic-updatebar-list>a{min-width:min(240px,calc(100vw - 32px));max-width:calc(100vw - 32px);flex:0 0 auto}
+ .civic-updatebar-list b,.civic-updatebar-list small{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+}
