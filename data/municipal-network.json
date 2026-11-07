@@ -6,7 +6,7 @@
     "disclaimer": "Mapeamento informativo do protótipo acadêmico. Não representa integração, despacho, protocolo ou roteamento oficial da Prefeitura de Piracicaba.",
     "officialDirectoryUrl": "https://transparencia.piracicaba.sp.gov.br/secretarias/",
     "officialServicesUrl": "https://piracicaba.sp.gov.br/carta-de-servicos/",
-    "official156Url": "https://sistemas.pmp.sp.gov.br/smg/SIP156/blank_inicial/",
+    "official156Url": "https://sempapel.pmp.sp.gov.br/156/",
     "officialPortalUrl": "https://piracicaba.sp.gov.br/",
     "integrationStatus": "not-configured",
     "integrationNote": "Não foi localizada documentação pública de API de escrita para integração automática. O Cidade Conecta mantém o despacho externo desativado até existir endpoint oficial e autorização."
@@ -123,8 +123,8 @@
       "phone": "(19) 3403-9611",
       "email": "presidencia@semaepiracicaba.sp.gov.br",
       "address": "Rua XV de Novembro, 2200",
-      "officialUrl": "https://piracicaba.sp.gov.br/sobre-servico-municipal-de-agua-e-esgoto-semae/",
-      "servicesUrl": "https://piracicaba.sp.gov.br/sobre-servico-municipal-de-agua-e-esgoto-semae/",
+      "officialUrl": "https://semaepiracicaba.sp.gov.br/",
+      "servicesUrl": "https://piracicaba.sp.gov.br/servicos/atendimento/",
       "sectors": [
         "Abastecimento público de água",
         "Esgotamento sanitário",
@@ -319,12 +319,12 @@
   "officialChannels": [
     {
       "id": "sip156",
-      "name": "Serviço de Informações à População – SIP 156",
-      "kind": "solicitações e reclamações",
-      "url": "https://sistemas.pmp.sp.gov.br/smg/SIP156/blank_inicial/",
+      "name": "Portal de Serviços 156",
+      "kind": "solicitações e consulta de protocolos",
+      "url": "https://sempapel.pmp.sp.gov.br/156/",
       "phone": "156",
       "availability": "Online 24h; telefone em horário informado pela Carta de Serviços",
-      "source": "Carta de Serviços da Prefeitura de Piracicaba"
+      "source": "Portal de Serviços 156 da Prefeitura de Piracicaba"
     },
     {
       "id": "carta-servicos",

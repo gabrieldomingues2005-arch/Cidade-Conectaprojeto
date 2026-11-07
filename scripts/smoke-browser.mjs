@@ -170,6 +170,7 @@ try{
  const demoPhoto=`document.querySelector('.civic-news-lead img')`;
  await evaluate(`${demoPhoto}.scrollIntoView()`);
  await waitFor(`${demoPhoto}.complete&&${demoPhoto}.naturalWidth>0`);
+ await evaluate(`window.scrollTo({top:0,behavior:'instant'})`);
  assert.ok(await evaluate(`${demoPhoto}.getAttribute('src').startsWith('assets/city-photos/')`));
  assert.ok(await evaluate(`document.querySelector('.civic-city-gallery img')!==null`));
  for(const width of [390,768,1366]){
@@ -435,6 +436,11 @@ try{
  scenario='institutional-services';
  await evaluate("location.hash='#/rede-municipal?cat=alagamentos'");
  await waitFor("document.querySelector('[data-network-category=alagamentos]')?.getAttribute('aria-pressed')==='true'");
+ assert.equal(await evaluate(`document.querySelector('.network-citizen-actions a[href^="https:"]').href`),'https://sempapel.pmp.sp.gov.br/156/');
+ assert.equal(await evaluate(`document.querySelector('.piraFooter a[href*="/156/"]').href`),'https://sempapel.pmp.sp.gov.br/156/');
+ await evaluate(`document.querySelector('[data-network-category=agua]').click()`);
+ assert.equal(await evaluate(`document.querySelector('.network-citizen-actions a[href^="https:"]').href`),'https://piracicaba.sp.gov.br/servicos/atendimento/');
+ await evaluate(`document.querySelector('[data-network-category=alagamentos]').click()`);
  assert.ok(await evaluate("document.querySelector('.network-citizen-actions a[href=\"#/registrar/alagamentos\"]')!==null"));
  await evaluate("document.querySelector('#networkSearch').value='assunto inexistente QA';document.querySelector('#networkSearch').dispatchEvent(new Event('input',{bubbles:true}))");
  assert.ok(await evaluate("document.querySelector('#networkDirectoryStatus').textContent.includes('Nenhuma área encontrada')"));
