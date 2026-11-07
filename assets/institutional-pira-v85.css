@@ -756,3 +756,5 @@ html {scroll-padding-block:calc(var(--cc-sticky-top,0px) + .5rem) calc(var(--cc-
 .civic-city-photo.is-fallback .civic-city-photo-fallback{display:grid}
 .civic-city-photo.is-fallback figcaption{position:relative;z-index:2;background:#fff}
 .civic-city-photo.is-fallback.civic-city-gallery-photo figcaption{background:linear-gradient(transparent,rgba(0,0,0,.76))}
+
+.civic-city-photo img{background:transparent}
