@@ -3,7 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2.117.3";
 
 const SUPABASE_URL=Deno.env.get("SUPABASE_URL")??"";
 const SERVICE_ROLE_KEY=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"";
-const ORIGINS=new Set(["https://gabrieldomingues2005-arch.github.io","https://cidconecta-nztptuci.manus.space"]);
+const ORIGINS=new Set(["https://gabrieldomingues2005-arch.github.io","https://cidade-conecta-piracicaba.web.app","https://cidade-conecta-piracicaba.firebaseapp.com","https://cidconecta-nztptuci.manus.space"]);
 const MAX_BODY=16384;
 const allowedOrigin=(o:string)=>ORIGINS.has(o)||/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
 const cors=(o:string)=>({"Access-Control-Allow-Origin":allowedOrigin(o)?o:"https://gabrieldomingues2005-arch.github.io","Access-Control-Allow-Headers":"authorization,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS","Vary":"Origin"});

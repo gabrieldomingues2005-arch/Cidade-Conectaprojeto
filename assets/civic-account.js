@@ -3,10 +3,10 @@
 'use strict';
 const cfg=window.CIDADE_CONECTA_CONFIG?.supabase||{},KEY='cidadeConectaCitizenAccountSessionV1',DEMO_KEY='cidadeConectaDemoCitizenSessionV1',DEMO_STATE_KEY='cidadeConectaDemoCitizenStateV1',TIMEOUT=12000;
 let refreshPromise=null,revision=0;
-const state={status:'checking',session:null,user:null,profile:null,preferences:null,follows:[],neighborhoods:[],notifications:[],unread:0,error:'',pendingVerification:false,demo:false,weekly:null,milestones:[],activity:[],recommendations:[],created:[],saved:[],recent:[]};
+const state={status:'checking',session:null,user:null,profile:null,preferences:null,follows:[],neighborhoods:[],notifications:[],unread:0,error:'',pendingVerification:false,pendingEmail:'',confirmationMessage:'',demo:false,weekly:null,milestones:[],activity:[],recommendations:[],created:[],saved:[],recent:[]};
 
 const emit=()=>window.dispatchEvent(new CustomEvent('cidadeconecta:account-state',{detail:snapshot()}));
-const snapshot=()=>({status:state.status,user:state.user?{id:state.user.id,email:state.user.email}:null,profile:state.profile?{...state.profile}:null,preferences:state.preferences?{...state.preferences}:null,follows:[...state.follows],neighborhoods:[...state.neighborhoods],notifications:state.notifications.map(x=>({...x})),unread:state.unread,error:state.error,pendingVerification:state.pendingVerification,demo:state.demo,weekly:state.weekly?{...state.weekly}:null,milestones:state.milestones.map(x=>({...x})),activity:state.activity.map(x=>({...x})),recommendations:state.recommendations.map(x=>({...x})),created:[...state.created],saved:[...state.saved],recent:state.recent.map(x=>({...x}))});
+const snapshot=()=>({status:state.status,user:state.user?{id:state.user.id,email:state.user.email}:null,profile:state.profile?{...state.profile}:null,preferences:state.preferences?{...state.preferences}:null,follows:[...state.follows],neighborhoods:[...state.neighborhoods],notifications:state.notifications.map(x=>({...x})),unread:state.unread,error:state.error,pendingVerification:state.pendingVerification,pendingEmail:state.pendingEmail,confirmationMessage:state.confirmationMessage,demo:state.demo,weekly:state.weekly?{...state.weekly}:null,milestones:state.milestones.map(x=>({...x})),activity:state.activity.map(x=>({...x})),recommendations:state.recommendations.map(x=>({...x})),created:[...state.created],saved:[...state.saved],recent:state.recent.map(x=>({...x}))});
 const configured=()=>Boolean(cfg.enabled&&cfg.projectRef==='qzpofoxxrjunyayczcfu'&&cfg.url==='https://qzpofoxxrjunyayczcfu.supabase.co'&&cfg.publishableKey);
 const demoAccount=()=>window.CidadeConectaDemo?.account||null;
 const scope=()=>state.demo?'demo':state.user?.id?'account:'+state.user.id:state.status==='checking'?'checking':'';
@@ -17,7 +17,7 @@ function setDemoActive(on){try{on?sessionStorage.setItem(DEMO_KEY,'1'):sessionSt
 function readDemoState(){try{return JSON.parse(sessionStorage.getItem(DEMO_STATE_KEY)||'null')||{}}catch{return{}}}
 function writeDemoState(value){try{sessionStorage.setItem(DEMO_STATE_KEY,JSON.stringify(value))}catch{}}
 function clearDemoState(){try{sessionStorage.removeItem(DEMO_STATE_KEY);sessionStorage.removeItem(DEMO_KEY)}catch{}}
-function resetState(){revision++;refreshPromise=null;Object.assign(state,{status:'anonymous',session:null,user:null,profile:null,preferences:null,follows:[],neighborhoods:[],notifications:[],unread:0,error:'',pendingVerification:false,demo:false,weekly:null,milestones:[],activity:[],recommendations:[],created:[],saved:[],recent:[]})}
+function resetState(){revision++;refreshPromise=null;Object.assign(state,{status:'anonymous',session:null,user:null,profile:null,preferences:null,follows:[],neighborhoods:[],notifications:[],unread:0,error:'',pendingVerification:false,pendingEmail:'',confirmationMessage:'',demo:false,weekly:null,milestones:[],activity:[],recommendations:[],created:[],saved:[],recent:[]})}
 function applyDemo(){
  const data=demoAccount();if(!data)return null;
  const local=readDemoState(),readIds=new Set(Array.isArray(local.readIds)?local.readIds:[]),preferences={...data.preferences,...(local.preferences||{})};
@@ -34,7 +34,7 @@ function persistDemo(){
  writeDemoState({follows:[...state.follows],neighborhoods:[...state.neighborhoods],saved:[...state.saved],preferences:{...state.preferences},readIds:state.notifications.filter(n=>n.read_at).map(n=>n.id)})
 }
 async function fetchTimed(url,options={}){const c=new AbortController(),t=setTimeout(()=>c.abort(),TIMEOUT);try{return await fetch(url,{...options,signal:c.signal,cache:'no-store'})}finally{clearTimeout(t)}}
-async function parse(res){let body=null;try{body=await res.json()}catch{}if(res.ok)return body;const e=new Error(String(body?.msg||body?.message||body?.error_description||body?.error||('HTTP '+res.status)));e.status=res.status;e.payload=body;throw e}
+async function parse(res){let body=null;try{body=await res.json()}catch{}if(res.ok)return body;const e=new Error(String(body?.msg||body?.message||body?.error_description||body?.error||('HTTP '+res.status)));e.status=res.status;e.code=body?.error_code||body?.code;e.payload=body;throw e}
 const headers=(token,extra={})=>({apikey:cfg.publishableKey,...(token?{Authorization:'Bearer '+token}:{}),...extra});
 function normalize(payload){if(!payload?.access_token||!payload?.refresh_token)return null;return{access_token:payload.access_token,refresh_token:payload.refresh_token,expires_at:Number(payload.expires_at)||Math.floor(Date.now()/1000)+Number(payload.expires_in||3600),user:payload.user||null}}
 async function auth(path,{method='GET',token=null,body=null}={}){return parse(await fetchTimed(cfg.url+'/auth/v1/'+path,{method,headers:headers(token,body?{'Content-Type':'application/json'}:{}),body:body?JSON.stringify(body):undefined}))}
@@ -77,7 +77,38 @@ async function syncLocal(){
  if(protocols.length||neighborhoods.length){await invoke('sync_local',{protocols,neighborhoods});await refreshProfile()}
  return snapshot()
 }
+function confirmationUrl(){
+ const url=new URL(location.href);url.hash='';url.search='';return url.href
+}
+function confirmationFromUrl(){
+ const hash=new URLSearchParams(location.hash.slice(1)),query=new URLSearchParams(location.search);
+ if(!hash.has('access_token')&&!hash.has('error')&&!query.has('error'))return null;
+ // Retira credenciais e erros da barra antes de iniciar qualquer chamada de rede.
+ history.replaceState(null,'',location.pathname+'#/conta');
+ return{params:hash.has('access_token')||hash.has('error')?hash:query}
+}
+async function consumeConfirmation(callback){
+ clearDemoState();saveSession(null);resetState();
+ const params=callback.params;
+ try{
+  if(params.has('error'))throw Error('O link de confirmação expirou ou já foi usado. Entre com sua senha se o e-mail já foi confirmado, ou solicite outro link.');
+  if(!['signup','email'].includes(params.get('type')||'signup'))throw Error('Este link não é uma confirmação de cadastro.');
+  const session=normalize(Object.fromEntries(params));
+  if(!session)throw Error('Link de confirmação incompleto. Solicite outro e-mail.');
+  const user=await auth('user',{token:session.access_token});
+  if(!user?.id||!user.email_confirmed_at)throw Error('Não foi possível validar a confirmação. Solicite outro e-mail.');
+  session.user=user;
+  await startSession(session);
+  state.confirmationMessage='E-mail confirmado. Sua conta está conectada.';emit();
+ }catch(e){
+  if(!state.session)resetState();
+  state.error=String(e?.message||'Não foi possível confirmar o e-mail.');emit();
+ }
+ return snapshot()
+}
 async function init(){
+ const callback=confirmationFromUrl();
+ if(callback)return consumeConfirmation(callback);
  state.error='';
  if(demoActive()&&demoAccount()){saveSession(null);return applyDemo()}
  if(!configured()){state.status='unconfigured';emit();return snapshot()}
@@ -87,14 +118,18 @@ async function init(){
  catch(e){if(current===revision){saveSession(null);resetState();state.error=String(e?.message||e);emit()}}
  return snapshot()
 }
-function startSession(session){
- clearDemoState();resetState();saveSession(session);state.user=session.user||null;state.status='checking';emit();return refreshProfile()
+async function startSession(session){
+ clearDemoState();resetState();saveSession(session);state.user=session.user||null;state.status='checking';emit();
+ const result=await refreshProfile();
+ if(result.status!=='authenticated')throw Error(result.error||'Não foi possível carregar sua conta. Tente entrar novamente.');
+ return result
 }
 async function signIn(email,password){
  const normalized=String(email||'').trim().toLowerCase(),secret=String(password||''),demo=demoAccount();
  if(demo&&normalized===String(demo.credentials.email).toLowerCase()&&secret===String(demo.credentials.password)){
   resetState();saveSession(null);setDemoActive(true);return applyDemo()
  }
+ if(demo&&normalized===String(demo.credentials.email).toLowerCase())throw Error('Senha da conta DEMO incorreta. Use os dados exibidos na tela.');
  if(!configured())throw Error('Conta indisponível neste ambiente.');
  const current=revision;
  const data=await auth('token?grant_type=password',{method:'POST',body:{email:normalized,password:secret}}),session=normalize(data);
@@ -104,14 +139,34 @@ async function signIn(email,password){
 async function signUp(email,password,name){
  if(!configured())throw Error('Conta indisponível neste ambiente.');
  const current=revision;
- const data=await auth('signup',{method:'POST',body:{email:String(email||'').trim().toLowerCase(),password:String(password||''),data:{name:String(name||'').trim().slice(0,80)}}}),session=normalize(data);
+ const normalized=String(email||'').trim().toLowerCase();
+ if(normalized===demoAccount()?.credentials.email?.toLowerCase())throw Error('O e-mail DEMO é reservado para a demonstração.');
+ const data=await auth('signup?redirect_to='+encodeURIComponent(confirmationUrl()),{method:'POST',body:{email:normalized,password:String(password||''),data:{name:String(name||'').trim().slice(0,80)}}}),session=normalize(data);
  if(current!==revision)return snapshot();
  if(session)return startSession(session);
- clearDemoState();saveSession(null);resetState();state.status='pending';state.pendingVerification=true;emit();return snapshot()
+ clearDemoState();saveSession(null);resetState();state.status='pending';state.pendingVerification=true;state.pendingEmail=normalized;emit();return snapshot()
+}
+async function resendConfirmation(email){
+ if(!configured())throw Error('Conta indisponível neste ambiente.');
+ const normalized=String(email||state.pendingEmail||'').trim().toLowerCase();
+ if(!normalized||normalized===demoAccount()?.credentials.email?.toLowerCase())throw Error('Informe o e-mail da sua conta real.');
+ await auth('resend?redirect_to='+encodeURIComponent(confirmationUrl()),{method:'POST',body:{type:'signup',email:normalized}});
+ return snapshot()
+}
+function showLogin(){state.pendingVerification=false;state.pendingEmail='';state.error='';state.status='anonymous';emit()}
+function errorText(error){
+ const code=error?.code||error?.payload?.error_code||error?.payload?.code;
+ if(code==='invalid_credentials')return 'E-mail ou senha incorretos.';
+ if(code==='email_not_confirmed')return 'Confirme seu e-mail antes de entrar. Você pode solicitar outro link abaixo.';
+ if(code==='over_email_send_rate_limit'||Number(error?.status)===429)return 'Aguarde alguns minutos antes de solicitar outro e-mail.';
+ if(code==='email_address_not_authorized')return 'O serviço de e-mail ainda precisa ser configurado para enviar confirmações a este endereço.';
+ if(code==='weak_password')return 'Escolha uma senha mais forte, com pelo menos 8 caracteres.';
+ if(error?.name==='AbortError'||error instanceof TypeError)return 'Não foi possível conectar. Verifique a internet e tente novamente.';
+ return String(error?.message||'Não foi possível concluir. Tente novamente.')
 }
 async function signOut(){
  const t=state.session?.access_token;clearDemoState();saveSession(null);resetState();emit();
- if(t)try{await auth('logout',{method:'POST',token:t})}catch{}
+ if(t)try{await auth('logout?scope=local',{method:'POST',token:t})}catch{}
 }
 async function follow(protocol,on=true){
  if(state.demo){const list=new Set(state.follows);on?list.add(String(protocol)):list.delete(String(protocol));state.follows=[...list];persistDemo();emit();return{following:on,protocol}}
@@ -147,5 +202,5 @@ function toggleDemoSaved(protocol){
 }
 
 const ready=init();
-window.CidadeConectaAccount=Object.freeze({state:snapshot,scope,ready,init,refresh:refreshProfile,signIn,signUp,signOut,follow,favorite,savePreferences,markNotification,markAll,syncLocal,invoke,demoCredentials,resetDemo,toggleDemoSaved});
+window.CidadeConectaAccount=Object.freeze({state:snapshot,scope,ready,init,refresh:refreshProfile,signIn,signUp,signOut,resendConfirmation,showLogin,errorText,follow,favorite,savePreferences,markNotification,markAll,syncLocal,invoke,demoCredentials,resetDemo,toggleDemoSaved});
 })();

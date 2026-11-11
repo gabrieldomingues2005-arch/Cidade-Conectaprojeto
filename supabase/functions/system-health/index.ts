@@ -6,7 +6,7 @@ const SERVICE_ROLE_KEY=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")??"";
 const MUNICIPAL_ADAPTER_URL=(Deno.env.get("MUNICIPAL_ADAPTER_URL")??"").trim();
 const MUNICIPAL_ADAPTER_TOKEN=(Deno.env.get("MUNICIPAL_ADAPTER_TOKEN")??"").trim();
 const MUNICIPAL_ADAPTER_HOSTS=(Deno.env.get("MUNICIPAL_ADAPTER_HOSTS")??"").split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
-const ORIGINS=new Set(["https://gabrieldomingues2005-arch.github.io","https://cidconecta-nztptuci.manus.space"]);
+const ORIGINS=new Set(["https://gabrieldomingues2005-arch.github.io","https://cidade-conecta-piracicaba.web.app","https://cidade-conecta-piracicaba.firebaseapp.com","https://cidconecta-nztptuci.manus.space"]);
 const allowedOrigin=(o:string)=>ORIGINS.has(o)||/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
 const cors=(o:string)=>({"Access-Control-Allow-Origin":allowedOrigin(o)?o:"https://gabrieldomingues2005-arch.github.io","Access-Control-Allow-Headers":"authorization,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS","Vary":"Origin"});
 const reply=(o:string,s:number,b:Record<string,unknown>)=>new Response(JSON.stringify(b),{status:s,headers:{...cors(o),"Content-Type":"application/json","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}});
