@@ -49,7 +49,7 @@
       }
     ],
     "predeploy": [
-      "HOSTING_SITE_URL=https://cidade-conecta-piracicaba.web.app/ node scripts/build-hosting.mjs"
+      "node scripts/build-hosting.mjs https://cidade-conecta-piracicaba.web.app/"
     ]
   }
 }
