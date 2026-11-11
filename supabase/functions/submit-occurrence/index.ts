@@ -5,7 +5,7 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const MAX_BODY_BYTES = 2_100_000;
 const MAX_IMAGE_BYTES = Math.floor(1.5 * 1024 * 1024);
-const FIXED_ORIGINS = new Set(["https://gabrieldomingues2005-arch.github.io","https://cidconecta-nztptuci.manus.space"]);
+const FIXED_ORIGINS = new Set(["https://gabrieldomingues2005-arch.github.io","https://cidade-conecta-piracicaba.web.app","https://cidade-conecta-piracicaba.firebaseapp.com","https://cidconecta-nztptuci.manus.space"]);
 function isAllowedOrigin(origin: string): boolean { if (FIXED_ORIGINS.has(origin)) return true; return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin); }
 function cors(origin: string): Record<string,string> { const allowed=isAllowedOrigin(origin)?origin:"https://gabrieldomingues2005-arch.github.io"; return {"Access-Control-Allow-Origin":allowed,"Access-Control-Allow-Headers":"authorization, x-client-info, apikey, content-type","Access-Control-Allow-Methods":"POST, OPTIONS","Access-Control-Max-Age":"86400","Vary":"Origin"}; }
 function json(origin:string,status:number,body:Record<string,unknown>):Response { return new Response(JSON.stringify(body),{status,headers:{...cors(origin),"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}}); }

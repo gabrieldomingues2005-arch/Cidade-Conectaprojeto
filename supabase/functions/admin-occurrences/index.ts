@@ -4,7 +4,7 @@ import { createClient } from "npm:@supabase/supabase-js@2.117.3";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const FIXED_ORIGINS = new Set([
-  "https://gabrieldomingues2005-arch.github.io",
+  "https://gabrieldomingues2005-arch.github.io","https://cidade-conecta-piracicaba.web.app","https://cidade-conecta-piracicaba.firebaseapp.com",
   "https://cidconecta-nztptuci.manus.space",
 ]);
 const ALLOWED_ROLES = new Set(["triage", "admin"]);

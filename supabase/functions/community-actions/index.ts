@@ -3,7 +3,7 @@ import {createClient} from "npm:@supabase/supabase-js@2.117.3";
 import {validate} from "./validation.mjs";
 
 const URL=Deno.env.get('SUPABASE_URL')||'',KEY=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||'';
-const origins=new Set(['https://gabrieldomingues2005-arch.github.io','https://cidconecta-nztptuci.manus.space']);
+const origins=new Set(['https://gabrieldomingues2005-arch.github.io','https://cidade-conecta-piracicaba.web.app','https://cidade-conecta-piracicaba.firebaseapp.com','https://cidconecta-nztptuci.manus.space']);
 const allowed=(o:string)=>origins.has(o)||/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
 function response(origin:string,status:number,body:Record<string,unknown>){return new Response(status===204?null:JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Access-Control-Allow-Origin':allowed(origin)?origin:'https://gabrieldomingues2005-arch.github.io','Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'authorization, apikey, content-type','Access-Control-Max-Age':'86400','Vary':'Origin',...(status===429?{'Retry-After':'60'}:{})}})}
 async function hash(value:string){const enc=new TextEncoder(),key=await crypto.subtle.importKey('raw',enc.encode(KEY),{name:'HMAC',hash:'SHA-256'},false,['sign']);const b=await crypto.subtle.sign('HMAC',key,enc.encode(value));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}

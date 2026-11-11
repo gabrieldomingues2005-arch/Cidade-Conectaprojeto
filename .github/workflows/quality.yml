@@ -63,6 +63,8 @@ jobs:
           node --check assets/civic-news-store.js
           node --check scripts/test-civic-store.mjs
           node --check scripts/test-civic-account.mjs
+          node --check scripts/test-account-flow.mjs
+          node --check scripts/build-hosting.mjs
           node --check scripts/test-operational-edges.mjs
           node --check scripts/test-map-resilience.mjs
           node --check scripts/test-seo.mjs
@@ -72,7 +74,7 @@ jobs:
         run: bash -n scripts/smoke-ui.sh
 
       - name: Testar autenticação, Edge e Service Worker
-        run: node --test scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-design.mjs scripts/test-civic-data.mjs scripts/test-civic-store.mjs scripts/test-civic-account.mjs scripts/test-civic-pages.mjs scripts/test-community.mjs scripts/test-operational-edges.mjs scripts/test-map-resilience.mjs scripts/test-seo.mjs scripts/test-pwa-assets.mjs
+        run: node --test scripts/test-account-flow.mjs scripts/test-hosting.mjs scripts/test-auth.mjs scripts/test-sw.mjs scripts/test-edge.mjs scripts/test-design.mjs scripts/test-civic-data.mjs scripts/test-civic-store.mjs scripts/test-civic-account.mjs scripts/test-civic-pages.mjs scripts/test-community.mjs scripts/test-operational-edges.mjs scripts/test-map-resilience.mjs scripts/test-seo.mjs scripts/test-pwa-assets.mjs
 
       - name: Verificar privacidade do cliente
         run: node scripts/qa-client-privacy.mjs

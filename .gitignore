@@ -1,3 +1,6 @@
 artifacts/
 .smoke-index.html
 supabase/.temp/
+dist/
+.firebase/
+*-debug.log
