@@ -3,7 +3,7 @@ import {cp,mkdir,rm,writeFile,readFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 const target='dist';
 const entries=['index.html','404.html','favicon.svg','manifest.webmanifest','robots.txt','sitemap.xml','sw.js','assets','data','participar','mapa','noticias','problemas-resolvidos','bairros','dados-abertos','transparencia'];
-const site=process.env.HOSTING_SITE_URL;
+const site=process.env.HOSTING_SITE_URL||process.argv[2];
 if(site){const u=new URL(site);if(u.protocol!=='https:'||u.pathname!=='/'||u.search||u.hash)throw Error('HOSTING_SITE_URL deve ser uma origem HTTPS com / final');}
 await rm(target,{recursive:true,force:true});await mkdir(target);
 for(const entry of entries)await cp(entry,target+'/'+entry,{recursive:true});
