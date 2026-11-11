@@ -1,0 +1,252 @@
+[
+  {
+    "width": 1366,
+    "route": "",
+    "overflow": false,
+    "h1": [
+      "Registre. Acompanhe. Veja resultados."
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 1366,
+    "route": "mapa",
+    "overflow": false,
+    "h1": [
+      "Mapa das ocorrências"
+    ],
+    "images": [
+      "https://c.tile.openstreetmap.org/13/3011/4626.png",
+      "https://b.tile.openstreetmap.org/13/3011/4625.png",
+      "https://b.tile.openstreetmap.org/13/3010/4626.png",
+      "https://a.tile.openstreetmap.org/13/3012/4626.png",
+      "https://a.tile.openstreetmap.org/13/3011/4627.png",
+      "https://a.tile.openstreetmap.org/13/3010/4625.png",
+      "https://c.tile.openstreetmap.org/13/3012/4625.png",
+      "https://c.tile.openstreetmap.org/13/3010/4627.png",
+      "https://b.tile.openstreetmap.org/13/3012/4627.png",
+      "https://a.tile.openstreetmap.org/13/3009/4626.png",
+      "https://b.tile.openstreetmap.org/13/3013/4626.png",
+      "https://c.tile.openstreetmap.org/13/3009/4625.png",
+      "https://a.tile.openstreetmap.org/13/3013/4625.png",
+      "https://b.tile.openstreetmap.org/13/3009/4627.png",
+      "https://c.tile.openstreetmap.org/13/3013/4627.png"
+    ],
+    "errors": []
+  },
+  {
+    "width": 1366,
+    "route": "noticias",
+    "overflow": false,
+    "h1": [
+      "Notícias da Cidade"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 1366,
+    "route": "conta",
+    "overflow": false,
+    "h1": [
+      "Sincronize seu Cidade Conecta"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 1366,
+    "route": "acompanhar",
+    "overflow": false,
+    "h1": [
+      "Consultar protocolo"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 1366,
+    "route": "registrar",
+    "overflow": false,
+    "h1": [
+      "Registrar problema urbano"
+    ],
+    "images": [
+      "https://c.tile.openstreetmap.org/13/3013/4627.png",
+      ""
+    ],
+    "errors": []
+  },
+  {
+    "width": 1366,
+    "route": "sobre",
+    "overflow": false,
+    "h1": [
+      "Cidade Conecta"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "",
+    "overflow": false,
+    "h1": [
+      "Registre. Acompanhe. Veja resultados."
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "mapa",
+    "overflow": false,
+    "h1": [
+      "Mapa das ocorrências"
+    ],
+    "images": [
+      "https://a.tile.openstreetmap.org/12/1506/2313.png",
+      "https://b.tile.openstreetmap.org/12/1505/2312.png",
+      "https://c.tile.openstreetmap.org/12/1506/2312.png",
+      "https://a.tile.openstreetmap.org/12/1505/2314.png",
+      "https://b.tile.openstreetmap.org/12/1506/2314.png"
+    ],
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "noticias",
+    "overflow": false,
+    "h1": [
+      "Notícias da Cidade"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "conta",
+    "overflow": false,
+    "h1": [
+      "Sincronize seu Cidade Conecta"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "acompanhar",
+    "overflow": false,
+    "h1": [
+      "Consultar protocolo"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "registrar",
+    "overflow": false,
+    "h1": [
+      "Registrar problema urbano"
+    ],
+    "images": [
+      "https://a.tile.openstreetmap.org/13/3011/4627.png",
+      ""
+    ],
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "sobre",
+    "overflow": false,
+    "h1": [
+      "Cidade Conecta"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 320,
+    "route": "",
+    "overflow": false,
+    "h1": [
+      "Registre. Acompanhe. Veja resultados."
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 320,
+    "route": "mapa",
+    "overflow": false,
+    "h1": [
+      "Mapa das ocorrências"
+    ],
+    "images": [
+      "https://a.tile.openstreetmap.org/12/1506/2313.png",
+      "https://a.tile.openstreetmap.org/12/1505/2314.png",
+      "https://b.tile.openstreetmap.org/12/1506/2314.png",
+      "https://b.tile.openstreetmap.org/12/1505/2312.png",
+      "https://c.tile.openstreetmap.org/12/1506/2312.png"
+    ],
+    "errors": []
+  },
+  {
+    "width": 320,
+    "route": "noticias",
+    "overflow": false,
+    "h1": [
+      "Notícias da Cidade"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 320,
+    "route": "conta",
+    "overflow": false,
+    "h1": [
+      "Sincronize seu Cidade Conecta"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 320,
+    "route": "acompanhar",
+    "overflow": false,
+    "h1": [
+      "Consultar protocolo"
+    ],
+    "images": [],
+    "errors": []
+  },
+  {
+    "width": 320,
+    "route": "registrar",
+    "overflow": false,
+    "h1": [
+      "Registrar problema urbano"
+    ],
+    "images": [
+      "https://c.tile.openstreetmap.org/13/3011/4626.png",
+      "https://a.tile.openstreetmap.org/13/3012/4626.png",
+      "https://a.tile.openstreetmap.org/13/3011/4627.png",
+      "https://b.tile.openstreetmap.org/13/3012/4627.png",
+      ""
+    ],
+    "errors": []
+  },
+  {
+    "width": 320,
+    "route": "sobre",
+    "overflow": false,
+    "h1": [
+      "Cidade Conecta"
+    ],
+    "images": [],
+    "errors": []
+  }
+]

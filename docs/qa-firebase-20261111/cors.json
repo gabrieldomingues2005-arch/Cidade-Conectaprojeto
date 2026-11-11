@@ -1,0 +1,164 @@
+[
+  {
+    "function": "submit-occurrence",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "submit-occurrence",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "submit-occurrence",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  },
+  {
+    "function": "track-occurrence",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "track-occurrence",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "track-occurrence",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  },
+  {
+    "function": "citizen-account",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "citizen-account",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "citizen-account",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  },
+  {
+    "function": "community-actions",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "community-actions",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "community-actions",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  },
+  {
+    "function": "admin-occurrences",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "admin-occurrences",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "admin-occurrences",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  },
+  {
+    "function": "admin-news",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "admin-news",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "admin-news",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  },
+  {
+    "function": "admin-resolution-media",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "admin-resolution-media",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "admin-resolution-media",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  },
+  {
+    "function": "system-health",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "system-health",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "system-health",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  },
+  {
+    "function": "municipal-dispatch",
+    "origin": "https://cidade-conecta-piracicaba.web.app",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "municipal-dispatch",
+    "origin": "https://cidade-conecta-piracicaba.firebaseapp.com",
+    "status": 204,
+    "pass": true
+  },
+  {
+    "function": "municipal-dispatch",
+    "origin": "https://invalid.example",
+    "status": 403,
+    "pass": true
+  }
+]
