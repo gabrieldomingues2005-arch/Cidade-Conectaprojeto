@@ -1,0 +1,72 @@
+[
+  {
+    "width": 1366,
+    "flow": "inicio e navegação",
+    "pass": true
+  },
+  {
+    "width": 1366,
+    "flow": "registro opcional sem conta",
+    "pass": true
+  },
+  {
+    "width": 1366,
+    "flow": "mapa e lista",
+    "pass": true
+  },
+  {
+    "width": 1366,
+    "flow": "notícias, fotos reais e links de fontes",
+    "pass": true
+  },
+  {
+    "width": 1366,
+    "flow": "DEMO, protocolo e saída isolados do Auth real",
+    "pass": true
+  },
+  {
+    "width": 1366,
+    "flow": "protocolo inexistente informa erro",
+    "pass": true
+  },
+  {
+    "width": 1366,
+    "flow": "admin exige autenticação própria",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "flow": "inicio e navegação",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "flow": "registro opcional sem conta",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "flow": "mapa e lista",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "flow": "notícias, fotos reais e links de fontes",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "flow": "DEMO, protocolo e saída isolados do Auth real",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "flow": "protocolo inexistente informa erro",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "flow": "admin exige autenticação própria",
+    "pass": true
+  }
+]

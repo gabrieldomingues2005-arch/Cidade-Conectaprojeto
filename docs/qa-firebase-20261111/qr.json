@@ -1,0 +1,26 @@
+{
+  "url": "https://cidade-conecta-piracicaba.web.app/",
+  "png": "https://cidade-conecta-piracicaba.web.app/assets/divulgacao/cidade-conecta-piracicaba-qr.png",
+  "dimensions": [
+    3280,
+    3280
+  ],
+  "dpi": 300,
+  "checks": [
+    {
+      "size": 3280,
+      "decoded": "https://cidade-conecta-piracicaba.web.app/",
+      "pass": true
+    },
+    {
+      "size": 600,
+      "decoded": "https://cidade-conecta-piracicaba.web.app/",
+      "pass": true
+    },
+    {
+      "size": 300,
+      "decoded": "https://cidade-conecta-piracicaba.web.app/",
+      "pass": true
+    }
+  ]
+}
