@@ -758,3 +758,15 @@ html {scroll-padding-block:calc(var(--cc-sticky-top,0px) + .5rem) calc(var(--cc-
 .civic-city-photo.is-fallback.civic-city-gallery-photo figcaption{background:linear-gradient(transparent,rgba(0,0,0,.76))}
 
 .civic-city-photo img{background:transparent}
+
+/* Apresentação pública: exemplos e explicações sem misturar a base real. */
+.civic-demo-welcome{margin-bottom:1.5rem;background:#eff6df;border-color:#b8d3a4}
+.civic-demo-welcome h2{margin-top:.6rem;font-size:clamp(1.55rem,4vw,2.5rem)}
+.civic-demo-welcome p{max-width:75ch;line-height:1.65}
+.civic-demo-examples,.civic-demo-faq{margin-block:1.5rem}
+.civic-demo-examples .civic-demo-tour-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.civic-demo-examples .civic-demo-tour-grid .civic-demo-stamp{width:auto;height:auto;border-radius:6px;font-size:.68rem;padding:.35rem .6rem}
+.civic-demo-faq details{border-top:1px solid #d5e1dc;padding:1rem 0}
+.civic-demo-faq summary{cursor:pointer;font-weight:750;line-height:1.5}
+.civic-demo-faq details p{max-width:75ch;line-height:1.65}
+@media(max-width:700px){.civic-demo-examples .civic-demo-tour-grid{grid-template-columns:1fr}.civic-demo-welcome .actions{display:grid}.civic-demo-welcome .btn{white-space:normal;text-align:center}}

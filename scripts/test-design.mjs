@@ -43,7 +43,7 @@ test('home orienta primeiro acesso e separa público de demonstração',()=>{
  assert.match(app,/Demonstração/);
  assert.match(civic,/homeIntentGridV82/);
  assert.match(civic,/recentSourceV82/);
- assert.match(html,/Ver apresentação DEMO/);
+ assert.match(html,/Entenda com exemplos fictícios/);
 });
 test('navegação anuncia mudança de rota para tecnologia assistiva',()=>{
  const html=read('index.html'),app=read('assets/app.js');
@@ -79,11 +79,11 @@ test('estética institucional preserva identidade própria e aviso independente'
  assert.match(civic,/--cc83-navy:#0b3f55/);
  assert.match(civic,/homePortalSearchBoxV83/);
  assert.match(html,/cc-institutional-pira-v85/);
- assert.match(html,/institutional-pira-v85\.css\?v=9\.2\.1/);
+ assert.match(html,/institutional-pira-v85\.css\?v=9\.8\.0/);
  assert.match(html,/civic\.css\?v=9\.6\.2/);
  assert.match(html,/app\.js\?v=9\.6\.4/);
- assert.match(html,/civic-pages\.js\?v=9\.6\.3/);
- assert.match(html,/civic-demo\.js\?v=9\.6\.1/);
+ assert.match(html,/civic-pages\.js\?v=9\.8\.0/);
+ assert.match(html,/civic-demo\.js\?v=9\.8\.0/);
  assert.match(html,/institutional-a11y-v85\.js\?v=8\.5\.1/);
  assert.match(html,/civic-ui\.js\?v=9\.7\.0/);
  assert.match(html,/civic-city-news\.js\?v=9\.6\.4/);

@@ -1,0 +1,26 @@
+[
+  {
+    "width": 1366,
+    "demoRows": 54,
+    "examples": 3,
+    "demoWithoutBackendWrites": true,
+    "noOverflow": true,
+    "noJsErrors": true
+  },
+  {
+    "width": 390,
+    "demoRows": 54,
+    "examples": 3,
+    "demoWithoutBackendWrites": true,
+    "noOverflow": true,
+    "noJsErrors": true
+  },
+  {
+    "width": 320,
+    "demoRows": 54,
+    "examples": 3,
+    "demoWithoutBackendWrites": true,
+    "noOverflow": true,
+    "noJsErrors": true
+  }
+]
